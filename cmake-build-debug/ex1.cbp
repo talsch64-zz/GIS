@@ -82,6 +82,51 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/Circle.cpp">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/Circle.h">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/Entity.cpp">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/Entity.h">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/EntityFactory.cpp">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/EntityFactory.h">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/GIS.cpp">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/GIS.h">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/Geometry.h">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/Junction.cpp">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/Junction.h">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/POI.cpp">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/POI.h">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/Way.cpp">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/Way.h">
+			<Option target="ex1"/>
+		</Unit>
 		<Unit filename="C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/main.cpp">
 			<Option target="ex1"/>
 		</Unit>

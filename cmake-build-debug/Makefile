@@ -122,6 +122,195 @@ ex1/fast:
 	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/build
 .PHONY : ex1/fast
 
+Circle.obj: Circle.cpp.obj
+
+.PHONY : Circle.obj
+
+# target to build an object file
+Circle.cpp.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Circle.cpp.obj
+.PHONY : Circle.cpp.obj
+
+Circle.i: Circle.cpp.i
+
+.PHONY : Circle.i
+
+# target to preprocess a source file
+Circle.cpp.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Circle.cpp.i
+.PHONY : Circle.cpp.i
+
+Circle.s: Circle.cpp.s
+
+.PHONY : Circle.s
+
+# target to generate assembly for a file
+Circle.cpp.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Circle.cpp.s
+.PHONY : Circle.cpp.s
+
+Entity.obj: Entity.cpp.obj
+
+.PHONY : Entity.obj
+
+# target to build an object file
+Entity.cpp.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Entity.cpp.obj
+.PHONY : Entity.cpp.obj
+
+Entity.i: Entity.cpp.i
+
+.PHONY : Entity.i
+
+# target to preprocess a source file
+Entity.cpp.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Entity.cpp.i
+.PHONY : Entity.cpp.i
+
+Entity.s: Entity.cpp.s
+
+.PHONY : Entity.s
+
+# target to generate assembly for a file
+Entity.cpp.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Entity.cpp.s
+.PHONY : Entity.cpp.s
+
+EntityFactory.obj: EntityFactory.cpp.obj
+
+.PHONY : EntityFactory.obj
+
+# target to build an object file
+EntityFactory.cpp.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/EntityFactory.cpp.obj
+.PHONY : EntityFactory.cpp.obj
+
+EntityFactory.i: EntityFactory.cpp.i
+
+.PHONY : EntityFactory.i
+
+# target to preprocess a source file
+EntityFactory.cpp.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/EntityFactory.cpp.i
+.PHONY : EntityFactory.cpp.i
+
+EntityFactory.s: EntityFactory.cpp.s
+
+.PHONY : EntityFactory.s
+
+# target to generate assembly for a file
+EntityFactory.cpp.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/EntityFactory.cpp.s
+.PHONY : EntityFactory.cpp.s
+
+GIS.obj: GIS.cpp.obj
+
+.PHONY : GIS.obj
+
+# target to build an object file
+GIS.cpp.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/GIS.cpp.obj
+.PHONY : GIS.cpp.obj
+
+GIS.i: GIS.cpp.i
+
+.PHONY : GIS.i
+
+# target to preprocess a source file
+GIS.cpp.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/GIS.cpp.i
+.PHONY : GIS.cpp.i
+
+GIS.s: GIS.cpp.s
+
+.PHONY : GIS.s
+
+# target to generate assembly for a file
+GIS.cpp.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/GIS.cpp.s
+.PHONY : GIS.cpp.s
+
+Junction.obj: Junction.cpp.obj
+
+.PHONY : Junction.obj
+
+# target to build an object file
+Junction.cpp.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Junction.cpp.obj
+.PHONY : Junction.cpp.obj
+
+Junction.i: Junction.cpp.i
+
+.PHONY : Junction.i
+
+# target to preprocess a source file
+Junction.cpp.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Junction.cpp.i
+.PHONY : Junction.cpp.i
+
+Junction.s: Junction.cpp.s
+
+.PHONY : Junction.s
+
+# target to generate assembly for a file
+Junction.cpp.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Junction.cpp.s
+.PHONY : Junction.cpp.s
+
+POI.obj: POI.cpp.obj
+
+.PHONY : POI.obj
+
+# target to build an object file
+POI.cpp.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/POI.cpp.obj
+.PHONY : POI.cpp.obj
+
+POI.i: POI.cpp.i
+
+.PHONY : POI.i
+
+# target to preprocess a source file
+POI.cpp.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/POI.cpp.i
+.PHONY : POI.cpp.i
+
+POI.s: POI.cpp.s
+
+.PHONY : POI.s
+
+# target to generate assembly for a file
+POI.cpp.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/POI.cpp.s
+.PHONY : POI.cpp.s
+
+Way.obj: Way.cpp.obj
+
+.PHONY : Way.obj
+
+# target to build an object file
+Way.cpp.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Way.cpp.obj
+.PHONY : Way.cpp.obj
+
+Way.i: Way.cpp.i
+
+.PHONY : Way.i
+
+# target to preprocess a source file
+Way.cpp.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Way.cpp.i
+.PHONY : Way.cpp.i
+
+Way.s: Way.cpp.s
+
+.PHONY : Way.s
+
+# target to generate assembly for a file
+Way.cpp.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/Way.cpp.s
+.PHONY : Way.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -158,6 +347,27 @@ help:
 	@echo ... ex1
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... Circle.obj
+	@echo ... Circle.i
+	@echo ... Circle.s
+	@echo ... Entity.obj
+	@echo ... Entity.i
+	@echo ... Entity.s
+	@echo ... EntityFactory.obj
+	@echo ... EntityFactory.i
+	@echo ... EntityFactory.s
+	@echo ... GIS.obj
+	@echo ... GIS.i
+	@echo ... GIS.s
+	@echo ... Junction.obj
+	@echo ... Junction.i
+	@echo ... Junction.s
+	@echo ... POI.obj
+	@echo ... POI.i
+	@echo ... POI.s
+	@echo ... Way.obj
+	@echo ... Way.i
+	@echo ... Way.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

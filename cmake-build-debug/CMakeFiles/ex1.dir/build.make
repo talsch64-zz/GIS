@@ -70,19 +70,131 @@ CMakeFiles/ex1.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex1.dir/main.cpp.s"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\main.cpp" -o CMakeFiles\ex1.dir\main.cpp.s
 
+CMakeFiles/ex1.dir/GIS.cpp.obj: CMakeFiles/ex1.dir/flags.make
+CMakeFiles/ex1.dir/GIS.cpp.obj: CMakeFiles/ex1.dir/includes_CXX.rsp
+CMakeFiles/ex1.dir/GIS.cpp.obj: ../GIS.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ex1.dir/GIS.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ex1.dir\GIS.cpp.obj -c "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\GIS.cpp"
+
+CMakeFiles/ex1.dir/GIS.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex1.dir/GIS.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\GIS.cpp" > CMakeFiles\ex1.dir\GIS.cpp.i
+
+CMakeFiles/ex1.dir/GIS.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex1.dir/GIS.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\GIS.cpp" -o CMakeFiles\ex1.dir\GIS.cpp.s
+
+CMakeFiles/ex1.dir/Entity.cpp.obj: CMakeFiles/ex1.dir/flags.make
+CMakeFiles/ex1.dir/Entity.cpp.obj: CMakeFiles/ex1.dir/includes_CXX.rsp
+CMakeFiles/ex1.dir/Entity.cpp.obj: ../Entity.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ex1.dir/Entity.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ex1.dir\Entity.cpp.obj -c "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Entity.cpp"
+
+CMakeFiles/ex1.dir/Entity.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex1.dir/Entity.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Entity.cpp" > CMakeFiles\ex1.dir\Entity.cpp.i
+
+CMakeFiles/ex1.dir/Entity.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex1.dir/Entity.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Entity.cpp" -o CMakeFiles\ex1.dir\Entity.cpp.s
+
+CMakeFiles/ex1.dir/POI.cpp.obj: CMakeFiles/ex1.dir/flags.make
+CMakeFiles/ex1.dir/POI.cpp.obj: CMakeFiles/ex1.dir/includes_CXX.rsp
+CMakeFiles/ex1.dir/POI.cpp.obj: ../POI.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ex1.dir/POI.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ex1.dir\POI.cpp.obj -c "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\POI.cpp"
+
+CMakeFiles/ex1.dir/POI.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex1.dir/POI.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\POI.cpp" > CMakeFiles\ex1.dir\POI.cpp.i
+
+CMakeFiles/ex1.dir/POI.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex1.dir/POI.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\POI.cpp" -o CMakeFiles\ex1.dir\POI.cpp.s
+
+CMakeFiles/ex1.dir/Circle.cpp.obj: CMakeFiles/ex1.dir/flags.make
+CMakeFiles/ex1.dir/Circle.cpp.obj: CMakeFiles/ex1.dir/includes_CXX.rsp
+CMakeFiles/ex1.dir/Circle.cpp.obj: ../Circle.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ex1.dir/Circle.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ex1.dir\Circle.cpp.obj -c "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Circle.cpp"
+
+CMakeFiles/ex1.dir/Circle.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex1.dir/Circle.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Circle.cpp" > CMakeFiles\ex1.dir\Circle.cpp.i
+
+CMakeFiles/ex1.dir/Circle.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex1.dir/Circle.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Circle.cpp" -o CMakeFiles\ex1.dir\Circle.cpp.s
+
+CMakeFiles/ex1.dir/Junction.cpp.obj: CMakeFiles/ex1.dir/flags.make
+CMakeFiles/ex1.dir/Junction.cpp.obj: CMakeFiles/ex1.dir/includes_CXX.rsp
+CMakeFiles/ex1.dir/Junction.cpp.obj: ../Junction.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ex1.dir/Junction.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ex1.dir\Junction.cpp.obj -c "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Junction.cpp"
+
+CMakeFiles/ex1.dir/Junction.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex1.dir/Junction.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Junction.cpp" > CMakeFiles\ex1.dir\Junction.cpp.i
+
+CMakeFiles/ex1.dir/Junction.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex1.dir/Junction.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Junction.cpp" -o CMakeFiles\ex1.dir\Junction.cpp.s
+
+CMakeFiles/ex1.dir/Way.cpp.obj: CMakeFiles/ex1.dir/flags.make
+CMakeFiles/ex1.dir/Way.cpp.obj: CMakeFiles/ex1.dir/includes_CXX.rsp
+CMakeFiles/ex1.dir/Way.cpp.obj: ../Way.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ex1.dir/Way.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ex1.dir\Way.cpp.obj -c "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Way.cpp"
+
+CMakeFiles/ex1.dir/Way.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex1.dir/Way.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Way.cpp" > CMakeFiles\ex1.dir\Way.cpp.i
+
+CMakeFiles/ex1.dir/Way.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex1.dir/Way.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\Way.cpp" -o CMakeFiles\ex1.dir\Way.cpp.s
+
+CMakeFiles/ex1.dir/EntityFactory.cpp.obj: CMakeFiles/ex1.dir/flags.make
+CMakeFiles/ex1.dir/EntityFactory.cpp.obj: CMakeFiles/ex1.dir/includes_CXX.rsp
+CMakeFiles/ex1.dir/EntityFactory.cpp.obj: ../EntityFactory.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ex1.dir/EntityFactory.cpp.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\ex1.dir\EntityFactory.cpp.obj -c "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\EntityFactory.cpp"
+
+CMakeFiles/ex1.dir/EntityFactory.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ex1.dir/EntityFactory.cpp.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\EntityFactory.cpp" > CMakeFiles\ex1.dir\EntityFactory.cpp.i
+
+CMakeFiles/ex1.dir/EntityFactory.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ex1.dir/EntityFactory.cpp.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\EntityFactory.cpp" -o CMakeFiles\ex1.dir\EntityFactory.cpp.s
+
 # Object files for target ex1
 ex1_OBJECTS = \
-"CMakeFiles/ex1.dir/main.cpp.obj"
+"CMakeFiles/ex1.dir/main.cpp.obj" \
+"CMakeFiles/ex1.dir/GIS.cpp.obj" \
+"CMakeFiles/ex1.dir/Entity.cpp.obj" \
+"CMakeFiles/ex1.dir/POI.cpp.obj" \
+"CMakeFiles/ex1.dir/Circle.cpp.obj" \
+"CMakeFiles/ex1.dir/Junction.cpp.obj" \
+"CMakeFiles/ex1.dir/Way.cpp.obj" \
+"CMakeFiles/ex1.dir/EntityFactory.cpp.obj"
 
 # External object files for target ex1
 ex1_EXTERNAL_OBJECTS =
 
 ex1.exe: CMakeFiles/ex1.dir/main.cpp.obj
+ex1.exe: CMakeFiles/ex1.dir/GIS.cpp.obj
+ex1.exe: CMakeFiles/ex1.dir/Entity.cpp.obj
+ex1.exe: CMakeFiles/ex1.dir/POI.cpp.obj
+ex1.exe: CMakeFiles/ex1.dir/Circle.cpp.obj
+ex1.exe: CMakeFiles/ex1.dir/Junction.cpp.obj
+ex1.exe: CMakeFiles/ex1.dir/Way.cpp.obj
+ex1.exe: CMakeFiles/ex1.dir/EntityFactory.cpp.obj
 ex1.exe: CMakeFiles/ex1.dir/build.make
 ex1.exe: CMakeFiles/ex1.dir/linklibs.rsp
 ex1.exe: CMakeFiles/ex1.dir/objects1.rsp
 ex1.exe: CMakeFiles/ex1.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ex1.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\Tal\Desktop\university\CS\year3\01 - cpp\03 - Project\ex1\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable ex1.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\ex1.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
