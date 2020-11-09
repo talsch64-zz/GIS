@@ -1,3 +1,0 @@
-C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/cmake-build-debug/CMakeFiles/ex1.dir
-C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Tal/Desktop/university/CS/year3/01 - cpp/03 - Project/ex1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
