@@ -1,6 +1,3 @@
-//
-// Created by Tal on 05/11/2020.
-//
 
 #ifndef EX1_POI_H
 #define EX1_POI_H
@@ -11,7 +8,7 @@
 #include "Entity.h"
 
 
-class POI: public Entity {
+class POI : public Entity {
     std::vector<std::string> accessibility;
     Geometry geometry;
 public:

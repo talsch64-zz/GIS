@@ -1,29 +1,28 @@
-//
-// Created by Tal on 05/11/2020.
-//
-
-#include "EntityFactory.h"
+#include "EntityJsonParser.h"
 
 template<typename T>
-T EntityFactory::parseJsonEntity(Document &doc) {
+T EntityJsonParser::parse(Document &doc) {
     std::string type = doc["type"].GetString();
     if (type == "POI") {
         return parsePoi(doc);
-    }
-    else {
+    } else {
         return nullptr;
     }
 }
 
-POI& parsePoi(Document &doc) {
+POI EntityJsonParser::parsePoi(Document &doc) {
     //TODO: handle exception
     std::string id = doc["id"].GetString();
     std::string name = doc["name"].GetString();
     std::string description = doc["description"].GetString();
     std::vector<std::string> categoryTags;
+    std::vector<std::string> accessibility;
+    std::vector<Coordinates> coordinates;
 
     for (SizeType i = 0; i < doc["category_tags"].Size(); i++) {
         categoryTags.push_back(doc["category_tags"][i].GetString());
     }
-     POI poi(id,name,description,categoryTags, nullptr, nullptr);
+    Geometry geometry(coordinates);
+    POI poi(id, name, description, categoryTags, accessibility, geometry);
+    return poi;
 }

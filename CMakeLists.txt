@@ -4,4 +4,4 @@ include_directories(include/rapidjson)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ex1 main.cpp GIS.cpp GIS.h Entity.cpp Entity.h POI.cpp POI.h Geometry.h Circle.cpp Circle.h Junction.cpp Junction.h Way.cpp Way.h EntityFactory.cpp EntityFactory.h)
+add_executable(ex1 main.cpp GIS.cpp GIS.h Entity.cpp Entity.h POI.cpp POI.h Geometry.h Circle.cpp Circle.h Junction.cpp Junction.h Way.cpp Way.h EntityJsonParser.cpp EntityJsonParser.h Geometry.cpp)
