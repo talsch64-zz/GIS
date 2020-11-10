@@ -1,10 +1,9 @@
 #include <iostream>
-#include "rapidjson.h"
+#include "GIS.h"
 
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    GIS gis;
+    gis.loadMapFile("C:\\Users\\royar\\Source\\Workspaces\\Workspace\\C projects\\a.json");
     return 0;
 }
-
-

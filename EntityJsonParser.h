@@ -5,20 +5,16 @@
 #ifndef EX1_ENTITYJSONPARSER_H
 #define EX1_ENTITYJSONPARSER_H
 
-#include "rapidjson.h"
-#include "document.h"
+#include <rapidjson/document.h>
 #include "POI.h"
-
-using namespace rapidjson;
 
 class EntityJsonParser {
 public:
-    template<typename T>
-    T parse(Document &doc);
+    Entity parse(rapidjson::Value &doc);
 
 private:
 
-    POI parsePoi(Document &doc);
+    POI parsePoi(rapidjson::Value &doc);
 };
 
 #endif //EX1_ENTITYJSONPARSER_H

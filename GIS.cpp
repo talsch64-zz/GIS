@@ -1,28 +1,73 @@
 
 
+#include <vector>
+#include <optional>
+#include "rapidjson/document.h"
 #include "GIS.h"
-#include "rapidjson.h"
-#include "document.h"
-using namespace rapidjson;
-std::size_t clear() {}
-std::vector<EntityId> loadMapFile(const std::string& filename) {
-    Document document;
-    document.Parse(filename.c_str());
+#include <stdexcept>
+#include <iostream>
+#include <fstream>
+
+std::size_t GIS::clear() {
+    return 0;
+}
+
+std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
+    rapidjson::Document document;
+    std::vector<char> *fileContent = readJsonFile(filename);
+    rapidjson::ParseResult ok = document.Parse(fileContent->data());
+    delete fileContent;
+
+    if (!ok) {
+        throw std::runtime_error("JSON parse error");
+    }
+
     if (!document.IsArray()) {
         //TODO: handle errors
-        throw "Map is not an array";
+        throw std::runtime_error("Map is not an array");
     }
 
-    for(SizeType i = 0; i < document.Size(); i++) {
-        a=document[i].GetInt()
+    for (auto &jsonEntity : document.GetArray()) {
+        Entity entity = entityJsonParser.parse(jsonEntity);
     }
-
-
-
-
+    return std::vector<EntityId>();
 }
-std::size_t saveMapFile(const std::string& filename) {}
-std::vector<EntityId> getEntities(const std::string& search_name) {}
-std::vector<EntityId> getEntities(const std::string& search_name, const Coordinates&, Meters radius) {}
-std::optional<Coordinates> getEntityClosestPoint(const EntityId&, const Coordinates&) {}
-std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates&) {}
+
+std::size_t GIS::saveMapFile(const std::string &filename) {
+    return 0;
+}
+
+std::vector<EntityId> GIS::getEntities(const std::string &search_name) { return std::vector<EntityId>(); }
+
+std::vector<EntityId>
+GIS::getEntities(const std::string &search_name, const Coordinates &, Meters radius) { return std::vector<EntityId>(); }
+
+std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &, const Coordinates &) {
+    Coordinates coord(0, 0);
+    return coord;
+}
+
+std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
+    Coordinates coord(0, 0);
+    std::pair<Coordinates, EntityId> p(coord, "something");
+    return p;
+}
+
+std::vector<char> *GIS::readJsonFile(std::string filePath) {
+    std::ifstream ifile(filePath, std::ios::ate);
+    if (!ifile) {
+        std::cerr << "Could not open file " << filePath << '\n';
+    }
+
+    std::streamsize size = ifile.tellg();
+    ifile.seekg(0, std::ios::beg);
+
+    std::vector<char> *buffer = new std::vector<char>(size);
+    if (!ifile.read(buffer->data(), size)) {
+        std::cerr << "Could not read file " << filePath << '\n';
+    }
+
+    ifile.close();
+
+    return buffer;
+}

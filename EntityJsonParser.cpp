@@ -1,16 +1,15 @@
 #include "EntityJsonParser.h"
 
-template<typename T>
-T EntityJsonParser::parse(Document &doc) {
+Entity EntityJsonParser::parse(rapidjson::Value &doc) {
     std::string type = doc["type"].GetString();
     if (type == "POI") {
         return parsePoi(doc);
     } else {
-        return nullptr;
+        throw "Entity type not supported";
     }
 }
 
-POI EntityJsonParser::parsePoi(Document &doc) {
+POI EntityJsonParser::parsePoi(rapidjson::Value &doc) {
     //TODO: handle exception
     std::string id = doc["id"].GetString();
     std::string name = doc["name"].GetString();
@@ -19,7 +18,7 @@ POI EntityJsonParser::parsePoi(Document &doc) {
     std::vector<std::string> accessibility;
     std::vector<Coordinates> coordinates;
 
-    for (SizeType i = 0; i < doc["category_tags"].Size(); i++) {
+    for (rapidjson::SizeType i = 0; i < doc["category_tags"].Size(); i++) {
         categoryTags.push_back(doc["category_tags"][i].GetString());
     }
     Geometry geometry(coordinates);

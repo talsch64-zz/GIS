@@ -4,7 +4,7 @@
 
 
 #include <vector>
-#include "GIS.h"
+#include "GISdefs.h"
 
 class Geometry {
     const std::vector<Coordinates> *coordinates;
