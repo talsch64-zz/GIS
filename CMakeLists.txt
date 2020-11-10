@@ -4,4 +4,4 @@ include_directories(include)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ex1 main.cpp GIS.cpp GIS.h Entity.cpp Entity.h POI.cpp POI.h Geometry.h Circle.cpp Circle.h Junction.cpp Junction.h Way.cpp Way.h EntityJsonParser.cpp EntityJsonParser.h Geometry.cpp GISdefs.h GeometryJsonParser.cpp GeometryJsonParser.h Polygon.cpp Polygon.h)
+add_executable(ex1 main.cpp GIS.cpp GIS.h entities/Entity.cpp entities/Entity.h entities/POI.cpp entities/POI.h entities/geometry/Geometry.h entities/Circle.cpp entities/Circle.h entities/Junction.cpp entities/Junction.h entities/Way.cpp entities/Way.h entities/EntityJsonParser.cpp entities/EntityJsonParser.h entities/geometry/Geometry.cpp GISdefs.h entities/geometry/GeometryJsonParser.cpp entities/geometry/GeometryJsonParser.h entities/geometry/Polygon.cpp entities/geometry/Polygon.h)

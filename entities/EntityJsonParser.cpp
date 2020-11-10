@@ -55,7 +55,6 @@ std::vector<std::string> EntityJsonParser::getCategoryTags(rapidjson::Value &doc
     std::vector<std::string> categoryTags;
 
     if (doc.HasMember("category_tags") && doc["category_tags"].IsArray()) {
-        //optional entry
         for (auto &category : doc["category_tags"].GetArray()) {
             if (category.IsString()) {
                 categoryTags.push_back(category.GetString());
@@ -71,7 +70,6 @@ std::vector<std::string> EntityJsonParser::getAccessibility(rapidjson::Value &do
     std::vector<std::string> accessibility;
 
     if (doc.HasMember("accessibility") && doc["accessibility"].IsArray()) {
-        //optional entry
         for (auto &acc : doc["accessibility"].GetArray()) {
             if (acc.IsString()) {
                 accessibility.push_back(acc.GetString());

@@ -3,7 +3,7 @@
 
 #include <rapidjson/document.h>
 #include "POI.h"
-#include "GeometryJsonParser.h"
+#include "geometry/GeometryJsonParser.h"
 
 class EntityJsonParser {
     GeometryJsonParser geometryJsonParser;

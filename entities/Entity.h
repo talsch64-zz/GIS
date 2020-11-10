@@ -5,7 +5,7 @@
 
 #include <string>
 #include <vector>
-#include "GISdefs.h"
+#include "../GISdefs.h"
 
 class Entity {
     EntityId id;

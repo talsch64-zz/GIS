@@ -3,7 +3,7 @@
 #define EX1_WAY_H
 
 #include "Entity.h"
-#include "GISdefs.h"
+#include "../GISdefs.h"
 
 class Way: public Entity {
     std::string from;

@@ -6,7 +6,7 @@
 #define EX1_JUNCTION_H
 
 #include "Entity.h"
-#include "GISdefs.h"
+#include "../GISdefs.h"
 
 class Junction: public Entity {
     Coordinates coordinates;

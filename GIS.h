@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <optional>
-#include "EntityJsonParser.h"
+#include "entities/EntityJsonParser.h"
 
 class GIS {
     std::vector<Entity> entities;
