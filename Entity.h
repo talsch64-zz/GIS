@@ -5,9 +5,10 @@
 
 #include <string>
 #include <vector>
+#include "GISdefs.h"
 
 class Entity {
-    std::string id;
+    EntityId id;
     std::string name;
     std::string description;
     std::vector<std::string> categoryTags;
@@ -16,7 +17,7 @@ public:
     Entity(const std::string &id, const std::string &name, const std::string &description,
            const std::vector<std::string> &category_tags);
 
-    std::string getId() { return id; }
+    EntityId getId() { return id; }
 
     std::string getName() { return name; }
 

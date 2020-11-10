@@ -9,6 +9,7 @@
 #include "EntityJsonParser.h"
 
 class GIS {
+    std::vector<Entity> entities;
     EntityJsonParser entityJsonParser;
 
 public:

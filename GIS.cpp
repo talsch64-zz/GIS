@@ -14,6 +14,7 @@ std::size_t GIS::clear() {
 
 std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     rapidjson::Document document;
+    std::vector<EntityId> entityIds;
     std::vector<char> *fileContent = readJsonFile(filename);
     rapidjson::ParseResult ok = document.Parse(fileContent->data());
     delete fileContent;
@@ -28,9 +29,15 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     }
 
     for (auto &jsonEntity : document.GetArray()) {
-        Entity entity = entityJsonParser.parse(jsonEntity);
+        try {
+            Entity entity = entityJsonParser.parse(jsonEntity);
+            entities.push_back(entity);
+            entityIds.push_back(entity.getId());
+        }
+        catch (const std::runtime_error &e) {
+        }
     }
-    return std::vector<EntityId>();
+    return entityIds;
 }
 
 std::size_t GIS::saveMapFile(const std::string &filename) {
@@ -56,7 +63,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
 std::vector<char> *GIS::readJsonFile(std::string filePath) {
     std::ifstream ifile(filePath, std::ios::ate);
     if (!ifile) {
-        std::cerr << "Could not open file " << filePath << '\n';
+        throw std::runtime_error("Could not open file " + filePath);
     }
 
     std::streamsize size = ifile.tellg();
@@ -64,6 +71,7 @@ std::vector<char> *GIS::readJsonFile(std::string filePath) {
 
     std::vector<char> *buffer = new std::vector<char>(size);
     if (!ifile.read(buffer->data(), size)) {
+        //TODO: figure out why this happens, despite a successful read
         std::cerr << "Could not read file " << filePath << '\n';
     }
 
