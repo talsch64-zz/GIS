@@ -6,7 +6,7 @@
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
 #include "Geometry.h"
-#include "../Circle.h"
+#include "Circle.h"
 #include "Polygon.h"
 
 
