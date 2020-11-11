@@ -1,6 +1,6 @@
 #include "EntityJsonParser.h"
 
-Entity EntityJsonParser::parse(rapidjson::Value &doc) {
+Entity *EntityJsonParser::parse(rapidjson::Value &doc) {
     std::string type = doc["type"].GetString();
     if (type == "POI") {
         return parsePoi(doc);
@@ -9,7 +9,7 @@ Entity EntityJsonParser::parse(rapidjson::Value &doc) {
     }
 }
 
-POI EntityJsonParser::parsePoi(rapidjson::Value &doc) {
+POI *EntityJsonParser::parsePoi(rapidjson::Value &doc) {
     EntityId entityId = getEntityId(doc);
     std::string name = getName(doc);
     std::string description = getDescription(doc);
@@ -21,7 +21,7 @@ POI EntityJsonParser::parsePoi(rapidjson::Value &doc) {
     }
     Geometry geometry = geometryJsonParser.parseGeometry(doc["geometry"]);
 
-    POI poi(entityId, name, description, categoryTags, accessibility, geometry);
+    POI *poi = new POI(entityId, name, description, categoryTags, accessibility, geometry);
     return poi;
 }
 

@@ -11,7 +11,7 @@ class NamedType {
 public:
     explicit NamedType(const T &t) : val(t) {}
 
-    operator const T &() const {
+    operator const T&() const {
         return val;
     }
 };
@@ -30,4 +30,20 @@ struct EntityId : NamedType<std::string> {
     using NamedType<std::string>::NamedType;
 };
 
+template <typename T>
+bool operator==(const NamedType<T>& lhs, const NamedType<T>& rhs) {
+    return static_cast<const T&>(lhs) == static_cast<const T&>(rhs);
+}
+
+template <typename T>
+bool operator<(const NamedType<T>& lhs, const NamedType<T>& rhs) {
+    return static_cast<const T&>(lhs) < static_cast<const T&>(rhs);
+}
+
+//class EntityIdHash {
+//public:
+//    std::size_t operator() (const EntityId entityId) const {
+//        return std::hash<std::string>()(entityId);
+//    }
+//};
 #endif //EX1_GISDEFS_H

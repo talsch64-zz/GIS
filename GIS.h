@@ -6,10 +6,11 @@
 #include <string>
 #include <vector>
 #include <optional>
+#include <bits/unordered_map.h>
 #include "entities/EntityJsonParser.h"
 
 class GIS {
-    std::vector<Entity> entities;
+    std::vector<Entity*> entities;
     EntityJsonParser entityJsonParser;
 
 public:

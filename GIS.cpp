@@ -30,9 +30,9 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
 
     for (auto &jsonEntity : document.GetArray()) {
         try {
-            Entity entity = entityJsonParser.parse(jsonEntity);
+            Entity *entity = entityJsonParser.parse(jsonEntity);
             entities.push_back(entity);
-            entityIds.push_back(entity.getId());
+            entityIds.push_back(entity->getId());
         }
         catch (const std::runtime_error &e) {
         }

@@ -9,10 +9,10 @@ class EntityJsonParser {
     GeometryJsonParser geometryJsonParser;
 
 public:
-    Entity parse(rapidjson::Value &doc);
+    Entity * parse(rapidjson::Value &doc);
 
 private:
-    POI parsePoi(rapidjson::Value &doc);
+    POI * parsePoi(rapidjson::Value &doc);
 
     EntityId getEntityId(rapidjson::Value &doc);
 
