@@ -5,7 +5,7 @@
 #ifndef EX1_CIRCLE_H
 #define EX1_CIRCLE_H
 
-#include "geometry/Geometry.h"
+#include "Geometry.h"
 
 class Circle: public Geometry {
     Meters radius;
