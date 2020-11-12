@@ -8,6 +8,8 @@
 #include "Geometry.h"
 #include "Circle.h"
 #include "Polygon.h"
+#include "../CoordinatesParser.h"
+
 
 
 class GeometryJsonParser {
@@ -16,8 +18,7 @@ private:
 
     Geometry parsePolygon(rapidjson::Value &value);
 
-    void getCoordinates(rapidjson::Value &value, std::vector<Coordinates> &coordinates);
-
+//    void getCoordinates(rapidjson::Value &value, std::vector<Coordinates> &coordinates);
 
 public:
     Geometry parseGeometry(rapidjson::Value &doc);

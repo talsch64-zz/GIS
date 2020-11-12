@@ -7,10 +7,11 @@
 #include "../../GISdefs.h"
 
 class Geometry {
-    const std::vector<Coordinates> *coordinates;
+    const std::vector<Coordinates> *coordinates = nullptr;
 
 public:
     Geometry(const std::vector<Coordinates> &coordinates);
+    Geometry() {}
 
     const std::vector<Coordinates> *getCoordinates() const;
 };

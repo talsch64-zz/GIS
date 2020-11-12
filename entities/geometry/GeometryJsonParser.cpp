@@ -18,12 +18,11 @@ Geometry GeometryJsonParser::parseGeometry(rapidjson::Value &doc) {
 
 Circle GeometryJsonParser::parseCircle(rapidjson::Value &doc) {
     std::vector<Coordinates> coordinates;
-    getCoordinates(doc, coordinates);
+    coordinates.push_back(CoordinatesParser::parseCoordinates(doc));
     if (!doc.HasMember("radius") || !doc["radius"].IsNumber()) {
         throw std::runtime_error("Circle JSON doesn't contain radius");
     }
     Meters radius(doc["radius"].GetDouble());
-
     Circle circle(coordinates, radius);
     return circle;
 }
@@ -32,20 +31,14 @@ Geometry GeometryJsonParser::parsePolygon(rapidjson::Value &value) {
     return Polygon(std::vector<Coordinates>());
 }
 
-void GeometryJsonParser::getCoordinates(rapidjson::Value &doc, std::vector<Coordinates> &coordinates) {
-    if (!doc.HasMember("coordinates") || !doc["coordinates"].IsArray() || doc["coordinates"].Size() == 0) {
-        throw std::runtime_error("Invalid circle JSON");
-    }
-    if (!doc["coordinates"].IsArray()) {
-        throw std::runtime_error("Invalid coordinates JSON");
-    }
-
-    for (auto &coordinateJSON: doc["coordinates"].GetArray()) {
-        if (!coordinateJSON.IsArray() || coordinateJSON.Size() != 2 || !coordinateJSON[0].IsNumber() ||
-            !coordinateJSON[1].IsNumber()) {
-            throw std::runtime_error("Invalid coordinate in JSON");
-        }
-        Coordinates coord(coordinateJSON[0].GetDouble(), coordinateJSON[1].GetDouble());
-        coordinates.push_back(coord);
-    }
-}
+//void GeometryJsonParser::getCoordinates(rapidjson::Value &doc, std::vector<Coordinates> &coordinates) {
+//    if (!doc.HasMember("coordinates") || !doc["coordinates"].IsArray() || doc["coordinates"].Size() == 0) {
+//        throw std::runtime_error("Invalid circle JSON");
+//    }
+//
+//    if (doc["coordinates"].Size() != 2 || doc["coordinates"].IsNumber() || doc["coordinates"][1].IsNumber()) {
+//        throw std::runtime_error("Invalid coordinate in JSON");
+//    }
+//    Coordinates coord(doc["coordinates"][0].GetDouble(), doc["coordinates"][1].GetDouble());
+//    coordinates.push_back(coord);
+//}

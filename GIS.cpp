@@ -17,12 +17,11 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     std::vector<EntityId> entityIds;
     std::vector<char> *fileContent = readJsonFile(filename);
     rapidjson::ParseResult ok = document.Parse(fileContent->data());
+
     delete fileContent;
-
-    if (!ok) {
-        throw std::runtime_error("JSON parse error");
-    }
-
+//    if (!ok) {
+//        throw std::runtime_error("JSON parse error");
+//    }
     if (!document.IsArray()) {
         //TODO: handle errors
         throw std::runtime_error("Map is not an array");

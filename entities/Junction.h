@@ -13,6 +13,8 @@ class Junction: public Entity {
 public:
     Junction(const std::string &id, const std::string &name, const std::string &description,
              const std::vector<std::string> &categoryTags, const Coordinates &coordinates);
+
+    void setCoordinates(const Coordinates &coordinates);
 };
 
 #endif //EX1_JUNCTION_H

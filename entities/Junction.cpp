@@ -10,3 +10,7 @@ Junction::Junction(const std::string &id, const std::string &name, const std::st
                                                                                                           categoryTags),
                                                                                                    coordinates(
                                                                                                            coordinates) {}
+
+void Junction::setCoordinates(const Coordinates &coordinates) {
+    Junction::coordinates = coordinates;
+}

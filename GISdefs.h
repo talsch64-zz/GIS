@@ -10,7 +10,6 @@ class NamedType {
     T val;
 public:
     explicit NamedType(const T &t) : val(t) {}
-
     operator const T&() const {
         return val;
     }
@@ -39,7 +38,6 @@ template <typename T>
 bool operator<(const NamedType<T>& lhs, const NamedType<T>& rhs) {
     return static_cast<const T&>(lhs) < static_cast<const T&>(rhs);
 }
-
 
 template <>
 struct std::hash<EntityId> {

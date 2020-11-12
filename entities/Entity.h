@@ -19,11 +19,6 @@ public:
 
     EntityId getId() { return id; }
 
-    std::string getName() { return name; }
-
-    std::string getDescription() { return description; }
-
-    std::vector<std::string> getCategoryTags() { return categoryTags; }
 };
 
 #endif //EX1_ENTITY_H
