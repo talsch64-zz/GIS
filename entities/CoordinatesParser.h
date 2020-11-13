@@ -13,7 +13,7 @@
 
 class CoordinatesParser {
 public:
-    static Coordinates parseCoordinates(rapidjson::Value &doc);
+    static Coordinates parse(rapidjson::Value &coordinates);
 };
 
 #endif //EX1_COORDINATESPARSER_H

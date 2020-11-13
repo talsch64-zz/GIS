@@ -35,13 +35,15 @@ private:
 
     int parseSpeedLimit(rapidjson::Value &doc);
 
-    bool parseBool(rapidjson::Value &doc);
+    bool parseTollRoad(rapidjson::Value &doc);
 
     std::vector<std::string> parseRestricted(rapidjson::Value &doc);
 
     std::string parseJunctionId(rapidjson::Value &doc, const char *direction);
 
-    std::vector<Coordinates> parseCurves(rapidjson::Value &value);
+    std::vector<Coordinates> parseCurves(rapidjson::Value &doc);
+
+    std::vector<Coordinates> parseCoordinates(rapidjson::Value &doc);
 };
 
 #endif //EX1_ENTITYJSONPARSER_H

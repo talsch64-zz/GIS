@@ -17,8 +17,7 @@ Geometry GeometryJsonParser::parseGeometry(rapidjson::Value &doc) {
 }
 
 Circle GeometryJsonParser::parseCircle(rapidjson::Value &doc) {
-    std::vector<Coordinates> coordinates;
-    coordinates.push_back(CoordinatesParser::parseCoordinates(doc));
+    std::vector<Coordinates> coordinates = parseCoordinates(doc);
     if (!doc.HasMember("radius") || !doc["radius"].IsNumber()) {
         throw std::runtime_error("Circle JSON doesn't contain radius");
     }
@@ -31,14 +30,12 @@ Geometry GeometryJsonParser::parsePolygon(rapidjson::Value &value) {
     return Polygon(std::vector<Coordinates>());
 }
 
-//void GeometryJsonParser::getCoordinates(rapidjson::Value &doc, std::vector<Coordinates> &coordinates) {
-//    if (!doc.HasMember("coordinates") || !doc["coordinates"].IsArray() || doc["coordinates"].Size() == 0) {
-//        throw std::runtime_error("Invalid circle JSON");
-//    }
-//
-//    if (doc["coordinates"].Size() != 2 || doc["coordinates"].IsNumber() || doc["coordinates"][1].IsNumber()) {
-//        throw std::runtime_error("Invalid coordinate in JSON");
-//    }
-//    Coordinates coord(doc["coordinates"][0].GetDouble(), doc["coordinates"][1].GetDouble());
-//    coordinates.push_back(coord);
-//}
+
+std::vector<Coordinates> GeometryJsonParser::parseCoordinates(rapidjson::Value &doc) {
+    std::vector<Coordinates > coordinates;
+    if (!doc.HasMember("coordinates") || !doc["coordinates"].IsArray())  {
+        throw std::runtime_error("Invalid coordinates in JSON");
+    }
+    coordinates.push_back(CoordinatesParser::parse(doc["coordinates"]));
+    return coordinates;
+}

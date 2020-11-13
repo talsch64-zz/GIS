@@ -18,7 +18,7 @@ private:
 
     Geometry parsePolygon(rapidjson::Value &value);
 
-//    void getCoordinates(rapidjson::Value &value, std::vector<Coordinates> &coordinates);
+    std::vector<Coordinates> parseCoordinates(rapidjson::Value &value);
 
 public:
     Geometry parseGeometry(rapidjson::Value &doc);
