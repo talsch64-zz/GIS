@@ -12,7 +12,7 @@ class Geometry {
 public:
     Geometry(const std::vector<Coordinates> &coordinates);
     Geometry() {}
-//    virtual ~Geometry() = 0;
+    virtual ~Geometry() = 0;
 };
 
 #endif //EX1_GEOMETRY_H

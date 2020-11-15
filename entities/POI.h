@@ -4,21 +4,22 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 #include "geometry/Geometry.h"
 #include "Entity.h"
 
 
 class POI : public Entity {
+
     std::vector<std::string> accessibility;
-    Geometry geometry;
+    std::unique_ptr<Geometry> geometry;
 public:
     POI(const std::string &id, const std::string &name, const std::string &description,
-        const std::vector<std::string> &categoryTags, const std::vector<std::string> &accessibility,
-        const Geometry &geometry);
+        const std::vector<std::string> &categoryTags, std::vector<std::string> accessibility,
+        std::unique_ptr<Geometry> geometry);
 
     const std::vector<std::string> &getAccessibility() const;
 
-    const Geometry &getGeometry() const;
 
 };
 

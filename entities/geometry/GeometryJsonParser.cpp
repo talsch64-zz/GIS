@@ -1,8 +1,9 @@
 
+#include <memory>
 #include "GeometryJsonParser.h"
 
 
-Geometry GeometryJsonParser::parseGeometry(rapidjson::Value &doc) {
+std::unique_ptr<Geometry> GeometryJsonParser::parseGeometry(rapidjson::Value &doc) {
     if (!doc.HasMember("geometry") || !doc["geometry"].IsObject()) {
         throw std::runtime_error("JSON entity doesn't contain geometry");
     }
@@ -13,25 +14,25 @@ Geometry GeometryJsonParser::parseGeometry(rapidjson::Value &doc) {
     std::string type = doc["type"].GetString();
     if (type == "Circle") {
         return parseCircle(doc);
-    } else if (type == "Polygon") {
-        return parsePolygon(doc);
+//    } else if (type == "Polygon") {
+//        return parsePolygon(doc);
     } else {
         throw std::runtime_error("Unsupported geometry type");
     }
 }
 
-Circle GeometryJsonParser::parseCircle(rapidjson::Value &doc) {
+std::unique_ptr<Circle> GeometryJsonParser::parseCircle(rapidjson::Value &doc) {
     std::vector<Coordinates> coordinates = parseCoordinates(doc);
     if (!doc.HasMember("radius") || !doc["radius"].IsNumber()) {
         throw std::runtime_error("Circle JSON doesn't contain radius");
     }
     Meters radius(doc["radius"].GetDouble());
-    Circle circle(coordinates, radius);
+    std::unique_ptr<Circle> circle(new Circle(coordinates, radius));
     return circle;
 }
 
-Geometry GeometryJsonParser::parsePolygon(rapidjson::Value &value) {
-    return Polygon(std::vector<Coordinates>());
+std::unique_ptr<Polygon> parsePolygon(rapidjson::Value &value) {
+    return nullptr;
 }
 
 

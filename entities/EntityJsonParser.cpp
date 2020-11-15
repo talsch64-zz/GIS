@@ -52,8 +52,8 @@ std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::vector<std::string> accessibility = parseAccessibility(doc);
-    Geometry geometry = geometryJsonParser.parseGeometry(doc);
-    std::unique_ptr<POI> poi(new POI(id, name, description, categoryTags, accessibility, geometry));
+    std::unique_ptr<Geometry> geometry = geometryJsonParser.parseGeometry(doc);
+    std::unique_ptr<POI> poi(new POI(id, name, description, categoryTags, accessibility, std::move(geometry)));
     return poi;
 }
 
