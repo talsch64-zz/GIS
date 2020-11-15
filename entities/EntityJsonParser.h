@@ -5,19 +5,21 @@
 #include "POI.h"
 #include "Junction.h"
 #include "geometry/GeometryJsonParser.h"
+#include "Way.h"
+#include<memory>
 
 
 class EntityJsonParser {
     GeometryJsonParser geometryJsonParser;
 
 public:
-    Entity * parse(rapidjson::Value &doc);
+    std::unique_ptr<Entity> parse(rapidjson::Value &doc);
 
 private:
 
-    POI * parsePoi(rapidjson::Value &doc);
+    std::unique_ptr<POI> parsePoi(rapidjson::Value &doc);
 
-    Junction *parseJunction(rapidjson::Value &doc);
+    std::unique_ptr<Junction> parseJunction(rapidjson::Value &doc);
 
     std::string parseEntityId(rapidjson::Value &doc);
 
@@ -29,7 +31,7 @@ private:
 
     std::vector<std::string> parseAccessibility(rapidjson::Value &doc);
 
-    Entity *parseWay(rapidjson::Value &doc);
+    std::unique_ptr<Way> parseWay(rapidjson::Value &doc);
 
     std::string parseDirection(rapidjson::Value &doc);
 

@@ -1,7 +1,8 @@
+#include <memory>
 #include "EntityJsonParser.h"
 #include "Way.h"
 
-Entity *EntityJsonParser::parse(rapidjson::Value &doc) {
+std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc) {
     std::string type = doc["type"].GetString();
     if (type == "POI") {
         return parsePoi(doc);
@@ -17,7 +18,7 @@ Entity *EntityJsonParser::parse(rapidjson::Value &doc) {
     }
 }
 
-Entity *EntityJsonParser::parseWay(rapidjson::Value &doc) {
+std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc) {
     std::string id = parseEntityId(doc);
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
@@ -28,35 +29,31 @@ Entity *EntityJsonParser::parseWay(rapidjson::Value &doc) {
     std::vector<std::string> restricted = parseRestricted(doc);
     std::string from = parseJunctionId(doc, "from");
     std::string to = parseJunctionId(doc, "to");
-    std::vector<Coordinates > curves = parseCurves(doc);
+    std::vector<Coordinates> curves = parseCurves(doc);
 
-    Way *way = new Way(id, name, description, categoryTags, from, to, curves, direction, speedLimit, tollRoad, restricted);
+    std::unique_ptr<Way> way(new Way(id, name, description, categoryTags, from, to, curves, direction, speedLimit, tollRoad, restricted));
     return way;
 }
 
-Junction *EntityJsonParser::parseJunction(rapidjson::Value &doc) {
+std::unique_ptr<Junction> EntityJsonParser::parseJunction(rapidjson::Value &doc) {
     std::string id = parseEntityId(doc);
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::vector<Coordinates> coordinates = parseCoordinates(doc);
-    Junction *junction = new Junction(id, name, description, categoryTags, coordinates);
+    std::unique_ptr<Junction> junction(new Junction(id, name, description, categoryTags, coordinates));
     return junction;
-
 }
 
 
-POI *EntityJsonParser::parsePoi(rapidjson::Value &doc) {
+std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
     std::string id = parseEntityId(doc);
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::vector<std::string> accessibility = parseAccessibility(doc);
-    if (!doc.HasMember("geometry") || !doc["geometry"].IsObject()) {
-        throw std::runtime_error("JSON entity doesn't contain geometry");
-    }
-    Geometry geometry = geometryJsonParser.parseGeometry(doc["geometry"]);
-    POI *poi = new POI(id, name, description, categoryTags, accessibility, geometry);
+    Geometry geometry = geometryJsonParser.parseGeometry(doc);
+    std::unique_ptr<POI> poi(new POI(id, name, description, categoryTags, accessibility, geometry));
     return poi;
 }
 

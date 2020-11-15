@@ -29,9 +29,9 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
 
     for (auto &jsonEntity : document.GetArray()) {
         try {
-            Entity *entity = entityJsonParser.parse(jsonEntity);
+            std::unique_ptr<Entity> entity = entityJsonParser.parse(jsonEntity);
             EntityId entityId = entity->getId();
-            entities[entityId] = entity;
+            entities.emplace(entityId, std::move(entity));
             entityIds.push_back(entityId);
         }
         catch (const std::runtime_error &e) {

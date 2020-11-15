@@ -3,6 +3,10 @@
 
 
 Geometry GeometryJsonParser::parseGeometry(rapidjson::Value &doc) {
+    if (!doc.HasMember("geometry") || !doc["geometry"].IsObject()) {
+        throw std::runtime_error("JSON entity doesn't contain geometry");
+    }
+    doc = doc["geometry"];
     if (!doc.HasMember("type") || !doc["type"].IsString()) {
         throw std::runtime_error("Geomtry JSON doesn't contain type");
     }

@@ -8,9 +8,11 @@
 #include <optional>
 #include <unordered_map>
 #include "entities/EntityJsonParser.h"
+#include <memory>
+
 
 class GIS {
-    std::unordered_map<EntityId, Entity*> entities;
+    std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     EntityJsonParser entityJsonParser;
 
 public:
