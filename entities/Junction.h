@@ -9,10 +9,11 @@
 #include "../GISdefs.h"
 
 class Junction: public Entity {
-    Coordinates coordinates;
+    std::vector<Coordinates> coordinates;
 public:
     Junction(const std::string &id, const std::string &name, const std::string &description,
-             const std::vector<std::string> &categoryTags, const Coordinates &coordinates);
+             const std::vector<std::string> &categoryTags, std::vector<Coordinates> coordinates);
+
 };
 
 #endif //EX1_JUNCTION_H

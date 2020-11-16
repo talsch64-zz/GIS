@@ -6,11 +6,13 @@
 #include <string>
 #include <vector>
 #include <optional>
-#include <bits/unordered_map.h>
+#include <unordered_map>
 #include "entities/EntityJsonParser.h"
+#include <memory>
+
 
 class GIS {
-    std::vector<Entity*> entities;
+    std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     EntityJsonParser entityJsonParser;
 
 public:
@@ -29,7 +31,7 @@ public:
     std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &);
 
 private:
-    std::vector<char> *readJsonFile(std::string filePath);
+    std::vector<char> *readJsonFile(const std::string &filePath);
 };
 
 #endif //EX1_GIS_H
