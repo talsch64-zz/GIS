@@ -20,6 +20,8 @@ public:
 
     const std::vector<std::string> &getAccessibility() const;
 
+    rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
+
 
 };
 

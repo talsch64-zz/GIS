@@ -9,3 +9,7 @@ Way::Way(const std::string &id, const std::string &name, const std::string &desc
                                                        curves(curves), direction(direction),
                                                        speedLimit(speedLimit),
                                                        tollRoad(tollRoad), restricted(restricted) {}
+
+rapidjson::Value Way::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
+    return rapidjson::Value();
+}

@@ -4,13 +4,14 @@
 
 #include <stdexcept>
 #include "CoordinatesParser.h"
+#include "geometry/Coordinates.h"
 
 
 Coordinates CoordinatesParser::parse(rapidjson::Value &coordinates) {
     if (coordinates.Size() != 2 || !coordinates[0].IsNumber() || !coordinates[1].IsNumber()) {
         throw std::runtime_error("Invalid coordinate in JSON");
     }
-    return Coordinates(coordinates[0].GetDouble(), coordinates[1].GetDouble());
+    return Coordinates(Longitude(coordinates[0].GetDouble()), Latitude(coordinates[1].GetDouble()));
 }
 
 

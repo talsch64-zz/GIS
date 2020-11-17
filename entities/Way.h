@@ -4,6 +4,7 @@
 
 #include "Entity.h"
 #include "../GISdefs.h"
+#include "geometry/Coordinates.h"
 
 class Way: public Entity {
     EntityId from;
@@ -19,6 +20,8 @@ public:
         const std::vector<std::string> &categoryTags, const std::string &from, const std::string &to,
         const std::vector<Coordinates> &curves, const std::string &direction, int speedLimit, bool tollRoad,
         const std::vector<std::string> &restricted);
+
+    rapidjson::Value toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) override;
 };
 
 #endif //EX1_WAY_H

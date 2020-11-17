@@ -5,7 +5,11 @@
 
 #include <string>
 #include <vector>
+#include <rapidjson/fwd.h>
+#include <rapidjson/document.h>
 #include "../GISdefs.h"
+
+class EntityJsonSerializer;
 
 class Entity {
     EntityId id;
@@ -13,13 +17,22 @@ class Entity {
     std::string description;
     std::vector<std::string> categoryTags;
 
+protected:
+    EntityJsonSerializer *entityJsonSerializer;
+
 public:
     Entity(const std::string &id, const std::string &name, const std::string &description,
            const std::vector<std::string> &category_tags);
-    virtual ~Entity() = 0;
 
-    EntityId getId() { return id; }
+    const EntityId &getId() const;
 
+    const std::string &getName() const;
+
+    const std::string &getDescription() const;
+
+    const std::vector<std::string> &getCategoryTags() const;
+
+    virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) = 0;
 };
 
 #endif //EX1_ENTITY_H

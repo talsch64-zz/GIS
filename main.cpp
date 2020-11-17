@@ -1,6 +1,6 @@
 #include <iostream>
 #include "GIS.h"
-#include "rapidjson/document.h"
+#include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
 #include <iostream>
 #include <fstream>
 #include <tchar.h>
@@ -8,10 +8,10 @@
 
 std::string getMapFilePath(const std::string &name);
 
+
 int main() {
     GIS gis;
-    rapidjson::Document document;
-
+    EntityJsonSerializer serializer;
 
     std::string mapPath = getMapFilePath("a.json");
     gis.loadMapFile(mapPath);

@@ -50,12 +50,12 @@ std::vector<EntityId>
 GIS::getEntities(const std::string &search_name, const Coordinates &, Meters radius) { return std::vector<EntityId>(); }
 
 std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &, const Coordinates &) {
-    Coordinates coord(0, 0);
+    Coordinates coord(Longitude(0), Latitude(0));
     return coord;
 }
 
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
-    Coordinates coord(0, 0);
+    Coordinates coord(Longitude(0), Latitude(0));
     std::pair<Coordinates, EntityId> p(coord, "something");
     return p;
 }

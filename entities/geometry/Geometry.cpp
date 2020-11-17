@@ -1,6 +1,11 @@
 #include "Geometry.h"
+#include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
 
-Geometry::Geometry(const std::vector<Coordinates> &coordinates) : coordinates(
-        new std::vector<Coordinates>(coordinates)) {}
+Geometry::Geometry(std::vector<Coordinates> coordinates) : coordinates(coordinates),
+                                                           geometryJsonSerializer(new GeometryJsonSerializer()) {}
+
+std::vector<Coordinates> Geometry::getCoordinates() {
+    return coordinates;
+}
 
 Geometry::~Geometry() {}
