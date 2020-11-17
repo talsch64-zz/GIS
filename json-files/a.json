@@ -1,0 +1,17 @@
+[
+	{
+		"type": "POI",
+		"id": "dsadsad",
+		"name": "dsadsad",
+		"description": "Dsadsad",
+		"category_tags": ["gfdsad"],
+		"geometry": {
+			"type":"Circle",
+			"coordinates": [
+				[40,30],
+				[21.2, 25.7]
+			],
+			"radius": 4.5
+		}
+	}
+]
