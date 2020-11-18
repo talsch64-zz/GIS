@@ -12,14 +12,12 @@ std::string getMapFilePath(const std::string &name);
 
 int main() {
     GIS gis;
-    EntityJsonSerializer serializer;
-
     std::string mapPath = getMapFilePath("a.json");
     gis.loadMapFile(mapPath);
     gis.saveMapFile("output.json");
 
-    Coordinates home(Longitude(35.036385), Latitude(31.887153));
-    Coordinates betsira = CoordinatesMath::calculateCoordinateByDistance(home, Meters(1000), 45);
+//    Coordinates home(Longitude(35.036385), Latitude(31.887153));
+//    Coordinates betsira = CoordinatesMath::calculateCoordinateByDistance(home, Meters(1000), 45);
 
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\poi.json")
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\junction.json");

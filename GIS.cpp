@@ -3,6 +3,7 @@
 #include <vector>
 #include <optional>
 #include "rapidjson/document.h"
+#include "rapidjson/filereadstream.h"
 #include "GIS.h"
 #include <stdexcept>
 #include <iostream>
@@ -18,10 +19,13 @@ std::size_t GIS::clear() {
 std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     rapidjson::Document document;
     std::vector<EntityId> entityIds;
-    std::vector<char> *fileContent = readJsonFile(filename);
-    rapidjson::ParseResult ok = document.Parse(fileContent->data());
+    FILE *fp = fopen(filename.c_str(), "rb"); // non-Windows use "r"
 
-    delete fileContent;
+    char readBuffer[65536];
+    rapidjson::FileReadStream fileReadStream(fp, readBuffer, sizeof(readBuffer));
+
+    document.ParseStream(fileReadStream);
+
 //    if (!ok) {
 //        throw std::runtime_error("JSON parse error");
 //    }

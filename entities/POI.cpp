@@ -16,3 +16,7 @@ const std::vector<std::string> &POI::getAccessibility() const {
 rapidjson::Value POI::toJson(rapidjson::Document::AllocatorType &allocator) {
     return entityJsonSerializer->toJson(this, allocator);
 }
+
+const std::unique_ptr<Geometry> &POI::getGeometry() const {
+    return geometry;
+}

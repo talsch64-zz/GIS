@@ -12,4 +12,5 @@ void JsonFileWriter::write(rapidjson::Document &doc, const std::string &filename
     doc.Accept(writer);
 
     fclose(fp);
+
 }
