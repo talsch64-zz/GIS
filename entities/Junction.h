@@ -7,7 +7,6 @@
 
 #include "Entity.h"
 #include "../GISdefs.h"
-#include "geometry/Coordinates.h"
 
 class Junction: public Entity {
     std::vector<Coordinates> coordinates;

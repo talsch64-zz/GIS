@@ -4,7 +4,6 @@
 
 #include <stdexcept>
 #include "CoordinatesParser.h"
-#include "geometry/Coordinates.h"
 
 
 Coordinates CoordinatesParser::parse(rapidjson::Value &coordinates) {

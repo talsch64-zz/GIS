@@ -1,6 +1,7 @@
 #include <iostream>
 #include "GIS.h"
 #include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
+#include "entities/geometry/CoordinatesMath.h"
 #include <iostream>
 #include <fstream>
 #include <tchar.h>
@@ -16,6 +17,10 @@ int main() {
     std::string mapPath = getMapFilePath("a.json");
     gis.loadMapFile(mapPath);
     gis.saveMapFile("output.json");
+
+    Coordinates home(Longitude(31.887153), Latitude( 35.036385));
+    Coordinates betsira = CoordinatesMath::calculateCoordinateByDistance(home, Meters(200), 0);
+
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\poi.json")
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\junction.json");
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\way.json");

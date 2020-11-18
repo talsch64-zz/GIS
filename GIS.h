@@ -11,12 +11,14 @@
 #include <memory>
 #include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
 #include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
+#include "search/Grid.h"
 
 class GIS {
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     EntityJsonParser entityJsonParser;
     EntityJsonSerializer entityJsonSerializer;
     JsonFileWriter jsonFileWriter;
+    Grid grid;
 
 public:
     std::size_t clear();

@@ -7,7 +7,6 @@
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
 #include "../../GISdefs.h"
-#include "Coordinates.h"
 
 class GeometryJsonSerializer;
 

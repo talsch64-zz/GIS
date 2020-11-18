@@ -4,7 +4,6 @@
 
 #include "Entity.h"
 #include "../GISdefs.h"
-#include "geometry/Coordinates.h"
 
 class Way: public Entity {
     EntityId from;

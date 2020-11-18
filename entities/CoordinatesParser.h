@@ -5,7 +5,6 @@
 #include <rapidjson/fwd.h>
 #include <vector>
 #include "../GISdefs.h"
-#include "geometry/Coordinates.h"
 #include <rapidjson/document.h>
 
 class CoordinatesParser {

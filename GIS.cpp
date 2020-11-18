@@ -33,6 +33,7 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
             EntityId entityId = entity->getId();
             entities.emplace(entityId, std::move(entity));
             entityIds.push_back(entityId);
+
         }
         catch (const std::runtime_error &e) {
         }

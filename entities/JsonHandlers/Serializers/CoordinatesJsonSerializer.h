@@ -5,7 +5,6 @@
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
 #include "../../../GISdefs.h"
-#include "../../geometry/Coordinates.h"
 
 class CoordinatesJsonSerializer {
 public:
