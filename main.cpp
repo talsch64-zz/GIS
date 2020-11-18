@@ -18,8 +18,8 @@ int main() {
     gis.loadMapFile(mapPath);
     gis.saveMapFile("output.json");
 
-    Coordinates home(Longitude(31.887153), Latitude( 35.036385));
-    Coordinates betsira = CoordinatesMath::calculateCoordinateByDistance(home, Meters(200), 0);
+    Coordinates home(Longitude(35.036385), Latitude(31.887153));
+    Coordinates betsira = CoordinatesMath::calculateCoordinateByDistance(home, Meters(1000), 45);
 
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\poi.json")
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\junction.json");

@@ -8,6 +8,9 @@
 #include <iostream>
 #include <fstream>
 
+GIS::GIS() : grid(std::make_shared<Grid>()), topologicalSearch(grid) {
+}
+
 std::size_t GIS::clear() {
     return 0;
 }

@@ -12,15 +12,19 @@
 #include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
 #include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
 #include "search/Grid.h"
+#include "search/TopologicalSearch.h"
 
 class GIS {
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     EntityJsonParser entityJsonParser;
     EntityJsonSerializer entityJsonSerializer;
     JsonFileWriter jsonFileWriter;
-    Grid grid;
+    std::shared_ptr<Grid> grid;
+    TopologicalSearch topologicalSearch;
 
 public:
+    GIS();
+
     std::size_t clear();
 
     std::vector<EntityId> loadMapFile(const std::string &filename);

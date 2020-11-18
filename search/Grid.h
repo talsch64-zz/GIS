@@ -25,7 +25,6 @@ public:
 };
 
 class Grid {
-    static constexpr double precision = 0.0001;
 
     double truncateDecimalCoordinate(double coordinate) const {
         return std::trunc(coordinate / precision) * precision;
@@ -37,6 +36,8 @@ class Grid {
     }
 
 public:
+    static constexpr double precision = 0.0001;
+
     using GridCell = Coordinates;
 
     // This function gets a new Entity and inserts it into all the zones it occupies
