@@ -37,7 +37,7 @@ std::unique_ptr<Polygon> parsePolygon(rapidjson::Value &value) {
 
 
 std::vector<Coordinates> GeometryJsonParser::parseCoordinates(rapidjson::Value &doc) {
-    std::vector<Coordinates > coordinates;
+    std::vector<Coordinates> coordinates;
     if (!doc.HasMember("coordinates") || !doc["coordinates"].IsArray())  {
         throw std::runtime_error("Invalid coordinates in JSON");
     }

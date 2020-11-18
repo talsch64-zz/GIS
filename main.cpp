@@ -15,6 +15,7 @@ int main() {
 
     std::string mapPath = getMapFilePath("a.json");
     gis.loadMapFile(mapPath);
+    gis.saveMapFile("output.json");
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\poi.json")
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\junction.json");
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\way.json");

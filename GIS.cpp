@@ -41,7 +41,16 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
 }
 
 std::size_t GIS::saveMapFile(const std::string &filename) {
-    return 0;
+    rapidjson::Document doc;
+    doc.SetArray();
+    std::size_t size = 0;
+    for (auto &entityPair : entities) {
+        rapidjson::Value entityVal = entityPair.second->toJson(doc.GetAllocator());
+        doc.PushBack(entityVal, doc.GetAllocator());
+        size++;
+    }
+    jsonFileWriter.write(doc, filename);
+    return size;
 }
 
 std::vector<EntityId> GIS::getEntities(const std::string &search_name) { return std::vector<EntityId>(); }

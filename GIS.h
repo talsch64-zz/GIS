@@ -9,11 +9,14 @@
 #include <unordered_map>
 #include "entities/EntityJsonParser.h"
 #include <memory>
-
+#include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
+#include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
 
 class GIS {
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     EntityJsonParser entityJsonParser;
+    EntityJsonSerializer entityJsonSerializer;
+    JsonFileWriter jsonFileWriter;
 
 public:
     std::size_t clear();
