@@ -3,6 +3,7 @@
 
 #include <rapidjson/document.h>
 #include <memory>
+#include <vector>
 #include "GeometryJsonSerializer.h"
 
 class POI;
@@ -30,6 +31,14 @@ private:
 
     rapidjson::Value setGeometry(rapidjson::Value entityJson, Geometry *geometry,
                                  rapidjson::Document::AllocatorType &allocator);
+
+    rapidjson::Value
+    setString(rapidjson::Value json, const rapidjson::GenericStringRef<char>& name, std::string str,
+              rapidjson::Document::AllocatorType &allocator);
+
+    rapidjson::Value
+    setStringVector(rapidjson::Value json, rapidjson::GenericStringRef<char> name, const std::vector<std::string>& vec,
+                    rapidjson::Document::AllocatorType &allocator);
 };
 
 #endif //EX1_ENTITYJSONSERIALIZER_H

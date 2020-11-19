@@ -8,45 +8,22 @@
 rapidjson::Value EntityJsonSerializer::entityToJson(Entity *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json;
     json.SetObject();
-    rapidjson::Value id;
-    std::string idStr = entity->getId();
-    id.SetString(idStr.c_str(), idStr.length(), allocator);
-    json.AddMember("id", id, allocator);
+    json = setString(std::move(json), "id", entity->getId(), allocator);
 
-    rapidjson::Value name;
-    name.SetString(entity->getName().c_str(), entity->getName().length(), allocator);
-    json.AddMember("name", name, allocator);
+    json = setString(std::move(json), "name", entity->getName(), allocator);
 
     if (entity->getDescription()) {
-        rapidjson::Value description;
-        description.SetString(entity->getDescription().value().c_str(), entity->getDescription().value().length(),
-                              allocator);
-        json.AddMember("description", description, allocator);
+        json = setString(std::move(json), "description", entity->getDescription().value(), allocator);
     }
 
-    rapidjson::Value categoryTags;
-    categoryTags.SetArray();
-    for (std::string tag : entity->getCategoryTags()) {
-        rapidjson::Value tagVal;
-        tagVal.SetString(tag.c_str(), tag.length(), allocator);
-        categoryTags.PushBack(tagVal, allocator);
-    }
-    json.AddMember("category_tags", categoryTags, allocator);
+    json = setStringVector(std::move(json), "category_tags", entity->getCategoryTags(), allocator);
 
     return json;
 }
 
 rapidjson::Value EntityJsonSerializer::toJson(POI *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json = entityToJson(entity, allocator);
-
-    rapidjson::Value accessibility;
-    accessibility.SetArray();
-    for (std::string acc : entity->getAccessibility()) {
-        rapidjson::Value accVal;
-        accVal.SetString(rapidjson::StringRef(acc.c_str()));
-        accessibility.PushBack(accVal, allocator);
-    }
-    json.AddMember("accessibility", accessibility, allocator);
+    json = setStringVector(std::move(json), "accessibility", entity->getAccessibility(), allocator);
     json = setGeometry(std::move(json), entity->getGeometry().get(),
                        allocator);
 
@@ -70,9 +47,7 @@ rapidjson::Value EntityJsonSerializer::toJson(Junction *entity, rapidjson::Docum
 rapidjson::Value
 EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json = entityToJson(entity, allocator);
-    rapidjson::Value direction;
-    direction.SetString(entity->getDirection().c_str(), entity->getDirection().length(), allocator);
-    json.AddMember("direction", direction, allocator);
+    json = setString(std::move(json), "direction", entity->getDirection(), allocator);
 
     rapidjson::Value speedLimit;
     speedLimit.SetInt(entity->getSpeedLimit());
@@ -82,24 +57,11 @@ EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &al
     tollRoad.SetBool(entity->isTollRoad());
     json.AddMember("toll_road", tollRoad, allocator);
 
-    rapidjson::Value from;
-    std::string fromStr = entity->getFrom();
-    from.SetString(fromStr.c_str(), fromStr.length(), allocator);
-    json.AddMember("from", from, allocator);
+    json = setString(std::move(json), "from", entity->getFrom(), allocator);
 
-    rapidjson::Value to;
-    std::string toStr = entity->getTo();
-    to.SetString(toStr.c_str(), toStr.length(), allocator);
-    json.AddMember("to", to, allocator);
+    json = setString(std::move(json), "to", entity->getTo(), allocator);
 
-    rapidjson::Value restricted;
-    restricted.SetArray();
-    for (const std::string &restrictedStr : entity->getRestricted()) {
-        rapidjson::Value restrictedVal;
-        restrictedVal.SetString(restrictedStr.c_str(), restrictedStr.length(), allocator);
-        restricted.PushBack(restrictedVal, allocator);
-    }
-    json.AddMember("restricted", restricted, allocator);
+    json = setStringVector(std::move(json), "restricted", entity->getRestricted(), allocator);
 
     rapidjson::Value curves;
     curves.SetArray();
@@ -109,5 +71,28 @@ EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &al
     }
     json.AddMember("curves", curves, allocator);
 
+    return json;
+}
+
+rapidjson::Value
+EntityJsonSerializer::setString(rapidjson::Value json, const rapidjson::GenericStringRef<char> &name, std::string str,
+                                rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
+    rapidjson::Value val;
+    val.SetString(str.c_str(), str.length(), allocator);
+    json.AddMember(name, val, allocator);
+    return json;
+}
+
+rapidjson::Value EntityJsonSerializer::setStringVector(rapidjson::Value json, rapidjson::GenericStringRef<char> name,
+                                                       const std::vector<std::string> &vec,
+                                                       rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
+    rapidjson::Value arr;
+    arr.SetArray();
+    for (std::string str : vec) {
+        rapidjson::Value elVal;
+        elVal.SetString(str.c_str(), str.length(), allocator);
+        arr.PushBack(elVal, allocator);
+    }
+    json.AddMember(name, arr, allocator);
     return json;
 }
