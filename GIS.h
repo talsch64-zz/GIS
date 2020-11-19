@@ -13,6 +13,7 @@
 #include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
 #include "search/Grid.h"
 #include "search/TopologicalSearch.h"
+#include "IdGenerator.h"
 
 class GIS {
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
@@ -21,6 +22,7 @@ class GIS {
     JsonFileWriter jsonFileWriter;
     std::shared_ptr<Grid> grid;
     TopologicalSearch topologicalSearch;
+    IdGenerator idGenerator;
 
 public:
     GIS();
