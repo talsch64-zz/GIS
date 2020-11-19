@@ -1,0 +1,54 @@
+[
+  {
+    "type": "POI",
+    "id": "id",
+    "name": "name",
+    "description": "desc",
+    "category_tags": [
+      "tag1",
+      "tag2"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        40,
+        30
+      ],
+      "radius": 4.5
+    }
+  },
+  {
+    "type": "Junction",
+    "id": "id2",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      20,
+      30
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "id3",
+    "name": "way",
+    "description": "desc3",
+    "from": "id2",
+    "to": "id10",
+    "curves": [
+      [
+        15,
+        32.3
+      ],
+      [
+        90,
+        11
+      ]
+    ],
+    "speed_limit": 70,
+    "direction": "unidirectional",
+    "toll_road": true,
+    "restricted": [
+      "trucks"
+    ]
+  }
+]

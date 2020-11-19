@@ -8,11 +8,12 @@
 #include "Geometry.h"
 #include "Circle.h"
 #include "Polygon.h"
-#include "../CoordinatesParser.h"
-
+#include "../CoordinatesJsonParser.h"
 
 
 class GeometryJsonParser {
+    CoordinatesJsonParser coordinatesJsonParser;
+
 private:
     std::unique_ptr<Circle> parseCircle(rapidjson::Value &value);
 

@@ -11,6 +11,7 @@
 
 class EntityJsonParser {
     GeometryJsonParser geometryJsonParser;
+    CoordinatesJsonParser coordinatesJsonParser;
 
 public:
     std::unique_ptr<Entity> parse(rapidjson::Value &doc);
