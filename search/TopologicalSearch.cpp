@@ -1,7 +1,9 @@
 #include "TopologicalSearch.h"
+
+#include <utility>
 #include "../entities/geometry/CoordinatesMath.h"
 
-TopologicalSearch::TopologicalSearch(std::shared_ptr<Grid> grid) : grid(grid) {}
+TopologicalSearch::TopologicalSearch(std::shared_ptr<Grid> grid) : grid(std::move(grid)) {}
 
 std::vector<Coordinates> TopologicalSearch::searchCircleInGrid(const Coordinates &center, Meters radius) {
     std::vector<Coordinates> gridCells;
@@ -17,4 +19,5 @@ std::vector<Coordinates> TopologicalSearch::searchCircleInGrid(const Coordinates
     }
     return gridCells;
 }
+
 
