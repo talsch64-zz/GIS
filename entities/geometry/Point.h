@@ -11,6 +11,10 @@
 class Point: public Geometry {
     Coordinates coordinates;
 public:
-    Point(const Coordinates &coordinates, const Coordinates &coordinates1);
+    const Coordinates &getCoordinates() const;
+
+    Point(const Coordinates &coordinates);
+
+    rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
 };
 #endif //EX1_POINT_H

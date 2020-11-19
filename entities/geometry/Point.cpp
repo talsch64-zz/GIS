@@ -4,3 +4,8 @@
 
 #include "Point.h"
 
+Point::Point(const Coordinates &coordinates) : Geometry(), coordinates(coordinates) {}
+
+const Coordinates &Point::getCoordinates() const {
+    return coordinates;
+}

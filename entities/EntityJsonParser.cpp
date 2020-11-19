@@ -28,11 +28,8 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc) {
     std::vector<std::string> restricted = parseRestricted(doc);
     std::string from = parseJunctionId(doc, "from");
     std::string to = parseJunctionId(doc, "to");
-    std::vector<Coordinates> curves = parseCurves(doc);
-
-    std::unique_ptr<Way> way(
-            new Way(id, name, description, categoryTags, from, to, curves, direction, speedLimit, tollRoad,
-                    restricted));
+    std::unique_ptr<Geometry> geometry = geometryJsonParser.parseWayGeometry(doc);
+    std::unique_ptr<Way> way(new Way(id, name, description, categoryTags, std::move(geometry), from, to, direction, speedLimit, tollRoad, restricted));
     return way;
 }
 
@@ -41,11 +38,8 @@ std::unique_ptr<Junction> EntityJsonParser::parseJunction(rapidjson::Value &doc)
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
-    if (!doc.HasMember("coordinates")) {
-        throw std::runtime_error("Junction doesn't contain coordinates");
-    }
-    Coordinates coordinates = coordinatesJsonParser.parse(doc["coordinates"]);
-    std::unique_ptr<Junction> junction(new Junction(id, name, description, categoryTags, coordinates));
+    std::unique_ptr<Geometry> geometry = geometryJsonParser.parseJunctionGeometry(doc);
+    std::unique_ptr<Junction> junction(new Junction(id, name, description, categoryTags, std::move(geometry)));
     return junction;
 }
 
@@ -56,16 +50,15 @@ std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::vector<std::string> accessibility = parseAccessibility(doc);
-    std::unique_ptr<Geometry> geometry = geometryJsonParser.parseGeometry(doc);
+    std::unique_ptr<Geometry> geometry = geometryJsonParser.parsePOIGeometry(doc);
     std::unique_ptr<POI> poi(new POI(id, name, description, categoryTags, accessibility, std::move(geometry)));
     return poi;
 }
 
 std::string EntityJsonParser::parseEntityId(rapidjson::Value &doc) {
     if (toParseId()) {
-        if (!doc.HasMember("id") || !doc["id"].IsString()) {
+        if (!doc.HasMember("id") || !doc["id"].IsString() || doc["id"].GetString() == "") {
             throw std::runtime_error("JSON entity doesn't contain id");
-
         } else {
             return doc["id"].GetString();
         }
@@ -162,17 +155,6 @@ std::string EntityJsonParser::parseJunctionId(rapidjson::Value &doc, const char 
     return junctionId;
 }
 
-std::vector<Coordinates> EntityJsonParser::parseCurves(rapidjson::Value &doc) {
-    //optional entry
-    std::vector<Coordinates> curves;
-    if (doc.HasMember("curves") && doc["curves"].IsArray()) {
-        for (auto &coordinates : doc["curves"].GetArray()) {
-            curves.push_back(coordinatesJsonParser.parse(coordinates));
-        }
-    }
-    return curves;
-}
-
 bool EntityJsonParser::containsIds(rapidjson::Value &doc) {
     bool hasId = false;
     for (auto &jsonEntity : doc.GetArray()) {
@@ -191,3 +173,15 @@ bool EntityJsonParser::toParseId() const {
 void EntityJsonParser::setParseId(bool parseId) {
     EntityJsonParser::parseId = parseId;
 }
+
+
+//std::vector<Coordinates> EntityJsonParser::parseCurves(rapidjson::Value &doc) {
+//    //optional entry
+//    std::vector<Coordinates> curves;
+//    if (doc.HasMember("curves") && doc["curves"].IsArray()) {
+//        for (auto &coordinates : doc["curves"].GetArray()) {
+//            curves.push_back(coordinatesJsonParser.parse(coordinates));
+//        }
+//    }
+//    return curves;
+//}

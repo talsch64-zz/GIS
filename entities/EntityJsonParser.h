@@ -51,9 +51,9 @@ private:
 
     std::string parseJunctionId(rapidjson::Value &doc, const char *direction);
 
-    std::vector<Coordinates> parseCurves(rapidjson::Value &doc);
+//    std::vector<Coordinates> parseCurves(rapidjson::Value &doc);
 
-    std::vector<Coordinates> parseCoordinates(rapidjson::Value &doc);
+//    std::vector<Coordinates> parseCoordinates(rapidjson::Value &doc);
 
 };
 

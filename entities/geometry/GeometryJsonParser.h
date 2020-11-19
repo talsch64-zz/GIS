@@ -21,8 +21,15 @@ private:
 
     std::vector<Coordinates> parseCoordinates(rapidjson::Value &value);
 
+
+
 public:
-    std::unique_ptr<Geometry> parseGeometry(rapidjson::Value &doc);
+    std::unique_ptr<Geometry> parsePOIGeometry(rapidjson::Value &doc);
+    std::unique_ptr<Geometry> parseWayGeometry(rapidjson::Value &doc);
+    std::unique_ptr<Geometry> parseJunctionGeometry(rapidjson::Value &doc);
+
+
+
 };
 
 #endif //EX1_GEOMETRYJSONPARSER_H

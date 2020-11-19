@@ -4,11 +4,11 @@
 
 #include "Entity.h"
 #include "../GISdefs.h"
+#include "geometry/Geometry.h"
 
 class Way: public Entity {
     EntityId from;
     EntityId to;
-    std::vector<Coordinates> curves;
     std::string direction;
     int speedLimit;
     bool tollRoad;
@@ -16,15 +16,12 @@ class Way: public Entity {
 
 public:
     Way(const std::string &id, const std::string &name, const std::string &description,
-        const std::vector<std::string> &categoryTags, const std::string &from, const std::string &to,
-        const std::vector<Coordinates> &curves, const std::string &direction, int speedLimit, bool tollRoad,
-        const std::vector<std::string> &restricted);
+        const std::vector<std::string> &categoryTags, std::unique_ptr<Geometry> geometry, const std::string &from,
+        const std::string &to, const std::string &direction, int speedLimit, bool tollRoad, const std::vector<std::string> &restricted);
 
     const EntityId &getFrom() const;
 
     const EntityId &getTo() const;
-
-    const std::vector<Coordinates> &getCurves() const;
 
     const std::string &getDirection() const;
 

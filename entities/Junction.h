@@ -7,16 +7,14 @@
 
 #include "Entity.h"
 #include "../GISdefs.h"
+#include "geometry/Point.h"
 
 class Junction: public Entity {
-    Coordinates coordinates;
 public:
     Junction(const std::string &id, const std::string &name, const std::string &description,
-             const std::vector<std::string> &categoryTags, Coordinates coordinates);
+             const std::vector<std::string> &categoryTags, std::unique_ptr<Geometry> geometry);
 
     rapidjson::Value toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) override;
-
-    const Coordinates &getCoordinates() const;
 };
 
 #endif //EX1_JUNCTION_H
