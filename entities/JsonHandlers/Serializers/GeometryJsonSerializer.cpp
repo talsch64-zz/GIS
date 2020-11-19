@@ -13,5 +13,9 @@ rapidjson::Value GeometryJsonSerializer::toJson(Circle *geometry, rapidjson::Doc
     rapidjson::Value coordinates = coordinatesJsonSerializer.toJson(geometry->getCenter(), allocator);
     json.AddMember("coordinates", coordinates, allocator);
 
+    rapidjson::Value radius;
+    radius.SetDouble(geometry->getRadius());
+    json.AddMember("radius", radius, allocator);
+
     return json;
 }

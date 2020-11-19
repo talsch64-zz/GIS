@@ -38,9 +38,6 @@ public:
     std::optional<Coordinates> getEntityClosestPoint(const EntityId &, const Coordinates &);
 
     std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &);
-
-private:
-    std::vector<char> *readJsonFile(const std::string &filePath);
 };
 
 #endif //EX1_GIS_H
