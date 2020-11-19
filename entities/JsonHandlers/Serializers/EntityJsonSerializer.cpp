@@ -2,6 +2,8 @@
 #include "EntityJsonSerializer.h"
 #include "../../Entity.h"
 #include "../../POI.h"
+#include "../../Junction.h"
+#include "../../Way.h"
 
 rapidjson::Value EntityJsonSerializer::entityToJson(Entity *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json;
@@ -15,9 +17,12 @@ rapidjson::Value EntityJsonSerializer::entityToJson(Entity *entity, rapidjson::D
     name.SetString(entity->getName().c_str(), entity->getName().length(), allocator);
     json.AddMember("name", name, allocator);
 
-    rapidjson::Value description;
-    description.SetString(entity->getDescription().c_str(), entity->getDescription().length(), allocator);
-    json.AddMember("description", description, allocator);
+    if (entity->getDescription()) {
+        rapidjson::Value description;
+        description.SetString(entity->getDescription().value().c_str(), entity->getDescription().value().length(),
+                              allocator);
+        json.AddMember("description", description, allocator);
+    }
 
     rapidjson::Value categoryTags;
     categoryTags.SetArray();
@@ -26,7 +31,7 @@ rapidjson::Value EntityJsonSerializer::entityToJson(Entity *entity, rapidjson::D
         tagVal.SetString(tag.c_str(), tag.length(), allocator);
         categoryTags.PushBack(tagVal, allocator);
     }
-    json.AddMember("categoryTags", categoryTags, allocator);
+    json.AddMember("category_tags", categoryTags, allocator);
 
     return json;
 }
@@ -59,5 +64,50 @@ rapidjson::Value EntityJsonSerializer::toJson(Junction *entity, rapidjson::Docum
     rapidjson::Value json = entityToJson(entity, allocator);
     rapidjson::Value coord = coordinatesJsonSerializer.toJson(entity->getCoordinates(), allocator);
     json.AddMember("coordinates", coord, allocator);
+    return json;
+}
+
+rapidjson::Value
+EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &allocator) {
+    rapidjson::Value json = entityToJson(entity, allocator);
+    rapidjson::Value direction;
+    direction.SetString(entity->getDirection().c_str(), entity->getDirection().length(), allocator);
+    json.AddMember("direction", direction, allocator);
+
+    rapidjson::Value speedLimit;
+    speedLimit.SetInt(entity->getSpeedLimit());
+    json.AddMember("speed_limit", speedLimit, allocator);
+
+    rapidjson::Value tollRoad;
+    tollRoad.SetBool(entity->isTollRoad());
+    json.AddMember("toll_road", tollRoad, allocator);
+
+    rapidjson::Value from;
+    std::string fromStr = entity->getFrom();
+    from.SetString(fromStr.c_str(), fromStr.length(), allocator);
+    json.AddMember("from", from, allocator);
+
+    rapidjson::Value to;
+    std::string toStr = entity->getTo();
+    to.SetString(toStr.c_str(), toStr.length(), allocator);
+    json.AddMember("to", to, allocator);
+
+    rapidjson::Value restricted;
+    restricted.SetArray();
+    for (const std::string &restrictedStr : entity->getRestricted()) {
+        rapidjson::Value restrictedVal;
+        restrictedVal.SetString(restrictedStr.c_str(), restrictedStr.length(), allocator);
+        restricted.PushBack(restrictedVal, allocator);
+    }
+    json.AddMember("restricted", restricted, allocator);
+
+    rapidjson::Value curves;
+    curves.SetArray();
+    for (Coordinates coord : entity->getCurves()) {
+        rapidjson::Value coordVal = coordinatesJsonSerializer.toJson(coord, allocator);
+        curves.PushBack(coordVal, allocator);
+    }
+    json.AddMember("curves", curves, allocator);
+
     return json;
 }

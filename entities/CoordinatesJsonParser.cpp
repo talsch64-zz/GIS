@@ -1,7 +1,3 @@
-//
-// Created by Tal on 12/11/2020.
-//
-
 #include <stdexcept>
 #include "CoordinatesJsonParser.h"
 

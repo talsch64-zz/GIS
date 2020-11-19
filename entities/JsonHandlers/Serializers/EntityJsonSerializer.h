@@ -4,21 +4,26 @@
 #include <rapidjson/document.h>
 #include <memory>
 #include "GeometryJsonSerializer.h"
-#include "../../Junction.h"
 
 class POI;
+
+class Junction;
+
+class Way;
 
 class Entity;
 
 class Geometry;
 
 class EntityJsonSerializer {
-    GeometryJsonSerializer geometryJsonSerializer;
     CoordinatesJsonSerializer coordinatesJsonSerializer;
 
 public:
     rapidjson::Value toJson(POI *entity, rapidjson::Document::AllocatorType &allocator);
+
     rapidjson::Value toJson(Junction *entity, rapidjson::Document::AllocatorType &allocator);
+
+    rapidjson::Value toJson(Way *entity, rapidjson::Document::AllocatorType &allocator);
 
 private:
     rapidjson::Value entityToJson(Entity *entity, rapidjson::Document::AllocatorType &allocator);

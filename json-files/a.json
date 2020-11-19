@@ -26,5 +26,29 @@
       20,
       30
     ]
+  },
+  {
+    "type": "Way",
+    "id": "id3",
+    "name": "way",
+    "description": "desc3",
+    "from": "id2",
+    "to": "id10",
+    "curves": [
+      [
+        15,
+        32.3
+      ],
+      [
+        90,
+        11
+      ]
+    ],
+    "speed_limit": 70,
+    "direction": "unidirectional",
+    "toll_road": true,
+    "restricted": [
+      "trucks"
+    ]
   }
 ]

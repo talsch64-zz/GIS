@@ -15,7 +15,7 @@ const std::string &Entity::getName() const {
     return name;
 }
 
-const std::string &Entity::getDescription() const {
+const std::optional<std::string> &Entity::getDescription() const {
     return description;
 }
 

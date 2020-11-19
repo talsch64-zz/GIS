@@ -8,6 +8,7 @@
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
 #include <memory>
+#include <optional>
 #include "../GISdefs.h"
 
 class EntityJsonSerializer;
@@ -15,7 +16,7 @@ class EntityJsonSerializer;
 class Entity {
     EntityId id;
     std::string name;
-    std::string description;
+    std::optional<std::string> description;
     std::vector<std::string> categoryTags;
 
 protected:
@@ -29,7 +30,7 @@ public:
 
     const std::string &getName() const;
 
-    const std::string &getDescription() const;
+    const std::optional<std::string> &getDescription() const;
 
     const std::vector<std::string> &getCategoryTags() const;
 
