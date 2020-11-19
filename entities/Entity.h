@@ -7,6 +7,7 @@
 #include <vector>
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
+#include <memory>
 #include "../GISdefs.h"
 
 class EntityJsonSerializer;
@@ -33,6 +34,8 @@ public:
     const std::vector<std::string> &getCategoryTags() const;
 
     virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) = 0;
+
+    virtual ~Entity();
 };
 
 #endif //EX1_ENTITY_H

@@ -7,7 +7,7 @@
 class Circle : public Geometry {
     Meters radius;
 public:
-    Circle(const std::vector<Coordinates> &coordinates, const Meters radius) : Geometry(coordinates), radius(radius) {}
+    Circle(const Coordinates &coordinates, const Meters radius) : Geometry(coordinates), radius(radius) {}
 
     const Meters &getRadius() const {
         return radius;

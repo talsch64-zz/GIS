@@ -16,10 +16,11 @@ protected:
     std::vector<Coordinates> coordinates;
     GeometryJsonSerializer *geometryJsonSerializer;
 
-public:
+    explicit Geometry(const Coordinates &coordinates);
+
     explicit Geometry(std::vector<Coordinates> coordinates);
 
-    Geometry() {}
+public:
 
     virtual ~Geometry() = 0;
 

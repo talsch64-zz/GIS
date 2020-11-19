@@ -9,13 +9,14 @@
 #include "../GISdefs.h"
 
 class Junction: public Entity {
-    std::vector<Coordinates> coordinates;
+    Coordinates coordinates;
 public:
     Junction(const std::string &id, const std::string &name, const std::string &description,
-             const std::vector<std::string> &categoryTags, std::vector<Coordinates> coordinates);
+             const std::vector<std::string> &categoryTags, Coordinates coordinates);
 
     rapidjson::Value toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) override;
 
+    const Coordinates &getCoordinates() const;
 };
 
 #endif //EX1_JUNCTION_H

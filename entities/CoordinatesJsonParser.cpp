@@ -3,10 +3,10 @@
 //
 
 #include <stdexcept>
-#include "CoordinatesParser.h"
+#include "CoordinatesJsonParser.h"
 
 
-Coordinates CoordinatesParser::parse(rapidjson::Value &coordinates) {
+Coordinates CoordinatesJsonParser::parse(rapidjson::Value &coordinates) {
     if (coordinates.Size() != 2 || !coordinates[0].IsNumber() || !coordinates[1].IsNumber()) {
         throw std::runtime_error("Invalid coordinate in JSON");
     }

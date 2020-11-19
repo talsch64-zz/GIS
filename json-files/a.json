@@ -1,11 +1,12 @@
 [
   {
     "type": "POI",
-    "id": "dsadsad",
-    "name": "dsadsad",
-    "description": "Dsadsad",
+    "id": "id",
+    "name": "name",
+    "description": "desc",
     "category_tags": [
-      "gfdsad"
+      "tag1",
+      "tag2"
     ],
     "geometry": {
       "type": "Circle",
@@ -15,5 +16,15 @@
       ],
       "radius": 4.5
     }
+  },
+  {
+    "type": "Junction",
+    "id": "id2",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      20,
+      30
+    ]
   }
 ]

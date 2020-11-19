@@ -76,23 +76,3 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
     std::pair<Coordinates, EntityId> p(coord, "something");
     return p;
 }
-
-std::vector<char> *GIS::readJsonFile(const std::string &filePath) {
-    std::ifstream ifile(filePath, std::ios::ate);
-    if (!ifile) {
-        throw std::runtime_error("Could not open file " + filePath);
-    }
-
-    std::streamsize size = ifile.tellg();
-    ifile.seekg(0, std::ios::beg);
-
-    auto *buffer = new std::vector<char>(size);
-    if (!ifile.read(buffer->data(), size)) {
-        //TODO: figure out why this happens, despite a successful read
-        std::cerr << "Could not read file " << filePath << '\n';
-    }
-
-    ifile.close();
-
-    return buffer;
-}

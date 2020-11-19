@@ -54,3 +54,10 @@ rapidjson::Value EntityJsonSerializer::setGeometry(rapidjson::Value entityJson, 
     entityJson.AddMember("geometry", geometryJson, allocator);
     return entityJson;
 }
+
+rapidjson::Value EntityJsonSerializer::toJson(Junction *entity, rapidjson::Document::AllocatorType &allocator) {
+    rapidjson::Value json = entityToJson(entity, allocator);
+    rapidjson::Value coord = coordinatesJsonSerializer.toJson(entity->getCoordinates(), allocator);
+    json.AddMember("coordinates", coord, allocator);
+    return json;
+}

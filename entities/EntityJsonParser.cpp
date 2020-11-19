@@ -12,8 +12,7 @@ std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc) {
     }
     if (type == "Way") {
         return parseWay(doc);
-    }
-    else {
+    } else {
         throw std::runtime_error("Entity type not supported");
     }
 }
@@ -31,7 +30,9 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc) {
     std::string to = parseJunctionId(doc, "to");
     std::vector<Coordinates> curves = parseCurves(doc);
 
-    std::unique_ptr<Way> way(new Way(id, name, description, categoryTags, from, to, curves, direction, speedLimit, tollRoad, restricted));
+    std::unique_ptr<Way> way(
+            new Way(id, name, description, categoryTags, from, to, curves, direction, speedLimit, tollRoad,
+                    restricted));
     return way;
 }
 
@@ -40,7 +41,10 @@ std::unique_ptr<Junction> EntityJsonParser::parseJunction(rapidjson::Value &doc)
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
-    std::vector<Coordinates> coordinates = parseCoordinates(doc);
+    if (!doc.HasMember("coordinates")) {
+        throw std::runtime_error("Junction doesn't contain coordinates");
+    }
+    Coordinates coordinates = coordinatesJsonParser.parse(doc["coordinates"]);
     std::unique_ptr<Junction> junction(new Junction(id, name, description, categoryTags, coordinates));
     return junction;
 }
@@ -157,21 +161,11 @@ std::string EntityJsonParser::parseJunctionId(rapidjson::Value &doc, const char 
 
 std::vector<Coordinates> EntityJsonParser::parseCurves(rapidjson::Value &doc) {
     //optional entry
-    std::vector<Coordinates > curves;
+    std::vector<Coordinates> curves;
     if (doc.HasMember("curves") && doc["curves"].IsArray()) {
         for (auto &coordinates : doc["curves"].GetArray()) {
-            curves.push_back(CoordinatesParser::parse(coordinates));
+            curves.push_back(coordinatesJsonParser.parse(coordinates));
         }
     }
     return curves;
 }
-
-std::vector<Coordinates> EntityJsonParser::parseCoordinates(rapidjson::Value &doc) {
-    std::vector<Coordinates > coordinates;
-    if (!doc.HasMember("coordinates") || !doc["coordinates"].IsArray())  {
-        throw std::runtime_error("Invalid coordinate in JSON");
-    }
-    coordinates.push_back(CoordinatesParser::parse(doc["coordinates"]));
-    return coordinates;
-}
-

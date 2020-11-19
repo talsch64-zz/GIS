@@ -22,7 +22,10 @@ std::unique_ptr<Geometry> GeometryJsonParser::parseGeometry(rapidjson::Value &do
 }
 
 std::unique_ptr<Circle> GeometryJsonParser::parseCircle(rapidjson::Value &doc) {
-    std::vector<Coordinates> coordinates = parseCoordinates(doc);
+    if (!doc.HasMember("coordinates") || !doc["coordinates"].IsArray())  {
+        throw std::runtime_error("Invalid coordinates in JSON");
+    }
+    Coordinates coordinates = coordinatesJsonParser.parse(doc["coordinates"]);
     if (!doc.HasMember("radius") || !doc["radius"].IsNumber()) {
         throw std::runtime_error("Circle JSON doesn't contain radius");
     }
@@ -33,14 +36,4 @@ std::unique_ptr<Circle> GeometryJsonParser::parseCircle(rapidjson::Value &doc) {
 
 std::unique_ptr<Polygon> parsePolygon(rapidjson::Value &value) {
     return nullptr;
-}
-
-
-std::vector<Coordinates> GeometryJsonParser::parseCoordinates(rapidjson::Value &doc) {
-    std::vector<Coordinates> coordinates;
-    if (!doc.HasMember("coordinates") || !doc["coordinates"].IsArray())  {
-        throw std::runtime_error("Invalid coordinates in JSON");
-    }
-    coordinates.push_back(CoordinatesParser::parse(doc["coordinates"]));
-    return coordinates;
 }
