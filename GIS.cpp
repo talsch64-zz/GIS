@@ -33,14 +33,24 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
         //TODO: handle errors
         throw std::runtime_error("Map is not an array");
     }
+    bool hasIds = entityJsonParser.containsIds(document);
+    entityJsonParser.setParseId(hasIds);
 
     for (auto &jsonEntity : document.GetArray()) {
         try {
             std::unique_ptr<Entity> entity = entityJsonParser.parse(jsonEntity);
+            if (!hasIds) {
+                entity->setId(idGenerator.generateId());
+            }
             EntityId entityId = entity->getId();
-            entities.emplace(entityId, std::move(entity));
-            entityIds.push_back(entityId);
-
+            // if entityId not loaded yet
+            if (entities.find(entityId) == entities.end()) {
+                entities.emplace(entityId, std::move(entity));
+                entityIds.push_back(entityId);
+            }
+            else {
+//                TODO print to log that id is not unique
+            }
         }
         catch (const std::runtime_error &e) {
         }

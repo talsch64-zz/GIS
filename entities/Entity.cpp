@@ -27,3 +27,6 @@ Entity::~Entity() {
     delete entityJsonSerializer;
 }
 
+void Entity::setId(const EntityId &id) {
+    Entity::id = id;
+}

@@ -62,12 +62,15 @@ std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
 }
 
 std::string EntityJsonParser::parseEntityId(rapidjson::Value &doc) {
-    if (!doc.HasMember("id") || !doc["id"].IsString()) {
-        throw std::runtime_error("JSON entity doesn't contain id");
-        //TODO: instead, generate unique id
-    } else {
-        return doc["id"].GetString();
+    if (toParseId()) {
+        if (!doc.HasMember("id") || !doc["id"].IsString()) {
+            throw std::runtime_error("JSON entity doesn't contain id");
+
+        } else {
+            return doc["id"].GetString();
+        }
     }
+    return "";
 }
 
 std::string EntityJsonParser::parseName(rapidjson::Value &doc) {
@@ -168,4 +171,23 @@ std::vector<Coordinates> EntityJsonParser::parseCurves(rapidjson::Value &doc) {
         }
     }
     return curves;
+}
+
+bool EntityJsonParser::containsIds(rapidjson::Value &doc) {
+    bool hasId = false;
+    for (auto &jsonEntity : doc.GetArray()) {
+        if (jsonEntity.HasMember("id") && jsonEntity["id"].IsString() && (strcmp(jsonEntity["id"].GetString(), "")) != 0) {
+            hasId = true;
+            break;
+        }
+    }
+    return hasId;
+}
+
+bool EntityJsonParser::toParseId() const {
+    return parseId;
+}
+
+void EntityJsonParser::setParseId(bool parseId) {
+    EntityJsonParser::parseId = parseId;
 }

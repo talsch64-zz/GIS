@@ -37,6 +37,9 @@ public:
     virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) = 0;
 
     virtual ~Entity();
+
+    void setId(const EntityId &id);
+
 };
 
 #endif //EX1_ENTITY_H
