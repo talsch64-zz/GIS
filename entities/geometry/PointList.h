@@ -8,14 +8,15 @@
 #include "Geometry.h"
 
 class PointList: public Geometry {
-    std::vector<Point> points;
+    std::vector<Coordinates> points;
 
 public:
-    const std::vector<Point> &getPoints() const;
 
-    PointList(std::vector<Point> points);
+    PointList(const std::vector<Coordinates> &points);
 
-    void addPoint(Point p);
+    const std::vector<Coordinates> &getPoints() const;
+
+    void addPoint(Coordinates coord);
 
     rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
 };

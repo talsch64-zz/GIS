@@ -37,52 +37,8 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     bool fileContainsIds = entityJsonParser.containsIds(document);
     entityJsonParser.setParseId(fileContainsIds);
 
-    std::vector<std::unique_ptr<Way>> ways;
-
-    for (auto &jsonEntity : document.GetArray()) {
-        try {
-            std::unique_ptr<Entity> entity = entityJsonParser.parse(jsonEntity);
-            // Way entities will be added in the end of the parsing
-            if (entity.get()->getType() == "Way") {
-                ways.push_back(std::unique_ptr<Way>(dynamic_cast<Way*>(entity.release())));
-                continue;
-            }
-            if (!fileContainsIds) {
-                entity->setId(idGenerator.generateId());
-            }
-
-            EntityId entityId = entity->getId();
-            // if entityId not loaded yet
-            if (entities.find(entityId) == entities.end()) {
-                entities.emplace(entityId, std::move(entity));
-                entityIds.push_back(entityId);
-            }
-            else {
-//                TODO print to log that id is not unique
-            }
-        }
-        catch (const std::runtime_error &e) {
-        }
-    }
-
-    for (int i = 0; i < ways.size(); i++) {
-        std::unique_ptr<Way> way = std::move(ways[i]);
-        EntityId from = way.get()->getFrom();
-        EntityId to = way.get()->getTo();
-        if (entities.find(from) == entities.end() || entities.find(to) == entities.end()) {
-//          TODO print to log that way's Junctions are not in GIS
-        }
-        else if (entities[from]->getType() != "Junction" || entities[to]->getType() != "Junction") {
-//          TODO print to log inv
-//           alid from/to entities
-        }
-        else {
-            Point *fromPoint = dynamic_cast<Point*>((entities[from]->getGeometry().get()));
-            dynamic_cast<PointList*>(way.get()->getGeometry().get())->addPoint(*fromPoint);
-            Point *toPoint = dynamic_cast<Point*>((entities[to]->getGeometry().get()));
-            dynamic_cast<PointList*>(way.get()->getGeometry().get())->addPoint(*toPoint);
-        }
-    }
+    loadNoneWaysEntities(document, entityIds, fileContainsIds);
+    loadWaysEntities(document, entityIds, fileContainsIds);
 
     return entityIds;
 }
@@ -115,4 +71,59 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
     Coordinates coord(Longitude(0), Latitude(0));
     std::pair<Coordinates, EntityId> p(coord, "something");
     return p;
+}
+
+
+void GIS::loadNoneWaysEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId) {
+    for (auto &jsonEntity : document.GetArray()) {
+        try {
+            if (entityJsonParser.isWay(jsonEntity)) {
+                // Way entities will be added in the end of the parsing
+                continue;
+            }
+            std::unique_ptr<Entity> entity = entityJsonParser.parse(jsonEntity);
+            //TODO parser should generate the id
+            if (!generateId) {
+                entity->setId(idGenerator.generateId());
+            }
+
+            EntityId entityId = entity->getId();
+            // if entityId not loaded yet
+            if (entities.find(entityId) == entities.end()) {
+                entities.emplace(entityId, std::move(entity));
+                entityIds.push_back(entityId);
+            }
+            else {
+//                TODO print to log that id is not unique
+            }
+        }
+        catch (const std::runtime_error &e) {
+        }
+    }
+}
+
+void GIS::loadWaysEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId) {
+    for (auto &jsonEntity : document.GetArray()) {
+        try {
+            if (!entityJsonParser.isWay(jsonEntity)) {
+                continue;
+            }
+            std::unique_ptr<Entity> entity = entityJsonParser.parse(jsonEntity);
+            if (!generateId) {
+                entity->setId(idGenerator.generateId());
+            }
+
+            EntityId entityId = entity->getId();
+            // if entityId not loaded yet
+            if (entities.find(entityId) == entities.end()) {
+                entities.emplace(entityId, std::move(entity));
+                entityIds.push_back(entityId);
+            }
+            else {
+//                TODO print to log that id is not unique
+            }
+        }
+        catch (const std::runtime_error &e) {
+        }
+    }
 }

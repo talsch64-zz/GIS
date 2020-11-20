@@ -23,6 +23,8 @@ public:
 
     bool toParseId() const;
 
+    bool isWay(rapidjson::Value &jsonEntity);
+
 private:
 
     std::unique_ptr<POI> parsePoi(rapidjson::Value &doc);

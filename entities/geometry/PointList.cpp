@@ -6,14 +6,15 @@
 
 #include <utility>
 
-PointList::PointList(std::vector<Point> points) : Geometry(), points(std::move(points)) {}
+PointList::PointList(const std::vector<Coordinates> &points) : points(points) {}
 
-const std::vector<Point> &PointList::getPoints() const {
+const std::vector<Coordinates> &PointList::getPoints() const {
     return points;
 }
 
-void PointList::addPoint(Point p) {
+void PointList::addPoint(Coordinates p) {
     points.push_back(p);
 }
+
 
 

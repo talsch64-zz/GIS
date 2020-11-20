@@ -17,6 +17,11 @@ std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc) {
     }
 }
 
+bool EntityJsonParser::isWay(rapidjson::Value &jsonEntity) {
+    std::string type = jsonEntity["type"].GetString();
+    return (type == "Way");
+}
+
 std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc) {
     std::string id = parseEntityId(doc);
     std::string name = parseName(doc);

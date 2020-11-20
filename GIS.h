@@ -40,6 +40,11 @@ public:
     std::optional<Coordinates> getEntityClosestPoint(const EntityId &, const Coordinates &);
 
     std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &);
+
+private:
+    void loadNoneWaysEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId);
+
+    void loadWaysEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId);
 };
 
 #endif //EX1_GIS_H
