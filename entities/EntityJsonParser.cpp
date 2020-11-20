@@ -33,8 +33,12 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc) {
     std::vector<std::string> restricted = parseRestricted(doc);
     std::string from = parseJunctionId(doc, "from");
     std::string to = parseJunctionId(doc, "to");
+//    TODO check if from and to are valid junctions inside GIS and parseWayGeometry. parseWayGeometry should receive reference to vector(to Junction)
+
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parseWayGeometry(doc);
-    std::unique_ptr<Way> way(new Way(id, name, description, categoryTags, std::move(geometry), from, to, direction, speedLimit, tollRoad, restricted));
+    std::unique_ptr<Way> way(
+            new Way(id, name, description, categoryTags, std::move(geometry), from, to, direction, speedLimit, tollRoad,
+                    restricted));
     return way;
 }
 
@@ -61,7 +65,7 @@ std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
 }
 
 std::string EntityJsonParser::parseEntityId(rapidjson::Value &doc) {
-    if (toParseId()) {
+    if (generateIds()) {
         if (!doc.HasMember("id") || !doc["id"].IsString() || doc["id"].GetString() == "") {
             throw std::runtime_error("JSON entity doesn't contain id");
         } else {
@@ -163,7 +167,8 @@ std::string EntityJsonParser::parseJunctionId(rapidjson::Value &doc, const char 
 bool EntityJsonParser::containsIds(rapidjson::Value &doc) {
     bool hasId = false;
     for (auto &jsonEntity : doc.GetArray()) {
-        if (jsonEntity.HasMember("id") && jsonEntity["id"].IsString() && (strcmp(jsonEntity["id"].GetString(), "")) != 0) {
+        if (jsonEntity.HasMember("id") && jsonEntity["id"].IsString() &&
+            (strcmp(jsonEntity["id"].GetString(), "")) != 0) {
             hasId = true;
             break;
         }
@@ -171,12 +176,12 @@ bool EntityJsonParser::containsIds(rapidjson::Value &doc) {
     return hasId;
 }
 
-bool EntityJsonParser::toParseId() const {
-    return parseId;
+bool EntityJsonParser::generateIds() const {
+    return _generateIds;
 }
 
-void EntityJsonParser::setParseId(bool parseId) {
-    EntityJsonParser::parseId = parseId;
+void EntityJsonParser::setGenerateIds(bool parseId) {
+    EntityJsonParser::_generateIds = parseId;
 }
 
 

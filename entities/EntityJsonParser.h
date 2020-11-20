@@ -12,16 +12,16 @@
 class EntityJsonParser {
     GeometryJsonParser geometryJsonParser;
     CoordinatesJsonParser coordinatesJsonParser;
-    bool parseId = false;
+    bool _generateIds = false;
 
 public:
     std::unique_ptr<Entity> parse(rapidjson::Value &doc);
 
     bool containsIds (rapidjson:: Value &doc);
 
-    void setParseId(bool parseId);
+    void setGenerateIds(bool generateIds);
 
-    bool toParseId() const;
+    bool generateIds() const;
 
     bool isWay(rapidjson::Value &jsonEntity);
 

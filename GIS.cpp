@@ -35,7 +35,7 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
         throw std::runtime_error("Map is not an array");
     }
     bool fileContainsIds = entityJsonParser.containsIds(document);
-    entityJsonParser.setParseId(fileContainsIds);
+    entityJsonParser.setGenerateIds(fileContainsIds);
 
     loadNoneWaysEntities(document, entityIds, fileContainsIds);
     loadWaysEntities(document, entityIds, fileContainsIds);
