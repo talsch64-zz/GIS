@@ -7,17 +7,18 @@
 #include <vector>
 #include <optional>
 #include <unordered_map>
-#include "entities/EntityJsonParser.h"
 #include <memory>
+#include <bits/unordered_map.h>
 #include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
 #include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
 #include "search/Grid.h"
 #include "search/TopologicalSearch.h"
 #include "IdGenerator.h"
+class EntityJsonParser;
 
 class GIS {
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
-    EntityJsonParser entityJsonParser;
+    EntityJsonParser *entityJsonParser;
     EntityJsonSerializer entityJsonSerializer;
     JsonFileWriter jsonFileWriter;
     std::shared_ptr<Grid> grid;
@@ -27,9 +28,13 @@ class GIS {
 public:
     GIS();
 
+    ~GIS();
+
     std::size_t clear();
 
     std::vector<EntityId> loadMapFile(const std::string &filename);
+
+    const std::unordered_map<EntityId, std::unique_ptr<Entity>> &getEntitiesMap() const;
 
     std::size_t saveMapFile(const std::string &filename);
 
@@ -41,10 +46,11 @@ public:
 
     std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &);
 
-private:
-    void loadNoneWaysEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId);
 
-    void loadWaysEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId);
+private:
+    void loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId, bool loadWays, bool loadNoneWays);
+
+
 };
 
 #endif //EX1_GIS_H

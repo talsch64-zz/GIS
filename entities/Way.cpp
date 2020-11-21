@@ -3,12 +3,14 @@
 
 #include "Way.h"
 
-Way::Way(const std::string &id, const std::string &name, const std::string &description,
-         const std::vector<std::string> &categoryTags, std::unique_ptr<Geometry> geometry, const std::string &from, const std::string &to,
-         const std::string &direction, int speedLimit, bool tollRoad,
-         const std::vector<std::string> &restricted) : Entity(id, name, description, categoryTags, std::move(geometry), "Way"),
-                                                       from(from), to(to), direction(direction), speedLimit(speedLimit),
-                                                       tollRoad(tollRoad), restricted(restricted) {}
+#include <utility>
+
+Way::Way(const EntityId &id, const std::string &name, const std::string &description,
+         const std::vector<std::string> &categoryTags, std::unique_ptr<Geometry> geometry, EntityId from, EntityId to,
+         std::string direction, int speedLimit, bool tollRoad,
+         std::vector<std::string> restricted) : Entity(id, name, description, categoryTags, std::move(geometry), "Way"),
+                                                       from(std::move(from)), to(std::move(to)), direction(std::move(direction)), speedLimit(speedLimit),
+                                                       tollRoad(tollRoad), restricted(std::move(restricted)) {}
 
 
 rapidjson::Value Way::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {

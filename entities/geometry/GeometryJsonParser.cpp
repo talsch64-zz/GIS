@@ -35,15 +35,15 @@ std::unique_ptr<Circle> GeometryJsonParser::parseCircle(rapidjson::Value &doc) {
     return circle;
 }
 
-std::unique_ptr<Geometry> GeometryJsonParser::parseWayGeometry(rapidjson::Value &doc) {
+std::unique_ptr<Geometry> GeometryJsonParser::parseWayGeometry(rapidjson::Value &doc, Coordinates &fromCoord, Coordinates &toCoord) {
     std::unique_ptr<PointList> pointList;
-//    insert dummy point to be replaced later by "to" junction coordinates
-    pointList->addPoint(Coordinates(Longitude(0), Latitude(0)));
+    pointList->addPoint(fromCoord);
     if (doc.HasMember("curves") && doc["curves"].IsArray()) {
         for (auto &coordinates : doc["curves"].GetArray()) {
             pointList->addPoint(coordinatesJsonParser.parse(coordinates));
         }
     }
+    pointList->addPoint(toCoord);
     return pointList;
 }
 

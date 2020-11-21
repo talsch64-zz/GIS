@@ -4,6 +4,7 @@
 #include "../../POI.h"
 #include "../../Junction.h"
 #include "../../Way.h"
+#include "../../geometry/PointList.h"
 
 rapidjson::Value EntityJsonSerializer::entityToJson(Entity *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json;
@@ -39,7 +40,8 @@ rapidjson::Value EntityJsonSerializer::setGeometry(rapidjson::Value entityJson, 
 
 rapidjson::Value EntityJsonSerializer::toJson(Junction *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json = entityToJson(entity, allocator);
-    rapidjson::Value coord = coordinatesJsonSerializer.toJson(entity->getCoordinates(), allocator);
+    Coordinates coordinates = ((Point*)entity->getGeometry().get())->getCoordinates();
+    rapidjson::Value coord = coordinatesJsonSerializer.toJson(coordinates, allocator);
     json.AddMember("coordinates", coord, allocator);
     return json;
 }
@@ -65,12 +67,13 @@ EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &al
 
     rapidjson::Value curves;
     curves.SetArray();
-    for (Coordinates coord : entity->getCurves()) {
-        rapidjson::Value coordVal = coordinatesJsonSerializer.toJson(coord, allocator);
+    std::vector<Coordinates> points = ((PointList*)entity->getGeometry().get())->getPoints();
+//    skipping first and last coordinates
+    for(int i = 1; i < points.size()-1; i++) {
+        rapidjson::Value coordVal = coordinatesJsonSerializer.toJson(points[i], allocator);
         curves.PushBack(coordVal, allocator);
     }
     json.AddMember("curves", curves, allocator);
-
     return json;
 }
 

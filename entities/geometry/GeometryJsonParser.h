@@ -25,7 +25,7 @@ private:
 
 public:
     std::unique_ptr<Geometry> parsePOIGeometry(rapidjson::Value &doc);
-    std::unique_ptr<Geometry> parseWayGeometry(rapidjson::Value &doc);
+    std::unique_ptr<Geometry> parseWayGeometry(rapidjson::Value &doc, Coordinates &fromCoord, Coordinates &toCoord);
     std::unique_ptr<Geometry> parseJunctionGeometry(rapidjson::Value &doc);
 
 

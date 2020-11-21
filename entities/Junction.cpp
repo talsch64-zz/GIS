@@ -1,7 +1,7 @@
 #include "Junction.h"
 #include "JsonHandlers/Serializers/EntityJsonSerializer.h"
 
-Junction::Junction(const std::string &id, const std::string &name, const std::string &description,
+Junction::Junction(const EntityId &id, const std::string &name, const std::string &description,
                        const std::vector<std::string> &categoryTags, std::unique_ptr<Geometry> geometry):
                        Entity(id, name, description, categoryTags, std::move(geometry), "Junction"){}
 

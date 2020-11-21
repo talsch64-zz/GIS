@@ -12,7 +12,7 @@
 class POI : public Entity {
     std::vector<std::string> accessibility;
 public:
-    POI(const std::string &id, const std::string &name, const std::string &description,
+    POI(const EntityId &id, const std::string &name, const std::string &description,
         const std::vector<std::string> &categoryTags, std::vector<std::string> accessibility,
         std::unique_ptr<Geometry> geometry);
 

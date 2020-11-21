@@ -9,9 +9,14 @@
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
+#include <bits/unordered_map.h>
+#include "entities/EntityJsonParser.h"
 
-GIS::GIS() : grid(std::make_shared<Grid>()), topologicalSearch(grid) {
+
+GIS::GIS() : grid(std::make_shared<Grid>()), topologicalSearch(grid), entityJsonParser(new EntityJsonParser()) {
 }
+
+GIS::~GIS() {delete entityJsonParser;}
 
 std::size_t GIS::clear() {
     return 0;
@@ -34,11 +39,12 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
         //TODO: handle errors
         throw std::runtime_error("Map is not an array");
     }
-    bool fileContainsIds = entityJsonParser.containsIds(document);
-    entityJsonParser.setGenerateIds(fileContainsIds);
+    bool fileContainsIds = entityJsonParser->containsIds(document);
+    entityJsonParser->setGenerateIds(fileContainsIds);
 
-    loadNoneWaysEntities(document, entityIds, fileContainsIds);
-    loadWaysEntities(document, entityIds, fileContainsIds);
+    loadEntities(document, entityIds, fileContainsIds, false, true);
+    loadEntities(document, entityIds, fileContainsIds, true, false);
+
 
     return entityIds;
 }
@@ -74,19 +80,18 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
 }
 
 
-void GIS::loadNoneWaysEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId) {
+void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId, bool loadWays, bool loadNoneWays) {
     for (auto &jsonEntity : document.GetArray()) {
         try {
-            if (entityJsonParser.isWay(jsonEntity)) {
+            if ((entityJsonParser->isWay(jsonEntity) && !loadWays) || (!entityJsonParser->isWay(jsonEntity) && !loadNoneWays)) {
                 // Way entities will be added in the end of the parsing
                 continue;
             }
-            std::unique_ptr<Entity> entity = entityJsonParser.parse(jsonEntity);
+            std::unique_ptr<Entity> entity = entityJsonParser->parse(jsonEntity, *this);
             //TODO parser should generate the id
             if (!generateId) {
                 entity->setId(idGenerator.generateId());
             }
-
             EntityId entityId = entity->getId();
             // if entityId not loaded yet
             if (entities.find(entityId) == entities.end()) {
@@ -102,28 +107,6 @@ void GIS::loadNoneWaysEntities(rapidjson::Document &document, std::vector<Entity
     }
 }
 
-void GIS::loadWaysEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId) {
-    for (auto &jsonEntity : document.GetArray()) {
-        try {
-            if (!entityJsonParser.isWay(jsonEntity)) {
-                continue;
-            }
-            std::unique_ptr<Entity> entity = entityJsonParser.parse(jsonEntity);
-            if (!generateId) {
-                entity->setId(idGenerator.generateId());
-            }
-
-            EntityId entityId = entity->getId();
-            // if entityId not loaded yet
-            if (entities.find(entityId) == entities.end()) {
-                entities.emplace(entityId, std::move(entity));
-                entityIds.push_back(entityId);
-            }
-            else {
-//                TODO print to log that id is not unique
-            }
-        }
-        catch (const std::runtime_error &e) {
-        }
-    }
+const std::unordered_map<EntityId, std::unique_ptr<Entity>> &GIS::getEntitiesMap() const {
+    return entities;
 }

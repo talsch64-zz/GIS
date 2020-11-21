@@ -4,4 +4,4 @@
 
 #include "Polygon.h"
 
-Polygon::Polygon(const std::vector<Coordinates> &coordinates) : Geometry(coordinates) {}
+//Polygon::Polygon(const std::vector<Coordinates> &coordinates) : Geometry(coordinates) {}

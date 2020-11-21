@@ -26,8 +26,10 @@ protected:
     EntityJsonSerializer *entityJsonSerializer;
 
 public:
-    Entity(const std::string &id, const std::string &name, const std::string &description,
-           const std::vector<std::string> &category_tags, std::unique_ptr<Geometry> geometry, std::string type);
+    Entity(EntityId id, std::string name, const std::string &description,
+           std::vector<std::string> category_tags, std::unique_ptr<Geometry> geometry, std::string type);
+
+
 
     const EntityId &getId() const;
 

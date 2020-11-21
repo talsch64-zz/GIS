@@ -15,9 +15,9 @@ class Way: public Entity {
     std::vector<std::string> restricted;
 
 public:
-    Way(const std::string &id, const std::string &name, const std::string &description,
-        const std::vector<std::string> &categoryTags, std::unique_ptr<Geometry> geometry, const std::string &from,
-        const std::string &to, const std::string &direction, int speedLimit, bool tollRoad, const std::vector<std::string> &restricted);
+    Way(const EntityId &id, const std::string &name, const std::string &description,
+        const std::vector<std::string> &categoryTags, std::unique_ptr<Geometry> geometry, EntityId from,
+        EntityId to, std::string direction, int speedLimit, bool tollRoad, std::vector<std::string> restricted);
 
     const EntityId &getFrom() const;
 
