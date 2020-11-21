@@ -16,5 +16,9 @@ void PointList::addPoint(Coordinates p) {
     points.push_back(p);
 }
 
+rapidjson::Value PointList::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
+    return rapidjson::Value();
+}
+
 
 

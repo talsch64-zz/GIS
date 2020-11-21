@@ -36,15 +36,16 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     EntityId from = parseJunctionId(doc, "from");
     EntityId to = parseJunctionId(doc, "to");
 
-    std::unordered_map<EntityId, std::unique_ptr<Entity>> GISEntities = gis.getEntitiesMap();
-    if(GISEntities.find(from) == GISEntities.end() || !(GISEntities.at(from)->getType() == "Junction")) {
+    auto fromEntity = gis.getEntityById(from);
+    if (!fromEntity || fromEntity->getType() != "Junction") {
         throw std::runtime_error("Way does not contain valid from Junction");
     }
-    if(GISEntities.find(to) == GISEntities.end() || !(GISEntities.at(to)->getType() == "Junction")) {
-        throw std::runtime_error("Way does not contain valid to Junction");
+    auto toEntity = gis.getEntityById(to);
+    if (!toEntity || toEntity->getType() != "Junction") {
+        throw std::runtime_error("Way does not contain valid from Junction");
     }
-    Coordinates fromCoordinates = ((Point *)GISEntities.at(from)->getGeometry().get())->getCoordinates();
-    Coordinates toCoordinates = ((Point *)GISEntities.at(to)->getGeometry().get())->getCoordinates();
+    Coordinates fromCoordinates = ((Point *) fromEntity->getGeometry().get())->getCoordinates();
+    Coordinates toCoordinates = ((Point *) toEntity->getGeometry().get())->getCoordinates();
 
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parseWayGeometry(doc, fromCoordinates, toCoordinates);
     std::unique_ptr<Way> way(

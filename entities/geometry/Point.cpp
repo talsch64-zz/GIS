@@ -9,3 +9,7 @@ Point::Point(const Coordinates &coordinates) : Geometry(), coordinates(coordinat
 const Coordinates &Point::getCoordinates() const {
     return coordinates;
 }
+
+rapidjson::Value Point::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
+    return rapidjson::Value();
+}
