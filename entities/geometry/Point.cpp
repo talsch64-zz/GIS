@@ -4,12 +4,8 @@
 
 #include "Point.h"
 
-Point::Point(const Coordinates &coordinates) : coordinates(coordinates) {}
+Point::Point(const Coordinates &coordinates) : Geometry(), coordinates(coordinates) {}
 
 const Coordinates &Point::getCoordinates() const {
     return coordinates;
-}
-
-rapidjson::Value Point::toJson(rapidjson::Document::AllocatorType &allocator) {
-    return rapidjson::Value();
 }

@@ -1,3 +1,5 @@
+
+
 #include <vector>
 #include <optional>
 #include "rapidjson/document.h"
@@ -6,13 +8,15 @@
 #include "entities/geometry/PointList.h"
 #include <stdexcept>
 #include <iostream>
+#include <fstream>
+#include <bits/unordered_map.h>
 #include "entities/EntityJsonParser.h"
 
 
 GIS::GIS() : grid(std::make_shared<Grid>()), topologicalSearch(grid), entityJsonParser(new EntityJsonParser()) {
 }
 
-GIS::~GIS() { delete entityJsonParser; }
+GIS::~GIS() {delete entityJsonParser;}
 
 std::size_t GIS::clear() {
     return 0;
@@ -76,12 +80,10 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
 }
 
 
-void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId, bool loadWays,
-                       bool loadNoneWays) {
+void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId, bool loadWays, bool loadNoneWays) {
     for (auto &jsonEntity : document.GetArray()) {
         try {
-            if ((entityJsonParser->isWay(jsonEntity) && !loadWays) ||
-                (!entityJsonParser->isWay(jsonEntity) && !loadNoneWays)) {
+            if ((entityJsonParser->isWay(jsonEntity) && !loadWays) || (!entityJsonParser->isWay(jsonEntity) && !loadNoneWays)) {
                 // Way entities will be added in the end of the parsing
                 continue;
             }
@@ -93,9 +95,10 @@ void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &ent
             EntityId entityId = entity->getId();
             // if entityId not loaded yet
             if (entities.find(entityId) == entities.end()) {
-                entities.emplace(entityId, std::move(entity.get()));
+                entities.emplace(entityId, std::move(entity));
                 entityIds.push_back(entityId);
-            } else {
+            }
+            else {
 //                TODO print to log that id is not unique
             }
         }
@@ -104,6 +107,6 @@ void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &ent
     }
 }
 
-const std::unordered_map<EntityId, Entity *> &GIS::getEntitiesMap() const {
+const std::unordered_map<EntityId, std::unique_ptr<Entity>> &GIS::getEntitiesMap() const {
     return entities;
 }

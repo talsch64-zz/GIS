@@ -1,6 +1,8 @@
+#include <memory>
 #include "EntityJsonParser.h"
 #include "Way.h"
 #include "../GIS.h"
+#include "geometry/PointList.h"
 
 std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc, GIS &gis) {
     std::string type = doc["type"].GetString();
@@ -34,15 +36,15 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     EntityId from = parseJunctionId(doc, "from");
     EntityId to = parseJunctionId(doc, "to");
 
-    std::unordered_map<EntityId, Entity *> GISEntities = gis.getEntitiesMap();
-    if (GISEntities.find(from) == GISEntities.end() || !(GISEntities.at(from)->getType() == "Junction")) {
+    std::unordered_map<EntityId, std::unique_ptr<Entity>> GISEntities = gis.getEntitiesMap();
+    if(GISEntities.find(from) == GISEntities.end() || !(GISEntities.at(from)->getType() == "Junction")) {
         throw std::runtime_error("Way does not contain valid from Junction");
     }
-    if (GISEntities.find(to) == GISEntities.end() || !(GISEntities.at(to)->getType() == "Junction")) {
+    if(GISEntities.find(to) == GISEntities.end() || !(GISEntities.at(to)->getType() == "Junction")) {
         throw std::runtime_error("Way does not contain valid to Junction");
     }
-    Coordinates fromCoordinates = ((Point *) GISEntities.at(from)->getGeometry().get())->getCoordinates();
-    Coordinates toCoordinates = ((Point *) GISEntities.at(to)->getGeometry().get())->getCoordinates();
+    Coordinates fromCoordinates = ((Point *)GISEntities.at(from)->getGeometry().get())->getCoordinates();
+    Coordinates toCoordinates = ((Point *)GISEntities.at(to)->getGeometry().get())->getCoordinates();
 
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parseWayGeometry(doc, fromCoordinates, toCoordinates);
     std::unique_ptr<Way> way(

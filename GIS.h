@@ -8,16 +8,16 @@
 #include <optional>
 #include <unordered_map>
 #include <memory>
+#include <bits/unordered_map.h>
 #include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
 #include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
 #include "search/Grid.h"
 #include "search/TopologicalSearch.h"
 #include "IdGenerator.h"
-
 class EntityJsonParser;
 
 class GIS {
-    std::unordered_map<EntityId, Entity *> entities;
+    std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     EntityJsonParser *entityJsonParser;
     EntityJsonSerializer entityJsonSerializer;
     JsonFileWriter jsonFileWriter;
@@ -34,7 +34,7 @@ public:
 
     std::vector<EntityId> loadMapFile(const std::string &filename);
 
-    const std::unordered_map<EntityId, Entity *> &getEntitiesMap() const;
+    const std::unordered_map<EntityId, std::unique_ptr<Entity>> &getEntitiesMap() const;
 
     std::size_t saveMapFile(const std::string &filename);
 
@@ -48,8 +48,7 @@ public:
 
 
 private:
-    void loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId, bool loadWays,
-                      bool loadNoneWays);
+    void loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId, bool loadWays, bool loadNoneWays);
 
 
 };
