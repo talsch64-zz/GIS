@@ -36,15 +36,16 @@ std::unique_ptr<Circle> GeometryJsonParser::parseCircle(rapidjson::Value &doc) {
 }
 
 std::unique_ptr<Geometry> GeometryJsonParser::parseWayGeometry(rapidjson::Value &doc, Coordinates &fromCoord, Coordinates &toCoord) {
-    std::unique_ptr<PointList> pointList;
-    pointList->addPoint(fromCoord);
+//    std::unique_ptr<PointList> pointList (new PointList());
+    std::vector<Coordinates> points;
+    points.push_back(fromCoord);
     if (doc.HasMember("curves") && doc["curves"].IsArray()) {
         for (auto &coordinates : doc["curves"].GetArray()) {
-            pointList->addPoint(coordinatesJsonParser.parse(coordinates));
+            points.push_back(coordinatesJsonParser.parse(coordinates));
         }
     }
-    pointList->addPoint(toCoord);
-    return pointList;
+    points.push_back(toCoord);
+    return std::make_unique<PointList>(points);
 }
 
 std::unique_ptr<Geometry> GeometryJsonParser::parseJunctionGeometry(rapidjson::Value &doc) {
@@ -52,8 +53,8 @@ std::unique_ptr<Geometry> GeometryJsonParser::parseJunctionGeometry(rapidjson::V
         throw std::runtime_error("Invalid coordinates in JSON");
     }
     Coordinates coordinates = coordinatesJsonParser.parse(doc["coordinates"]);
-    std::unique_ptr<Point> point(new Point(coordinates));
-    return point;
+//    std::unique_ptr<Point> point(new Point(coordinates));
+    return std::make_unique<Point>(coordinates);;
 }
 
 

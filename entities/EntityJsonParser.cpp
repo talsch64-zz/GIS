@@ -170,8 +170,11 @@ std::vector<std::string> EntityJsonParser::parseRestricted(rapidjson::Value &doc
 
 EntityId EntityJsonParser::parseJunctionId(rapidjson::Value &doc, const char *direction) {
     std::string junctionId;
-    if (doc.HasMember(direction) && doc[direction].IsString()) {
-        junctionId = doc[direction].GetString();
+    if (doc.HasMember(direction) && doc[direction].IsObject() && doc[direction].HasMember("entity_id")) {
+        junctionId = doc[direction]["entity_id"].GetString();
+    }
+    else {
+        throw std::runtime_error("Way is not valid");
     }
     return EntityId(junctionId);
 }
