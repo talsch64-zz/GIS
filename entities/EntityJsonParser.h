@@ -20,7 +20,7 @@ public:
 
     bool containsIds (rapidjson:: Value &doc);
 
-    void setGenerateIds(bool generateIds);
+    void setGenerateIds(bool fileContainsId);
 
     bool generateIds() const;
 
