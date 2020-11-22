@@ -24,7 +24,6 @@ class GIS {
     JsonFileWriter jsonFileWriter;
     std::shared_ptr<Grid> grid;
     TopologicalSearch topologicalSearch;
-    IdGenerator idGenerator;
 
 public:
     GIS();
@@ -49,7 +48,7 @@ public:
 
 
 private:
-    void loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId, bool loadWays,
+    void loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool loadWays,
                       bool loadNoneWays);
 
 

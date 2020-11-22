@@ -77,18 +77,19 @@ std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
 }
 
 EntityId EntityJsonParser::parseEntityId(rapidjson::Value &doc) {
-    if (!generateIds()) {
-        if (!doc.HasMember("id") || !doc["id"].IsString() || strcmp(doc["id"].GetString(), "") == 0) {
-            throw std::runtime_error("JSON entity doesn't contain id");
-        } else {
-            return EntityId(doc["id"].GetString());
-        }
+    if (generateIds()) {
+        return idGenerator.generateId();
     }
-    return EntityId("");
+
+    if (!doc.HasMember("id") || !doc["id"].IsString() || strcmp(doc["id"].GetString(), "") == 0) {
+        throw std::runtime_error("JSON entity doesn't contain id");
+    } else {
+        return EntityId(doc["id"].GetString());
+    }
 }
 
 std::string EntityJsonParser::parseName(rapidjson::Value &doc) {
-    if (!doc.HasMember("name") || !doc["id"].IsString()) {
+    if (!doc.HasMember("name") || !doc["name"].IsString()) {
         throw std::runtime_error("JSON entity doesn't contain name");
     }
     return doc["name"].GetString();

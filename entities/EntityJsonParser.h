@@ -6,6 +6,7 @@
 #include "Junction.h"
 #include "geometry/GeometryJsonParser.h"
 #include "Way.h"
+#include "../IdGenerator.h"
 #include<memory>
 
 class GIS;
@@ -14,6 +15,8 @@ class EntityJsonParser {
     GeometryJsonParser geometryJsonParser;
     CoordinatesJsonParser coordinatesJsonParser;
     bool _generateIds = false;
+    IdGenerator idGenerator;
+
 
 public:
     std::unique_ptr<Entity> parse(rapidjson::Value &doc, GIS &gis);

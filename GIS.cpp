@@ -42,9 +42,8 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     bool fileContainsIds = entityJsonParser->containsIds(document);
     entityJsonParser->setGenerateIds(fileContainsIds);
 
-    loadEntities(document, entityIds, fileContainsIds, false, true);
-    loadEntities(document, entityIds, fileContainsIds, true, false);
-
+    loadEntities(document, entityIds, false, true);
+    loadEntities(document, entityIds, true, false);
 
     return entityIds;
 }
@@ -80,7 +79,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
 }
 
 
-void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool generateId, bool loadWays,
+void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool loadWays,
                        bool loadNoneWays) {
     for (auto &jsonEntity : document.GetArray()) {
         try {
@@ -91,9 +90,9 @@ void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &ent
             }
             std::unique_ptr<Entity> entity = entityJsonParser->parse(jsonEntity, *this);
             //TODO parser should generate the id
-            if (!generateId) {
-                entity->setId(idGenerator.generateId());
-            }
+//            if (!generateId) {
+//                entity->setId(idGenerator.generateId());
+//            }
             EntityId entityId = entity->getId();
             // if entityId not loaded yet
             if (entities.find(entityId) == entities.end()) {
