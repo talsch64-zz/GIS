@@ -3,4 +3,8 @@
 
 Geometry::Geometry(): geometryJsonSerializer(new GeometryJsonSerializer()) {}
 
+Geometry::~Geometry() {
+    delete(geometryJsonSerializer);
+}
+
 

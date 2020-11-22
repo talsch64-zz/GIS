@@ -24,8 +24,8 @@ std::size_t GIS::clear() {
 
 std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     rapidjson::Document document;
-    std::vector<EntityId> entityIds;
     FILE *fp = fopen(filename.c_str(), "rb"); // non-Windows use "r"
+//    TODO print to log if file could not be open
     char readBuffer[65536];
     rapidjson::FileReadStream fileReadStream(fp, readBuffer, sizeof(readBuffer));
     document.ParseStream(fileReadStream);
@@ -39,7 +39,7 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     }
     bool fileContainsIds = entityJsonParser->containsIds(document);
     entityJsonParser->setGenerateIds(fileContainsIds);
-    loadEntities(document);
+    std::vector<EntityId> entityIds = loadEntities(document);
 
     return entityIds;
 }
@@ -96,7 +96,7 @@ std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
     return entityIds;
 }
 
-const Entity *GIS::getEntityById(EntityId id) const {
+const Entity *GIS::getEntityById(const EntityId& id) const {
     auto pair = entities.find(id);
     if (pair == entities.end()) {
         return nullptr;

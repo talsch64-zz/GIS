@@ -34,7 +34,7 @@ public:
 
     std::vector<EntityId> loadMapFile(const std::string &filename);
 
-    const Entity *getEntityById(EntityId id) const;
+    const Entity *getEntityById(const EntityId& id) const;
 
     std::size_t saveMapFile(const std::string &filename);
 

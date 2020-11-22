@@ -5,19 +5,17 @@
 #include "PointList.h"
 
 #include <utility>
+#include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
 
-PointList::PointList(const std::vector<Coordinates> &points) : points(points) {}
+
+PointList::PointList(std::vector<Coordinates> points) : points(std::move(points)) {}
 
 const std::vector<Coordinates> &PointList::getPoints() const {
     return points;
 }
 
-void PointList::addPoint(Coordinates p) {
-    points.push_back(p);
-}
-
 rapidjson::Value PointList::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
-    return rapidjson::Value();
+    return geometryJsonSerializer->toJson(this, allocator);
 }
 
 

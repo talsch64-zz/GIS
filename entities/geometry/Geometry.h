@@ -10,7 +10,6 @@
 
 class GeometryJsonSerializer;
 
-
 class Geometry {
 protected:
     GeometryJsonSerializer *geometryJsonSerializer;
@@ -18,7 +17,7 @@ protected:
 
 public:
 
-    virtual ~Geometry() {};
+    virtual ~Geometry();
 
     virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) = 0;
 };

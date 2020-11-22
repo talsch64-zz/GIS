@@ -3,6 +3,7 @@
 //
 
 #include "Point.h"
+#include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
 
 Point::Point(const Coordinates &coordinates) : Geometry(), coordinates(coordinates) {}
 
@@ -11,5 +12,5 @@ const Coordinates &Point::getCoordinates() const {
 }
 
 rapidjson::Value Point::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
-    return rapidjson::Value();
+    return geometryJsonSerializer->toJson(this, allocator);
 }

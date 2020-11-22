@@ -25,7 +25,6 @@ bool EntityJsonParser::isWay(rapidjson::Value &jsonEntity) {
 }
 
 std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS &gis) {
-    EntityId id = parseEntityId(doc);
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
@@ -46,8 +45,9 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     }
     Coordinates fromCoordinates = ((Point *) fromEntity->getGeometry().get())->getCoordinates();
     Coordinates toCoordinates = ((Point *) toEntity->getGeometry().get())->getCoordinates();
-
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parseWayGeometry(doc, fromCoordinates, toCoordinates);
+
+    EntityId id = parseEntityId(doc);
     std::unique_ptr<Way> way(
             new Way(id, name, description, categoryTags, std::move(geometry), from, to, direction, speedLimit, tollRoad,
                     restricted));
@@ -55,23 +55,23 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
 }
 
 std::unique_ptr<Junction> EntityJsonParser::parseJunction(rapidjson::Value &doc) {
-    EntityId id = parseEntityId(doc);
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parseJunctionGeometry(doc);
+    EntityId id = parseEntityId(doc);
     std::unique_ptr<Junction> junction(new Junction(id, name, description, categoryTags, std::move(geometry)));
     return junction;
 }
 
 
 std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
-    EntityId id = parseEntityId(doc);
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::vector<std::string> accessibility = parseAccessibility(doc);
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parsePOIGeometry(doc);
+    EntityId id = parseEntityId(doc);
     std::unique_ptr<POI> poi(new POI(id, name, description, categoryTags, accessibility, std::move(geometry)));
     return poi;
 }
