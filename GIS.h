@@ -48,8 +48,7 @@ public:
 
 
 private:
-    void loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool loadWays,
-                      bool loadNoneWays);
+    std::vector<EntityId> loadEntities(rapidjson::Document &document);
 
 
 };

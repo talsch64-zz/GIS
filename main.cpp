@@ -7,30 +7,16 @@
 #include <tchar.h>
 //#include <winbase.h>
 
-std::string getMapFilePath(const std::string &name);
+//std::string getMapFilePath(const std::string &name);
 
 
 int main() {
     GIS gis;
     EntityJsonSerializer serializer;
 
-//    std::string mapPath = getMapFilePath("a.json");
-//    gis.loadMapFile(mapPath);
-//    gis.saveMapFile("output.json");
-//
-//    Coordinates home(Longitude(35.036385), Latitude(31.887153));
-//    Coordinates betsira = CoordinatesMath::calculateCoordinateByDistance(home, Meters(1000), 45);
 
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\poi.json");
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\junction.json");
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\junction2.json");
-//
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\way.json");
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\poi.json");
-    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\noids5.json");
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\3j1w1p.json");
+    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\3j1w1p.json");
 
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\1.json");
 
 
 

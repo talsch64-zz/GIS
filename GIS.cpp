@@ -26,10 +26,8 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     rapidjson::Document document;
     std::vector<EntityId> entityIds;
     FILE *fp = fopen(filename.c_str(), "rb"); // non-Windows use "r"
-
     char readBuffer[65536];
     rapidjson::FileReadStream fileReadStream(fp, readBuffer, sizeof(readBuffer));
-
     document.ParseStream(fileReadStream);
 
 //    if (!ok) {
@@ -41,9 +39,7 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     }
     bool fileContainsIds = entityJsonParser->containsIds(document);
     entityJsonParser->setGenerateIds(fileContainsIds);
-
-    loadEntities(document, entityIds, false, true);
-    loadEntities(document, entityIds, true, false);
+    loadEntities(document);
 
     return entityIds;
 }
@@ -79,20 +75,11 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
 }
 
 
-void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &entityIds, bool loadWays,
-                       bool loadNoneWays) {
+std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
+    std::vector<EntityId> entityIds;
     for (auto &jsonEntity : document.GetArray()) {
         try {
-            if ((entityJsonParser->isWay(jsonEntity) && !loadWays) ||
-                (!entityJsonParser->isWay(jsonEntity) && !loadNoneWays)) {
-                // Way entities will be added in the end of the parsing
-                continue;
-            }
             std::unique_ptr<Entity> entity = entityJsonParser->parse(jsonEntity, *this);
-            //TODO parser should generate the id
-//            if (!generateId) {
-//                entity->setId(idGenerator.generateId());
-//            }
             EntityId entityId = entity->getId();
             // if entityId not loaded yet
             if (entities.find(entityId) == entities.end()) {
@@ -103,8 +90,10 @@ void GIS::loadEntities(rapidjson::Document &document, std::vector<EntityId> &ent
             }
         }
         catch (const std::runtime_error &e) {
+//            TODO print to log error that entity is invalid
         }
     }
+    return entityIds;
 }
 
 const Entity *GIS::getEntityById(EntityId id) const {
