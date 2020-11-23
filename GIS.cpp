@@ -13,6 +13,7 @@
 #include "entities/EntityJsonParser.h"
 
 
+
 GIS::GIS() : grid(std::make_shared<Grid>()), topologicalSearch(grid), entityJsonParser(new EntityJsonParser()) {
 }
 
@@ -85,6 +86,7 @@ std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
             if (entities.find(entityId) == entities.end()) {
                 entities.emplace(entityId, std::move(entity));
                 entityIds.push_back(entityId);
+//                TODO insert entity to grid
             } else {
 //                TODO print to log that id is not unique
             }

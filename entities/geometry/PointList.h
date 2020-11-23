@@ -12,7 +12,7 @@ class PointList: public Geometry {
 
 public:
 
-    PointList(std::vector<Coordinates> points);
+    explicit PointList(std::vector<Coordinates> &points);
 
     const std::vector<Coordinates> &getPoints() const;
 

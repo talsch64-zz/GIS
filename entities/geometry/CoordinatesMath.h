@@ -2,18 +2,20 @@
 
 #include <cmath>
 
+namespace std::numbers {
+    static double pi = M_PI;
+}
+//TODO: revert pi back to its original form (nova recognizes numbers.h)
+
 #include "../../GISdefs.h"
 
 class CoordinatesMath {
-    static constexpr double pi = 3.141592653589793238;
-    // Earth radius in meters
+
     static constexpr double earth_radius = 6371000;
-
     // The function convert degrees into radians
-    //TODO: fix pi
-    static double deg2rad(double deg) { return deg * pi / 180; }
+    static double deg2rad(double deg) { return deg * std::numbers::pi / 180; }
 
-    static double rad2deg(double rad) { return 180 * rad / pi; }
+    static double rad2deg(double rad) { return 180 * rad / std::numbers::pi; }
 
 public:
     // The function returns the airial distance in meters between two decimal coordinates
@@ -37,25 +39,51 @@ public:
         const double delta_latitude = latitude2 - latitude1;
         const double delta_longitude = longitude2 - longitude1;
         const double a = std::sin(delta_latitude / 2) * std::sin(delta_latitude / 2) +
-                         std::cos(latitude1) * std::cos(latitude2) * std::sin(delta_longitude) / 2 *
+                         std::cos(latitude1) * std::cos(latitude2) * std::sin(delta_longitude / 2) *
                          std::sin(delta_longitude / 2);
         const double distance = 2 * std::atan2(std::sqrt(a), std::sqrt(1 - a)) * earth_radius;
         return Meters{distance};
     }
 
-    static Coordinates calculateCoordinateByDistance(const Coordinates &c, Meters distance, double deg) {
+    static Coordinates calculateCoordinateByDistance(const Coordinates &c, Meters distance, double bearing) {
         double angDistance = distance / earth_radius;
-        double radDeg = deg2rad(deg);
-        Latitude latRad(deg2rad(c.latitude()));
-        Longitude lonRad(deg2rad(c.longitude()));
-        Latitude targetLat(std::asin(
-                std::sin(latRad) * std::cos(angDistance) +
-                std::cos(lonRad) * std::sin(angDistance) * std::cos(radDeg)));
-        Longitude targetLon(lonRad + std::atan2(std::sin(radDeg) * std::sin(angDistance) * std::cos(latRad),
-                                                std::cos(angDistance) - std::sin(latRad) * std::sin(targetLat)));
-
+        double rad_bearing = deg2rad(bearing);
+        Latitude latitude(deg2rad(c.latitude()));
+        Longitude longitude(deg2rad(c.longitude()));
+        double targetLat = asin(sin(latitude)*cos(angDistance)+cos(latitude)*sin(angDistance)*cos(rad_bearing));
+        double targetLon = longitude + atan2(sin(rad_bearing)*sin(angDistance)*cos(latitude), cos(angDistance)-sin(latitude)*sin(targetLat));
         Longitude targetLonDeg(rad2deg(targetLon));
         Latitude targetLatDeg(rad2deg(targetLat));
         return Coordinates(targetLonDeg, targetLatDeg);
+    }
+
+    static double calculateBearing(Coordinates &start, Coordinates &end) {
+        // convert to radians
+        double lat1 = deg2rad(start.latitude());
+        double lon1 = deg2rad(start.longitude());
+        double lat2 = deg2rad(end.latitude());
+        double lon2 = deg2rad(end.longitude());
+        double y = sin(lon2-lon1) * cos(lat2);
+        double x = cos(lat1)*sin(lat2) - sin(lat1)*cos(lat2)*cos(lon2-lon1);
+        double bearing = atan2(y,x);
+        return rad2deg(bearing);
+    }
+
+    static Coordinates calculateMidpoint(const Coordinates& coord1, const Coordinates& coord2) {
+        // convert to radians
+        double lat1 = deg2rad(coord1.latitude());
+        double lon1 = deg2rad(coord1.longitude());
+        double lat2 = deg2rad(coord2.latitude());
+        double lon2 = deg2rad(coord2.longitude());
+
+        double Bx = cos(lat2) * cos(lon2 - lon1);
+        double By = cos(lat2) * sin(lon2 - lon1);
+
+        double latMidRad = atan2(sin(lat1) + sin(lat2), std::sqrt((cos(lat1)+Bx)*(cos(lat1)+Bx) + By*By));
+        double lonMidRad = lon1 + atan2(By, cos(lat1) + Bx);
+
+//        convert back to degrees
+        return Coordinates(Longitude(rad2deg(lonMidRad)), Latitude(rad2deg(latMidRad)));
+
     }
 };
