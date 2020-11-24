@@ -5,7 +5,7 @@
 #include "Point.h"
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
 
-Point::Point(const Coordinates &coordinates) : Geometry(), coordinates(coordinates) {}
+Point::Point(const Coordinates &coordinates) : Geometry("Point"), coordinates(coordinates) {}
 
 const Coordinates &Point::getCoordinates() const {
     return coordinates;
