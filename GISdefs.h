@@ -41,7 +41,7 @@ class Coordinates {
     Latitude _latitude;
 
 public:
-    Coordinates(Longitude longitude, Latitude latitude) : _longitude(longitude), _latitude(latitude) {}
+    Coordinates(const Longitude &longitude, const Latitude &latitude) : _longitude(longitude), _latitude(latitude) {}
 
     Longitude longitude() const { return _longitude; }
 

@@ -62,7 +62,6 @@ public:
 
 private:
     std::unordered_map<GridCell, CellEntities> grid;
-
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
     void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells);
     std::vector<Coordinates> searchPointListGridCells(PointList &geometry);

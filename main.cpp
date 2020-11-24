@@ -32,14 +32,28 @@ int main() {
 //    double bearing2 = CoordinatesMath::calculateBearing(midPoint, c2);
 //    Coordinates c2_cpy = CoordinatesMath::calculateCoordinateByDistance(midPoint, Meters(distance), bearing2);
 
-    Coordinates c1(Longitude(-1), Latitude(10));
-    Coordinates c2(Longitude(-0.999), Latitude(10.001));
-    Coordinates c3(Longitude(-0.998), Latitude(10.001));
+//    Coordinates c1(Longitude(-1), Latitude(10));
+//    Coordinates c2(Longitude(-0.999), Latitude(10.001));
+//    Coordinates c3(Longitude(-0.998), Latitude(10.001));
 
-    Grid grid;
-    std::vector<Coordinates> vector {c1, c3, c2};
-    PointList points(vector);
-    grid.setEntityOnGrid(points, EntityId("dummy"));
+//
+//    Grid grid;
+//    std::vector<Coordinates> vector {c1, c3, c2};
+//    PointList points(vector);
+//    grid.setEntityOnGrid(points, EntityId("dummy"));
+
+//    Coordinates A(Longitude(-117.518921), Latitude(35.345678));
+//    Coordinates B(Longitude(-117.318492), Latitude(30.100678));
+//    double bearing = CoordinatesMath::calculateBearing(A,B);
+//    double b = CoordinatesMath::calculateBearing(B,A);
+//    double distance = CoordinatesMath::calculateDistance(A,B);
+//    Coordinates C = CoordinatesMath::calculateCoordinateByDistance(B, Meters(distance), b);
+//    double bearing2 = CoordinatesMath::calculateBearing(A,C);
+
+    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
+    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
+    Coordinates C(Longitude(-116.8), Latitude(38));
+    Coordinates D = CoordinatesMath::calculateClosestCoordinateAlongLine(A, B, C);
 
     return 0;
 }

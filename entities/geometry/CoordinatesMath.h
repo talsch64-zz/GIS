@@ -57,14 +57,14 @@ public:
         return Coordinates(targetLonDeg, targetLatDeg);
     }
 
-    static double calculateBearing(Coordinates &start, Coordinates &end) {
+    static double calculateBearing(const Coordinates &start, const Coordinates &end) {
         // convert to radians
         double lat1 = deg2rad(start.latitude());
-        double lon1 = deg2rad(start.longitude());
+        double lng1 = deg2rad(start.longitude());
         double lat2 = deg2rad(end.latitude());
-        double lon2 = deg2rad(end.longitude());
-        double y = sin(lon2-lon1) * cos(lat2);
-        double x = cos(lat1)*sin(lat2) - sin(lat1)*cos(lat2)*cos(lon2-lon1);
+        double lng2 = deg2rad(end.longitude());
+        double y = sin(lng2 - lng1) * cos(lat2);
+        double x = cos(lat1)*sin(lat2) - sin(lat1)*cos(lat2)*cos(lng2 - lng1);
         double bearing = atan2(y,x);
         return rad2deg(bearing);
     }
@@ -72,18 +72,109 @@ public:
     static Coordinates calculateMidpoint(const Coordinates& coord1, const Coordinates& coord2) {
         // convert to radians
         double lat1 = deg2rad(coord1.latitude());
-        double lon1 = deg2rad(coord1.longitude());
+        double lng1 = deg2rad(coord1.longitude());
         double lat2 = deg2rad(coord2.latitude());
-        double lon2 = deg2rad(coord2.longitude());
+        double lng2 = deg2rad(coord2.longitude());
 
-        double Bx = cos(lat2) * cos(lon2 - lon1);
-        double By = cos(lat2) * sin(lon2 - lon1);
+        double Bx = cos(lat2) * cos(lng2 - lng1);
+        double By = cos(lat2) * sin(lng2 - lng1);
 
         double latMidRad = atan2(sin(lat1) + sin(lat2), std::sqrt((cos(lat1)+Bx)*(cos(lat1)+Bx) + By*By));
-        double lonMidRad = lon1 + atan2(By, cos(lat1) + Bx);
+        double lonMidRad = lng1 + atan2(By, cos(lat1) + Bx);
 
 //        convert back to degrees
         return Coordinates(Longitude(rad2deg(lonMidRad)), Latitude(rad2deg(latMidRad)));
 
     }
+
+    static Coordinates calculateClosestCoordinateAlongLine(Coordinates& A, Coordinates& B, Coordinates& C) {
+        double bearAB = deg2rad(calculateBearing(A, B));
+        double bearAC = deg2rad(calculateBearing(A, C));
+        double dAC = calculateDistance(A, C);
+        if (fabs(bearAC - bearAB) > std::numbers::pi / 2) {
+            return A;
+        }
+        double dxt = asin(sin(dAC / earth_radius) * sin(bearAC - bearAB)) * earth_radius;
+        double dAB = calculateDistance(A, B);
+        double dAD = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
+        if (dAD > dAB) {
+            return B;
+        }
+        double dat = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
+        Coordinates closest = calculateCoordinateByDistance(A, Meters(dat), rad2deg(bearAB));
+        return closest;
+    }
 };
+
+
+
+
+//    static Coordinates calculateClosestCoordinateAlongLine(const Coordinates &start, const Coordinates &end, const Coordinates &target) {
+//        Coordinates A = start;
+//        Coordinates B = end;
+//        const Coordinates &C = target;
+//
+//        double AB = calculateDistance(A, B);
+//        double AC = calculateDistance(A, C);
+//        double BC = calculateDistance(B, C);
+//
+//        if(BC > AB && C.latitude() > B.latitude()) {
+////            swap between A and B
+//            Coordinates *tmpPtr = &B;
+//            *(&B) = A;
+//            *(&A) = *tmpPtr;
+//            double tmpVal = AC;
+//            AC = BC;
+//            BC = tmpVal;
+//        }
+//
+//        double bearAB = deg2rad(calculateBearing(A, B));
+//        double bearAC = deg2rad(calculateBearing(A, C));
+//
+//        double angDisAC = AC / earth_radius;
+////        cross-track distance
+//        double dxt = asin(sin(angDisAC) * sin(bearAC - bearAB)) * earth_radius;
+////        along-track distance
+//        double dat = acos(cos(angDisAC) / cos(dxt / earth_radius)) * earth_radius;
+//
+//        Coordinates closest = calculateCoordinateByDistance(A, Meters(dat), rad2deg(bearAB));
+//
+//        if (calculateDistance(A, closest) > AB || calculateDistance(B, closest) > AB) {
+//            if (AC > BC) {
+//                return B;
+//            }
+//            return A;
+//        }
+//        return closest;
+//    }
+//
+
+
+///*calculate the coordinate along the great circle that runs through coordinates A and B which is closest to C*/
+//    static Coordinates calculateClosestCoordinateAlongGreatGreatCircle(const Coordinates &A, const Coordinates &B, const Coordinates &C) {
+//        double latA = A.latitude();
+//        double latB= B.latitude();
+//        double latC = C.latitude();
+//        double lngA = A.longitude();
+//        double lngB= B.longitude();
+//        double lngC = C.longitude();
+//        double t = ((latC - latA) * (latB - latA) + (lngC - lngA) * (lngB - lngA)) / ((latB - latA) * (latB - latA) + (lngB - lngA) *  (lngB - lngA));
+//        return Coordinates(Longitude(lngA + t*(lngB-lngA)), Latitude(latA + t*(latB - latA)));
+//    }
+//
+//    static Coordinates calculateClosestCoordinateAlongLine(const Coordinates &start, const Coordinates &end, const Coordinates &source) {
+//        Coordinates closest = calculateClosestCoordinateAlongGreatGreatCircle(start, end, source);
+////        if closest point is not on the line itselt
+//        if ((closest.longitude() > start.longitude() && closest.longitude() > end.longitude()) ||
+//                (closest.longitude() < start.longitude() && closest.longitude() < end.longitude()) ||
+//                (closest.latitude() > start.latitude() && closest.latitude() > end.latitude()) ||
+//                (closest.latitude() < start.latitude() && closest.latitude() < end.latitude())) {
+//            if (calculateDistance(source, start) > calculateDistance(source, end)) {
+//                closest = end;
+//            }
+//            else {
+//                closest = start;
+//            }
+//        }
+//        return closest;
+//    }
