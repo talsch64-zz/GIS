@@ -5,6 +5,7 @@
 #include "../entities/geometry/PointList.h"
 #include "../entities/geometry/Point.h"
 #include "../entities/geometry/Circle.h"
+#include "../entities/Entity.h"
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
@@ -45,25 +46,19 @@ public:
 
     using GridCell = Coordinates;
 
-    std::vector<GridCell> setEntityOnGrid(PointList &geometry, const EntityId &id);
-    std::vector<GridCell> setEntityOnGrid(Point &geometry, const EntityId &id);
-    std::vector<GridCell> setEntityOnGrid(Circle &geometry, const EntityId &id);
-
-
-    CellEntities getEntitiesOnGrid(const Coordinates &coordinates) {
-        GridCell grid_cell = truncateCoordinates(coordinates);
-        auto pair = grid.find(grid_cell);
-        if (pair == grid.end()) {
-            return CellEntities();
-        } else {
-            return pair->second;
-        }
-    }
+    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
+    std::vector<GridCell> setEntityOnGrid(const Point &geometry, const EntityId &id);
+    std::vector<GridCell> setEntityOnGrid(const Circle &geometry, const EntityId &id);
+    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
 
 private:
     std::unordered_map<GridCell, CellEntities> grid;
+
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
     void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells);
-    std::vector<Coordinates> searchPointListGridCells(PointList &geometry);
+
+    std::vector<Coordinates> getGeometryGridCells(const PointList &geometry);
+
+
 
 };

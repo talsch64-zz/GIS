@@ -107,7 +107,7 @@ public:
 };
 
 
-
+//TODO delete all the remarks bellow
 
 //    static Coordinates calculateClosestCoordinateAlongLine(const Coordinates &start, const Coordinates &end, const Coordinates &target) {
 //        Coordinates A = start;

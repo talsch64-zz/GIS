@@ -21,12 +21,7 @@ int main() {
 //    Coordinates c1(Longitude(-3.0700117898814905), Latitude(58.643945458221));
 //    Coordinates c2(Longitude(-5.714727651210689), Latitude(50.066393943909226));
 //    Coordinates midPoint = CoordinatesMath::calculateMidpoint(c1, c2);
-////    Coordinates c1(Longitude(-1), Latitude(10));
-////    Coordinates c2(Longitude(-0.8708031656252585), Latitude(10.129101382398709));
-//    Coordinates tal(Longitude(34.87630298242422), Latitude(31.938347454762326));
-//    Coordinates sonia(Longitude(35.00539233396715), Latitude(31.89113667156286));
-//    double d = CoordinatesMath::calculateDistance(tal, sonia);
-//
+
 //    double distance = CoordinatesMath::calculateDistance(c1, midPoint);
 //    double bearing1 = CoordinatesMath::calculateBearing(c1, midPoint);
 //    double bearing2 = CoordinatesMath::calculateBearing(midPoint, c2);
