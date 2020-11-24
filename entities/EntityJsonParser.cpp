@@ -82,9 +82,8 @@ EntityId EntityJsonParser::parseEntityId(rapidjson::Value &doc) {
 
     if (!doc.HasMember("id") || !doc["id"].IsString() || strcmp(doc["id"].GetString(), "") == 0) {
         throw std::runtime_error("JSON entity doesn't contain id");
-    } else {
-        return EntityId(doc["id"].GetString());
     }
+    return EntityId(doc["id"].GetString());
 }
 
 std::string EntityJsonParser::parseName(rapidjson::Value &doc) {
