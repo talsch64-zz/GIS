@@ -15,7 +15,7 @@ CellEntities Grid::getEntitiesOnGrid(const Coordinates &coordinates) {
     }
 }
 
-std::vector<Grid::GridCell> Grid::setEntityOnGrid(Entity &entity) {
+std::vector<Grid::GridCell> Grid::setEntityOnGrid(const Entity &entity) {
     Geometry &entityGeometry = *(entity.getGeometry().get());
     std::vector<Grid::GridCell> cells = getGeometryGridCells(entityGeometry);
     EntityId id = entity.getId();

@@ -45,7 +45,7 @@ public:
     static constexpr double precision = 0.0001;
 
     using GridCell = Coordinates;
-    std::vector<GridCell> setEntityOnGrid(Entity &entity);
+    std::vector<GridCell> setEntityOnGrid(const Entity &entity);
 
 
 
