@@ -22,8 +22,7 @@ rapidjson::Value EntityJsonSerializer::entityToJson(Entity *entity, rapidjson::D
 rapidjson::Value EntityJsonSerializer::toJson(POI *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value entityJson = entityToJson(entity, allocator);
     entityJson = setStringVector(std::move(entityJson), "accessibility", entity->getAccessibility(), allocator);
-    Geometry *geometry = entity->getGeometry().get();
-    rapidjson::Value geometryJson = geometry->toJson(allocator);
+    rapidjson::Value geometryJson = entity->getGeometry().get()->toJson(allocator);
     entityJson.AddMember("geometry", geometryJson, allocator);
 
     return entityJson;
@@ -31,8 +30,7 @@ rapidjson::Value EntityJsonSerializer::toJson(POI *entity, rapidjson::Document::
 
 rapidjson::Value EntityJsonSerializer::toJson(Junction *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json = entityToJson(entity, allocator);
-    Geometry *geometry = entity->getGeometry().get();
-    rapidjson::Value geometryJson = geometry->toJson(allocator);
+    rapidjson::Value geometryJson = entity->getGeometry()->toJson(allocator);
     json.AddMember("coordinates", geometryJson, allocator);
     return json;
 }
@@ -41,7 +39,6 @@ rapidjson::Value
 EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json = entityToJson(entity, allocator);
     json = setString(std::move(json), "direction", entity->getDirection(), allocator);
-
     rapidjson::Value speedLimit;
     speedLimit.SetInt(entity->getSpeedLimit());
     json.AddMember("speed_limit", speedLimit, allocator);
@@ -55,9 +52,7 @@ EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &al
     json = setString(std::move(json), "to", entity->getTo(), allocator);
 
     json = setStringVector(std::move(json), "restricted", entity->getRestricted(), allocator);
-
-    Geometry *geometry = entity->getGeometry().get();
-    rapidjson::Value curves = geometry->toJson(allocator);
+    rapidjson::Value curves = entity->getGeometry()->toJson(allocator);
     json.AddMember("curves", curves, allocator);
 
     return json;

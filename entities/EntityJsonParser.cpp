@@ -48,9 +48,8 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parseWayGeometry(doc, fromCoordinates, toCoordinates);
 
     EntityId id = parseEntityId(doc);
-    std::unique_ptr<Way> way(
-            new Way(id, name, description, categoryTags, std::move(geometry), from, to, direction, speedLimit, tollRoad,
-                    restricted));
+    std::unique_ptr<Way> way = std::make_unique<Way>(id, name, description, categoryTags, std::move(geometry), from, to, direction, speedLimit, tollRoad,
+                    restricted);
     return way;
 }
 
@@ -60,7 +59,7 @@ std::unique_ptr<Junction> EntityJsonParser::parseJunction(rapidjson::Value &doc)
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parseJunctionGeometry(doc);
     EntityId id = parseEntityId(doc);
-    std::unique_ptr<Junction> junction(new Junction(id, name, description, categoryTags, std::move(geometry)));
+    std::unique_ptr<Junction> junction = std::make_unique<Junction>(id, name, description, categoryTags, std::move(geometry));
     return junction;
 }
 
@@ -72,7 +71,7 @@ std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
     std::vector<std::string> accessibility = parseAccessibility(doc);
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parsePOIGeometry(doc);
     EntityId id = parseEntityId(doc);
-    std::unique_ptr<POI> poi(new POI(id, name, description, categoryTags, accessibility, std::move(geometry)));
+    std::unique_ptr<POI> poi = std::make_unique<POI>(id, name, description, categoryTags, accessibility, std::move(geometry));
     return poi;
 }
 

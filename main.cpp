@@ -11,12 +11,14 @@
 
 
 int main() {
-//    GIS gis;
+    GIS gis;
 //    std::string mapPath = "C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\noids.json";
 //    std::vector<EntityId> entityId = gis.loadMapFile(mapPath);
 //    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
 
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\3j1w1p.json");
+    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\3j1w1p.json");
+    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
+
 
 //    Coordinates c1(Longitude(-3.0700117898814905), Latitude(58.643945458221));
 //    Coordinates c2(Longitude(-5.714727651210689), Latitude(50.066393943909226));
@@ -45,10 +47,10 @@ int main() {
 //    Coordinates C = CoordinatesMath::calculateCoordinateByDistance(B, Meters(distance), b);
 //    double bearing2 = CoordinatesMath::calculateBearing(A,C);
 
-    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
-    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
-    Coordinates C(Longitude(-116.8), Latitude(38));
-    Coordinates D = CoordinatesMath::calculateClosestCoordinateAlongLine(A, B, C);
+//    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
+//    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
+//    Coordinates C(Longitude(-116.8), Latitude(38));
+//    Coordinates D = CoordinatesMath::calculateClosestCoordinateAlongLine(A, B, C);
 
     return 0;
 }
