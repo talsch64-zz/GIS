@@ -29,15 +29,12 @@ public:
 private:
     rapidjson::Value entityToJson(Entity *entity, rapidjson::Document::AllocatorType &allocator);
 
-    rapidjson::Value setGeometry(rapidjson::Value entityJson, Geometry *geometry,
-                                 rapidjson::Document::AllocatorType &allocator);
-
     rapidjson::Value
-    setString(rapidjson::Value json, const rapidjson::GenericStringRef<char>& name, std::string str,
+    setString(rapidjson::Value json, const rapidjson::GenericStringRef<char>& name, const std::string& str,
               rapidjson::Document::AllocatorType &allocator);
 
     rapidjson::Value
-    setStringVector(rapidjson::Value json, rapidjson::GenericStringRef<char> name, const std::vector<std::string>& vec,
+    setStringVector(rapidjson::Value json, const rapidjson::GenericStringRef<char>& name, const std::vector<std::string>& vec,
                     rapidjson::Document::AllocatorType &allocator);
 };
 

@@ -1,8 +1,10 @@
 #include <memory>
 #include "EntityJsonParser.h"
 #include "Way.h"
+#include "../GIS.h"
+#include "geometry/PointList.h"
 
-std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc) {
+std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc, GIS &gis) {
     std::string type = doc["type"].GetString();
     if (type == "POI") {
         return parsePoi(doc);
@@ -11,14 +13,18 @@ std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc) {
         return parseJunction(doc);
     }
     if (type == "Way") {
-        return parseWay(doc);
+        return parseWay(doc, gis);
     } else {
         throw std::runtime_error("Entity type not supported");
     }
 }
 
-std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc) {
-    std::string id = parseEntityId(doc);
+bool EntityJsonParser::isWay(rapidjson::Value &jsonEntity) {
+    std::string type = jsonEntity["type"].GetString();
+    return (type == "Way");
+}
+
+std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS &gis) {
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
@@ -26,52 +32,62 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc) {
     int speedLimit = parseSpeedLimit(doc);
     bool tollRoad = parseTollRoad(doc);
     std::vector<std::string> restricted = parseRestricted(doc);
-    std::string from = parseJunctionId(doc, "from");
-    std::string to = parseJunctionId(doc, "to");
-    std::vector<Coordinates> curves = parseCurves(doc);
+    EntityId from = parseJunctionId(doc, "from");
+    EntityId to = parseJunctionId(doc, "to");
 
-    std::unique_ptr<Way> way(
-            new Way(id, name, description, categoryTags, from, to, curves, direction, speedLimit, tollRoad,
-                    restricted));
+    auto fromEntity = gis.getEntityById(from);
+    if (!fromEntity || fromEntity->getType() != "Junction") {
+        throw std::runtime_error("Way does not contain valid from Junction");
+    }
+    auto toEntity = gis.getEntityById(to);
+    if (!toEntity || toEntity->getType() != "Junction") {
+        throw std::runtime_error("Way does not contain valid from Junction");
+    }
+    Coordinates fromCoordinates = ((Point *) fromEntity->getGeometry().get())->getCoordinates();
+    Coordinates toCoordinates = ((Point *) toEntity->getGeometry().get())->getCoordinates();
+    std::unique_ptr<Geometry> geometry = geometryJsonParser.parseWayGeometry(doc, fromCoordinates, toCoordinates);
+
+    EntityId id = parseEntityId(doc);
+    std::unique_ptr<Way> way = std::make_unique<Way>(id, name, description, categoryTags, std::move(geometry), from, to, direction, speedLimit, tollRoad,
+                    restricted);
     return way;
 }
 
 std::unique_ptr<Junction> EntityJsonParser::parseJunction(rapidjson::Value &doc) {
-    std::string id = parseEntityId(doc);
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
-    if (!doc.HasMember("coordinates")) {
-        throw std::runtime_error("Junction doesn't contain coordinates");
-    }
-    Coordinates coordinates = coordinatesJsonParser.parse(doc["coordinates"]);
-    std::unique_ptr<Junction> junction(new Junction(id, name, description, categoryTags, coordinates));
+    std::unique_ptr<Geometry> geometry = geometryJsonParser.parseJunctionGeometry(doc);
+    EntityId id = parseEntityId(doc);
+    std::unique_ptr<Junction> junction = std::make_unique<Junction>(id, name, description, categoryTags, std::move(geometry));
     return junction;
 }
 
 
 std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
-    std::string id = parseEntityId(doc);
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::vector<std::string> accessibility = parseAccessibility(doc);
-    std::unique_ptr<Geometry> geometry = geometryJsonParser.parseGeometry(doc);
-    std::unique_ptr<POI> poi(new POI(id, name, description, categoryTags, accessibility, std::move(geometry)));
+    std::unique_ptr<Geometry> geometry = geometryJsonParser.parsePOIGeometry(doc);
+    EntityId id = parseEntityId(doc);
+    std::unique_ptr<POI> poi = std::make_unique<POI>(id, name, description, categoryTags, accessibility, std::move(geometry));
     return poi;
 }
 
-std::string EntityJsonParser::parseEntityId(rapidjson::Value &doc) {
-    if (!doc.HasMember("id") || !doc["id"].IsString()) {
-        throw std::runtime_error("JSON entity doesn't contain id");
-        //TODO: instead, generate unique id
-    } else {
-        return doc["id"].GetString();
+EntityId EntityJsonParser::parseEntityId(rapidjson::Value &doc) {
+    if (generateIds()) {
+        return idGenerator.generateId();
     }
+
+    if (!doc.HasMember("id") || !doc["id"].IsString() || strcmp(doc["id"].GetString(), "") == 0) {
+        throw std::runtime_error("JSON entity doesn't contain id");
+    }
+    return EntityId(doc["id"].GetString());
 }
 
 std::string EntityJsonParser::parseName(rapidjson::Value &doc) {
-    if (!doc.HasMember("name") || !doc["id"].IsString()) {
+    if (!doc.HasMember("name") || !doc["name"].IsString()) {
         throw std::runtime_error("JSON entity doesn't contain name");
     }
     return doc["name"].GetString();
@@ -151,21 +167,45 @@ std::vector<std::string> EntityJsonParser::parseRestricted(rapidjson::Value &doc
     return restricted;
 }
 
-std::string EntityJsonParser::parseJunctionId(rapidjson::Value &doc, const char *direction) {
+EntityId EntityJsonParser::parseJunctionId(rapidjson::Value &doc, const char *direction) {
     std::string junctionId;
-    if (doc.HasMember(direction) && doc[direction].IsString()) {
-        junctionId = doc[direction].GetString();
+    if (doc.HasMember(direction) && doc[direction].IsObject() && doc[direction].HasMember("entity_id")) {
+        junctionId = doc[direction]["entity_id"].GetString();
     }
-    return junctionId;
+    else {
+        throw std::runtime_error("Way is not valid");
+    }
+    return EntityId(junctionId);
 }
 
-std::vector<Coordinates> EntityJsonParser::parseCurves(rapidjson::Value &doc) {
-    //optional entry
-    std::vector<Coordinates> curves;
-    if (doc.HasMember("curves") && doc["curves"].IsArray()) {
-        for (auto &coordinates : doc["curves"].GetArray()) {
-            curves.push_back(coordinatesJsonParser.parse(coordinates));
+bool EntityJsonParser::containsIds(rapidjson::Value &doc) {
+    bool hasId = false;
+    for (auto &jsonEntity : doc.GetArray()) {
+        if (jsonEntity.HasMember("id") && jsonEntity["id"].IsString() &&
+            (strcmp(jsonEntity["id"].GetString(), "")) != 0) {
+            hasId = true;
+            break;
         }
     }
-    return curves;
+    return hasId;
 }
+
+bool EntityJsonParser::generateIds() const {
+    return _generateIds;
+}
+
+void EntityJsonParser::setGenerateIds(bool fileContainsId) {
+    EntityJsonParser::_generateIds = !fileContainsId;
+}
+
+
+//std::vector<Coordinates> EntityJsonParser::parseCurves(rapidjson::Value &doc) {
+//    //optional entry
+//    std::vector<Coordinates> curves;
+//    if (doc.HasMember("curves") && doc["curves"].IsArray()) {
+//        for (auto &coordinates : doc["curves"].GetArray()) {
+//            curves.push_back(coordinatesJsonParser.parse(coordinates));
+//        }
+//    }
+//    return curves;
+//}

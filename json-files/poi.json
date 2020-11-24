@@ -1,0 +1,14 @@
+[
+	{
+		"type": "POI",
+		"id": "P1001",
+		"name": "dsadsad",
+		"description": "Dsadsad",
+		"category_tags": ["gfdsad"],
+		"geometry": {
+			"type":"Circle",
+			"coordinates": [40,30],
+			"radius": 4.5
+		}
+	}
+]

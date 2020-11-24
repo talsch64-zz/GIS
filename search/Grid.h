@@ -1,8 +1,14 @@
 #pragma once
 
 #include "../GISdefs.h"
+#include "../entities/geometry/Geometry.h"
+#include "../entities/geometry/PointList.h"
+#include "../entities/geometry/Point.h"
+#include "../entities/geometry/Circle.h"
+#include "../entities/Entity.h"
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <forward_list>
 #include <cmath>
 
@@ -40,35 +46,19 @@ public:
 
     using GridCell = Coordinates;
 
-    // This function gets a new Entity and inserts it into all the zones it occupies
-    // TODO: This version gets Coordinates and EntityId.
-    //       However, your version might get an object that has an API such as: getCenterCoordinates (what about way??), and isCoordinatesInsideEntityGeometry
-    //
-    // A new cell is created if this is the first Entity in it
-    //
-    // Returns:
-    //  all affected cells
-    std::vector<GridCell> setEntitiyOnGrid(const Coordinates &coordinates, const EntityId &id) {
-        std::vector<GridCell> cells;
-        GridCell grid_cell = truncateCoordinates(coordinates);
-        grid[grid_cell].insertEntity(id);
-        cells.emplace_back(grid_cell);
-
-        // TODO: search all neighboring cells recursively, test whether entity also resides in them
-
-        return cells;
-    }
-
-    CellEntities getEntitiesOnGrid(const Coordinates &coordinates) {
-        GridCell grid_cell = truncateCoordinates(coordinates);
-        auto pair = grid.find(grid_cell);
-        if (pair == grid.end()) {
-            return CellEntities();
-        } else {
-            return pair->second;
-        }
-    }
+    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
+    std::vector<GridCell> setEntityOnGrid(const Point &geometry, const EntityId &id);
+    std::vector<GridCell> setEntityOnGrid(const Circle &geometry, const EntityId &id);
+    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
 
 private:
     std::unordered_map<GridCell, CellEntities> grid;
+
+    /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
+    void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells);
+
+    std::vector<Coordinates> getGeometryGridCells(const PointList &geometry);
+
+
+
 };

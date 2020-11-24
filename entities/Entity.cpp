@@ -1,11 +1,19 @@
 #include "Entity.h"
+
+#include <utility>
 #include "JsonHandlers/Serializers/EntityJsonSerializer.h"
 
-Entity::Entity(const std::string &id, const std::string &name, const std::string &description,
-               const std::vector<std::string> &categoryTags) : id(id), name(name), description(description),
-                                                               categoryTags(categoryTags),
-                                                               entityJsonSerializer(
-                                                                       new EntityJsonSerializer()) {}
+Entity::Entity(EntityId id, std::string name, const std::string &description,
+               std::vector<std::string> categoryTags, std::unique_ptr<Geometry> geometry, std::string type) : id(std::move(
+        id)), name(std::move(name)), description(description),
+                                                                                                                     categoryTags(std::move(
+                                                                                                                             categoryTags)),
+                                                                                                                     geometry(
+                                                                                                                             std::move(
+                                                                                                                                     geometry)),
+                                                                                                                     type(std::move(type)),
+                                                                                                                     entityJsonSerializer(
+                                                                                                                             new EntityJsonSerializer()) {}
 
 const EntityId &Entity::getId() const {
     return id;
@@ -27,3 +35,14 @@ Entity::~Entity() {
     delete entityJsonSerializer;
 }
 
+void Entity::setId(const EntityId &id) {
+    Entity::id = id;
+}
+
+const std::unique_ptr<Geometry> &Entity::getGeometry() const {
+    return geometry;
+}
+
+const std::string &Entity::getType() const {
+    return type;
+}

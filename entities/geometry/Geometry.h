@@ -10,21 +10,14 @@
 
 class GeometryJsonSerializer;
 
-
 class Geometry {
 protected:
-    std::vector<Coordinates> coordinates;
     GeometryJsonSerializer *geometryJsonSerializer;
-
-    explicit Geometry(const Coordinates &coordinates);
-
-    explicit Geometry(std::vector<Coordinates> coordinates);
+    Geometry();
 
 public:
 
-    virtual ~Geometry() = 0;
-
-    std::vector<Coordinates> getCoordinates();
+    virtual ~Geometry();
 
     virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) = 0;
 };

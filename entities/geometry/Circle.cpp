@@ -6,5 +6,5 @@ rapidjson::Value Circle::toJson(rapidjson::Document::AllocatorType &allocator) {
 }
 
 Coordinates Circle::getCenter() {
-    return coordinates[0];
+    return coordinates;
 }

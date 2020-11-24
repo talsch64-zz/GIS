@@ -10,21 +10,15 @@
 
 
 class POI : public Entity {
-
     std::vector<std::string> accessibility;
-    std::unique_ptr<Geometry> geometry;
 public:
-    POI(const std::string &id, const std::string &name, const std::string &description,
+    POI(const EntityId &id, const std::string &name, const std::string &description,
         const std::vector<std::string> &categoryTags, std::vector<std::string> accessibility,
         std::unique_ptr<Geometry> geometry);
 
     const std::vector<std::string> &getAccessibility() const;
 
-    const std::unique_ptr<Geometry> &getGeometry() const;
-
     rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
-
-
 };
 
 #endif //EX1_POI_H

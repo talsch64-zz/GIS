@@ -6,8 +6,9 @@
 
 class Circle : public Geometry {
     Meters radius;
+    Coordinates coordinates;
 public:
-    Circle(const Coordinates &coordinates, const Meters radius) : Geometry(coordinates), radius(radius) {}
+    Circle(const Coordinates &coordinates, const Meters radius) : Geometry(), radius(radius), coordinates(coordinates) {}
 
     const Meters &getRadius() const {
         return radius;
