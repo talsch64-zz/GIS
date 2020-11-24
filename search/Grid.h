@@ -45,20 +45,23 @@ public:
     static constexpr double precision = 0.0001;
 
     using GridCell = Coordinates;
+    std::vector<GridCell> setEntityOnGrid(Entity &entity);
 
-    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
-    std::vector<GridCell> setEntityOnGrid(const Point &geometry, const EntityId &id);
-    std::vector<GridCell> setEntityOnGrid(const Circle &geometry, const EntityId &id);
-    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
+
+
 
 private:
     std::unordered_map<GridCell, CellEntities> grid;
 
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
     void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells);
+    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
+    std::vector<GridCell> setEntityOnGrid(const Point &geometry, const EntityId &id);
+    std::vector<GridCell> setEntityOnGrid(const Circle &geometry, const EntityId &id);
+    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
 
+
+    std::vector<GridCell> getGeometryGridCells(const Geometry &geometry);
     std::vector<Coordinates> getGeometryGridCells(const PointList &geometry);
-
-
-
+    std::vector<Coordinates> getGeometryGridCells(const Point &geometry);
 };

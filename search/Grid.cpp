@@ -15,28 +15,15 @@ CellEntities Grid::getEntitiesOnGrid(const Coordinates &coordinates) {
     }
 }
 
-
-std::vector<Grid::GridCell> Grid::setEntityOnGrid(const PointList &geometry, const EntityId &id) {
-    std::vector<GridCell> cells = getGeometryGridCells(geometry);
+std::vector<Grid::GridCell> Grid::setEntityOnGrid(Entity &entity) {
+    Geometry &entityGeometry = *(entity.getGeometry().get());
+    std::vector<Grid::GridCell> cells = getGeometryGridCells(entityGeometry);
+    EntityId id = entity.getId();
     for(const auto& cell: cells) {
         grid[cell].insertEntity(id);
     }
     return cells;
 }
-
-std::vector<Grid::GridCell> Grid::setEntityOnGrid(const Point &geometry, const EntityId &id) {
-    std::vector<GridCell> gridCells;
-    GridCell cell = truncateCoordinates(geometry.getCoordinates());
-    grid[cell].insertEntity(id);
-    gridCells.emplace_back(cell);
-    return gridCells;
-}
-
-
-std::vector<Grid::GridCell> Grid::setEntityOnGrid(const Circle &geometry, const EntityId &id) {
-    return std::vector<GridCell>();
-}
-
 
 std::vector<Coordinates> Grid::getGeometryGridCells(const PointList &geometry) {
     std::vector<Coordinates> points = geometry.getPoints();
@@ -52,6 +39,10 @@ std::vector<Coordinates> Grid::getGeometryGridCells(const PointList &geometry) {
     return cells;
 }
 
+std::vector<Coordinates> Grid::getGeometryGridCells(const Point &geometry) {
+    return std::vector<Coordinates> {truncateCoordinates(geometry.getCoordinates())};
+}
+
 void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells) {
     if(abs(coord1.latitude()-coord2.latitude()) < Grid::precision && abs(coord1.latitude()-coord2.latitude()) < Grid::precision) {
         cells.insert(truncateCoordinates(coord1));
@@ -61,4 +52,26 @@ void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &c
     Coordinates midPoint = CoordinatesMath::calculateMidpoint(coord1, coord2);
     addIntervalsGridCells(coord1, midPoint, cells);
     addIntervalsGridCells(midPoint, coord2, cells);
+}
+
+std::vector<Grid::GridCell> Grid::getGeometryGridCells(const Geometry &geometry) {
+    std::vector<Grid::GridCell> cells;
+
+    if (geometry.getType() == "PointList") {
+        cells = getGeometryGridCells(dynamic_cast<const PointList&> (geometry));
+    }
+
+    else if (geometry.getType() == "Point") {
+        cells = getGeometryGridCells(dynamic_cast<const Point &> (geometry));
+    }
+
+    else if (geometry.getType() == "Circle") {
+        cells = getGeometryGridCells(dynamic_cast<const Circle &> (geometry));
+    }
+
+    return cells;
+
+
+
+
 }

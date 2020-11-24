@@ -10,12 +10,18 @@
 
 class GeometryJsonSerializer;
 
+
 class Geometry {
+    std::string type;
+//    TODO set type to be enum
 protected:
     GeometryJsonSerializer *geometryJsonSerializer;
-    Geometry();
+    Geometry(std::string type);
 
 public:
+    enum type {POINT, POINTLIST, CIRCLE};
+
+    const std::string &getType() const;
 
     virtual ~Geometry();
 
