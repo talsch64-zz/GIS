@@ -46,6 +46,8 @@ public:
 
     using GridCell = Coordinates;
     std::vector<GridCell> setEntityOnGrid(const Entity &entity);
+    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
+
 
 
 
