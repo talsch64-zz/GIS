@@ -56,7 +56,10 @@ public:
     std::vector<GridCell> getGeometryGridCells(const Point &geometry) const;
 
     std::vector<GridCell> getGeometryGridCells(const Circle &geometry) const;
-
+    Coordinates truncateCoordinates(const Coordinates &coordinates) const {
+        return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
+                Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
+    }
 private:
     std::unordered_map<GridCell, CellEntities> grid;
 
@@ -70,8 +73,5 @@ private:
         return std::trunc(coordinate / precision) * precision;
     }
 
-    Coordinates truncateCoordinates(const Coordinates &coordinates) const {
-        return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
-                Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
-    }
+
 };

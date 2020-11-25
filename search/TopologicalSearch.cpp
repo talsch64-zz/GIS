@@ -13,7 +13,8 @@ TopologicalSearch::searchCircleInGrid(const Grid &grid, const Coordinates &cente
 
     for (double lat = bottomCoord.latitude(); lat <= topCoord.latitude(); lat += grid.precision) {
         for (double lon = leftCoord.longitude(); lon <= rightCoord.longitude(); lon += grid.precision) {
-            gridCells.emplace_back(Coordinates(Longitude(lon), Latitude(lat)));
+            Coordinates coord = grid.truncateCoordinates(Coordinates(Longitude(lon), Latitude(lat)));
+            gridCells.emplace_back(coord);
         }
     }
     return gridCells;
