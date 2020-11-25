@@ -71,12 +71,3 @@ void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &c
     addIntervalsGridCells(coord1, midPoint, cells);
     addIntervalsGridCells(midPoint, coord2, cells);
 }
-
-//TODO remove after testing
-//std::vector<Grid::GridCell> Grid::setEntityOnGrid(const PointList &geometry, const EntityId &id) {
-//    std::vector<GridCell> cells = getGeometryGridCells(geometry);
-//    for(const auto& cell: cells) {
-//        grid[cell].insertEntity(id);
-//    }
-//    return cells;
-//}
