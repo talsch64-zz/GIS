@@ -6,12 +6,13 @@
 #include <memory>
 #include "../GISdefs.h"
 #include "Grid.h"
+#include "../entities/geometry/Circle.h"
 
 class TopologicalSearch {
-    std::vector<Coordinates> searchCircleInGrid(const Coordinates &center, Meters radius);
-    std::shared_ptr<Grid> grid;
 public:
-    TopologicalSearch(std::shared_ptr<Grid> grid);
+    std::vector<Coordinates> searchCircleInGrid(const Grid &grid, const Coordinates &center, Meters radius) const;
+
+    bool isInCircle(const Coordinates &center, Meters radius, const Circle &entityGeometry);
 };
 
 

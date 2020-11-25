@@ -18,7 +18,7 @@ public:
 
     rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
 
-    Coordinates getCenter();
+    Coordinates getCenter() const;
 
     std::vector<Coordinates> getGridCells(const Grid *grid) override;
 };

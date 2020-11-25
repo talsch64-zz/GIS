@@ -6,6 +6,8 @@
 #include "../entities/geometry/Point.h"
 #include "../entities/geometry/Circle.h"
 
+Grid::Grid() : topologicalSearch(std::make_unique<TopologicalSearch>()) {
+}
 
 CellEntities Grid::getEntitiesOnGrid(const Coordinates &coordinates) {
     GridCell grid_cell = truncateCoordinates(coordinates);
@@ -46,7 +48,7 @@ std::vector<Grid::GridCell> Grid::getGeometryGridCells(const Point &geometry) co
 }
 
 std::vector<Grid::GridCell> Grid::getGeometryGridCells(const Circle &geometry) const {
-    return std::vector<GridCell>();
+    return topologicalSearch->searchCircleInGrid(*this, geometry.getCenter(), geometry.getRadius());
 }
 
 void

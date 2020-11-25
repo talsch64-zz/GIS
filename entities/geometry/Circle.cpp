@@ -10,7 +10,7 @@ rapidjson::Value Circle::toJson(rapidjson::Document::AllocatorType &allocator) {
     return geometryJsonSerializer->toJson(this, allocator);
 }
 
-Coordinates Circle::getCenter() {
+Coordinates Circle::getCenter() const {
     return coordinates;
 }
 

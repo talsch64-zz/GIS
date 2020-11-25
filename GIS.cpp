@@ -13,7 +13,7 @@
 
 
 
-GIS::GIS() : grid(std::make_shared<Grid>()), topologicalSearch(grid), entityJsonParser(new EntityJsonParser()) {
+GIS::GIS() : grid(std::make_shared<Grid>()), entityJsonParser(new EntityJsonParser()) {
 }
 
 GIS::~GIS() { delete entityJsonParser; }
