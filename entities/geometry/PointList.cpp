@@ -8,7 +8,7 @@
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
 #include "../search/Grid.h"
 
-PointList::PointList(std::vector<Coordinates> &points) : points(std::move(points)), Geometry("PointList") {}
+PointList::PointList(std::vector<Coordinates> &points) : points(std::move(points)), Geometry() {}
 
 const std::vector<Coordinates> &PointList::getPoints() const {
     return points;

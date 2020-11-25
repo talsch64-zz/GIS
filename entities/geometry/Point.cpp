@@ -6,7 +6,7 @@
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
 #include "../search/Grid.h"
 
-Point::Point(const Coordinates &coordinates) : Geometry("Point"), coordinates(coordinates) {}
+Point::Point(const Coordinates &coordinates) : Geometry(), coordinates(coordinates) {}
 
 const Coordinates &Point::getCoordinates() const {
     return coordinates;

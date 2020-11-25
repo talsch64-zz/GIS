@@ -3,7 +3,7 @@
 #include "../search/Grid.h"
 
 
-Circle::Circle(const Coordinates &coordinates, const Meters radius) : Geometry("Circle"), radius(radius),
+Circle::Circle(const Coordinates &coordinates, const Meters radius) : Geometry(), radius(radius),
                                                                       coordinates(coordinates) {}
 
 rapidjson::Value Circle::toJson(rapidjson::Document::AllocatorType &allocator) {
