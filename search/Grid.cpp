@@ -57,15 +57,16 @@ std::vector<Grid::GridCell> Grid::getGeometryGridCells(const Circle &geometry) c
     return std::vector<GridCell>();
 }
 
-void
-Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2,
+void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2,
                             std::unordered_set<GridCell> &cells) const {
-    if (abs(coord1.latitude() - coord2.latitude()) < Grid::precision &&
-        abs(coord1.latitude() - coord2.latitude()) < Grid::precision) {
-        cells.insert(truncateCoordinates(coord1));
-        cells.insert(truncateCoordinates(coord2));
+    GridCell cell1 = truncateCoordinates(coord1);
+    GridCell cell2 = truncateCoordinates(coord2);
+    if (cell1 == cell2 || CoordinatesMath::calculateDistance(coord1, coord2) < meterPrecision) {
+        cells.insert(cell1);
+        cells.insert(cell2);
         return;
     }
+
     Coordinates midPoint = CoordinatesMath::calculateMidpoint(coord1, coord2);
     addIntervalsGridCells(coord1, midPoint, cells);
     addIntervalsGridCells(midPoint, coord2, cells);

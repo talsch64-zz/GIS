@@ -33,14 +33,12 @@ public:
 
 class Grid {
 
-    double truncateDecimalCoordinate(double coordinate) const;
-    Coordinates truncateCoordinates(const Coordinates &coordinates) const;
-
 public:
     static constexpr double precision = 0.0001;
+    static constexpr double meterPrecision = 1;
 
     using GridCell = Coordinates;
-
+//TODO maybe change to return unordered_set
     std::vector<GridCell> setEntityOnGrid(const Entity &entity);
 
 //    TODO remove after testing
@@ -55,11 +53,10 @@ public:
 private:
     std::unordered_map<GridCell, CellEntities> grid;
 
-
+    double truncateDecimalCoordinate(double coordinate) const;
+    Coordinates truncateCoordinates(const Coordinates &coordinates) const;
     CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
-
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
-    void
-    addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2,
-                          std::unordered_set<GridCell> &cells) const;
+    void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells) const;
+
 };
