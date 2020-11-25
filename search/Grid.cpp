@@ -6,6 +6,14 @@
 #include "../entities/geometry/Point.h"
 #include "../entities/geometry/Circle.h"
 
+double Grid::truncateDecimalCoordinate(double coordinate) const {
+    return std::floor(coordinate / precision) * precision;
+}
+
+Coordinates Grid::truncateCoordinates(const Coordinates &coordinates) const {
+    return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
+            Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
+}
 
 CellEntities Grid::getEntitiesOnGrid(const Coordinates &coordinates) {
     GridCell grid_cell = truncateCoordinates(coordinates);

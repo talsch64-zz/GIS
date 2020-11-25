@@ -33,14 +33,8 @@ public:
 
 class Grid {
 
-    double truncateDecimalCoordinate(double coordinate) const {
-        return std::trunc(coordinate / precision) * precision;
-    }
-
-    Coordinates truncateCoordinates(const Coordinates &coordinates) const {
-        return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
-                Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
-    }
+    double truncateDecimalCoordinate(double coordinate) const;
+    Coordinates truncateCoordinates(const Coordinates &coordinates) const;
 
 public:
     static constexpr double precision = 0.0001;
