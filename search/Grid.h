@@ -46,13 +46,17 @@ public:
 
     using GridCell = Coordinates;
     std::vector<GridCell> setEntityOnGrid(const Entity &entity);
-    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
+
+//    TODO remove after testing
+//    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
+//    std::vector<Grid::GridCell> setEntityOnGrid(const Point &geometry, const EntityId &id);
 
 
 
 
 
-private:
+
+        private:
     std::unordered_map<GridCell, CellEntities> grid;
 
 

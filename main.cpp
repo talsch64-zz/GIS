@@ -16,8 +16,8 @@ int main() {
 //    std::vector<EntityId> entityId = gis.loadMapFile(mapPath);
 //    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
 //
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\3j1w1p.json");
-//    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
+    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\poi.json");
+    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
 
 
 //    Coordinates c1(Longitude(-3.0700117898814905), Latitude(58.643945458221));
@@ -29,24 +29,24 @@ int main() {
 //    double bearing2 = CoordinatesMath::calculateBearing(midPoint, c2);
 //    Coordinates c2_cpy = CoordinatesMath::calculateCoordinateByDistance(midPoint, Meters(distance), bearing2);
 
-    Coordinates c1(Longitude(-1), Latitude(10));
-    Coordinates c2(Longitude(-0.999), Latitude(10.001));
-    Coordinates c3(Longitude(-0.998), Latitude(10.001));
+//    Coordinates c1(Longitude(-1), Latitude(10));
+//    Coordinates c2(Longitude(-0.999), Latitude(10.001));
+//    Coordinates c3(Longitude(-0.998), Latitude(10.001));
 //
-////
-    Grid grid;
-    std::vector<Coordinates> vector {c1, c3, c2};
-    PointList points(vector);
-    grid.setEntityOnGrid(points, EntityId("dummy"));
-
-    Coordinates c4(Longitude(-2), Latitude(1));
-    Coordinates c5(Longitude(-2.001), Latitude(1.001));
-    Coordinates c6(Longitude(-2), Latitude(1.0005));
-
-    std::vector<Coordinates> vector2 {c4, c5, c6};
-
-    PointList points2(vector2);
-    grid.setEntityOnGrid(points2, EntityId("dummy2"));
+//    Grid grid;
+//    std::vector<Coordinates> vector {c1, c2};
+//    PointList points(vector);
+//    grid.setEntityOnGrid(points, EntityId("dummy"));
+//    grid.setEntityOnGrid(Point(Coordinates(Longitude(-1), Latitude(10))), EntityId("Junction"));
+//
+//    Coordinates c4(Longitude(-2), Latitude(1));
+//    Coordinates c5(Longitude(-2.001), Latitude(1.001));
+//    Coordinates c6(Longitude(-2), Latitude(1.0005));
+//
+//    std::vector<Coordinates> vector2 {c4, c5, c6};
+//
+//    PointList points2(vector2);
+//    grid.setEntityOnGrid(points2, EntityId("dummy2"));
 
 
 //    Coordinates A(Longitude(-117.518921), Latitude(35.345678));

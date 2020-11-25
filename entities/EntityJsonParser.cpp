@@ -79,7 +79,6 @@ EntityId EntityJsonParser::parseEntityId(rapidjson::Value &doc) {
     if (generateIds()) {
         return idGenerator.generateId();
     }
-
     if (!doc.HasMember("id") || !doc["id"].IsString() || strcmp(doc["id"].GetString(), "") == 0) {
         throw std::runtime_error("JSON entity doesn't contain id");
     }

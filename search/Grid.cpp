@@ -76,10 +76,11 @@ std::vector<Grid::GridCell> Grid::getGeometryGridCells(const Geometry &geometry)
 
 }
 
-std::vector<Grid::GridCell> Grid::setEntityOnGrid(const PointList &geometry, const EntityId &id) {
-    std::vector<GridCell> cells = getGeometryGridCells(geometry);
-    for(const auto& cell: cells) {
-        grid[cell].insertEntity(id);
-    }
-    return cells;
-}
+//TODO remove after testing
+//std::vector<Grid::GridCell> Grid::setEntityOnGrid(const PointList &geometry, const EntityId &id) {
+//    std::vector<GridCell> cells = getGeometryGridCells(geometry);
+//    for(const auto& cell: cells) {
+//        grid[cell].insertEntity(id);
+//    }
+//    return cells;
+//}

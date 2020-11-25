@@ -83,10 +83,10 @@ std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
             EntityId entityId = entity->getId();
             // if entityId not loaded yet
             if (entities.find(entityId) == entities.end()) {
+                grid->setEntityOnGrid(*entity);
                 entities.emplace(entityId, std::move(entity));
                 entityIds.push_back(entityId);
-                grid->setEntityOnGrid(*entity);
-//                TODO fix the bug with the unique_ptrs (maybe change to shared_ptr)
+
             } else {
 //                TODO print to log that id is not unique
             }
