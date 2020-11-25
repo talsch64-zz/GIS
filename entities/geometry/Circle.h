@@ -4,6 +4,8 @@
 #include "Geometry.h"
 #include <rapidjson/document.h>
 
+class Grid;
+
 class Circle : public Geometry {
     Meters radius;
     Coordinates coordinates;
@@ -17,6 +19,8 @@ public:
     rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
 
     Coordinates getCenter();
+
+    std::vector<Coordinates> getGridCells(const Grid *grid) override;
 };
 
 #endif //EX1_CIRCLE_H

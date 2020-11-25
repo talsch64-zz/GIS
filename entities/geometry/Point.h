@@ -16,5 +16,7 @@ public:
     Point(const Coordinates &coordinates);
 
     rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
+
+    std::vector<Coordinates> getGridCells(const Grid *grid) override;
 };
 #endif //EX1_POINT_H

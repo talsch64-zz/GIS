@@ -8,6 +8,8 @@
 #include <rapidjson/document.h>
 #include "../../GISdefs.h"
 
+class Grid;
+
 class GeometryJsonSerializer;
 
 class Geometry {
@@ -15,6 +17,7 @@ class Geometry {
 //    TODO set type to be enum
 protected:
     GeometryJsonSerializer *geometryJsonSerializer;
+
     Geometry(std::string type);
 
 public:
@@ -24,6 +27,8 @@ public:
     virtual ~Geometry();
 
     virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) = 0;
+
+    virtual std::vector<Coordinates> getGridCells(const Grid *grid) = 0;
 };
 
 #endif //EX1_GEOMETRY_H
