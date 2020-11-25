@@ -12,7 +12,7 @@ class TopologicalSearch {
 public:
     std::vector<Coordinates> searchCircleInGrid(const Grid &grid, const Coordinates &center, Meters radius) const;
 
-    bool isInCircle(const Coordinates &center, Meters radius, const Circle &entityGeometry);
+    bool isInCircle(const Coordinates &center, Meters radius, const Circle &entityGeometry) const;
 };
 
 

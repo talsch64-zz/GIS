@@ -37,21 +37,14 @@ public:
 class Grid {
     std::unique_ptr<TopologicalSearch> topologicalSearch;
 
-    double truncateDecimalCoordinate(double coordinate) const {
-        return std::trunc(coordinate / precision) * precision;
-    }
-
-    Coordinates truncateCoordinates(const Coordinates &coordinates) const {
-        return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
-                Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
-    }
-
 public:
     Grid();
 
-    static constexpr double precision = 0.0001;
+    static constexpr double precision = 0.01;
 
     using GridCell = Coordinates;
+
+    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
 
     std::vector<GridCell> setEntityOnGrid(const Entity &entity);
 
@@ -68,10 +61,17 @@ private:
     std::unordered_map<GridCell, CellEntities> grid;
 
 
-    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
-
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
     void
     addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2,
                           std::unordered_set<GridCell> &cells) const;
+
+    double truncateDecimalCoordinate(double coordinate) const {
+        return std::trunc(coordinate / precision) * precision;
+    }
+
+    Coordinates truncateCoordinates(const Coordinates &coordinates) const {
+        return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
+                Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
+    }
 };

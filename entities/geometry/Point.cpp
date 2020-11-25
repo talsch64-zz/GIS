@@ -19,3 +19,7 @@ rapidjson::Value Point::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllo
 std::vector<Grid::GridCell> Point::getGridCells(const Grid *grid) {
     return grid->getGeometryGridCells(*this);
 }
+
+bool Point::isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const {
+    return false;
+}

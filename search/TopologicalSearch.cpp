@@ -19,8 +19,10 @@ TopologicalSearch::searchCircleInGrid(const Grid &grid, const Coordinates &cente
     return gridCells;
 }
 
-bool TopologicalSearch::isInCircle(const Coordinates &center, Meters radius, const Circle &entityGeometry) {
-    return false;
+bool TopologicalSearch::isInCircle(const Coordinates &center, Meters radius, const Circle &entityGeometry) const {
+    Meters distanceBetweenCenters = CoordinatesMath::calculateDistance(center, entityGeometry.getCenter());
+    bool inCircle = distanceBetweenCenters <= radius + entityGeometry.getRadius();
+    return inCircle;
 }
 
 

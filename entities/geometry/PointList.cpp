@@ -22,5 +22,9 @@ std::vector<Grid::GridCell> PointList::getGridCells(const Grid *grid) {
     return grid->getGeometryGridCells(*this);
 }
 
+bool PointList::isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const {
+    return false;
+}
+
 
 
