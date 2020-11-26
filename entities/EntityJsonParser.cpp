@@ -41,7 +41,7 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     }
     auto toEntity = gis.getEntityById(to);
     if (!toEntity || toEntity->getType() != "Junction") {
-        throw std::runtime_error("Way does not contain valid from Junction");
+        throw std::runtime_error("Way does not contain valid to Junction");
     }
     Coordinates fromCoordinates = ((Point *) fromEntity->getGeometry().get())->getCoordinates();
     Coordinates toCoordinates = ((Point *) toEntity->getGeometry().get())->getCoordinates();
