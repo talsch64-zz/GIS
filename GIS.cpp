@@ -58,16 +58,29 @@ std::size_t GIS::saveMapFile(const std::string &filename) {
     return size;
 }
 
-std::vector<EntityId> GIS::getEntities(const std::string &search_name) { return std::vector<EntityId>(); }
-
-std::vector<EntityId>
-GIS::getEntities(const std::string &search_name, const Coordinates &, Meters radius) { return std::vector<EntityId>(); }
-
-std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &, const Coordinates &) {
-    Coordinates coord(Longitude(0), Latitude(0));
-    return coord;
+std::vector<EntityId> GIS::getEntities(const std::string &search_name) {
+    std::vector<EntityId> entityIds;
+    for(const auto& pair: entities) {
+        if(pair.second->getName() == search_name) {
+            entityIds.push_back(pair.first);
+        }
+    }
+    return entityIds;
+}
+//TODO
+std::vector<EntityId> GIS::getEntities(const std::string &search_name, const Coordinates &, Meters radius) {
+    return std::vector<EntityId>();
 }
 
+
+std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &entityId, const Coordinates &coordinates) {
+    if (entities.find(entityId) == entities.end()) {
+        return {};
+    }
+    return entities.find(entityId)->second->getGeometry()->getClosestPoint(coordinates);
+}
+
+//TODO
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
     Coordinates coord(Longitude(0), Latitude(0));
     std::pair<Coordinates, EntityId> p(coord, "something");
@@ -106,3 +119,4 @@ const Entity *GIS::getEntityById(const EntityId& id) const {
         return pair->second.get();
     }
 }
+

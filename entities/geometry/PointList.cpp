@@ -7,6 +7,7 @@
 #include <utility>
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
 #include "../search/Grid.h"
+#include "CoordinatesMath.h"
 
 PointList::PointList(std::vector<Coordinates> &points) : points(std::move(points)), Geometry() {}
 
@@ -20,6 +21,19 @@ rapidjson::Value PointList::toJson(rapidjson::MemoryPoolAllocator<rapidjson::Crt
 
 std::vector<Grid::GridCell> PointList::getGridCells(const Grid *grid) {
     return grid->getGeometryGridCells(*this);
+}
+
+Coordinates PointList::getClosestPoint(const Coordinates &coordinates) {
+    std::vector<Coordinates> coords = getPoints();
+//  initialize dummy pair;
+    std::pair<Meters, Coordinates> closestPair {INFINITY, Coordinates(Longitude(0), Latitude(0))};
+    for(int i = 0; i < coords.size()-1; ++i) {
+        std::pair<Meters, Coordinates> nextPair = CoordinatesMath::calculateShortestDistanceAndCoordinatesFromLine(coords[i], coords[i+1], coordinates);
+        if (closestPair.first > nextPair.first) {
+            closestPair = nextPair;
+        }
+    }
+    return closestPair.second;
 }
 
 

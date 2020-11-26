@@ -26,6 +26,8 @@ public:
     virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) = 0;
 
     virtual std::vector<Coordinates> getGridCells(const Grid *grid) = 0;
+
+    virtual Coordinates getClosestPoint(const Coordinates &coordinates) = 0;
 };
 
 #endif //EX1_GEOMETRY_H

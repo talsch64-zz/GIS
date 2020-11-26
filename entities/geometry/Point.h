@@ -18,5 +18,8 @@ public:
     rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
 
     std::vector<Coordinates> getGridCells(const Grid *grid) override;
+
+    Coordinates getClosestPoint(const Coordinates &coord) override;
+
 };
 #endif //EX1_POINT_H

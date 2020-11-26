@@ -10,7 +10,7 @@ class Circle : public Geometry {
     Meters radius;
     Coordinates coordinates;
 public:
-    Circle(const Coordinates &coordinates, const Meters radius);
+    Circle(const Coordinates &coordinates, const Meters &radius);
 
     const Meters &getRadius() const {
         return radius;
@@ -21,6 +21,9 @@ public:
     Coordinates getCenter();
 
     std::vector<Coordinates> getGridCells(const Grid *grid) override;
+
+    Coordinates getClosestPoint(const Coordinates &coordinates) override;
+
 };
 
 #endif //EX1_CIRCLE_H

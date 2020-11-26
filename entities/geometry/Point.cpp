@@ -19,3 +19,7 @@ rapidjson::Value Point::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllo
 std::vector<Grid::GridCell> Point::getGridCells(const Grid *grid) {
     return grid->getGeometryGridCells(*this);
 }
+
+Coordinates Point::getClosestPoint(const Coordinates &coord) {
+    return coordinates;
+}

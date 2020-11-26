@@ -2,6 +2,7 @@
 #include "GIS.h"
 #include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
 #include "entities/geometry/CoordinatesMath.h"
+#include "entities/geometry/Circle.h"
 #include <iostream>
 #include <fstream>
 #include <tchar.h>
@@ -17,8 +18,11 @@ int main() {
 //    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
 //
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json");
+//
 //    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
-
+//
+//    std::vector<EntityId> ids = gis.getEntities("dsadsad");
+//
 
 
 //    Coordinates c1(Longitude(-3.0700117898814905), Latitude(58.643945458221));
@@ -28,7 +32,7 @@ int main() {
 //    double distance = CoordinatesMath::calculateDistance(c1, midPoint);
 //    double bearing1 = CoordinatesMath::calculateBearing(c1, midPoint);
 //    double bearing2 = CoordinatesMath::calculateBearing(midPoint, c2);
-//    Coordinates c2_cpy = CoordinatesMath::calculateCoordinateByDistance(midPoint, Meters(distance), bearing2);
+//    Coordinates c2_cpy = CoordinatesMath::calculateCoordinatesByDistanceAndBearing(midPoint, Meters(distance), bearing2);
 
 //    Coordinates c1(Longitude(-1), Latitude(10));
 //    Coordinates c2(Longitude(-0.999), Latitude(10.001));
@@ -55,13 +59,39 @@ int main() {
 //    double bearing = CoordinatesMath::calculateBearing(A,B);
 //    double b = CoordinatesMath::calculateBearing(B,A);
 //    double distance = CoordinatesMath::calculateDistance(A,B);
-//    Coordinates C = CoordinatesMath::calculateCoordinateByDistance(B, Meters(distance), b);
+//    Coordinates C = CoordinatesMath::calculateCoordinatesByDistanceAndBearing(B, Meters(distance), b);
 //    double bearing2 = CoordinatesMath::calculateBearing(A,C);
 
 //    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
 //    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
 //    Coordinates C(Longitude(-116.8), Latitude(38));
 //    Coordinates D = CoordinatesMath::calculateClosestCoordinateAlongLine(A, B, C);
+
+
+//    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
+//    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
+//    Coordinates C(Longitude(-116.8), Latitude(38));
+//    Coordinates D = CoordinatesMath::calculateClosestCoordinateAlongLine(A, B, C);
+//    Meters distance1 = CoordinatesMath::calculateShortestDistanceFromLine(A, B, C);
+//    Meters distance2 = CoordinatesMath::calculateDistance(C, D);
+//    std::pair<Meters, Coordinates> p = CoordinatesMath::calculateShortestDistanceAndCoordinatesFromLine(A, B, C);
+
+    Coordinates c1(Longitude(-2), Latitude(2));
+    Coordinates c2(Longitude(-2), Latitude(1));
+    Coordinates c3(Longitude(-3), Latitude(0.5));
+    Coordinates c4(Longitude(0), Latitude(1));
+    Coordinates c5(Longitude(-3), Latitude(1.3));
+
+
+    std::vector<Coordinates> vector2 {c1, c2, c3, c4};
+    PointList points(vector2);
+    Coordinates closest = points.getClosestPoint(c5);
+
+    Coordinates c = CoordinatesMath::calculateClosestCoordinateAlongLine(c3, c2, c5);
+    Meters radius = CoordinatesMath::calculateDistance(c1, c2);
+    Circle circle(c2, radius);
+    c5  = circle.getClosestPoint(Coordinates {Longitude(4), Latitude(1)});
+
 
     return 0;
 }

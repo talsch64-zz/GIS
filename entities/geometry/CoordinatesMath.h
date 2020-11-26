@@ -12,6 +12,7 @@ namespace std::numbers {
 class CoordinatesMath {
 
     static constexpr double earth_radius = 6371000;
+
     // The function convert degrees into radians
     static double deg2rad(double deg) { return deg * std::numbers::pi / 180; }
 
@@ -45,13 +46,14 @@ public:
         return Meters{distance};
     }
 
-    static Coordinates calculateCoordinateByDistance(const Coordinates &c, Meters distance, double bearing) {
+    static Coordinates calculateCoordinatesByDistanceAndBearing(const Coordinates &c, Meters distance, double bearing) {
         double angDistance = distance / earth_radius;
         double rad_bearing = deg2rad(bearing);
         Latitude latitude(deg2rad(c.latitude()));
         Longitude longitude(deg2rad(c.longitude()));
-        double targetLat = asin(sin(latitude)*cos(angDistance)+cos(latitude)*sin(angDistance)*cos(rad_bearing));
-        double targetLon = longitude + atan2(sin(rad_bearing)*sin(angDistance)*cos(latitude), cos(angDistance)-sin(latitude)*sin(targetLat));
+        double targetLat = asin(sin(latitude) * cos(angDistance) + cos(latitude) * sin(angDistance) * cos(rad_bearing));
+        double targetLon = longitude + atan2(sin(rad_bearing) * sin(angDistance) * cos(latitude),
+                                             cos(angDistance) - sin(latitude) * sin(targetLat));
         Longitude targetLonDeg(rad2deg(targetLon));
         Latitude targetLatDeg(rad2deg(targetLat));
         return Coordinates(targetLonDeg, targetLatDeg);
@@ -64,12 +66,12 @@ public:
         double lat2 = deg2rad(end.latitude());
         double lng2 = deg2rad(end.longitude());
         double y = sin(lng2 - lng1) * cos(lat2);
-        double x = cos(lat1)*sin(lat2) - sin(lat1)*cos(lat2)*cos(lng2 - lng1);
-        double bearing = atan2(y,x);
+        double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lng2 - lng1);
+        double bearing = atan2(y, x);
         return rad2deg(bearing);
     }
 
-    static Coordinates calculateMidpoint(const Coordinates& coord1, const Coordinates& coord2) {
+    static Coordinates calculateMidpoint(const Coordinates &coord1, const Coordinates &coord2) {
         // convert to radians
         double lat1 = deg2rad(coord1.latitude());
         double lng1 = deg2rad(coord1.longitude());
@@ -79,7 +81,7 @@ public:
         double Bx = cos(lat2) * cos(lng2 - lng1);
         double By = cos(lat2) * sin(lng2 - lng1);
 
-        double latMidRad = atan2(sin(lat1) + sin(lat2), std::sqrt((cos(lat1)+Bx)*(cos(lat1)+Bx) + By*By));
+        double latMidRad = atan2(sin(lat1) + sin(lat2), std::sqrt((cos(lat1) + Bx) * (cos(lat1) + Bx) + By * By));
         double lonMidRad = lng1 + atan2(By, cos(lat1) + Bx);
 
 //        convert back to degrees
@@ -87,7 +89,41 @@ public:
 
     }
 
-    static Coordinates calculateClosestCoordinateAlongLine(Coordinates& A, Coordinates& B, Coordinates& C) {
+    static std::pair<Meters, Coordinates> calculateShortestDistanceAndCoordinatesFromLine(const Coordinates &A, const Coordinates &B, const Coordinates &C) {
+        double bearAB = deg2rad(calculateBearing(A, B));
+        double bearAC = deg2rad(calculateBearing(A, C));
+        double dAC = calculateDistance(A, C);
+        if (fabs(bearAC - bearAB) > std::numbers::pi / 2) {
+            return std::pair<Meters, Coordinates> {dAC, A};
+        }
+        double dxt = asin(sin(dAC / earth_radius) * sin(bearAC - bearAB)) * earth_radius;
+        double dAB = calculateDistance(A, B);
+        double dAD = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
+        if (dAD > dAB) {
+            return std::pair<Meters, Coordinates> {calculateDistance(B,C), B};
+        }
+        double dat = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
+        Coordinates closest = calculateCoordinatesByDistanceAndBearing(A, Meters(dat), rad2deg(bearAB));
+        return std::pair<Meters, Coordinates> {std::abs(dxt), closest};
+    }
+
+    static Meters calculateShortestDistanceFromLine(Coordinates &A, Coordinates &B, Coordinates &C) {
+        double bearAB = deg2rad(calculateBearing(A, B));
+        double bearAC = deg2rad(calculateBearing(A, C));
+        double dAC = calculateDistance(A, C);
+        if (fabs(bearAC - bearAB) > std::numbers::pi / 2) {
+            return Meters(dAC);
+        }
+        double dxt = asin(sin(dAC / earth_radius) * sin(bearAC - bearAB)) * earth_radius;
+        double dAB = calculateDistance(A, B);
+        double dAD = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
+        if (dAD > dAB) {
+            return calculateDistance(B, C);
+        }
+        return Meters(std::abs(dxt));
+    }
+
+    static Coordinates calculateClosestCoordinateAlongLine(Coordinates &A, Coordinates &B, Coordinates &C) {
         double bearAB = deg2rad(calculateBearing(A, B));
         double bearAC = deg2rad(calculateBearing(A, C));
         double dAC = calculateDistance(A, C);
@@ -101,7 +137,7 @@ public:
             return B;
         }
         double dat = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
-        Coordinates closest = calculateCoordinateByDistance(A, Meters(dat), rad2deg(bearAB));
+        Coordinates closest = calculateCoordinatesByDistanceAndBearing(A, Meters(dat), rad2deg(bearAB));
         return closest;
     }
 };
@@ -137,7 +173,7 @@ public:
 ////        along-track distance
 //        double dat = acos(cos(angDisAC) / cos(dxt / earth_radius)) * earth_radius;
 //
-//        Coordinates closest = calculateCoordinateByDistance(A, Meters(dat), rad2deg(bearAB));
+//        Coordinates closest = calculateCoordinatesByDistanceAndBearing(A, Meters(dat), rad2deg(bearAB));
 //
 //        if (calculateDistance(A, closest) > AB || calculateDistance(B, closest) > AB) {
 //            if (AC > BC) {
