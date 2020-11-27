@@ -6,16 +6,24 @@
 #include <iostream>
 #include <fstream>
 #include <tchar.h>
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
+
+
 //#include <winbase.h>
 
 //std::string getMapFilePath(const std::string &name);
 
 
-int main() {
+int main(int argc, char* argv[]) {
+//    testing::InitGoogleTest(&argc, argv);
+//    return RUN_ALL_TESTS();
+
     GIS gis;
-//    std::string mapPath = "C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\noids.json";
-//    std::vector<EntityId> entityId = gis.loadMapFile(mapPath);
-//    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
+    std::string mapPath = "C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json";
+    std::vector<EntityId> entityId = gis.loadMapFile(mapPath);
+    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
 //
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json");
 //
@@ -33,16 +41,11 @@ int main() {
 //    double bearing1 = CoordinatesMath::calculateBearing(c1, midPoint);
 //    double bearing2 = CoordinatesMath::calculateBearing(midPoint, c2);
 //    Coordinates c2_cpy = CoordinatesMath::calculateCoordinatesByDistanceAndBearing(midPoint, Meters(distance), bearing2);
-
+//
 //    Coordinates c1(Longitude(-1), Latitude(10));
 //    Coordinates c2(Longitude(-0.999), Latitude(10.001));
 //    Coordinates c3(Longitude(-0.998), Latitude(10.001));
 //
-//    Grid grid;
-//    std::vector<Coordinates> vector {c1, c2};
-//    PointList points(vector);
-//    grid.setEntityOnGrid(points, EntityId("dummy"));
-//    grid.setEntityOnGrid(Point(Coordinates(Longitude(-1), Latitude(10))), EntityId("Junction"));
 //
 //    Coordinates c4(Longitude(-2), Latitude(1));
 //    Coordinates c5(Longitude(-2.001), Latitude(1.001));
@@ -65,36 +68,78 @@ int main() {
 //    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
 //    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
 //    Coordinates C(Longitude(-116.8), Latitude(38));
-//    Coordinates D = CoordinatesMath::calculateClosestCoordinateAlongLine(A, B, C);
+//    Coordinates D = CoordinatesMath::calculateClosestCoordinatesAlongLine(A, B, C);
 
 
 //    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
 //    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
 //    Coordinates C(Longitude(-116.8), Latitude(38));
-//    Coordinates D = CoordinatesMath::calculateClosestCoordinateAlongLine(A, B, C);
+//    Coordinates D = CoordinatesMath::calculateClosestCoordinatesAlongLine(A, B, C);
 //    Meters distance1 = CoordinatesMath::calculateShortestDistanceFromLine(A, B, C);
 //    Meters distance2 = CoordinatesMath::calculateDistance(C, D);
-//    std::pair<Meters, Coordinates> p = CoordinatesMath::calculateShortestDistanceAndCoordinatesFromLine(A, B, C);
+//    std::pair<Meters, Coordinates> p = CoordinatesMath::calculateClosestPointAndDistanceFromLine(A, B, C);
+//
+//    Coordinates c = CoordinatesMath::calculateClosestCoordinatesAlongLine(c3, c2, c5);
+//    Meters radius = CoordinatesMath::calculateDistance(c1, c2);
+//    Circle circle(c2, radius);
+//    c5  = circle.getClosestPoint(Coordinates {Longitude(4), Latitude(1)});
+//    Coordinates c1(Longitude(-2), Latitude(2));
+//    Coordinates c2(Longitude(-2), Latitude(1));
+//    Coordinates c3(Longitude(-3), Latitude(0.5));
+//    Coordinates c4(Longitude(0), Latitude(1));
+//    Coordinates c5(Longitude(-3), Latitude(1.3));
+//    Coordinates c6(Longitude(-5), Latitude(1.8));
+//
+//    Coordinates target(Longitude(-2.7), Latitude(1));
+//    std::vector<Coordinates> vector {c1, c2, c3, c4, c5, c6};
+//    PointList points(vector);
+//    Coordinates closest = points.getClosestPoint(target);
+//    Meters distance = CoordinatesMath::calculateDistance(closest, target);
+//
+//    Circle circle(c1, Meters(20000));
+//    closest = circle.getClosestPoint(target);
 
-    Coordinates c1(Longitude(-2), Latitude(2));
-    Coordinates c2(Longitude(-2), Latitude(1));
-    Coordinates c3(Longitude(-3), Latitude(0.5));
-    Coordinates c4(Longitude(0), Latitude(1));
-    Coordinates c5(Longitude(-3), Latitude(1.3));
-
-
-    std::vector<Coordinates> vector2 {c1, c2, c3, c4};
-    PointList points(vector2);
-    Coordinates closest = points.getClosestPoint(c5);
-
-    Coordinates c = CoordinatesMath::calculateClosestCoordinateAlongLine(c3, c2, c5);
-    Meters radius = CoordinatesMath::calculateDistance(c1, c2);
-    Circle circle(c2, radius);
-    c5  = circle.getClosestPoint(Coordinates {Longitude(4), Latitude(1)});
+//    for (auto &&pair: gis.grid->grid) {
+//        Coordinates cell = pair.first;
+//        std::cout << "Longitude: " << cell.longitude() << ", Latitude: " << cell.latitude() << std::endl;
+//    }
 
 
     return 0;
 }
+
+//TEST(ClosestPointTest, ClosestPointTest_Way_Test1) {
+//    Coordinates c1(Longitude(-2), Latitude(2));
+//    Coordinates c2(Longitude(-2), Latitude(1));
+//    Coordinates c3(Longitude(-3), Latitude(0.5));
+//    Coordinates c4(Longitude(0), Latitude(1));
+//    Coordinates c5(Longitude(-3), Latitude(1.3));
+//    Coordinates c6(Longitude(-5), Latitude(1.8));
+//
+//    Coordinates target(Longitude(-1), Latitude(4));
+//    std::vector<Coordinates> vector {c1, c2, c3, c4, c5, c6};
+//    PointList points(vector);
+//    Coordinates closest = points.getClosestPoint(target);
+//
+//    EXPECT_TRUE(CoordinatesMath::calculateDistance(closest, c1) < 0.1);
+//}
+//
+//TEST(ClosestPointTest, ClosestPointTest_Way_Test2) {
+//    Coordinates c1(Longitude(-2), Latitude(2));
+//    Coordinates c2(Longitude(-2), Latitude(1));
+//    Coordinates c3(Longitude(-3), Latitude(0.5));
+//    Coordinates c4(Longitude(0), Latitude(1));
+//    Coordinates c5(Longitude(-3), Latitude(1.3));
+//    Coordinates c6(Longitude(-5), Latitude(1.8));
+//
+//    Coordinates target(Longitude(-6), Latitude(2));
+//    std::vector<Coordinates> vector {c1, c2, c3, c4, c5, c6};
+//    PointList points(vector);
+//    Coordinates closest = points.getClosestPoint(target);
+//
+//    EXPECT_TRUE(CoordinatesMath::calculateDistance(closest, c6) < 0.1);
+//}
+
 
 //std::string getMapFilePath(const std::string &name) {
 //    static TCHAR buffer[MAX_PATH];

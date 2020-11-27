@@ -28,7 +28,10 @@ Coordinates PointList::getClosestPoint(const Coordinates &coordinates) {
 //  initialize dummy pair;
     std::pair<Meters, Coordinates> closestPair {INFINITY, Coordinates(Longitude(0), Latitude(0))};
     for(int i = 0; i < coords.size()-1; ++i) {
-        std::pair<Meters, Coordinates> nextPair = CoordinatesMath::calculateShortestDistanceAndCoordinatesFromLine(coords[i], coords[i+1], coordinates);
+        std::pair<Meters, Coordinates> nextPair = CoordinatesMath::calculateClosestPointAndDistanceAlongLine(coords[i],
+                                                                                                             coords[i +
+                                                                                                                    1],
+                                                                                                             coordinates);
         if (closestPair.first > nextPair.first) {
             closestPair = nextPair;
         }
