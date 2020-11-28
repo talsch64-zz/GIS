@@ -44,9 +44,9 @@ TEST(CoordinatesMathTest, Shortest_Distance_And_Coordinates_Test) {
     Coordinates A(Longitude(-117.518921), Latitude(33.345678));
     Coordinates B(Longitude(-117.218492), Latitude(33.900678));
     Coordinates C(Longitude(-116.8), Latitude(38));
-    Coordinates D = CoordinatesMath::calculateClosestCoordinatesAlongLine(A, B, C);
-    Meters distance = CoordinatesMath::calculateShortestDistanceFromLine(A, B, C);
-    std::pair<Meters, Coordinates> closestPair = CoordinatesMath::calculateClosestPointAndDistanceAlongLine(A, B, C);
+    Coordinates D = CoordinatesMath::closestCoordinatesOnSegment(A, B, C);
+    Meters distance = CoordinatesMath::distanceFromSegment(A, B, C);
+    std::pair<Meters, Coordinates> closestPair = CoordinatesMath::closestPointOnSegmentAndDistance(A, B, C);
 
     EXPECT_TRUE(abs(closestPair.first - distance) < METERS_PRECISION);
     EXPECT_TRUE(abs(CoordinatesMath::calculateDistance(C,D) - distance) < METERS_PRECISION);

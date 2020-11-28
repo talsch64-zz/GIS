@@ -33,7 +33,7 @@ public:
         return Meters{distance};
     }
 
-    static Coordinates calculateCoordinatesByDistanceAndBearing(const Coordinates &c, Meters distance, double bearing) {
+    static Coordinates CoordinatesByBearingAndDistance(const Coordinates &c, Meters distance, double bearing) {
         double angDistance = distance / earth_radius;
         double rad_bearing = deg2rad(bearing);
         Latitude latitude(deg2rad(c.latitude()));
@@ -75,58 +75,95 @@ public:
         return Coordinates(Longitude(rad2deg(lonMidRad)), Latitude(rad2deg(latMidRad)));
 
     }
-/* calculate the closest point on AB from C and the shortest distance */
-    static std::pair<Meters, Coordinates> calculateClosestPointAndDistanceAlongLine(const Coordinates &A, const Coordinates &B, const Coordinates &C) {
-        double bearAB = deg2rad(calculateBearing(A, B));
-        double bearAC = deg2rad(calculateBearing(A, C));
-        double dAC = calculateDistance(A, C);
-        if (fabs(bearAC - bearAB) > std::numbers::pi / 2) {
-            return std::pair<Meters, Coordinates> {dAC, A};
-        }
-        double dxt = asin(sin(dAC / earth_radius) * sin(bearAC - bearAB)) * earth_radius;
-        double dAB = calculateDistance(A, B);
-        double dAD = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
-        if (dAD > dAB) {
-            return std::pair<Meters, Coordinates> {calculateDistance(B,C), B};
-        }
-        double dat = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
-        Coordinates closest = calculateCoordinatesByDistanceAndBearing(A, Meters(dat), rad2deg(bearAB));
-        return std::pair<Meters, Coordinates> {std::abs(dxt), closest};
+/* calculates the closest point on A1A2 from C and the shortest distance */
+    static std::pair<Meters, Coordinates> closestPointOnSegmentAndDistance(const Coordinates &A1, const Coordinates &A2, const Coordinates &C) {
+        Coordinates closest = closestCoordinatesOnSegment(A1, A2, C);
+        return std::pair<Meters, Coordinates> {calculateDistance(C, closest), closest};
     }
 
-    /* calculate the shortest distance from C to AB*/
-    static Meters calculateShortestDistanceFromLine(Coordinates &A, Coordinates &B, Coordinates &C) {
-        double bearAB = deg2rad(calculateBearing(A, B));
-        double bearAC = deg2rad(calculateBearing(A, C));
-        double dAC = calculateDistance(A, C);
-        if (fabs(bearAC - bearAB) > std::numbers::pi / 2) {
+    /* calculates the shortest distance from C to A1A2*/
+    static Meters distanceFromSegment(const Coordinates &A1, const Coordinates &A2, const Coordinates &C) {
+        double bearing_A1A2 = deg2rad(calculateBearing(A1, A2));
+        double bearing_A1C = deg2rad(calculateBearing(A1, C));
+        double dAC = calculateDistance(A1, C);
+        if (fabs(bearing_A1C - bearing_A1A2) > std::numbers::pi / 2) {
             return Meters(dAC);
         }
-        double dxt = asin(sin(dAC / earth_radius) * sin(bearAC - bearAB)) * earth_radius;
-        double dAB = calculateDistance(A, B);
-        double dAD = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
-        if (dAD > dAB) {
-            return calculateDistance(B, C);
+        double dxt = asin(sin(dAC / earth_radius) * sin(bearing_A1C - bearing_A1A2)) * earth_radius;
+        double distance_A1A2 = calculateDistance(A1, A2);
+        double dat = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
+        if (dat > distance_A1A2) {
+            return calculateDistance(A2, C);
         }
         return Meters(std::abs(dxt));
     }
 
-    /* calculate the closest point on AB from C */
-    static Coordinates calculateClosestCoordinatesAlongLine(Coordinates &A, Coordinates &B, Coordinates &C) {
-        double bearAB = deg2rad(calculateBearing(A, B));
-        double bearAC = deg2rad(calculateBearing(A, C));
-        double dAC = calculateDistance(A, C);
-        if (fabs(bearAC - bearAB) > std::numbers::pi / 2) {
-            return A;
+    /* calculates the closest point on A1A2 from C */
+    static Coordinates closestCoordinatesOnSegment(const Coordinates &A1, const Coordinates &A2, const Coordinates &C) {
+        double bearing_A1A2 = deg2rad(calculateBearing(A1, A2));
+        double bearing_A1C = deg2rad(calculateBearing(A1, C));
+        double distance_A1C = calculateDistance(A1, C);
+        if (fabs(bearing_A1C - bearing_A1A2) > std::numbers::pi / 2) {
+            return A1;
         }
-        double dxt = asin(sin(dAC / earth_radius) * sin(bearAC - bearAB)) * earth_radius;
-        double dAB = calculateDistance(A, B);
-        double dAD = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
-        if (dAD > dAB) {
-            return B;
+        double dxt = asin(sin(distance_A1C / earth_radius) * sin(bearing_A1C - bearing_A1A2)) * earth_radius;
+        double distance_A1A2 = calculateDistance(A1, A2);
+        double dat = acos(cos(distance_A1C / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
+        if (dat > distance_A1A2) {
+            return A2;
         }
-        double dat = acos(cos(dAC / earth_radius) / cos(dxt / earth_radius)) * earth_radius;
-        Coordinates closest = calculateCoordinatesByDistanceAndBearing(A, Meters(dat), rad2deg(bearAB));
+        Coordinates closest = CoordinatesByBearingAndDistance(A1, Meters(dat), rad2deg(bearing_A1A2));
         return closest;
     }
+
+    static Coordinates closestPointOnCircle(const Coordinates& c, const Coordinates& circle_center, Meters circle_radius) {
+        Meters distance = CoordinatesMath::calculateDistance(circle_center, c);
+        if (distance <= circle_radius) {
+            return c;
+        }
+        double bearing = CoordinatesMath::calculateBearing(circle_center, c);
+        return CoordinatesMath::CoordinatesByBearingAndDistance(circle_center, circle_radius, bearing);
+    }
+
 };
+
+
+//    static Coordinates intersection(const Coordinates& cA1, const Coordinates& cA2, const Coordinates& cB1, const Coordinates& cB2) {
+//        double bearingA = deg2rad(calculateBearing(cA1, cA2));
+//        double bearingB = deg2rad(calculateBearing(cB1, cB2));
+//        double lat_A1 = deg2rad(cA1.latitude());
+//        double lat_B1 = deg2rad(cB1.latitude());
+//        double lng_A1 = deg2rad(cA1.longitude());
+//        double lng_B1 = deg2rad(cB1.longitude());
+//
+//        double angDistance_A1B1 = 2*asin(sqrt(pow(sin(abs(lat_A1 - lat_B1) / 2), 2) +
+//                cos(lat_A1) * cos(lat_B1) * pow(sin(abs(lng_A1 - lng_B1)/2), 2)));
+//
+//        double bearing_a = acos((sin(lat_B1) - sin(lat_A1) * cos(angDistance_A1B1)) / (sin(angDistance_A1B1) * cos(lat_A1)));
+//        double bearing_b = acos((sin(lat_A1) - sin(lat_B1) * cos(angDistance_A1B1)) / (sin(angDistance_A1B1) * cos(lat_B1)));
+//
+//        double bearing_A1B1;
+//        double bearing_B1A1;
+//
+//        if (sin(lng_B1 - lng_A1) > 0) {
+//            bearing_A1B1 = bearing_a;
+//            bearing_B1A1 = 2*std::numbers::pi - bearing_b;
+//        }
+//        else {
+//            bearing_A1B1 = 2*std::numbers::pi - bearing_a;
+//            bearing_B1A1 = bearing_b;
+//        }
+//
+//        double bearing_A1A2 = deg2rad(calculateBearing(cA1, cA2));
+//        double bearing_B1B2 = deg2rad(calculateBearing(cB1, cB2));
+//
+//        double angle1 = bearing_A1A2 - bearing_A1B1;
+//        double angle2 = bearing_B1A1 - bearing_B1B2;
+//        double angle3 = acos(-cos(angle1) * cos(angle2) + sin(angle1) * sin(angle2) * cos(angDistance_A1B1));
+//        double angDistance_AX = atan2(sin(angDistance_A1B1) * sin(angle1) * sin(angle2), cos(angle2) + cos(angle1) * cos(angle3));
+//        double lat_X = asin(sin(lat_A1) * cos(angDistance_AX) + cos(lat_A1) * sin(angDistance_AX) * cos(bearing_A1A2));
+//        double deltaLng = atan2(sin(bearing_A1A2) * sin(angDistance_AX) * cos(lat_A1), cos(angDistance_AX) - sin(lat_A1) * sin(lat_X));
+//        double lng_X = lng_A1 + deltaLng;
+//
+//        return Coordinates(Longitude(rad2deg(lng_X)), Latitude(rad2deg(lat_X)));
+//    }

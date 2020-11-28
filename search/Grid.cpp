@@ -71,3 +71,26 @@ void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &c
     addIntervalsGridCells(coord1, midPoint, cells);
     addIntervalsGridCells(midPoint, coord2, cells);
 }
+
+std::vector<Grid::GridCell> Grid::getFrameCells(Grid::GridCell initialCell, int frameDistance) {
+
+    double bl_lng = initialCell.longitude() - precision * frameDistance;
+    double bl_lat = initialCell.latitude() - precision * frameDistance;
+
+    double br_lng = initialCell.longitude() + precision * frameDistance;
+    double br_lat = initialCell.latitude() - precision * frameDistance;
+
+    double tr_lng = initialCell.longitude() + precision * frameDistance;
+    double tr_lat = initialCell.latitude() + precision * frameDistance;
+
+    double tl_lng = initialCell.longitude() - precision * frameDistance;
+    double tl_lat = initialCell.latitude() + precision * frameDistance;
+
+
+
+
+
+
+
+    return std::vector<GridCell>();
+}

@@ -17,13 +17,14 @@
 
 
 int main(int argc, char* argv[]) {
-//    testing::InitGoogleTest(&argc, argv);
-//    return RUN_ALL_TESTS();
 
-    GIS gis;
-    std::string mapPath = "C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json";
-    std::vector<EntityId> entityId = gis.loadMapFile(mapPath);
-    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+
+//    GIS gis;
+//    std::string mapPath = "C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json";
+//    std::vector<EntityId> entityId = gis.loadMapFile(mapPath);
+//    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
 //
 //    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json");
 //
@@ -40,7 +41,7 @@ int main(int argc, char* argv[]) {
 //    double distance = CoordinatesMath::calculateDistance(c1, midPoint);
 //    double bearing1 = CoordinatesMath::calculateBearing(c1, midPoint);
 //    double bearing2 = CoordinatesMath::calculateBearing(midPoint, c2);
-//    Coordinates c2_cpy = CoordinatesMath::calculateCoordinatesByDistanceAndBearing(midPoint, Meters(distance), bearing2);
+//    Coordinates c2_cpy = CoordinatesMath::CoordinatesByBearingAndDistance(midPoint, Meters(distance), bearing2);
 //
 //    Coordinates c1(Longitude(-1), Latitude(10));
 //    Coordinates c2(Longitude(-0.999), Latitude(10.001));
@@ -62,34 +63,36 @@ int main(int argc, char* argv[]) {
 //    double bearing = CoordinatesMath::calculateBearing(A,B);
 //    double b = CoordinatesMath::calculateBearing(B,A);
 //    double distance = CoordinatesMath::calculateDistance(A,B);
-//    Coordinates C = CoordinatesMath::calculateCoordinatesByDistanceAndBearing(B, Meters(distance), b);
+//    Coordinates C = CoordinatesMath::CoordinatesByBearingAndDistance(B, Meters(distance), b);
 //    double bearing2 = CoordinatesMath::calculateBearing(A,C);
 
 //    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
 //    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
 //    Coordinates C(Longitude(-116.8), Latitude(38));
-//    Coordinates D = CoordinatesMath::calculateClosestCoordinatesAlongLine(A, B, C);
+//    Coordinates D = CoordinatesMath::closestCoordinatesOnSegment(A, B, C);
 
 
 //    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
 //    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
 //    Coordinates C(Longitude(-116.8), Latitude(38));
-//    Coordinates D = CoordinatesMath::calculateClosestCoordinatesAlongLine(A, B, C);
-//    Meters distance1 = CoordinatesMath::calculateShortestDistanceFromLine(A, B, C);
+//    Coordinates D = CoordinatesMath::closestCoordinatesOnSegment(A, B, C);
+//    Meters distance1 = CoordinatesMath::distanceFromSegment(A, B, C);
 //    Meters distance2 = CoordinatesMath::calculateDistance(C, D);
 //    std::pair<Meters, Coordinates> p = CoordinatesMath::calculateClosestPointAndDistanceFromLine(A, B, C);
 //
-//    Coordinates c = CoordinatesMath::calculateClosestCoordinatesAlongLine(c3, c2, c5);
+//    Coordinates c = CoordinatesMath::closestCoordinatesOnSegment(c3, c2, c5);
 //    Meters radius = CoordinatesMath::calculateDistance(c1, c2);
 //    Circle circle(c2, radius);
 //    c5  = circle.getClosestPoint(Coordinates {Longitude(4), Latitude(1)});
+
+
 //    Coordinates c1(Longitude(-2), Latitude(2));
 //    Coordinates c2(Longitude(-2), Latitude(1));
 //    Coordinates c3(Longitude(-3), Latitude(0.5));
 //    Coordinates c4(Longitude(0), Latitude(1));
 //    Coordinates c5(Longitude(-3), Latitude(1.3));
 //    Coordinates c6(Longitude(-5), Latitude(1.8));
-//
+////
 //    Coordinates target(Longitude(-2.7), Latitude(1));
 //    std::vector<Coordinates> vector {c1, c2, c3, c4, c5, c6};
 //    PointList points(vector);
@@ -98,6 +101,15 @@ int main(int argc, char* argv[]) {
 //
 //    Circle circle(c1, Meters(20000));
 //    closest = circle.getClosestPoint(target);
+//
+//    Coordinates a1(Longitude(0.2545), Latitude(51.8853));
+//    Coordinates b1(Longitude(2.5735), Latitude(49.0034));
+//    Coordinates a2 = CoordinatesMath::CoordinatesByBearingAndDistance(a1, Meters(200000), 108.55);
+//    Coordinates b2 = CoordinatesMath::CoordinatesByBearingAndDistance(b1, Meters(200000), 32.44);
+
+//    Coordinates intersection = CoordinatesMath::intersection(a1, a2, b1, b2);
+
+
 
 //    for (auto &&pair: gis.grid->grid) {
 //        Coordinates cell = pair.first;
@@ -107,48 +119,3 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-
-//TEST(ClosestPointTest, ClosestPointTest_Way_Test1) {
-//    Coordinates c1(Longitude(-2), Latitude(2));
-//    Coordinates c2(Longitude(-2), Latitude(1));
-//    Coordinates c3(Longitude(-3), Latitude(0.5));
-//    Coordinates c4(Longitude(0), Latitude(1));
-//    Coordinates c5(Longitude(-3), Latitude(1.3));
-//    Coordinates c6(Longitude(-5), Latitude(1.8));
-//
-//    Coordinates target(Longitude(-1), Latitude(4));
-//    std::vector<Coordinates> vector {c1, c2, c3, c4, c5, c6};
-//    PointList points(vector);
-//    Coordinates closest = points.getClosestPoint(target);
-//
-//    EXPECT_TRUE(CoordinatesMath::calculateDistance(closest, c1) < 0.1);
-//}
-//
-//TEST(ClosestPointTest, ClosestPointTest_Way_Test2) {
-//    Coordinates c1(Longitude(-2), Latitude(2));
-//    Coordinates c2(Longitude(-2), Latitude(1));
-//    Coordinates c3(Longitude(-3), Latitude(0.5));
-//    Coordinates c4(Longitude(0), Latitude(1));
-//    Coordinates c5(Longitude(-3), Latitude(1.3));
-//    Coordinates c6(Longitude(-5), Latitude(1.8));
-//
-//    Coordinates target(Longitude(-6), Latitude(2));
-//    std::vector<Coordinates> vector {c1, c2, c3, c4, c5, c6};
-//    PointList points(vector);
-//    Coordinates closest = points.getClosestPoint(target);
-//
-//    EXPECT_TRUE(CoordinatesMath::calculateDistance(closest, c6) < 0.1);
-//}
-
-
-//std::string getMapFilePath(const std::string &name) {
-//    static TCHAR buffer[MAX_PATH];
-//    static bool assigned = false;
-//    if (!assigned) {
-//        SetCurrentDirectory(_T(".."));
-//        GetCurrentDirectory(MAX_PATH, buffer);
-//        assigned = true;
-//    }
-//    std::string path = std::string(buffer) + "\\json-files\\" + name;
-//    return path;
-//}

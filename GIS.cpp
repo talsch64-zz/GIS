@@ -82,6 +82,7 @@ std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &entityId, 
 
 //TODO
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
+
     Coordinates coord(Longitude(0), Latitude(0));
     std::pair<Coordinates, EntityId> p(coord, "something");
     return p;

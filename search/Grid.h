@@ -50,6 +50,8 @@ public:
 
     std::vector<GridCell> getGeometryGridCells(const Circle &geometry) const;
 
+    std::vector<GridCell> getFrameCells(GridCell initialCell, int frameDistance);
+
 private:
     std::unordered_map<GridCell, CellEntities> grid;
 

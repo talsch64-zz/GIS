@@ -19,13 +19,6 @@ std::vector<Grid::GridCell> Circle::getGridCells(const Grid *grid) {
 }
 
 Coordinates Circle::getClosestPoint(const Coordinates &coordinates) {
-    Coordinates center = getCenter();
-    Meters radius = getRadius();
-    Meters distance = CoordinatesMath::calculateDistance(center, coordinates);
-    if (distance <= radius) {
-        return coordinates;
-    }
-    double bearing = CoordinatesMath::calculateBearing(center, coordinates);
-    return CoordinatesMath::calculateCoordinatesByDistanceAndBearing(center, radius, bearing);
+    return CoordinatesMath::closestPointOnCircle(coordinates, getCenter(), getRadius());
 }
 
