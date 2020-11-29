@@ -4,17 +4,9 @@
 
 #include <utility>
 #include <string>
+//#include "Double.h"
+#include "NamedType.h"
 
-template<typename T>
-class NamedType {
-    T val;
-public:
-    explicit NamedType(const T &t) : val(t) {}
-
-    operator const T &() const {
-        return val;
-    }
-};
 
 struct Longitude : NamedType<double> {
     using NamedType<double>::NamedType;

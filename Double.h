@@ -6,6 +6,7 @@
 #include <cmath>
 #include "NamedType.h"
 
+
 template<std::size_t I>
 consteval double tenToThePowerOf() {
     if constexpr(I == 0) return 1;
