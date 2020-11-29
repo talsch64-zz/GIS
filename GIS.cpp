@@ -123,7 +123,7 @@ std::vector<const Entity *> GIS::getEntities(const Coordinates &coordinates, Met
     for (Grid::GridCell cell : cells) {
         CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
         for (EntityId id : cellEntities.getEntities()) {
-            if (searchedEntityIds.find(id) != searchedEntityIds.end()) {
+            if (searchedEntityIds.find(id) == searchedEntityIds.end()) {
                 searchedEntityIds.insert(id);
                 const Entity *entity = getEntityById(id);
                 if (entity->getGeometry()->isInCircle(topologicalSearch.get(), coordinates, radius)) {
