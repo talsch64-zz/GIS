@@ -34,7 +34,7 @@ public:
 class Grid {
 
 public:
-    static constexpr double precision = 0.0001220703125;
+    static constexpr double precision = 0.015625;
     static constexpr double meterPrecision = 1;
 
     using GridCell = Coordinates;
@@ -53,25 +53,19 @@ public:
 
     std::vector<GridCell> getCellNeighbors(GridCell initialCell);
 
+    Coordinates truncateCoordinates(const Coordinates &coordinates) const;
+
+    CellEntities getEntitiesOnGrid(const GridCell &cell);
+
+
 private:
     std::unordered_map<GridCell, CellEntities> grid;
 
 
     double truncateDecimalCoordinate(double coordinate) const;
-    Coordinates truncateCoordinates(const Coordinates &coordinates) const;
-    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
     void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells) const;
     std::vector<GridCell> getPollCellNeighbors(bool north);
-
-    GridCell getNorthernCell() const {
-        return Coordinates(Longitude(0), Latitude(90));
-    }
-
-    GridCell getSouthernCell() const {
-        return Coordinates(Longitude(0), Latitude(90));
-    }
-
-
-
+    GridCell getNorthernCell() const;
+    GridCell getSouthernCell() const;
 };

@@ -17,7 +17,7 @@ std::unique_ptr<Geometry> GeometryJsonParser::parsePOIGeometry(rapidjson::Value 
         return parseCircle(geometry);
 
     } else {
-        throw std::runtime_error("Unsupported geometry type");
+        throw std::runtime_error("Unsupported geometry type: " + type);
     }
 }
 

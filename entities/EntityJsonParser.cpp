@@ -25,6 +25,7 @@ bool EntityJsonParser::isWay(rapidjson::Value &jsonEntity) {
 }
 
 std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS &gis) {
+
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);

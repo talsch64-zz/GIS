@@ -9,8 +9,9 @@
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
+#include <stack>
 #include "entities/EntityJsonParser.h"
-
+#include "entities/geometry/CoordinatesMath.h"
 
 
 GIS::GIS() : grid(std::make_shared<Grid>()), topologicalSearch(grid), entityJsonParser(new EntityJsonParser()) {
@@ -80,12 +81,107 @@ std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &entityId, 
     return entities.find(entityId)->second->getGeometry()->getClosestPoint(coordinates);
 }
 
-//TODO
-std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &) {
+std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord) {
+    bool wayFound = false;
+    std::stack<Grid::GridCell> stack;
+    std::unordered_set<Grid::GridCell> cellsVisited;
+    std::unordered_set<EntityId> idsSeen;
+    Coordinates *closest = nullptr;
+    Meters shortestDistance(INFINITY);
+    EntityId closestEntityId("");
+//    std::vector<Grid::GridCell> neighbors;
+    std::stack<Grid::GridCell> nextStack;
+//
+    stack.push(grid->truncateCoordinates(coord));
+    cellsVisited.insert(grid->truncateCoordinates(coord));
+//
+//
+    while (!stack.empty()) {
+        nextStack = std::stack<Grid::GridCell>();
+        while (!stack.empty()) {
+            Grid::GridCell cell = stack.top();
+            stack.pop();
+            CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
+            for (auto &entityId: cellEntities.getEntities()) {
+                if (idsSeen.find(entityId) != idsSeen.end()) {
+    //              if id was already seen
+                    continue;
+                }
+                idsSeen.insert(entityId);
+                Entity &entity = *(entities.find(entityId)->second);
+                if (entity.getType() == "Way") {
+                    wayFound = true;
+                    Coordinates candidate = entity.getGeometry()->getClosestPoint(coord);
+                    Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
+                    if (distance < shortestDistance) {
+                        closest = &candidate;
+                        shortestDistance = distance;
+                        closestEntityId = entityId;
+                    }
+                }
+            }
+            if (!wayFound) {
+                std::vector<Grid::GridCell> neighbors = grid->getCellNeighbors(cell);
+    //          push to stack all the cells that were not visited yet.
+                for (auto &neighbor: neighbors) {
+                    if (cellsVisited.find(neighbor) == cellsVisited.end()) {
+                        nextStack.push(neighbor);
+                        cellsVisited.insert(neighbor);
+                    }
+                }
+            }
+            else if(stack.empty()) {
+                return {*closest, closestEntityId};
+            }
+        }
+        stack = nextStack;
+    }
+    return {*closest, closestEntityId};
+//    TODO write to log that way was not found!
 
-    Coordinates coord(Longitude(0), Latitude(0));
-    std::pair<Coordinates, EntityId> p(coord, "something");
-    return p;
+
+//    while (!stack.empty()) {
+//        Grid::GridCell cell = stack.top();
+//        stack.pop();
+//        CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
+//        for (auto &entityId: cellEntities.getEntities()) {
+//            if (idsSeen.find(entityId) != idsSeen.end()) {
+////              if id was already seen
+//                continue;
+//            }
+//            idsSeen.insert(entityId);
+//            Entity &entity = *(entities.find(entityId)->second);
+//            if (entity.getType() == "Way") {
+//                wayFound = true;
+//                Coordinates candidate = entity.getGeometry()->getClosestPoint(coord);
+//                Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
+//                if (distance < shortestDistance) {
+//                    *closest = candidate;
+//                    shortestDistance = distance;
+//                    closestEntityId = entityId;
+//                }
+//            }
+//        }
+//        if (!wayFound) {
+//            neighbors = grid->getCellNeighbors(cell);
+////          push to stack all the cells that were not visited yet.
+//            for (auto &neighbor: neighbors) {
+//                if (cellsVisited.find(neighbor) == cellsVisited.end()) {
+//                    nextStack.push(neighbor);
+//                }
+//            }
+//
+//            if (stack.empty()) {
+//                stack = nextStack;
+//                nextStack = std::stack<Grid::GridCell>();
+//            }
+//        }
+//
+//        else if(stack.empty()) {
+//            return std::pair<Coordinates, EntityId> (*closest, closestEntityId);
+//        }
+//    }
+
 }
 
 

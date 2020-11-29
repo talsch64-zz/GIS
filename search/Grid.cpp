@@ -19,12 +19,15 @@ Coordinates Grid::truncateCoordinates(const Coordinates &coordinates) const {
     if (coordinates.latitude() == -90) {
         return getSouthernCell();
     }
-    return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
-            Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
+    double longitude = truncateDecimalCoordinate(coordinates.longitude());
+    if (longitude == -180) {
+        longitude = 180;
+    }
+    return {Longitude(longitude), Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
 }
 
-CellEntities Grid::getEntitiesOnGrid(const Coordinates &coordinates) {
-    GridCell grid_cell = truncateCoordinates(coordinates);
+CellEntities Grid::getEntitiesOnGrid(const GridCell &cell) {
+    GridCell grid_cell = truncateCoordinates(cell);
     auto pair = grid.find(grid_cell);
     if (pair == grid.end()) {
         return CellEntities();
@@ -129,4 +132,11 @@ std::vector<Grid::GridCell> Grid::getPollCellNeighbors(bool north) {
         }
     }
     return neighbors;
+}
+
+Grid::GridCell Grid::getNorthernCell() const {
+    return Coordinates(Longitude(0), Latitude(90));
+}
+Grid::GridCell Grid::getSouthernCell() const {
+    return Coordinates(Longitude(0), Latitude(90));
 }

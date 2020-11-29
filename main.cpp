@@ -17,37 +17,48 @@
 
 
 int main(int argc, char* argv[]) {
-
+//
 //    testing::InitGoogleTest(&argc, argv);
 //    return RUN_ALL_TESTS();
 
-    Grid grid;
-    Coordinates coord(Longitude(180), Latitude(10));
-    std::vector<Coordinates> neighbors = grid.getCellNeighbors(coord);
+    GIS gis;
+    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\nyc.json");
+    Coordinates junction(Longitude(40.5), Latitude(-73));
+    Coordinates closest = gis.getWayClosestPoint(junction).first;
     std::cout.precision(15);
-    for(int i = 0; i < neighbors.size(); ++i) {
-        std::cout << "longitude: " << neighbors[i].longitude() << " , latitude: " << neighbors[i].latitude() << std::endl;
-    }
+    std::cout << closest.longitude() << ", " << closest.latitude() << std::endl;
+
+//    [[40.733566, -73.999446]]
+//    [40.732254, -73.996394]
 
 
-
-//    GIS gis;
+//    auto way = gis.getWayClosestPoint(junction);
+//
+//    Grid grid;
+//    Coordinates coord(Longitude(180), Latitude(10));
+//    std::vector<Coordinates> neighbors = grid.getCellNeighbors(coord);
+//    std::cout.precision(15);
+//    for(int i = 0; i < neighbors.size(); ++i) {
+//        std::cout << "longitude: " << neighbors[i].longitude() << " , latitude: " << neighbors[i].latitude() << std::endl;
+//    }
+//
+//
+//
 //    std::string mapPath = "C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json";
 //    std::vector<EntityId> entityId = gis.loadMapFile(mapPath);
 //    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
 //
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json");
 //
 //    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
 //
 //    std::vector<EntityId> ids = gis.getEntities("dsadsad");
 //
-
-
+//
+//
 //    Coordinates c1(Longitude(-3.0700117898814905), Latitude(58.643945458221));
 //    Coordinates c2(Longitude(-5.714727651210689), Latitude(50.066393943909226));
 //    Coordinates midPoint = CoordinatesMath::calculateMidpoint(c1, c2);
-
+//
 //    double distance = CoordinatesMath::calculateDistance(c1, midPoint);
 //    double bearing1 = CoordinatesMath::calculateBearing(c1, midPoint);
 //    double bearing2 = CoordinatesMath::calculateBearing(midPoint, c2);
@@ -66,8 +77,8 @@ int main(int argc, char* argv[]) {
 //
 //    PointList points2(vector2);
 //    grid.setEntityOnGrid(points2, EntityId("dummy2"));
-
-
+//
+//
 //    Coordinates A(Longitude(-117.518921), Latitude(35.345678));
 //    Coordinates B(Longitude(-117.318492), Latitude(30.100678));
 //    double bearing = CoordinatesMath::calculateBearing(A,B);
@@ -75,13 +86,13 @@ int main(int argc, char* argv[]) {
 //    double distance = CoordinatesMath::calculateDistance(A,B);
 //    Coordinates C = CoordinatesMath::CoordinatesByBearingAndDistance(B, Meters(distance), b);
 //    double bearing2 = CoordinatesMath::calculateBearing(A,C);
-
+//
 //    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
 //    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
 //    Coordinates C(Longitude(-116.8), Latitude(38));
 //    Coordinates D = CoordinatesMath::closestCoordinatesOnSegment(A, B, C);
-
-
+//
+//
 //    Coordinates A(Longitude(-117.518921), Latitude(33.345678));
 //    Coordinates B(Longitude(-117.218492), Latitude(33.900678));
 //    Coordinates C(Longitude(-116.8), Latitude(38));
@@ -94,8 +105,8 @@ int main(int argc, char* argv[]) {
 //    Meters radius = CoordinatesMath::calculateDistance(c1, c2);
 //    Circle circle(c2, radius);
 //    c5  = circle.getClosestPoint(Coordinates {Longitude(4), Latitude(1)});
-
-
+//
+//
 //    Coordinates c1(Longitude(-2), Latitude(2));
 //    Coordinates c2(Longitude(-2), Latitude(1));
 //    Coordinates c3(Longitude(-3), Latitude(0.5));
@@ -116,11 +127,11 @@ int main(int argc, char* argv[]) {
 //    Coordinates b1(Longitude(2.5735), Latitude(49.0034));
 //    Coordinates a2 = CoordinatesMath::CoordinatesByBearingAndDistance(a1, Meters(200000), 108.55);
 //    Coordinates b2 = CoordinatesMath::CoordinatesByBearingAndDistance(b1, Meters(200000), 32.44);
-
+//
 //    Coordinates intersection = CoordinatesMath::intersection(a1, a2, b1, b2);
-
-
-
+//
+//
+//
 //    for (auto &&pair: gis.grid->grid) {
 //        Coordinates cell = pair.first;
 //        std::cout << "Longitude: " << cell.longitude() << ", Latitude: " << cell.latitude() << std::endl;
