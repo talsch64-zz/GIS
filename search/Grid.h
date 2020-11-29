@@ -38,6 +38,7 @@ public:
     static constexpr double meterPrecision = 1;
 
     using GridCell = Coordinates;
+
 //TODO maybe change to return unordered_set
     std::vector<GridCell> setEntityOnGrid(const Entity &entity);
 
@@ -50,15 +51,27 @@ public:
 
     std::vector<GridCell> getGeometryGridCells(const Circle &geometry) const;
 
-    std::vector<GridCell> getFrameCells(GridCell initialCell, int frameDistance);
+    std::vector<GridCell> getCellNeighbors(GridCell initialCell);
 
 private:
     std::unordered_map<GridCell, CellEntities> grid;
+
 
     double truncateDecimalCoordinate(double coordinate) const;
     Coordinates truncateCoordinates(const Coordinates &coordinates) const;
     CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
     void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells) const;
+    std::vector<GridCell> getPollCellNeighbors(bool north);
+
+    GridCell getNorthernCell() const {
+        return Coordinates(Longitude(0), Latitude(90));
+    }
+
+    GridCell getSouthernCell() const {
+        return Coordinates(Longitude(0), Latitude(90));
+    }
+
+
 
 };

@@ -18,8 +18,18 @@
 
 int main(int argc, char* argv[]) {
 
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+//    testing::InitGoogleTest(&argc, argv);
+//    return RUN_ALL_TESTS();
+
+    Grid grid;
+    Coordinates coord(Longitude(180), Latitude(10));
+    std::vector<Coordinates> neighbors = grid.getCellNeighbors(coord);
+    std::cout.precision(15);
+    for(int i = 0; i < neighbors.size(); ++i) {
+        std::cout << "longitude: " << neighbors[i].longitude() << " , latitude: " << neighbors[i].latitude() << std::endl;
+    }
+
+
 
 //    GIS gis;
 //    std::string mapPath = "C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json";

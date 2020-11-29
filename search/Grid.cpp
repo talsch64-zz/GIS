@@ -11,6 +11,14 @@ double Grid::truncateDecimalCoordinate(double coordinate) const {
 }
 
 Coordinates Grid::truncateCoordinates(const Coordinates &coordinates) const {
+//    north poll
+    if (coordinates.latitude() == 90) {
+        return getNorthernCell();
+    }
+//    south poll
+    if (coordinates.latitude() == -90) {
+        return getSouthernCell();
+    }
     return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
             Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
 }
@@ -58,7 +66,7 @@ std::vector<Grid::GridCell> Grid::getGeometryGridCells(const Circle &geometry) c
 }
 
 void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2,
-                            std::unordered_set<GridCell> &cells) const {
+                                 std::unordered_set<GridCell> &cells) const {
     GridCell cell1 = truncateCoordinates(coord1);
     GridCell cell2 = truncateCoordinates(coord2);
     if (cell1 == cell2 || CoordinatesMath::calculateDistance(coord1, coord2) < meterPrecision) {
@@ -72,25 +80,53 @@ void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &c
     addIntervalsGridCells(midPoint, coord2, cells);
 }
 
-std::vector<Grid::GridCell> Grid::getFrameCells(Grid::GridCell initialCell, int frameDistance) {
 
-    double bl_lng = initialCell.longitude() - precision * frameDistance;
-    double bl_lat = initialCell.latitude() - precision * frameDistance;
+std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) {
+    double lat = initialCell.latitude();
+    double lng = initialCell.longitude();
 
-    double br_lng = initialCell.longitude() + precision * frameDistance;
-    double br_lat = initialCell.latitude() - precision * frameDistance;
-
-    double tr_lng = initialCell.longitude() + precision * frameDistance;
-    double tr_lat = initialCell.latitude() + precision * frameDistance;
-
-    double tl_lng = initialCell.longitude() - precision * frameDistance;
-    double tl_lat = initialCell.latitude() + precision * frameDistance;
+// initialCell is not a poll cell
+    if (lat < 90 && lat > -90) {
+        double northLat = lat + precision;
+        double southLat = lat - precision;
+        double eastLng = (lng + precision) > 180 ? -(360 - lng - precision) : lng + precision;
+        double westLng = (lng - precision) <= -180 ? (360 + lng - precision) : lng - precision;
 
 
+        Coordinates north((Longitude(lng)), Latitude(northLat));
+        Coordinates south((Longitude(lng)), Latitude(southLat));
+        Coordinates east((Longitude(eastLng)), Latitude(lat));
+        Coordinates west((Longitude(westLng)), Latitude(lat));
+        Coordinates northEast((Longitude(eastLng)), Latitude(northLat));
+        Coordinates southEast((Longitude(eastLng)), Latitude(southLat));
+        Coordinates northWest((Longitude(westLng)), Latitude(northLat));
+        Coordinates southWest((Longitude(westLng)), Latitude(southLat));
+
+        if (northLat == 90) {
+//            north = north poll cell
+            return std::vector<GridCell>{east, west, southEast, southWest, south, getNorthernCell()};
+        } else if (southLat == -90) {
+//            south = south poll cell
+            return std::vector<GridCell>{east, west, northEast, northWest, north, getSouthernCell()};
+        }
+        return std::vector<GridCell>{north, south, east, west, northEast, southEast, northWest, southWest};
+    }
+    return getPollCellNeighbors(lat == 90);
+}
 
 
-
-
-
-    return std::vector<GridCell>();
+std::vector<Grid::GridCell> Grid::getPollCellNeighbors(bool north) {
+    std::vector<GridCell> neighbors;
+    double lng = precision;
+    double lat = 90 - precision;
+    if (!north) lat = -lat;
+    neighbors.emplace_back(Longitude(0), Latitude(lat));
+    while (lng != 0) {
+        neighbors.emplace_back(Longitude(lng), Latitude(lat));
+        lng += precision;
+        if (lng > 180) {
+            lng = -(360 - lng);
+        }
+    }
+    return neighbors;
 }
