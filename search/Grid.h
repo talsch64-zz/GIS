@@ -34,7 +34,7 @@ public:
 class Grid {
 
 public:
-    static constexpr double precision = 0.0001;
+    static constexpr double precision = 0.0001220703125;
     static constexpr double meterPrecision = 1;
 
     using GridCell = Coordinates;
