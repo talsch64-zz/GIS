@@ -40,12 +40,12 @@ class Grid {
 public:
     Grid();
 
-    static constexpr double precision = 0.01;
+    static constexpr double precision = 0.015625;
+    static constexpr double meterPrecision = 1;
 
     using GridCell = Coordinates;
 
-    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
-
+//TODO maybe change to return unordered_set
     std::vector<GridCell> setEntityOnGrid(const Entity &entity);
 
 //    TODO remove after testing
@@ -56,22 +56,21 @@ public:
     std::vector<GridCell> getGeometryGridCells(const Point &geometry) const;
 
     std::vector<GridCell> getGeometryGridCells(const Circle &geometry) const;
-    Coordinates truncateCoordinates(const Coordinates &coordinates) const {
-        return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
-                Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
-    }
+
+    std::vector<GridCell> getCellNeighbors(GridCell initialCell);
+
+    Coordinates truncateCoordinates(const Coordinates &coordinates) const;
+
+    CellEntities getEntitiesOnGrid(const GridCell &cell);
+
 private:
     std::unordered_map<GridCell, CellEntities> grid;
 
 
+    double truncateDecimalCoordinate(double coordinate) const;
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
-    void
-    addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2,
-                          std::unordered_set<GridCell> &cells) const;
-
-    double truncateDecimalCoordinate(double coordinate) const {
-        return std::trunc(coordinate / precision) * precision;
-    }
-
-
+    void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells) const;
+    std::vector<GridCell> getPollCellNeighbors(bool north);
+    GridCell getNorthernCell() const;
+    GridCell getSouthernCell() const;
 };

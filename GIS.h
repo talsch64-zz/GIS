@@ -44,7 +44,7 @@ public:
 
     std::optional<Coordinates> getEntityClosestPoint(const EntityId &, const Coordinates &);
 
-    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &);
+    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords);
 
 
 private:

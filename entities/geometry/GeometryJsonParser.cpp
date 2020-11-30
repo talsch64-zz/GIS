@@ -8,16 +8,16 @@ std::unique_ptr<Geometry> GeometryJsonParser::parsePOIGeometry(rapidjson::Value 
     if (!doc.HasMember("geometry") || !doc["geometry"].IsObject()) {
         throw std::runtime_error("JSON entity doesn't contain geometry");
     }
-    if (!doc["geometry"].HasMember("type") || !doc["geometry"]["type"].IsString()) {
+    rapidjson::Value geometry = doc["geometry"].GetObject();
+    if (!geometry.HasMember("type") || !geometry["type"].IsString()) {
         throw std::runtime_error("Geomtry JSON doesn't contain type");
     }
-    std::string type = doc["geometry"]["type"].GetString();
+    std::string type = geometry["type"].GetString();
     if (type == "Circle") {
-        return parseCircle(doc["geometry"]);
-//    } else if (type == "Polygon") {
-//        return parsePolygon(doc);
+        return parseCircle(geometry);
+
     } else {
-        throw std::runtime_error("Unsupported geometry type");
+        throw std::runtime_error("Unsupported geometry type: " + type);
     }
 }
 
