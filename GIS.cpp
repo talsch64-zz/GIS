@@ -111,7 +111,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
             CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
             for (auto &entityId: cellEntities.getEntities()) {
                 if (idsSeen.find(entityId) != idsSeen.end()) {
-    //              if id was already seen
+                    //              if id was already seen
                     continue;
                 }
                 idsSeen.insert(entityId);
@@ -129,15 +129,14 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
             }
             if (!wayFound) {
                 std::vector<Grid::GridCell> neighbors = grid->getCellNeighbors(cell);
-    //          push to stack all the cells that were not visited yet.
+                //          push to stack all the cells that were not visited yet.
                 for (auto &neighbor: neighbors) {
                     if (cellsVisited.find(neighbor) == cellsVisited.end()) {
                         nextStack.push(neighbor);
                         cellsVisited.insert(neighbor);
                     }
                 }
-            }
-            else if(stack.empty()) {
+            } else if (stack.empty()) {
                 return {*closest, closestEntityId};
             }
         }
@@ -146,8 +145,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
     return {*closest, closestEntityId};
 //    TODO write to log that way was not found!
 
-
-
+}
 
 std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
     std::vector<EntityId> entityIds;

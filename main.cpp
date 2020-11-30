@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <tchar.h>
+//#include "tests/lib/googletest/gte"
 
 
 
@@ -16,20 +17,20 @@
 
 
 int main(int argc, char* argv[]) {
-////
+//
 //    testing::InitGoogleTest(&argc, argv);
 //    return RUN_ALL_TESTS();
 
-    Coordinates to(Longitude(90.28177), Latitude(65.89199));
-    Coordinates coord(Longitude(91.68265), Latitude(65.92547));
-
-    GIS gis;
-    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\russia.json");
-//    Coordinates closest = gis.getWayClosestPoint(to).first;
+//    Coordinates to(Longitude(90.28177), Latitude(65.89199));
+//    Coordinates coord(Longitude(91.68265), Latitude(65.92547));
+//
+//    GIS gis;
+//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\russia.json");
+////    Coordinates closest = gis.getWayClosestPoint(to).first;
+////    std::cout << closest.longitude() << ", " << closest.latitude() << std::endl;
+//    Coordinates closest = gis.getWayClosestPoint(coord).first;
+//    std::cout.precision(15);
 //    std::cout << closest.longitude() << ", " << closest.latitude() << std::endl;
-    Coordinates closest = gis.getWayClosestPoint(coord).first;
-    std::cout.precision(15);
-    std::cout << closest.longitude() << ", " << closest.latitude() << std::endl;
 
 
 
