@@ -1,0 +1,87 @@
+[
+  {
+    "type": "POI",
+    "id": "1",
+    "name": "dsadsad",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.802795,
+        31.927566
+      ],
+      "radius": 1000
+    }
+  },
+  {
+    "type": "POI",
+    "id": "2",
+    "name": "dsadsad",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.776488,
+        31.952395
+      ],
+      "radius": 1100
+    }
+  },
+  {
+    "type": "POI",
+    "id": "3",
+    "name": "dsadsad",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.740749,
+        31.897630
+      ],
+      "radius": 4000
+    }
+  },
+  {
+    "type": "POI",
+    "id": "4",
+    "name": "dsadsad",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.783868,
+        31.930202
+      ],
+      "radius": 2
+    }
+  },
+  {
+    "type": "POI",
+    "id": "5",
+    "name": "dsadsad",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.785924,
+        31.932656
+      ],
+      "radius": 5
+    }
+  }
+]

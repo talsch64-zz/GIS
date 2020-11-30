@@ -16,5 +16,9 @@ public:
     Point(const Coordinates &coordinates);
 
     rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
+
+    std::vector<Coordinates> getGridCells(const Grid *grid) override;
+
+    bool isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const override;
 };
 #endif //EX1_POINT_H

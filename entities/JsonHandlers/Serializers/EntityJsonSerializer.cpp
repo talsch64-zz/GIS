@@ -22,7 +22,7 @@ rapidjson::Value EntityJsonSerializer::entityToJson(Entity *entity, rapidjson::D
 rapidjson::Value EntityJsonSerializer::toJson(POI *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value entityJson = entityToJson(entity, allocator);
     entityJson = setStringVector(std::move(entityJson), "accessibility", entity->getAccessibility(), allocator);
-    rapidjson::Value geometryJson = entity->getGeometry().get()->toJson(allocator);
+    rapidjson::Value geometryJson = entity->getGeometry()->toJson(allocator);
     entityJson.AddMember("geometry", geometryJson, allocator);
 
     return entityJson;

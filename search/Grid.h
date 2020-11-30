@@ -1,17 +1,21 @@
 #pragma once
 
 #include "../GISdefs.h"
-#include "../entities/geometry/Geometry.h"
-#include "../entities/geometry/PointList.h"
-#include "../entities/geometry/Point.h"
-#include "../entities/geometry/Circle.h"
 #include "../entities/Entity.h"
+#include "TopologicalSearch.h"
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
 #include <forward_list>
 #include <cmath>
 
+class Point;
+
+class PointList;
+
+class Circle;
+
+class TopologicalSearch;
 
 class CellEntities {
     //TODO: consider keeping way's segments separated from all other entities
@@ -31,34 +35,43 @@ public:
 };
 
 class Grid {
+    std::unique_ptr<TopologicalSearch> topologicalSearch;
 
-    double truncateDecimalCoordinate(double coordinate) const {
-        return std::trunc(coordinate / precision) * precision;
-    }
+public:
+    Grid();
 
+    static constexpr double precision = 0.01;
+
+    using GridCell = Coordinates;
+
+    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
+
+    std::vector<GridCell> setEntityOnGrid(const Entity &entity);
+
+//    TODO remove after testing
+//    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
+//    std::vector<Grid::GridCell> setEntityOnGrid(const Point &geometry, const EntityId &id);
+    std::vector<GridCell> getGeometryGridCells(const PointList &geometry) const;
+
+    std::vector<GridCell> getGeometryGridCells(const Point &geometry) const;
+
+    std::vector<GridCell> getGeometryGridCells(const Circle &geometry) const;
     Coordinates truncateCoordinates(const Coordinates &coordinates) const {
         return {Longitude{truncateDecimalCoordinate(coordinates.longitude())},
                 Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
     }
-
-public:
-    static constexpr double precision = 0.0001;
-
-    using GridCell = Coordinates;
-
-    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
-    std::vector<GridCell> setEntityOnGrid(const Point &geometry, const EntityId &id);
-    std::vector<GridCell> setEntityOnGrid(const Circle &geometry, const EntityId &id);
-    CellEntities getEntitiesOnGrid(const Coordinates &coordinates);
-
 private:
     std::unordered_map<GridCell, CellEntities> grid;
 
+
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
-    void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells);
+    void
+    addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2,
+                          std::unordered_set<GridCell> &cells) const;
 
-    std::vector<Coordinates> getGeometryGridCells(const PointList &geometry);
-
+    double truncateDecimalCoordinate(double coordinate) const {
+        return std::trunc(coordinate / precision) * precision;
+    }
 
 
 };

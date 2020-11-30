@@ -6,9 +6,9 @@
 
 #include <utility>
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
+#include "../search/Grid.h"
 
-
-PointList::PointList(std::vector<Coordinates> &points) : points(std::move(points)) {}
+PointList::PointList(std::vector<Coordinates> &points) : points(std::move(points)), Geometry("PointList") {}
 
 const std::vector<Coordinates> &PointList::getPoints() const {
     return points;
@@ -16,6 +16,14 @@ const std::vector<Coordinates> &PointList::getPoints() const {
 
 rapidjson::Value PointList::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
     return geometryJsonSerializer->toJson(this, allocator);
+}
+
+std::vector<Grid::GridCell> PointList::getGridCells(const Grid *grid) {
+    return grid->getGeometryGridCells(*this);
+}
+
+bool PointList::isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const {
+    return false;
 }
 
 
