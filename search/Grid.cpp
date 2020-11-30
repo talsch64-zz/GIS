@@ -94,8 +94,8 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) {
     if (lat < 90 && lat > -90) {
         double northLat = lat + precision;
         double southLat = lat - precision;
-        double eastLng = (lng + precision) > 180 ? -(360 - lng - precision) : lng + precision;
-        double westLng = (lng - precision) <= -180 ? (360 + lng - precision) : lng - precision;
+        double eastLng = (lng + precision);
+        double westLng = (lng - precision);
 
 
         Coordinates north((Longitude(lng)), Latitude(northLat));
@@ -122,16 +122,12 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) {
 
 std::vector<Grid::GridCell> Grid::getPollCellNeighbors(bool north) {
     std::vector<GridCell> neighbors;
-    double lng = precision;
+    double lng = 0;
     double lat = 90 - precision;
     if (!north) lat = -lat;
-    neighbors.emplace_back(Longitude(0), Latitude(lat));
-    while (lng != 0) {
+    while (lng < 360) {
         neighbors.emplace_back(Longitude(lng), Latitude(lat));
         lng += precision;
-        if (lng > 180) {
-            lng = -(360 - lng);
-        }
     }
     return neighbors;
 }
