@@ -6,8 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <tchar.h>
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
+
 
 
 
@@ -17,9 +16,9 @@
 
 
 int main(int argc, char* argv[]) {
-//
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+////
+//    testing::InitGoogleTest(&argc, argv);
+//    return RUN_ALL_TESTS();
 
     Coordinates to(Longitude(90.28177), Latitude(65.89199));
     Coordinates coord(Longitude(91.68265), Latitude(65.92547));
