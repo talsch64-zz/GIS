@@ -2,6 +2,7 @@
 
 #include "../GISdefs.h"
 #include "../entities/Entity.h"
+#include "TopologicalSearch.h"
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
@@ -13,6 +14,8 @@ class Point;
 class PointList;
 
 class Circle;
+
+class TopologicalSearch;
 
 class CellEntities {
     //TODO: consider keeping way's segments separated from all other entities
@@ -32,8 +35,11 @@ public:
 };
 
 class Grid {
+    std::unique_ptr<TopologicalSearch> topologicalSearch;
 
 public:
+    Grid();
+
     static constexpr double precision = 0.015625;
     static constexpr double meterPrecision = 1;
 
@@ -56,7 +62,6 @@ public:
     Coordinates truncateCoordinates(const Coordinates &coordinates) const;
 
     CellEntities getEntitiesOnGrid(const GridCell &cell);
-
 
 private:
     std::unordered_map<GridCell, CellEntities> grid;

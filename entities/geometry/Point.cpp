@@ -23,3 +23,7 @@ std::vector<Grid::GridCell> Point::getGridCells(const Grid *grid) {
 Coordinates Point::getClosestPoint(const Coordinates &coord) {
     return coordinates;
 }
+
+bool Point::isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const {
+    return false;
+}

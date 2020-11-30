@@ -13,6 +13,7 @@
 #include "search/Grid.h"
 #include "search/TopologicalSearch.h"
 #include "IdGenerator.h"
+#include "GISdefs.h"
 
 class EntityJsonParser;
 
@@ -22,7 +23,7 @@ class GIS {
     EntityJsonSerializer entityJsonSerializer;
     JsonFileWriter jsonFileWriter;
     std::shared_ptr<Grid> grid;
-    TopologicalSearch topologicalSearch;
+    std::unique_ptr<TopologicalSearch> topologicalSearch;
 
 public:
     GIS();
@@ -33,7 +34,7 @@ public:
 
     std::vector<EntityId> loadMapFile(const std::string &filename);
 
-    const Entity *getEntityById(const EntityId& id) const;
+    const Entity *getEntityById(const EntityId &id) const;
 
     std::size_t saveMapFile(const std::string &filename);
 
@@ -49,6 +50,7 @@ public:
 private:
     std::vector<EntityId> loadEntities(rapidjson::Document &document);
 
+    std::vector<const Entity *> getEntities(const Coordinates &coordinates, Meters radius);
 
 };
 

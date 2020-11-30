@@ -18,9 +18,11 @@ public:
 
     rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
 
-    Coordinates getCenter();
+    Coordinates getCenter() const;
 
     std::vector<Coordinates> getGridCells(const Grid *grid) override;
+
+    bool isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &searchCenter, Meters searchRadius) const override;
 
     Coordinates getClosestPoint(const Coordinates &coordinates) override;
 

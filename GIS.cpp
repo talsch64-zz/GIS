@@ -10,11 +10,12 @@
 #include <iostream>
 #include <fstream>
 #include <stack>
+#include <set>
 #include "entities/EntityJsonParser.h"
 #include "entities/geometry/CoordinatesMath.h"
 
-
-GIS::GIS() : grid(std::make_shared<Grid>()), topologicalSearch(grid), entityJsonParser(new EntityJsonParser()) {
+GIS::GIS() : grid(std::make_shared<Grid>()), entityJsonParser(new EntityJsonParser()),
+             topologicalSearch(std::make_unique<TopologicalSearch>()) {
 }
 
 GIS::~GIS() { delete entityJsonParser; }
@@ -68,11 +69,17 @@ std::vector<EntityId> GIS::getEntities(const std::string &search_name) {
     }
     return entityIds;
 }
-//TODO
-std::vector<EntityId> GIS::getEntities(const std::string &search_name, const Coordinates &, Meters radius) {
-    return std::vector<EntityId>();
-}
 
+std::vector<EntityId>
+GIS::getEntities(const std::string &search_name, const Coordinates &coordinates, Meters radius) {
+    //TODO: filter also by name
+    std::vector<const Entity *> foundEntities = getEntities(coordinates, radius);
+    std::vector<EntityId> ids;
+    for (auto entity : foundEntities) {
+        ids.push_back(entity->getId());
+    }
+    return ids;
+}
 
 std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &entityId, const Coordinates &coordinates) {
     if (entities.find(entityId) == entities.end()) {
@@ -140,49 +147,6 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
 //    TODO write to log that way was not found!
 
 
-//    while (!stack.empty()) {
-//        Grid::GridCell cell = stack.top();
-//        stack.pop();
-//        CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
-//        for (auto &entityId: cellEntities.getEntities()) {
-//            if (idsSeen.find(entityId) != idsSeen.end()) {
-////              if id was already seen
-//                continue;
-//            }
-//            idsSeen.insert(entityId);
-//            Entity &entity = *(entities.find(entityId)->second);
-//            if (entity.getType() == "Way") {
-//                wayFound = true;
-//                Coordinates candidate = entity.getGeometry()->getClosestPoint(coord);
-//                Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
-//                if (distance < shortestDistance) {
-//                    *closest = candidate;
-//                    shortestDistance = distance;
-//                    closestEntityId = entityId;
-//                }
-//            }
-//        }
-//        if (!wayFound) {
-//            neighbors = grid->getCellNeighbors(cell);
-////          push to stack all the cells that were not visited yet.
-//            for (auto &neighbor: neighbors) {
-//                if (cellsVisited.find(neighbor) == cellsVisited.end()) {
-//                    nextStack.push(neighbor);
-//                }
-//            }
-//
-//            if (stack.empty()) {
-//                stack = nextStack;
-//                nextStack = std::stack<Grid::GridCell>();
-//            }
-//        }
-//
-//        else if(stack.empty()) {
-//            return std::pair<Coordinates, EntityId> (*closest, closestEntityId);
-//        }
-//    }
-
-}
 
 
 std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
@@ -208,12 +172,31 @@ std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
     return entityIds;
 }
 
-const Entity *GIS::getEntityById(const EntityId& id) const {
+const Entity *GIS::getEntityById(const EntityId &id) const {
     auto pair = entities.find(id);
     if (pair == entities.end()) {
         return nullptr;
     } else {
         return pair->second.get();
     }
+}
+
+std::vector<const Entity *> GIS::getEntities(const Coordinates &coordinates, Meters radius) {
+    std::vector<Grid::GridCell> cells = topologicalSearch->searchCircleInGrid(*grid.get(), coordinates, radius);
+    std::set<EntityId> searchedEntityIds;
+    std::vector<const Entity *> foundEntities;
+    for (Grid::GridCell cell : cells) {
+        CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
+        for (EntityId id : cellEntities.getEntities()) {
+            if (searchedEntityIds.find(id) == searchedEntityIds.end()) {
+                searchedEntityIds.insert(id);
+                const Entity *entity = getEntityById(id);
+                if (entity->getGeometry()->isInCircle(topologicalSearch.get(), coordinates, radius)) {
+                    foundEntities.push_back(entity);
+                }
+            }
+        }
+    }
+    return foundEntities;
 }
 

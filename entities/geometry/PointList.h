@@ -22,5 +22,7 @@ public:
 
     Coordinates getClosestPoint(const Coordinates &coordinates) override;
 
+
+    bool isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const override;
 };
 #endif //EX1_POINTLIST_H

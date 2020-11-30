@@ -9,6 +9,8 @@
 double Grid::truncateDecimalCoordinate(double coordinate) const {
     return std::floor(coordinate / precision) * precision;
 }
+Grid::Grid() : topologicalSearch(std::make_unique<TopologicalSearch>()) {
+}
 
 Coordinates Grid::truncateCoordinates(const Coordinates &coordinates) const {
 //    north poll
@@ -65,7 +67,7 @@ std::vector<Grid::GridCell> Grid::getGeometryGridCells(const Point &geometry) co
 }
 
 std::vector<Grid::GridCell> Grid::getGeometryGridCells(const Circle &geometry) const {
-    return std::vector<GridCell>();
+    return topologicalSearch->searchCircleInGrid(*this, geometry.getCenter(), geometry.getRadius());
 }
 
 void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2,
