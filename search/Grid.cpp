@@ -137,6 +137,7 @@ std::vector<Grid::GridCell> Grid::getPollCellNeighbors(bool north) {
 Grid::GridCell Grid::getNorthernCell() const {
     return Coordinates(Longitude(0), Latitude(90));
 }
+
 Grid::GridCell Grid::getSouthernCell() const {
     return Coordinates(Longitude(0), Latitude(90));
 }
