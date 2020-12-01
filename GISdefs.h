@@ -33,7 +33,7 @@ class Coordinates {
     Latitude _latitude;
 
 public:
-    Coordinates(const Longitude &longitude, const Latitude &latitude) : _longitude(longitude), _latitude(latitude) {}
+    Coordinates(const Longitude &longitude, const Latitude &latitude) : _longitude(trimLongitude(longitude)), _latitude(latitude) {}
 
     Longitude longitude() const { return _longitude; }
 
@@ -50,6 +50,24 @@ public:
         } else {
             return c.latitude();
         }
+    }
+private:
+    Longitude trimLongitude(const Longitude &longitude) {
+        double lon = static_cast<const double &>(longitude);
+        long whole = static_cast<long>(lon);
+        int sign = lon > 0 ? 1 : -1;
+        double fraction = abs(lon - whole);
+        whole = whole % 360;
+        if (whole + fraction > 180) {
+            lon = whole - 360 + fraction;
+        }
+        else if (whole - fraction <= -180){
+            lon = whole + 360 - fraction;
+        }
+        else {
+            lon = whole + sign * fraction;
+        }
+        return Longitude(lon);
     }
 };
 

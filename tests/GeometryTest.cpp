@@ -5,7 +5,7 @@
 #include "../entities/geometry/PointList.h"
 #include "../GIS.h"
 
-#define METERS_PRECISION 0.1
+#define METERS_PRECISION 1
 TEST(ClosestPointTest, ClosestPointTest_Way_Test1) {
     Coordinates c1(Longitude(-2), Latitude(2));
     Coordinates c2(Longitude(-2), Latitude(1));
@@ -54,13 +54,14 @@ TEST(CoordinatesMathTest, Shortest_Distance_And_Coordinates_Test) {
 
 }
 
-//TEST(GISBasic, getWayClosestPoint_test1) {
-//    GIS gis;
-//    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\nyc.json");
-//    Coordinates junction(Longitude(40.731437), Latitude(-73.996967));
-//    auto way = gis.getWayClosestPoint(junction);
-//    EXPECT_TRUE(CoordinatesMath::calculateDistance(junction, way.first) < METERS_PRECISION);
-//}
+TEST(GISBasic, getWayClosestPoint_test1) {
+    GIS gis;
+    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\nyc.json");
+    Coordinates coord(Longitude(40.731437), Latitude(-73.996967));
+    Coordinates expected(Longitude(40.73248), Latitude(-73.99693));
+    auto closest = gis.getWayClosestPoint(coord).first;
+    EXPECT_TRUE(CoordinatesMath::calculateDistance(expected, closest) < METERS_PRECISION);
+}
 
 TEST(GISBasic, getWayClosestPoint_test2) {
     GIS gis;
