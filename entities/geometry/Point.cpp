@@ -25,5 +25,5 @@ Coordinates Point::getClosestPoint(const Coordinates &coord) {
 }
 
 bool Point::isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const {
-    return false;
+    return topologicalSearch->isInCircle(center, radius, *this);
 }

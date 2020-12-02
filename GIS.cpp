@@ -62,8 +62,8 @@ std::size_t GIS::saveMapFile(const std::string &filename) {
 
 std::vector<EntityId> GIS::getEntities(const std::string &search_name) {
     std::vector<EntityId> entityIds;
-    for(const auto& pair: entities) {
-        if(pair.second->getName() == search_name) {
+    for (const auto &pair: entities) {
+        if (pair.second->getName() == search_name) {
             entityIds.push_back(pair.first);
         }
     }
