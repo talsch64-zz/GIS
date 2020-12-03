@@ -43,7 +43,7 @@ bool TopologicalSearch::isInCircle(const Coordinates &center, Meters radius, con
     Coordinates prevCoord = *coordsIter;
     for (coordsIter = next(coordsIter); coordsIter < coords.end(); coordsIter++) {
         Coordinates coord = *coordsIter;
-        Meters distance = CoordinatesMath::distanceFromSegment(prevCoord, coord, center);
+        Meters distance = CoordinatesMath::distanceFromSegment(center, prevCoord, coord);
         if (distance <= radius) {
             return true;
         }

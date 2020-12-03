@@ -80,7 +80,7 @@ void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &c
         return;
     }
 
-    Coordinates midPoint = CoordinatesMath::calculateMidpoint(coord1, coord2);
+    Coordinates midPoint = CoordinatesMath::midpoint(coord1, coord2);
     addIntervalsGridCells(coord1, midPoint, cells);
     addIntervalsGridCells(midPoint, coord2, cells);
 }
