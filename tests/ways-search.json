@@ -2,7 +2,7 @@
   {
     "type": "Junction",
     "id": "8",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -57.83334529241408,
@@ -12,7 +12,7 @@
   {
     "type": "Junction",
     "id": "10",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -59.32575568330603,
@@ -58,7 +58,7 @@
   {
     "type": "Junction",
     "id": "12",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -61.08393083162706,
@@ -68,7 +68,7 @@
   {
     "type": "Junction",
     "id": "13",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -61.72846776160691,
@@ -98,7 +98,7 @@
   {
     "type": "Junction",
     "id": "14",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -62.76836640855191,
@@ -108,7 +108,7 @@
   {
     "type": "Junction",
     "id": "15",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -62.73318110419756,
@@ -173,7 +173,7 @@
   {
     "type": "Junction",
     "id": "7",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -59.95606167485185,
@@ -183,7 +183,7 @@
   {
     "type": "Junction",
     "id": "9",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -60.41198921911494,
@@ -216,7 +216,7 @@
   {
     "type": "Junction",
     "id": "6",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -56.42013234172999,
@@ -226,7 +226,7 @@
   {
     "type": "Junction",
     "id": "11",
-    "name": "junction",
+    "name": "way",
     "description": "desc",
     "coordinates": [
       -57.4973221023434,

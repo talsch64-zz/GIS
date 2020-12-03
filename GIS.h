@@ -52,6 +52,7 @@ private:
 
     std::vector<const Entity *> getEntities(const Coordinates &coordinates, Meters radius);
 
+    bool filterEntityByName(const Entity *entity, const std::string &search_name);
 };
 
 #endif //EX1_GIS_H
