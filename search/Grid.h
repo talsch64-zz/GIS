@@ -40,7 +40,7 @@ class Grid {
 public:
     Grid();
 
-    static constexpr double precision = 0.015625;
+    static constexpr double precision = 0.01;
     static constexpr double meterPrecision = 1;
 
     using GridCell = Coordinates;
@@ -57,7 +57,7 @@ public:
 
     std::vector<GridCell> getGeometryGridCells(const Circle &geometry) const;
 
-    std::vector<GridCell> getCellNeighbors(GridCell initialCell);
+    std::vector<GridCell> getCellNeighbors(GridCell initialCell) const;
 
     Coordinates truncateCoordinates(const Coordinates &coordinates) const;
 
@@ -70,7 +70,7 @@ private:
     double truncateDecimalCoordinate(double coordinate) const;
     /* add all GridCells which the interval between coord1 and coord2 runs through to cells vector */
     void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2, std::unordered_set<GridCell> &cells) const;
-    std::vector<GridCell> getPollCellNeighbors(bool north);
+    std::vector<GridCell> getPollCellNeighbors(bool north) const;
     GridCell getNorthernCell() const;
     GridCell getSouthernCell() const;
 };

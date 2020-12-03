@@ -86,7 +86,7 @@ void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &c
 }
 
 
-std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) {
+std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) const {
     double lat = initialCell.latitude();
     double lng = initialCell.longitude();
 
@@ -120,7 +120,7 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) {
 }
 
 
-std::vector<Grid::GridCell> Grid::getPollCellNeighbors(bool north) {
+std::vector<Grid::GridCell> Grid::getPollCellNeighbors(bool north) const {
     std::vector<GridCell> neighbors;
     double lng = 0;
     double lat = 90 - precision;

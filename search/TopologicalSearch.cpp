@@ -1,23 +1,34 @@
 #include "TopologicalSearch.h"
 
 #include <utility>
+#include <queue>
 #include "../entities/geometry/CoordinatesMath.h"
 
 std::vector<Coordinates>
 TopologicalSearch::searchCircleInGrid(const Grid &grid, const Coordinates &center, Meters radius) const {
-    std::vector<Coordinates> gridCells;
-    Coordinates leftCoord = CoordinatesMath::CoordinatesByBearingAndDistance(center, radius, -90);
-    Coordinates topCoord = CoordinatesMath::CoordinatesByBearingAndDistance(center, radius, 0);
-    Coordinates rightCoord = CoordinatesMath::CoordinatesByBearingAndDistance(center, radius, 90);
-    Coordinates bottomCoord = CoordinatesMath::CoordinatesByBearingAndDistance(center, radius, 180);
-
-    for (double lat = bottomCoord.latitude(); lat <= topCoord.latitude(); lat += grid.precision) {
-        for (double lon = leftCoord.longitude(); lon <= rightCoord.longitude(); lon += grid.precision) {
-            Coordinates coord = grid.truncateCoordinates(Coordinates(Longitude(lon), Latitude(lat)));
-            gridCells.emplace_back(coord);
+    std::vector<Coordinates> cellsInCircle;
+    std::queue<Coordinates> queue;
+    queue.push(grid.truncateCoordinates(center));
+    std::unordered_set<Coordinates> searchedCoord;
+    while (!queue.empty()) {
+        Coordinates coord = queue.front();
+        queue.pop();
+        cellsInCircle.push_back(coord);
+        std::vector<Coordinates> neighbors = grid.getCellNeighbors(coord);
+        for (Coordinates neighbor: neighbors) {
+            neighbor = grid.truncateCoordinates(neighbor);
+            if (searchedCoord.find(neighbor) == searchedCoord.end()) {
+                searchedCoord.insert(neighbor);
+                Meters distance = CoordinatesMath::calculateDistance(center, neighbor);
+                if (distance <= radius) {
+                    queue.push(neighbor);
+                } else {
+                    cellsInCircle.push_back(neighbor);
+                }
+            }
         }
     }
-    return gridCells;
+    return cellsInCircle;
 }
 
 bool TopologicalSearch::isInCircle(const Coordinates &center, Meters radius, const Circle &entityGeometry) const {

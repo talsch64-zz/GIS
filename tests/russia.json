@@ -1,0 +1,37 @@
+[
+  {
+      "type": "Junction",
+      "id": "J1001",
+      "name": "5th Ave & 8th St",
+      "description": ".*",
+      "category_tags": [],
+      "coordinates": [90.24369, 66.21945]
+  },
+
+  {
+      "type": "Junction",
+      "id": "J1002",
+      "name": "6th Ave & 8th St",
+      "description": "6 Ave & Greenwich Ave & 8th St",
+      "category_tags": [],
+      "coordinates": [90.28177, 65.89199]
+  },
+  {
+      "type": "Way",
+      "id": "W1001",
+      "name": "8th St btw. 6th Ave & 5th Ave",
+      "description": ".*",
+      "category_tags": [],
+      "from": {
+          "entity_id": "J1001"
+      },
+      "to": {
+          "entity_id": "J1002"
+      },
+      "speed_limit": 40,
+      "direction": "unidirectional",
+      "toll_road": false,
+      "curves": [[90.61809, 66.12225], [90.69101, 65.98046]],
+      "restricted": ["trucks"]
+  }
+]
