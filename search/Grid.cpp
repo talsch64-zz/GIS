@@ -94,8 +94,8 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) c
     if (lat < 90 && lat > -90) {
         double northLat = lat + precision;
         double southLat = lat - precision;
-        double eastLng = (lng + precision);
-        double westLng = (lng - precision);
+        double eastLng = lng + precision;
+        double westLng = lng - precision;
 
 
         Coordinates north((Longitude(lng)), Latitude(northLat));

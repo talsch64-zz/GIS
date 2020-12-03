@@ -106,7 +106,6 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
     cellsVisited.insert(grid->truncateCoordinates(coord));
 
     while (!stack.empty()) {
-        nextStack = std::stack<Grid::GridCell>();
         while (!stack.empty()) {
             Grid::GridCell cell = stack.top();
             stack.pop();
@@ -142,7 +141,8 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                 return {*closest, closestEntityId};
             }
         }
-        stack = nextStack;
+        std::swap(stack,nextStack);
+
     }
     return {*closest, closestEntityId};
 //    TODO write to log that way was not found!
