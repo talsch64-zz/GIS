@@ -17,20 +17,11 @@
 
 
 int main(int argc, char* argv[]) {
-
-//    std::string mapPath = "C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\4j1w.json";
-//    std::vector<EntityId> entityId = gis.loadMapFile(mapPath);
-//    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
-//
-//
-//    gis.saveMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\output.json");
-//
-//
-//    for (auto &&pair: gis.grid->grid) {
-//        Coordinates cell = pair.first;
-//        std::cout << "Longitude: " << cell.longitude() << ", Latitude: " << cell.latitude() << std::endl;
-//    }
-
+    GIS gis;
+    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\nyc.json");
+    Coordinates coord(Longitude(40.731437), Latitude(-73.996967));
+    Coordinates expected(Longitude(40.73248), Latitude(-73.99693));
+    auto closest = gis.getWayClosestPoint(coord).first;
 
     return 0;
 }
