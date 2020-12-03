@@ -20,7 +20,7 @@ public:
 
     std::vector<Coordinates> getGridCells(const Grid *grid) override;
 
-    Coordinates getClosestPoint(const Coordinates &coordinates) override;
+    Coordinates getClosestPoint(const Coordinates &coordinates) const override;
 
 
     bool isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const override;

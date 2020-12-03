@@ -2,7 +2,7 @@
   {
     "type": "POI",
     "id": "1",
-    "name": "dsadsad",
+    "name": "aaa",
     "description": "Dsadsad",
     "category_tags": [
       "gfdsad"
@@ -19,7 +19,7 @@
   {
     "type": "POI",
     "id": "2",
-    "name": "dsadsad",
+    "name": "aaa",
     "description": "Dsadsad",
     "category_tags": [
       "gfdsad"
@@ -30,13 +30,13 @@
         34.776488,
         31.952395
       ],
-      "radius": 1100
+      "radius": 900
     }
   },
   {
     "type": "POI",
     "id": "3",
-    "name": "dsadsad",
+    "name": "aaa",
     "description": "Dsadsad",
     "category_tags": [
       "gfdsad"
@@ -53,7 +53,7 @@
   {
     "type": "POI",
     "id": "4",
-    "name": "dsadsad",
+    "name": "aaa",
     "description": "Dsadsad",
     "category_tags": [
       "gfdsad"
@@ -70,7 +70,7 @@
   {
     "type": "POI",
     "id": "5",
-    "name": "dsadsad",
+    "name": "aaa",
     "description": "Dsadsad",
     "category_tags": [
       "gfdsad"

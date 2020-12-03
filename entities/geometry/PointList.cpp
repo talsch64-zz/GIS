@@ -1,6 +1,3 @@
-//
-// Created by Tal on 19/11/2020.
-//
 
 #include "PointList.h"
 
@@ -24,20 +21,22 @@ std::vector<Grid::GridCell> PointList::getGridCells(const Grid *grid) {
 }
 
 bool PointList::isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const {
-    return false;
+    return topologicalSearch->isInCircle(center, radius, *this);
 }
 
-Coordinates PointList::getClosestPoint(const Coordinates &coordinates) {
+Coordinates PointList::getClosestPoint(const Coordinates &coordinates) const {
     std::vector<Coordinates> coords = getPoints();
 //  initialize dummy pair;
-    std::pair<Meters, Coordinates> closestPair {INFINITY, Coordinates(Longitude(0), Latitude(0))};
-    for(int i = 0; i < coords.size()-1; ++i) {
-        std::pair<Meters, Coordinates> nextPair = CoordinatesMath::closestPointOnSegmentAndDistance(coords[i],coords[i+1], coordinates);
-        if (closestPair.first > nextPair.first) {
+    std::pair<Coordinates, Meters> closestPair{Coordinates(Longitude(0), Latitude(0)), INFINITY};
+    for (int i = 0; i < coords.size() - 1; ++i) {
+        std::pair<Coordinates, Meters> nextPair = CoordinatesMath::closestPointOnSegmentAndDistance(coordinates,
+                                                                                                    coords[i],
+                                                                                                    coords[i + 1]);
+        if (closestPair.second > nextPair.second) {
             closestPair = nextPair;
         }
     }
-    return closestPair.second;
+    return closestPair.first;
 }
 
 

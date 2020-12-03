@@ -29,9 +29,10 @@ public:
 
     virtual std::vector<Coordinates> getGridCells(const Grid *grid) = 0;
 
-    virtual Coordinates getClosestPoint(const Coordinates &coordinates) = 0;
+    virtual Coordinates getClosestPoint(const Coordinates &coordinates) const = 0;
 
-    virtual bool isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const = 0;
+    virtual bool
+    isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const = 0;
 };
 
 #endif //EX1_GEOMETRY_H

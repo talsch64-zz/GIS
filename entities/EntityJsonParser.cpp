@@ -25,7 +25,6 @@ bool EntityJsonParser::isWay(rapidjson::Value &jsonEntity) {
 }
 
 std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS &gis) {
-
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
@@ -49,8 +48,9 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parseWayGeometry(doc, fromCoordinates, toCoordinates);
 
     EntityId id = parseEntityId(doc);
-    std::unique_ptr<Way> way = std::make_unique<Way>(id, name, description, categoryTags, std::move(geometry), from, to, direction, speedLimit, tollRoad,
-                    restricted);
+    std::unique_ptr<Way> way = std::make_unique<Way>(id, name, description, categoryTags, std::move(geometry), from, to,
+                                                     direction, speedLimit, tollRoad,
+                                                     restricted);
     return way;
 }
 
@@ -60,7 +60,8 @@ std::unique_ptr<Junction> EntityJsonParser::parseJunction(rapidjson::Value &doc)
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parseJunctionGeometry(doc);
     EntityId id = parseEntityId(doc);
-    std::unique_ptr<Junction> junction = std::make_unique<Junction>(id, name, description, categoryTags, std::move(geometry));
+    std::unique_ptr<Junction> junction = std::make_unique<Junction>(id, name, description, categoryTags,
+                                                                    std::move(geometry));
     return junction;
 }
 
@@ -72,7 +73,8 @@ std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
     std::vector<std::string> accessibility = parseAccessibility(doc);
     std::unique_ptr<Geometry> geometry = geometryJsonParser.parsePOIGeometry(doc);
     EntityId id = parseEntityId(doc);
-    std::unique_ptr<POI> poi = std::make_unique<POI>(id, name, description, categoryTags, accessibility, std::move(geometry));
+    std::unique_ptr<POI> poi = std::make_unique<POI>(id, name, description, categoryTags, accessibility,
+                                                     std::move(geometry));
     return poi;
 }
 
@@ -171,8 +173,7 @@ EntityId EntityJsonParser::parseJunctionId(rapidjson::Value &doc, const char *di
     std::string junctionId;
     if (doc.HasMember(direction) && doc[direction].IsObject() && doc[direction].HasMember("entity_id")) {
         junctionId = doc[direction]["entity_id"].GetString();
-    }
-    else {
+    } else {
         throw std::runtime_error("Way is not valid");
     }
     return EntityId(junctionId);
