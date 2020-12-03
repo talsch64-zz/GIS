@@ -200,7 +200,7 @@ private:
         const double d_at = acos(cos(distance_1sphere_cA1_c) /
                                  cos(d_xt)); // The along-track distance from cA1 to closest point on path to the third point
 
-        if (d_at + coordinate_epsilon >= distance_1sphere_A) return set_return(c, cA2, Meters{-1});
+        if (d_at > distance_1sphere_A) return set_return(c, cA2, Meters{-1});
 
         const Coordinates closest_point = coordinatesByBearingAndDistance(cA1, bearing_cA1_cA2,
                                                                           Meters{d_at * earth_radius});
