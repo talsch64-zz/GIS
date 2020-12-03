@@ -53,6 +53,21 @@ TEST(CoordinatesMathTest, Shortest_Distance_And_Coordinates_Test) {
 
 }
 
+TEST(CoordinatesTest, Longitude_Trim_Test) {
+    Coordinates coords {Longitude(178), Latitude(0)};
+    Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 90, Meters(200000));
+    EXPECT_TRUE(target.longitude() > 0);
+    double reverse_bearing = CoordinatesMath::initialBearing(target, coords);
+    target = CoordinatesMath::coordinatesByBearingAndDistance(target, reverse_bearing, Meters(200000));
+    EXPECT_EQ(coords.longitude(), target.longitude());
+}
+TEST(CoordinatesTest, ZulVern_Latitude_Test) {
+    Coordinates coords {Longitude(0), Latitude(0)};
+    Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 0, Meters(CoordinatesMath::pi*6371000));
+    EXPECT_TRUE(abs(target.latitude() - coords.latitude()) < 0.00001);
+    EXPECT_EQ(target.longitude(), coords.longitude());
+}
+
 TEST(GISBasic, getWayClosestPoint_test1) {
     GIS gis;
     gis.loadMapFile("nyc.json");
