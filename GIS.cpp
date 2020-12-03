@@ -181,7 +181,7 @@ const Entity *GIS::getEntityById(const EntityId &id) const {
 }
 
 std::vector<const Entity *> GIS::getEntities(const Coordinates &coordinates, Meters radius) {
-    std::vector<Grid::GridCell> cells = topologicalSearch->searchCircleInGrid(*grid.get(), coordinates, radius);
+    std::vector<Grid::GridCell> cells = topologicalSearch->searchCircleInGrid(*grid, coordinates, radius);
     std::set<EntityId> searchedEntityIds;
     std::vector<const Entity *> foundEntities;
     for (Grid::GridCell cell : cells) {

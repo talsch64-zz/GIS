@@ -19,7 +19,7 @@ TEST(ClosestPointTest, ClosestPointTest_Way_Test1) {
     PointList points(vector);
     Coordinates closest = points.getClosestPoint(target);
 
-    EXPECT_TRUE(CoordinatesMath::calculateDistance(closest, c1) < METERS_PRECISION);
+    EXPECT_LT(CoordinatesMath::calculateDistance(closest, c1), METERS_PRECISION);
 }
 
 TEST(ClosestPointTest, ClosestPointTest_Way_Test2) {
@@ -35,7 +35,7 @@ TEST(ClosestPointTest, ClosestPointTest_Way_Test2) {
     PointList points(vector);
     Coordinates closest = points.getClosestPoint(target);
 
-    EXPECT_TRUE(CoordinatesMath::calculateDistance(closest, c6) < METERS_PRECISION);
+    EXPECT_LT(CoordinatesMath::calculateDistance(closest, c6), METERS_PRECISION);
 }
 
 
@@ -47,9 +47,9 @@ TEST(CoordinatesMathTest, Shortest_Distance_And_Coordinates_Test) {
     Meters distance = CoordinatesMath::distanceFromSegment(C, A, B);
     std::pair<Coordinates, Meters> closestPair = CoordinatesMath::closestPointOnSegmentAndDistance(C, A, B);
 
-    EXPECT_TRUE(abs(closestPair.second - distance) < METERS_PRECISION);
-    EXPECT_TRUE(abs(CoordinatesMath::calculateDistance(C, D) - distance) < METERS_PRECISION);
-    EXPECT_TRUE(CoordinatesMath::calculateDistance(closestPair.first, D) < METERS_PRECISION);
+    EXPECT_LT(abs(closestPair.second - distance), METERS_PRECISION);
+    EXPECT_LT(abs(CoordinatesMath::calculateDistance(C, D) - distance), METERS_PRECISION);
+    EXPECT_LT(CoordinatesMath::calculateDistance(closestPair.first, D), METERS_PRECISION);
 
 }
 
@@ -64,7 +64,7 @@ TEST(CoordinatesTest, Longitude_Trim_Test) {
 TEST(CoordinatesTest, ZulVern_Latitude_Test) {
     Coordinates coords {Longitude(0), Latitude(0)};
     Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 0, Meters(2*CoordinatesMath::pi*6371000));
-    EXPECT_TRUE(abs(target.latitude() - coords.latitude()) < 0.00001);
+    EXPECT_LT(abs(target.latitude() - coords.latitude()), 0.00001);
     EXPECT_EQ(target.longitude(), coords.longitude());
 }
 

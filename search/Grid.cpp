@@ -97,6 +97,14 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) c
         double eastLng = lng + precision;
         double westLng = lng - precision;
 
+//        Coordinates north(truncateCoordinates({Longitude(lng), Latitude(northLat)}));
+//        Coordinates south(truncateCoordinates({Longitude(lng), Latitude(southLat)}));
+//        Coordinates east(truncateCoordinates({Longitude(eastLng), Latitude(lat)}));
+//        Coordinates west(truncateCoordinates({Longitude(westLng), Latitude(lat)}));
+//        Coordinates northEast(truncateCoordinates({Longitude(eastLng), Latitude(northLat)}));
+//        Coordinates southEast(truncateCoordinates({Longitude(eastLng), Latitude(southLat)}));
+//        Coordinates northWest(truncateCoordinates({Longitude(westLng), Latitude(northLat)}));
+//        Coordinates southWest(truncateCoordinates({Longitude(westLng), Latitude(southLat)}));
 
         Coordinates north((Longitude(lng)), Latitude(northLat));
         Coordinates south((Longitude(lng)), Latitude(southLat));

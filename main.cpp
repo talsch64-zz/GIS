@@ -18,10 +18,16 @@
 
 int main(int argc, char* argv[]) {
     GIS gis;
-    gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\nyc.json");
-    Coordinates coord(Longitude(40.731437), Latitude(-73.996967));
-    Coordinates expected(Longitude(40.73248), Latitude(-73.99693));
-    auto closest = gis.getWayClosestPoint(coord).first;
+    auto loadedIds = gis.loadMapFile("C:\\Users\\Tal\\Desktop\\university\\CS\\year3\\01 - cpp\\03 - Project\\ex1\\json-files\\ways-search.json");
+    std::vector<EntityId> foundEntityIds = gis.getEntities("way",
+                                                           Coordinates(Longitude(-60.550612),
+                                                                       Latitude(-23.263132)),
+                                                           Meters(130000));
+    const Entity *way = gis.getEntityById(EntityId{"1"});
+    Coordinates c = Coordinates(Longitude(-60.550612),
+                                Latitude(-23.263132));
+    Coordinates closest = way->getGeometry()->getClosestPoint(c);
+    Meters distance = CoordinatesMath::calculateDistance(c, closest);
 
     return 0;
 }
