@@ -38,18 +38,8 @@ bool TopologicalSearch::isInCircle(const Coordinates &center, Meters radius, con
 }
 
 bool TopologicalSearch::isInCircle(const Coordinates &center, Meters radius, const PointList &entityGeometry) const {
-    std::vector<Coordinates> coords = entityGeometry.getPoints();
-    auto coordsIter = coords.begin();
-    Coordinates prevCoord = *coordsIter;
-    for (coordsIter = next(coordsIter); coordsIter < coords.end(); coordsIter++) {
-        Coordinates coord = *coordsIter;
-        Meters distance = CoordinatesMath::distanceFromSegment(center, prevCoord, coord);
-        if (distance <= radius) {
-            return true;
-        }
-        prevCoord = coord;
-    }
-    return false;
+    Coordinates closest = entityGeometry.getClosestPoint(center);
+    return CoordinatesMath::calculateDistance(center, closest) <= radius;
 }
 
 bool TopologicalSearch::isInCircle(const Coordinates &center, Meters radius, const Point &entityGeometry) const {

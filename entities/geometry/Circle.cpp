@@ -23,7 +23,7 @@ bool Circle::isInCircle(const TopologicalSearch *topologicalSearch, const Coordi
     return topologicalSearch->isInCircle(searchCenter, searchRadius, *this);
 }
 
-Coordinates Circle::getClosestPoint(const Coordinates &coordinates) {
+Coordinates Circle::getClosestPoint(const Coordinates &coordinates) const {
     return CoordinatesMath::closestPointOnCircle(coordinates, getCenter(), getRadius());
 }
 

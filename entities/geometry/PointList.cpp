@@ -24,7 +24,7 @@ bool PointList::isInCircle(const TopologicalSearch *topologicalSearch, const Coo
     return topologicalSearch->isInCircle(center, radius, *this);
 }
 
-Coordinates PointList::getClosestPoint(const Coordinates &coordinates) {
+Coordinates PointList::getClosestPoint(const Coordinates &coordinates) const {
     std::vector<Coordinates> coords = getPoints();
 //  initialize dummy pair;
     std::pair<Coordinates, Meters> closestPair{Coordinates(Longitude(0), Latitude(0)), INFINITY};

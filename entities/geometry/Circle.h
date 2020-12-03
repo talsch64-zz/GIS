@@ -24,7 +24,7 @@ public:
 
     bool isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &searchCenter, Meters searchRadius) const override;
 
-    Coordinates getClosestPoint(const Coordinates &coordinates) override;
+    Coordinates getClosestPoint(const Coordinates &coordinates) const override;
 
 };
 

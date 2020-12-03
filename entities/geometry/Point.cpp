@@ -20,7 +20,7 @@ std::vector<Grid::GridCell> Point::getGridCells(const Grid *grid) {
     return grid->getGeometryGridCells(*this);
 }
 
-Coordinates Point::getClosestPoint(const Coordinates &coord) {
+Coordinates Point::getClosestPoint(const Coordinates &coord) const {
     return coordinates;
 }
 
