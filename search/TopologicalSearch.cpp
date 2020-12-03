@@ -9,19 +9,22 @@ std::vector<Coordinates>
 TopologicalSearch::searchCircleInGrid(const Grid &grid, const Coordinates &center, Meters radius) const {
     std::vector<Coordinates> cellsInCircle;
     std::queue<Coordinates> queue;
-    queue.push(center);
+    queue.push(grid.truncateCoordinates(center));
     std::unordered_set<Coordinates> searchedCoord;
     while (!queue.empty()) {
         Coordinates coord = queue.front();
         queue.pop();
+        cellsInCircle.push_back(coord);
         std::vector<Coordinates> neighbors = grid.getCellNeighbors(coord);
         for (Coordinates neighbor: neighbors) {
+            neighbor = grid.truncateCoordinates(neighbor);
             if (searchedCoord.find(neighbor) == searchedCoord.end()) {
                 searchedCoord.insert(neighbor);
-                cellsInCircle.push_back(neighbor);
                 Meters distance = CoordinatesMath::calculateDistance(center, neighbor);
                 if (distance <= radius) {
                     queue.push(neighbor);
+                } else {
+                    cellsInCircle.push_back(neighbor);
                 }
             }
         }

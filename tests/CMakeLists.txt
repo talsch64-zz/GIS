@@ -17,6 +17,6 @@ file(GLOB MAP_FILES
 foreach(CurrentFile IN LISTS MAP_FILES)
     add_custom_command(
             TARGET Google_Tests_run PRE_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CurrentFile} .
+            COMMAND ${CMAKE_COMMAND} -E copy ${CurrentFile} .
             COMMENT "Copying map file: ${CurrentFile}")
 endforeach()
