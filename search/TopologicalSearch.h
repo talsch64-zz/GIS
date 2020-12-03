@@ -19,6 +19,7 @@ public:
     bool isInCircle(const Coordinates &center, Meters radius, const PointList &entityGeometry) const;
 
     bool isInCircle(const Coordinates &center, Meters radius, const Point &entityGeometry) const;
+
 };
 
 

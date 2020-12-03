@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "../GIS.h"
+#include "../entities/geometry/CoordinatesMath.h"
 
 TEST(Search, SearchCircleTest) {
     GIS gis;
@@ -23,7 +24,7 @@ TEST(Search, SearchWaysTest) {
     std::vector<EntityId> foundEntityIds = gis.getEntities("way",
                                                            Coordinates(Longitude(-59.5938072863849),
                                                                        Latitude(-23.32009705500784)),
-                                                           Meters(130000));
+                                                           Meters(160000));
 
     std::vector<EntityId> expectedEntityIds = {EntityId("1"), EntityId("2"), EntityId("3"),
                                                EntityId("10"), EntityId("12")};
@@ -32,4 +33,17 @@ TEST(Search, SearchWaysTest) {
     for (EntityId id : expectedEntityIds) {
         ASSERT_NE(std::find(foundEntityIds.begin(), foundEntityIds.end(), id), foundEntityIds.end());
     }
+}
+
+TEST(Search, SearchWaysTest2) {
+    GIS gis;
+    auto loadedIds = gis.loadMapFile("ways-search.json");
+
+    const Entity *entity = gis.getEntityById(EntityId("3"));
+
+    TopologicalSearch topologicalSearch;
+    bool a = entity->getGeometry()->isInCircle(&topologicalSearch, Coordinates(Longitude(-59.5938072863849),
+                                                                               Latitude(-23.32009705500784)),
+                                               Meters(130000));
+    std::cout << a << std::endl;
 }
