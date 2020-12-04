@@ -14,7 +14,7 @@
 #include "entities/EntityJsonParser.h"
 #include "entities/geometry/CoordinatesMath.h"
 
-GIS::GIS() : grid(std::make_shared<Grid>()), entityJsonParser(new EntityJsonParser()),
+GIS::GIS() : entityJsonParser(new EntityJsonParser()), grid(std::make_shared<Grid>()),
              topologicalSearch(std::make_unique<TopologicalSearch>()) {
 }
 

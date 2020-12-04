@@ -51,7 +51,7 @@ std::vector<Grid::GridCell> Grid::setEntityOnGrid(const Entity &entity) {
 std::vector<Coordinates> Grid::getGeometryGridCells(const PointList &geometry) const {
     std::vector<Coordinates> points = geometry.getPoints();
     std::unordered_set<GridCell> cellSet;
-    for (int i = 0; i < points.size() - 1; i++) {
+    for (int i = 0; i < (int) points.size() - 1; i++) {
         addIntervalsGridCells(points[i], points[i + 1], cellSet);
     }
     std::vector<GridCell> cells;
