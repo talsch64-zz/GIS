@@ -25,23 +25,25 @@ std::size_t GIS::clear() {
 }
 
 std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
-    rapidjson::Document document;
+    std::vector<EntityId> entityIds;
     FILE *fp = fopen(filename.c_str(), "rb"); // non-Windows use "r"
-//    TODO print to log if file could not be open
-    char readBuffer[65536];
-    rapidjson::FileReadStream fileReadStream(fp, readBuffer, sizeof(readBuffer));
-    document.ParseStream(fileReadStream);
+    if (fp == NULL) {
+        logger->error("Couldn't load map because the file '" + filename + "' could not be found");
+    } else {
+        rapidjson::Document document;
+        char readBuffer[65536];
+        rapidjson::FileReadStream fileReadStream(fp, readBuffer, sizeof(readBuffer));
+        document.ParseStream(fileReadStream);
+        fclose(fp);
 
-//    if (!ok) {
-//        throw std::runtime_error("JSON parse error");
-//    }
-    if (!document.IsArray()) {
-        //TODO: handle errors
-        throw std::runtime_error("Map is not an array");
+        if (!document.IsArray()) {
+            logger->error("The JSON map is not an array");
+        } else {
+            bool fileContainsIds = entityJsonParser->containsIds(document);
+            entityJsonParser->setGenerateIds(fileContainsIds);
+            entityIds = loadEntities(document);
+        }
     }
-    bool fileContainsIds = entityJsonParser->containsIds(document);
-    entityJsonParser->setGenerateIds(fileContainsIds);
-    std::vector<EntityId> entityIds = loadEntities(document);
 
     return entityIds;
 }
