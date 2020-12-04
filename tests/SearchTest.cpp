@@ -27,8 +27,8 @@ TEST(Search, SearchWaysTest) {
                                                            Meters(130000));
 
     std::vector<EntityId> expectedEntityIds = {EntityId("1"), EntityId("2"), EntityId("3"), EntityId("12")};
-    ASSERT_EQ(loadedIds.size(), 15);
-    ASSERT_EQ(foundEntityIds.size(), expectedEntityIds.size());
+    ASSERT_EQ((int) loadedIds.size(), 15);
+    ASSERT_EQ( foundEntityIds.size(), expectedEntityIds.size());
     for (EntityId id : expectedEntityIds) {
         ASSERT_NE(std::find(foundEntityIds.begin(), foundEntityIds.end(), id), foundEntityIds.end());
     }

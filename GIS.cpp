@@ -9,6 +9,7 @@
 #include <set>
 #include "entities/EntityJsonParser.h"
 #include "entities/geometry/CoordinatesMath.h"
+#include <limits.h>
 
 GIS::GIS() : entityJsonParser(new EntityJsonParser()), grid(std::make_shared<Grid>()),
              topologicalSearch(std::make_unique<TopologicalSearch>()) {
@@ -94,8 +95,8 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
     std::stack<Grid::GridCell> stack;
     std::unordered_set<Grid::GridCell> cellsVisited;
     std::unordered_set<EntityId> idsSeen;
-    Coordinates *closest = nullptr;
-    Meters shortestDistance(INFINITY);
+    Coordinates closest(Longitude(0), Latitude(0));
+    Meters shortestDistance(INT_MAX);
     EntityId closestEntityId("");
     std::stack<Grid::GridCell> nextStack;
     stack.push(grid->truncateCoordinates(coord));
@@ -118,7 +119,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                     Coordinates candidate = entity.getGeometry()->getClosestPoint(coord);
                     Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
                     if (distance < shortestDistance) {
-                        closest = &candidate;
+                        closest = candidate;
                         shortestDistance = distance;
                         closestEntityId = entityId;
                     }
@@ -134,13 +135,14 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                     }
                 }
             } else if (stack.empty()) {
-                return {*closest, closestEntityId};
+                std::cout << "closest distance: " << CoordinatesMath::calculateDistance(closest, coord) << std::endl;
+                return {closest, closestEntityId};
             }
         }
         std::swap(stack,nextStack);
 
     }
-    return {*closest, closestEntityId};
+    return {closest, closestEntityId};
 //    TODO write to log that way was not found!
 }
 

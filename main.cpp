@@ -10,29 +10,18 @@ using std::cout;
 using std::endl;
 
 int main() {
+    Coordinates c1 = Coordinates(Longitude(40.732254), Latitude(-73.996394));
+    Coordinates c2 = Coordinates(Longitude(40.733566), Latitude(-73.999446));
+    Coordinates coord(Longitude(40.731437), Latitude(-73.996967));
+//    Coordinates closest = CoordinatesMath::closestPointOnSegment(coord, c1, c2);
+//    Coordinates closest2 = CoordinatesMath::closestPointOnSegment(coord, c2, c1);
 
-    Coordinates c1(Longitude(-2), Latitude(2));
-    Coordinates c2(Longitude(-2), Latitude(1));
-    Coordinates c3(Longitude(-3), Latitude(0.5));
-    Coordinates c4(Longitude(0), Latitude(1));
-    Coordinates c5(Longitude(-3), Latitude(1.3));
-    Coordinates c6(Longitude(-5), Latitude(1.8));
-
-    cout << c1.longitude() << ", " << c1.latitude() << endl;
-    cout << c2.longitude() << ", " << c2.latitude() << endl;
-    cout << c3.longitude() << ", " << c3.latitude() << endl;
-    cout << c4.longitude() << ", " << c4.latitude() << endl;
-    cout << c5.longitude() << ", " << c5.latitude() << endl;
-    cout << c6.longitude() << ", " << c6.latitude() << endl;
-
-
-
-    Coordinates target(Longitude(-1), Latitude(4));
-    std::vector<Coordinates> vector{c1, c2, c3, c4, c5, c6};
-    PointList points(vector);
-    Coordinates closest = points.getClosestPoint(target);
-    std::cout << closest.longitude() << ", " << closest.latitude() << std::endl;
-
+//    cout << closest.longitude() << ", " << closest.latitude() << endl;
+//    cout << closest2.longitude() << ", " << closest2.latitude() << endl;
+    std::vector<Coordinates> v {c1, c2, c1};
+    PointList points(v);
+    Coordinates closest = points.getClosestPoint(coord);
+    cout << closest.longitude() << ", " << closest.latitude() << endl;
     return 0;
 }
 
