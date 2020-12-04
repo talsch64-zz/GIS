@@ -14,6 +14,7 @@
 #include "search/TopologicalSearch.h"
 #include "IdGenerator.h"
 #include "GISdefs.h"
+#include "Logger.h"
 
 class EntityJsonParser;
 
@@ -24,6 +25,7 @@ class GIS {
     JsonFileWriter jsonFileWriter;
     std::shared_ptr<Grid> grid;
     std::unique_ptr<TopologicalSearch> topologicalSearch;
+    std::unique_ptr<Logger> logger;
 
 public:
     GIS();
