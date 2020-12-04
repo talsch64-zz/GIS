@@ -51,7 +51,7 @@ std::vector<Grid::GridCell> Grid::setEntityOnGrid(const Entity &entity) {
 std::vector<Coordinates> Grid::getGeometryGridCells(const PointList &geometry) const {
     std::vector<Coordinates> points = geometry.getPoints();
     std::unordered_set<GridCell> cellSet;
-    for (int i = 0; i < points.size() - 1; i++) {
+    for (int i = 0; i < (int) points.size() - 1; i++) {
         addIntervalsGridCells(points[i], points[i + 1], cellSet);
     }
     std::vector<GridCell> cells;
@@ -94,9 +94,17 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) c
     if (lat < 90 && lat > -90) {
         double northLat = lat + precision;
         double southLat = lat - precision;
-        double eastLng = (lng + precision);
-        double westLng = (lng - precision);
+        double eastLng = lng + precision;
+        double westLng = lng - precision;
 
+//        Coordinates north(truncateCoordinates({Longitude(lng), Latitude(northLat)}));
+//        Coordinates south(truncateCoordinates({Longitude(lng), Latitude(southLat)}));
+//        Coordinates east(truncateCoordinates({Longitude(eastLng), Latitude(lat)}));
+//        Coordinates west(truncateCoordinates({Longitude(westLng), Latitude(lat)}));
+//        Coordinates northEast(truncateCoordinates({Longitude(eastLng), Latitude(northLat)}));
+//        Coordinates southEast(truncateCoordinates({Longitude(eastLng), Latitude(southLat)}));
+//        Coordinates northWest(truncateCoordinates({Longitude(westLng), Latitude(northLat)}));
+//        Coordinates southWest(truncateCoordinates({Longitude(westLng), Latitude(southLat)}));
 
         Coordinates north((Longitude(lng)), Latitude(northLat));
         Coordinates south((Longitude(lng)), Latitude(southLat));

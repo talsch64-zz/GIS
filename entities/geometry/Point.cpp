@@ -21,6 +21,7 @@ std::vector<Grid::GridCell> Point::getGridCells(const Grid *grid) {
 }
 
 Coordinates Point::getClosestPoint(const Coordinates &coord) const {
+    coord.latitude();
     return coordinates;
 }
 

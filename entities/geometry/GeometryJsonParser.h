@@ -17,12 +17,6 @@ class GeometryJsonParser {
 private:
     std::unique_ptr<Circle> parseCircle(rapidjson::Value &value);
 
-    std::unique_ptr<Polygon> parsePolygon(rapidjson::Value &value);
-
-    std::vector<Coordinates> parseCoordinates(rapidjson::Value &value);
-
-
-
 public:
     std::unique_ptr<Geometry> parsePOIGeometry(rapidjson::Value &doc);
     std::unique_ptr<Geometry> parseWayGeometry(rapidjson::Value &doc, Coordinates &fromCoord, Coordinates &toCoord);

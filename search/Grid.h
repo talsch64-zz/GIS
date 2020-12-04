@@ -64,8 +64,8 @@ public:
     CellEntities getEntitiesOnGrid(const GridCell &cell);
 
 private:
-    std::unordered_map<GridCell, CellEntities> grid;
 
+    std::unordered_map<GridCell, CellEntities> grid;
 
     double truncateDecimalCoordinate(double coordinate) const;
 

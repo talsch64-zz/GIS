@@ -1,5 +1,3 @@
-
-
 #include <vector>
 #include <optional>
 #include "rapidjson/document.h"
@@ -11,8 +9,9 @@
 #include <set>
 #include "entities/EntityJsonParser.h"
 #include "entities/geometry/CoordinatesMath.h"
+#include <limits.h>
 
-GIS::GIS() : grid(std::make_shared<Grid>()), entityJsonParser(new EntityJsonParser()),
+GIS::GIS() : entityJsonParser(new EntityJsonParser()), grid(std::make_shared<Grid>()),
              topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()) {
     logger->initialize();
 }
@@ -100,15 +99,14 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
     std::stack<Grid::GridCell> stack;
     std::unordered_set<Grid::GridCell> cellsVisited;
     std::unordered_set<EntityId> idsSeen;
-    Coordinates *closest = nullptr;
-    Meters shortestDistance(INFINITY);
+    Coordinates closest(Longitude(0), Latitude(0));
+    Meters shortestDistance(INT_MAX);
     EntityId closestEntityId("");
     std::stack<Grid::GridCell> nextStack;
     stack.push(grid->truncateCoordinates(coord));
     cellsVisited.insert(grid->truncateCoordinates(coord));
 
     while (!stack.empty()) {
-        nextStack = std::stack<Grid::GridCell>();
         while (!stack.empty()) {
             Grid::GridCell cell = stack.top();
             stack.pop();
@@ -125,7 +123,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                     Coordinates candidate = entity.getGeometry()->getClosestPoint(coord);
                     Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
                     if (distance < shortestDistance) {
-                        closest = &candidate;
+                        closest = candidate;
                         shortestDistance = distance;
                         closestEntityId = entityId;
                     }
@@ -141,12 +139,13 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                     }
                 }
             } else if (stack.empty()) {
-                return {*closest, closestEntityId};
+                return {closest, closestEntityId};
             }
         }
-        stack = nextStack;
+        std::swap(stack,nextStack);
+
     }
-    return {*closest, closestEntityId};
+    return {closest, closestEntityId};
 //    TODO write to log that way was not found!
 }
 
@@ -188,7 +187,7 @@ const Entity *GIS::getEntityById(const EntityId &id) const {
 }
 
 std::vector<const Entity *> GIS::getEntities(const Coordinates &coordinates, Meters radius) {
-    std::vector<Grid::GridCell> cells = topologicalSearch->searchCircleInGrid(*grid.get(), coordinates, radius);
+    std::vector<Grid::GridCell> cells = topologicalSearch->searchCircleInGrid(*grid, coordinates, radius);
     std::set<EntityId> searchedEntityIds;
     std::vector<const Entity *> foundEntities;
     for (Grid::GridCell cell : cells) {
