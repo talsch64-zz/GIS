@@ -3,8 +3,8 @@ COMP = g++-10
 GOOGLE_LIB = /usr/src/googletest/googletest/gcc-10-build/lib/
 GOOGLE_TEST_INCLUDE = /usr/src/googletest/googletest/include/
 
-INC_DIRS := ./ ./entities ./entities/geometry ./entities/JsonHandlers/Serializers ./search
-SRCS := ./*.cpp ./entities/*.cpp ./entities/geometry/*.cpp ./entities/JsonHandlers/Serializers/*.cpp ./search/*.cpp ./tests.cpp ./main.cpp
+INC_DIRS := . ./entities ./entities/geometry ./entities/JsonHandlers/Serializers ./search
+SRCS := $(wildcard ./*.cpp ./entities/*.cpp ./entities/geometry/*.cpp ./entities/JsonHandlers/Serializers/*.cpp ./search/*.cpp) ./tests/tests.cpp
 DEPS := $(OBJS:.o=.d)
 BUILD_DIR := build
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
@@ -12,7 +12,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 #put all your object files here
 OBJS = $(SRCS:%=$(BUILD_DIR)/%.o)
-#The executabel filename DON'T CHANGE
+#The executabele filename DON'T CHANGE
 EXEC = ex1
 CPP_COMP_FLAG = -std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG -MMD -MP $(INC_FLAGS) -I$(GOOGLE_TEST_INCLUDE)
 CPP_LINK_FLAG = -L $(GOOGLE_LIB) -lgtest -lgtest_main -pthread

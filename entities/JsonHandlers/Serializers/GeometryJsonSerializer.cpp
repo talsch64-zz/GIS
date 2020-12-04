@@ -31,7 +31,7 @@ rapidjson::Value GeometryJsonSerializer::toJson(PointList *geometry, rapidjson::
     curves.SetArray();
     std::vector<Coordinates> points = geometry->getPoints();
 //    skipping first and last coordinates
-    for(int i = 1; i < points.size()-1; i++) {
+    for(int i = 1; i < (int) points.size()-1; i++) {
         rapidjson::Value coordVal = coordinatesJsonSerializer.toJson(points[i], allocator);
         curves.PushBack(coordVal, allocator);
     }

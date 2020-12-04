@@ -55,8 +55,3 @@ std::unique_ptr<Geometry> GeometryJsonParser::parseJunctionGeometry(rapidjson::V
 //    std::unique_ptr<Point> point(new Point(coordinates));
     return std::make_unique<Point>(coordinates);;
 }
-
-
-std::unique_ptr<Polygon> parsePolygon(rapidjson::Value &value) {
-    return nullptr;
-}
