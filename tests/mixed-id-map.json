@@ -1,0 +1,61 @@
+[
+  {
+    "type": "POI",
+    "id": "1",
+    "name": "aaa",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.802795,
+        31.927566
+      ],
+      "radius": 1000
+    }
+  },
+  {
+    "type": "POI",
+    "name": "aaa",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.802795,
+        31.927566
+      ],
+      "radius": 1000
+    }
+  },
+  {
+    "type": "POI",
+    "name": "aaa",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.802795,
+        31.927566
+      ],
+      "radius": 1000
+    }
+  },
+  {
+    "type": "Junction",
+    "id": "14",
+    "name": "way",
+    "description": "desc",
+    "coordinates": [
+      -62.76836640855191,
+      -26.28165401160653
+    ]
+  }
+]

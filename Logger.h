@@ -5,8 +5,13 @@
 #include <string>
 
 class Logger {
+    const std::string ERRORS_FILE_PATH = "errors.log";
+
 public:
-    void error(std::string msg, std::exception ex);
+    void initialize();
+
+    void error(std::string msg, std::runtime_error ex);
+
     void error(std::string msg);
 };
 
