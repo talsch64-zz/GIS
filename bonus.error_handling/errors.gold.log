@@ -1,0 +1,6 @@
+ERROR: Couldn't load invalid entity - JSON entity doesn't contain name
+ERROR: Entity with id '1' already exists
+ERROR: Couldn't load invalid entity - Invalid coordinate in JSON
+ERROR: Couldn't load invalid entity - Way does not contain valid from Junction
+ERROR: Couldn't load invalid entity - Circle JSON doesn't contain radius
+ERROR: Couldn't load invalid entity - JSON entity doesn't contain geometry

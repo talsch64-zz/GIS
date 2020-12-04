@@ -12,7 +12,8 @@
 #include <limits.h>
 
 GIS::GIS() : entityJsonParser(new EntityJsonParser()), grid(std::make_shared<Grid>()),
-             topologicalSearch(std::make_unique<TopologicalSearch>()) {
+             topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()) {
+    logger->initialize();
 }
 
 GIS::~GIS() { delete entityJsonParser; }
@@ -22,23 +23,26 @@ std::size_t GIS::clear() {
 }
 
 std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
-    rapidjson::Document document;
+    std::vector<EntityId> entityIds;
     FILE *fp = fopen(filename.c_str(), "rb"); // non-Windows use "r"
-//    TODO print to log if file could not be open
-    char readBuffer[65536];
-    rapidjson::FileReadStream fileReadStream(fp, readBuffer, sizeof(readBuffer));
-    document.ParseStream(fileReadStream);
-
-//    if (!ok) {
-//        throw std::runtime_error("JSON parse error");
-//    }
-    if (!document.IsArray()) {
-        //TODO: handle errors
-        throw std::runtime_error("Map is not an array");
+    if (fp == nullptr) {
+        logger->error("Couldn't load map because the file '" + filename + "' could not be opened");
+    } else {
+        rapidjson::Document document;
+        char readBuffer[65536];
+        rapidjson::FileReadStream fileReadStream(fp, readBuffer, sizeof(readBuffer));
+        document.ParseStream(fileReadStream);
+        fclose(fp);
+        if (document.HasParseError()) {
+            logger->error("The JSON map is invalid");
+        } else if (!document.IsArray()) {
+            logger->error("The JSON map is not an array");
+        } else {
+            bool fileContainsIds = entityJsonParser->containsIds(document);
+            entityJsonParser->setGenerateIds(fileContainsIds);
+            entityIds = loadEntities(document);
+        }
     }
-    bool fileContainsIds = entityJsonParser->containsIds(document);
-    entityJsonParser->setGenerateIds(fileContainsIds);
-    std::vector<EntityId> entityIds = loadEntities(document);
 
     return entityIds;
 }
@@ -135,7 +139,6 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                     }
                 }
             } else if (stack.empty()) {
-                std::cout << "closest distance: " << CoordinatesMath::calculateDistance(closest, coord) << std::endl;
                 return {closest, closestEntityId};
             }
         }
@@ -149,9 +152,10 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
 std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
     std::vector<EntityId> entityIds;
     for (auto &jsonEntity : document.GetArray()) {
+        EntityId entityId("");
         try {
             std::unique_ptr<Entity> entity = entityJsonParser->parse(jsonEntity, *this);
-            EntityId entityId = entity->getId();
+            entityId = entity->getId();
             // if entityId not loaded yet
             if (entities.find(entityId) == entities.end()) {
                 grid->setEntityOnGrid(*entity);
@@ -159,11 +163,15 @@ std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
                 entityIds.push_back(entityId);
 
             } else {
-//                TODO print to log that id is not unique
+                logger->error("Entity with id '" + (std::string) entityId + "' already exists");
             }
         }
         catch (const std::runtime_error &e) {
-//            TODO print to log error that entity is invalid
+            std::string err = "Couldn't load invalid entity";
+            if (!((std::string) entityId).empty()) {
+                err += " with id '" + (std::string) entityId + "'";
+            }
+            logger->error(err, e);
         }
     }
     return entityIds;
