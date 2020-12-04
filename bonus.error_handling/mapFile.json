@@ -1,0 +1,110 @@
+[
+  {
+    "type": "POI",
+    "id": "P1001",
+    "description": "A public park in Lower Manhattan",
+    "category_tags": [],
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          40.731051,
+          -73.999611
+        ],
+        [
+          40.729606,
+          -73.996602
+        ],
+        [
+          40.730805,
+          -73.995674
+        ],
+        [
+          40.732179,
+          -73.998624
+        ]
+      ]
+    }
+  },
+  {
+    "type": "POI",
+    "id": "1",
+    "name": "aaa",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.802795,
+        31.927566
+      ],
+      "radius": 1000
+    }
+  },
+  {
+    "type": "Junction",
+    "id": "1",
+    "name": "way",
+    "description": "desc",
+    "coordinates": [
+      -57.83334529241408,
+      -23.27452327203399
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "2",
+    "name": "way",
+    "description": "desc",
+    "coordinates": [
+      -57.83334529241408
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "3",
+    "name": "way",
+    "description": "desc3",
+    "from": {
+      "entity_id": "13"
+    },
+    "to": {
+      "entity_id": "12"
+    },
+    "curves": [
+    ],
+    "speed_limit": 70,
+    "direction": "unidirectional",
+    "toll_road": true,
+    "restricted": [
+      "trucks"
+    ]
+  },
+  {
+    "type": "POI",
+    "id": "11",
+    "name": "aaa",
+    "description": "Dsadsad",
+    "category_tags": [
+      "gfdsad"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        34.776488,
+        31.952395
+      ]
+    }
+  },
+  {
+    "type": "POI",
+    "id": "12",
+    "name": "bbb",
+    "description": "Dsadsad",
+    "category_tags": [
+      "aaa"
+    ]
+  }
+]
