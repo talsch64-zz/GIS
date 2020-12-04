@@ -1,6 +1,6 @@
 
 #include "PointList.h"
-
+#include <limits.h>
 #include <utility>
 #include <iostream>
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
@@ -28,7 +28,7 @@ bool PointList::isInCircle(const TopologicalSearch *topologicalSearch, const Coo
 Coordinates PointList::getClosestPoint(const Coordinates &coordinates) const {
     std::vector<Coordinates> coords = getPoints();
 //  initialize dummy pair;
-    std::pair<Coordinates, Meters> closestPair{Coordinates(Longitude(0), Latitude(0)), CoordinatesMath::earth_radius * 10};
+    std::pair<Coordinates, Meters> closestPair{Coordinates(Longitude(0), Latitude(0)), INT_MAX};
     for (int i = 0; i < (int) coords.size() - 1; ++i) {
         std::pair<Coordinates, Meters> nextPair = CoordinatesMath::closestPointOnSegmentAndDistance(coordinates,
                                                                                                     coords[i],
