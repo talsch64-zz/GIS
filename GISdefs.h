@@ -4,6 +4,7 @@
 
 #include <utility>
 #include <string>
+#include <cmath>
 //#include "Double.h"
 #include "NamedType.h"
 
@@ -53,19 +54,12 @@ public:
     }
 private:
     Longitude trimLongitude(const Longitude &longitude) {
-        double lon = static_cast<const double &>(longitude);
-        long whole = static_cast<long>(lon);
-        int sign = lon > 0 ? 1 : -1;
-        double fraction = abs(lon - whole);
-        whole = whole % 360;
-        if (whole + fraction > 180) {
-            lon = whole - 360 + fraction;
+        double lon = std::fmod(longitude, 360);
+        if (lon > 180) {
+            lon = lon - 360;
         }
-        else if (whole - fraction <= -180){
-            lon = whole + 360 - fraction;
-        }
-        else {
-            lon = whole + sign * fraction;
+        else if (lon <= -180){
+            lon = lon + 360;
         }
         return Longitude(lon);
     }
