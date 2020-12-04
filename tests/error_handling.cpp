@@ -17,8 +17,9 @@ bool logContainsError(std::string err) {
 TEST(ErrorHandling, ErrorHandlingTest) {
     GIS gis;
 
-    gis.loadMapFile("mapFile.json");
+    auto entityIds = gis.loadMapFile("map-with-errors.json");
 
+    ASSERT_EQ(entityIds.size(), 1);
     ASSERT_TRUE(logContainsError("Couldn't load invalid entity - JSON entity doesn't contain name"));
     ASSERT_TRUE(logContainsError("Entity with id '1' already exists"));
     ASSERT_TRUE(logContainsError("Couldn't load invalid entity - Invalid coordinate in JSON"));
