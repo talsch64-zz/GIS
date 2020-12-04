@@ -1,14 +1,10 @@
-
-
 #include <vector>
 #include <optional>
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
 #include "GIS.h"
-#include "entities/geometry/PointList.h"
 #include <stdexcept>
 #include <iostream>
-#include <fstream>
 #include <stack>
 #include <set>
 #include "entities/EntityJsonParser.h"

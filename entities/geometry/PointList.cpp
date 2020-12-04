@@ -2,6 +2,7 @@
 #include "PointList.h"
 
 #include <utility>
+#include <iostream>
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
 #include "../search/Grid.h"
 #include "CoordinatesMath.h"
@@ -27,7 +28,7 @@ bool PointList::isInCircle(const TopologicalSearch *topologicalSearch, const Coo
 Coordinates PointList::getClosestPoint(const Coordinates &coordinates) const {
     std::vector<Coordinates> coords = getPoints();
 //  initialize dummy pair;
-    std::pair<Coordinates, Meters> closestPair{Coordinates(Longitude(0), Latitude(0)), INFINITY};
+    std::pair<Coordinates, Meters> closestPair{Coordinates(Longitude(0), Latitude(0)), CoordinatesMath::earth_radius * 10};
     for (int i = 0; i < (int) coords.size() - 1; ++i) {
         std::pair<Coordinates, Meters> nextPair = CoordinatesMath::closestPointOnSegmentAndDistance(coordinates,
                                                                                                     coords[i],

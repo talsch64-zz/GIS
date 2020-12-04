@@ -6,6 +6,8 @@
 
 //std::string getMapFilePath(const std::string &name);
 
+using std::cout;
+using std::endl;
 
 int main() {
 
@@ -16,14 +18,20 @@ int main() {
     Coordinates c5(Longitude(-3), Latitude(1.3));
     Coordinates c6(Longitude(-5), Latitude(1.8));
 
+    cout << c1.longitude() << ", " << c1.latitude() << endl;
+    cout << c2.longitude() << ", " << c2.latitude() << endl;
+    cout << c3.longitude() << ", " << c3.latitude() << endl;
+    cout << c4.longitude() << ", " << c4.latitude() << endl;
+    cout << c5.longitude() << ", " << c5.latitude() << endl;
+    cout << c6.longitude() << ", " << c6.latitude() << endl;
+
+
+
     Coordinates target(Longitude(-1), Latitude(4));
     std::vector<Coordinates> vector{c1, c2, c3, c4, c5, c6};
     PointList points(vector);
     Coordinates closest = points.getClosestPoint(target);
-    std::cout << closest.longitude() << ", " << closest.longitude() << std::endl;
-
-
-
+    std::cout << closest.longitude() << ", " << closest.latitude() << std::endl;
 
     return 0;
 }
