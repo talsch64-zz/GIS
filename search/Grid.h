@@ -63,6 +63,8 @@ public:
 
     CellEntities getEntitiesOnGrid(const GridCell &cell);
 
+    void clear();
+
 private:
 
     std::unordered_map<GridCell, CellEntities> grid;

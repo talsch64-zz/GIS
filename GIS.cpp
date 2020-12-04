@@ -19,7 +19,10 @@ GIS::GIS() : entityJsonParser(new EntityJsonParser()), grid(std::make_shared<Gri
 GIS::~GIS() { delete entityJsonParser; }
 
 std::size_t GIS::clear() {
-    return 0;
+    int size = entities.size();
+    entities.clear();
+    grid->clear();
+    return size;
 }
 
 std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {

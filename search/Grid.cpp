@@ -147,3 +147,7 @@ Grid::GridCell Grid::getNorthernCell() const {
 Grid::GridCell Grid::getSouthernCell() const {
     return Coordinates(Longitude(0), Latitude(90));
 }
+
+void Grid::clear() {
+    grid.clear();
+}
