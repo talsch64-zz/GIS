@@ -49,12 +49,14 @@ public:
     std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords);
 
 
-private:
+protected:
     std::vector<EntityId> loadEntities(rapidjson::Document &document);
 
     std::vector<const Entity *> getEntities(const Coordinates &coordinates, Meters radius);
 
     bool filterEntityByName(const Entity *entity, const std::string &search_name);
+
+    bool addEntity(std::unique_ptr<Entity> entity);
 };
 
 #endif //EX1_GIS_H
