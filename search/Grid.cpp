@@ -91,10 +91,11 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) c
 
 // initialCell is not a poll cell
     if (lat < 90 && lat > -90) {
-        double northLat = lat + precision;
-        double southLat = lat - precision;
-        double eastLng = lng + precision;
-        double westLng = lng - precision;
+//      just to be safe we multiplied precision :)
+        double northLat = lat + safe_precision;
+        double southLat = lat - safe_precision;
+        double eastLng = lng + safe_precision;
+        double westLng = lng - safe_precision;
 
         Coordinates north(truncateCoordinates({Longitude(lng), Latitude(northLat)}));
         Coordinates south(truncateCoordinates({Longitude(lng), Latitude(southLat)}));
@@ -125,7 +126,7 @@ std::vector<Grid::GridCell> Grid::getPollCellNeighbors(bool north) const {
     if (!north) lat = -lat;
     while (lng < 360) {
         neighbors.emplace_back(Longitude(lng), Latitude(lat));
-        lng += precision;
+        lng = truncateDecimalCoordinate(lng + safe_precision);
     }
     return neighbors;
 }
