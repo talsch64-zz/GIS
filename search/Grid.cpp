@@ -28,11 +28,10 @@ Coordinates Grid::truncateCoordinates(const Coordinates &coordinates) const {
     return {Longitude(longitude), Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
 }
 
-CellEntities Grid::getEntitiesOnGrid(const GridCell &cell) {
-    GridCell grid_cell = truncateCoordinates(cell);
-    auto pair = grid.find(grid_cell);
+std::vector<EntityId> Grid::getEntitiesOnGrid(const GridCell &cell) {
+    auto pair = grid.find(cell);
     if (pair == grid.end()) {
-        return CellEntities();
+        return std::vector<EntityId>();
     } else {
         return pair->second;
     }
@@ -43,7 +42,7 @@ std::vector<Grid::GridCell> Grid::setEntityOnGrid(const Entity &entity) {
     std::vector<Grid::GridCell> cells = entityGeometry.getGridCells(this);
     EntityId id = entity.getId();
     for (const auto &cell: cells) {
-        grid[cell].insertEntity(id);
+        grid[cell].push_back(id);
     }
     return cells;
 }
@@ -97,23 +96,23 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) c
         double eastLng = lng + precision;
         double westLng = lng - precision;
 
-//        Coordinates north(truncateCoordinates({Longitude(lng), Latitude(northLat)}));
-//        Coordinates south(truncateCoordinates({Longitude(lng), Latitude(southLat)}));
-//        Coordinates east(truncateCoordinates({Longitude(eastLng), Latitude(lat)}));
-//        Coordinates west(truncateCoordinates({Longitude(westLng), Latitude(lat)}));
-//        Coordinates northEast(truncateCoordinates({Longitude(eastLng), Latitude(northLat)}));
-//        Coordinates southEast(truncateCoordinates({Longitude(eastLng), Latitude(southLat)}));
-//        Coordinates northWest(truncateCoordinates({Longitude(westLng), Latitude(northLat)}));
-//        Coordinates southWest(truncateCoordinates({Longitude(westLng), Latitude(southLat)}));
+        Coordinates north(truncateCoordinates({Longitude(lng), Latitude(northLat)}));
+        Coordinates south(truncateCoordinates({Longitude(lng), Latitude(southLat)}));
+        Coordinates east(truncateCoordinates({Longitude(eastLng), Latitude(lat)}));
+        Coordinates west(truncateCoordinates({Longitude(westLng), Latitude(lat)}));
+        Coordinates northEast(truncateCoordinates({Longitude(eastLng), Latitude(northLat)}));
+        Coordinates southEast(truncateCoordinates({Longitude(eastLng), Latitude(southLat)}));
+        Coordinates northWest(truncateCoordinates({Longitude(westLng), Latitude(northLat)}));
+        Coordinates southWest(truncateCoordinates({Longitude(westLng), Latitude(southLat)}));
 
-        Coordinates north((Longitude(lng)), Latitude(northLat));
-        Coordinates south((Longitude(lng)), Latitude(southLat));
-        Coordinates east((Longitude(eastLng)), Latitude(lat));
-        Coordinates west((Longitude(westLng)), Latitude(lat));
-        Coordinates northEast((Longitude(eastLng)), Latitude(northLat));
-        Coordinates southEast((Longitude(eastLng)), Latitude(southLat));
-        Coordinates northWest((Longitude(westLng)), Latitude(northLat));
-        Coordinates southWest((Longitude(westLng)), Latitude(southLat));
+//        Coordinates north((Longitude(lng)), Latitude(northLat));
+//        Coordinates south((Longitude(lng)), Latitude(southLat));
+//        Coordinates east((Longitude(eastLng)), Latitude(lat));
+//        Coordinates west((Longitude(westLng)), Latitude(lat));
+//        Coordinates northEast((Longitude(eastLng)), Latitude(northLat));
+//        Coordinates southEast((Longitude(eastLng)), Latitude(southLat));
+//        Coordinates northWest((Longitude(westLng)), Latitude(northLat));
+//        Coordinates southWest((Longitude(westLng)), Latitude(southLat));
 
         if (northLat == 90) {
 //            north = north poll cell
