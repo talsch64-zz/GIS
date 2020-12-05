@@ -6,6 +6,7 @@
 #include <vector>
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
+#include <memory>
 #include "../../GISdefs.h"
 
 class TopologicalSearch;
@@ -17,7 +18,7 @@ class GeometryJsonSerializer;
 class Geometry {
 
 protected:
-    GeometryJsonSerializer *geometryJsonSerializer;
+    std::shared_ptr<GeometryJsonSerializer> geometryJsonSerializer;
 
     Geometry();
 

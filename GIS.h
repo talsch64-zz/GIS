@@ -20,7 +20,7 @@ class EntityJsonParser;
 
 class GIS {
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
-    EntityJsonParser *entityJsonParser;
+    std::shared_ptr<EntityJsonParser> entityJsonParser;
     EntityJsonSerializer entityJsonSerializer;
     JsonFileWriter jsonFileWriter;
     std::shared_ptr<Grid> grid;
@@ -29,8 +29,6 @@ class GIS {
 
 public:
     GIS();
-
-    ~GIS();
 
     std::size_t clear();
 

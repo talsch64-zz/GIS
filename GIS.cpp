@@ -11,12 +11,10 @@
 #include "entities/geometry/CoordinatesMath.h"
 #include <limits.h>
 
-GIS::GIS() : entityJsonParser(new EntityJsonParser()), grid(std::make_shared<Grid>()),
+GIS::GIS() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
              topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()) {
     logger->initialize();
 }
-
-GIS::~GIS() { delete entityJsonParser; }
 
 std::size_t GIS::clear() {
     int size = entities.size();
