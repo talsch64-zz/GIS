@@ -25,6 +25,6 @@ TEST(ErrorHandling, MixedIdTest) {
 
     auto entityIds = gis.loadMapFile("mixed-id-map.json");
 
-    ASSERT_EQ(entityIds.size(), 2);
+    ASSERT_EQ((int)entityIds.size(), 2);
     ASSERT_TRUE(logContainsError("Couldn't load invalid entity - JSON entity doesn't contain id"));
 }

@@ -11,5 +11,5 @@ public:
         return val;
     }
 
-//    auto operator<=>(const NamedType<T>&) const = default;
+    auto operator<=>(const NamedType<T>&) const = default;
 };

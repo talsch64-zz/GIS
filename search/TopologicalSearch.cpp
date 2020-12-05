@@ -16,7 +16,7 @@ TopologicalSearch::searchCircleInGrid(const Grid &grid, const Coordinates &cente
         cellsInCircle.push_back(coord);
         std::vector<Coordinates> neighbors = grid.getCellNeighbors(coord);
         for (Coordinates neighbor: neighbors) {
-            neighbor = grid.truncateCoordinates(neighbor);
+//            neighbor = grid.truncateCoordinates(neighbor);
             if (searchedCoord.find(neighbor) == searchedCoord.end()) {
                 searchedCoord.insert(neighbor);
                 Meters distance = CoordinatesMath::calculateDistance(center, neighbor);

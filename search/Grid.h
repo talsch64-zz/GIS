@@ -40,28 +40,33 @@ class Grid {
 public:
     Grid();
 
-    static constexpr double precision = 0.015625;
+    static constexpr double precision = 0.01;
+    static constexpr double safe_precision = 0.015;
+
     static constexpr double meterPrecision = 1;
 
     using GridCell = Coordinates;
 
-//TODO maybe change to return unordered_set
     std::vector<GridCell> setEntityOnGrid(const Entity &entity);
 
-//    TODO remove after testing
-//    std::vector<GridCell> setEntityOnGrid(const PointList &geometry, const EntityId &id);
-//    std::vector<Grid::GridCell> setEntityOnGrid(const Point &geometry, const EntityId &id);
     std::vector<GridCell> getGeometryGridCells(const PointList &geometry) const;
 
+    /* returns all the GridCells which contains the PointList */
     std::vector<GridCell> getGeometryGridCells(const Point &geometry) const;
 
+    /* returns GridCell which contains the Point */
     std::vector<GridCell> getGeometryGridCells(const Circle &geometry) const;
 
+    /* returns all the GridCells which contains the Circle */
     std::vector<GridCell> getCellNeighbors(GridCell initialCell) const;
 
+    /* returns all the neighboring cells of the given GridCell */
     Coordinates truncateCoordinates(const Coordinates &coordinates) const;
 
+    /* returns all the entities inside the given GridCell */
     CellEntities getEntitiesOnGrid(const GridCell &cell);
+
+    void clear();
 
 private:
 
@@ -73,9 +78,15 @@ private:
     void addIntervalsGridCells(const Coordinates &coord1, const Coordinates &coord2,
                                std::unordered_set<GridCell> &cells) const;
 
+    /* returns all the neighboring GridCells of the poll-GridCell
+     * if north is true then return the northern polls neighbors, else southern poll neighbors */
     std::vector<GridCell> getPollCellNeighbors(bool north) const;
 
+    /* returns the northern cell - Longitude = 0, Latitude = 90
+     * There is only one cell with latitude 90 */
     GridCell getNorthernCell() const;
 
+    /* returns the southrern cell - Longitude = 0, Latitude = -90
+    * There is only one cell with latitude -90 */
     GridCell getSouthernCell() const;
 };
