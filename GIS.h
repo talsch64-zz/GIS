@@ -18,7 +18,9 @@
 
 class EntityJsonParser;
 
-class GIS {
+class GIS
+{
+protected:
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     EntityJsonParser *entityJsonParser;
     EntityJsonSerializer entityJsonSerializer;
@@ -47,7 +49,6 @@ public:
     std::optional<Coordinates> getEntityClosestPoint(const EntityId &, const Coordinates &);
 
     std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords);
-
 
 protected:
     std::vector<EntityId> loadEntities(rapidjson::Document &document);

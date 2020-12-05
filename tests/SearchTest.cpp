@@ -47,7 +47,61 @@ TEST(Search, SearchWaysTest)
     }
 }
 
-std::string ENTITY_NAME = "aaa";
+std::string getName() {
+    return std::string("aaa");
+}
+
+double fRand(double fMin, double fMax)
+{
+    double f = (double)rand() / RAND_MAX;
+    return fMin + f * (fMax - fMin);
+}
+
+Coordinates randCoord(Latitude minLat, Latitude maxLat, Longitude minLon, Longitude maxLon)
+{
+    Latitude lat = Latitude(fRand(minLat, maxLat));
+    Longitude lon = Longitude(fRand(minLon, maxLon));
+    return Coordinates(lon, lat);
+}
+
+Coordinates randCoord()
+{
+    return randCoord(Latitude(-90), Latitude(90), Longitude(-180), Longitude(180));
+}
+
+std::tuple<Latitude, Latitude, Longitude, Longitude> randBound()
+{
+    Coordinates minCoord = randCoord();
+    Coordinates dif = randCoord(Latitude(-45), Latitude(45), Longitude(-90), Longitude(90));
+    auto bound = std::make_tuple(minCoord.latitude(), Latitude(minCoord.latitude() + dif.latitude()),
+                                 minCoord.longitude(), Longitude(minCoord.longitude() + dif.longitude()));
+    return bound;
+}
+
+std::unique_ptr<Junction> generateJunction(IdGenerator *idGenerator, Coordinates coord)
+{
+    EntityId id = idGenerator->generateId();
+    std::unique_ptr<Geometry> point = (std::unique_ptr<Geometry>)std::make_unique<Point>(coord);
+    std::unique_ptr<Junction> junction = std::make_unique<Junction>(id, getName(), getName(), std::vector<std::string>(), std::move(point));
+    return junction;
+}
+
+std::unique_ptr<Way> generateWay(IdGenerator *idGenerator, std::vector<Coordinates> curves, EntityId from, EntityId to)
+{
+    EntityId id = idGenerator->generateId();
+    std::unique_ptr<Geometry> points = (std::unique_ptr<Geometry>)std::make_unique<PointList>(curves);
+    std::unique_ptr<Way> way = std::make_unique<Way>(id, getName(), getName(), std::vector<std::string>(), std::move(points), from, to,
+                                                     "dir", 70, true, std::vector<std::string>());
+    return way;
+}
+
+std::unique_ptr<POI> generatePOI(IdGenerator *idGenerator, Coordinates center, Meters radius)
+{
+    EntityId id = idGenerator->generateId();
+    std::unique_ptr<Geometry> circle = (std::unique_ptr<Geometry>)std::make_unique<Circle>(center, radius);
+    std::unique_ptr<POI> poi = std::make_unique<POI>(id, getName(), getName(), std::vector<std::string>(), std::vector<std::string>(), std::move(circle));
+    return poi;
+}
 
 void generateEntity(GISMock *gis, IdGenerator *idGenerator,
                     Latitude minLat, Latitude maxLat, Longitude minLon, Longitude maxLon)
@@ -85,58 +139,6 @@ void generateEntity(GISMock *gis, IdGenerator *idGenerator,
     gis->addEntity(std::move(entity));
 }
 
-std::unique_ptr<Junction> generateJunction(IdGenerator *idGenerator, Coordinates coord)
-{
-    EntityId id = idGenerator->generateId();
-    Point point(coord);
-    std::unique_ptr<Junction> junction = std::make_unique<Junction>(id, ENTITY_NAME, ENTITY_NAME, std::vector<std::string>(), point);
-    return junction;
-}
-
-std::unique_ptr<Way> generateWay(IdGenerator *idGenerator, std::vector<Coordinates> curves, EntityId from, EntityId to)
-{
-    EntityId id = idGenerator->generateId();
-    PointList points(curves);
-    std::unique_ptr<Way> way = std::make_unique<Way>(id, ENTITY_NAME, ENTITY_NAME, std::vector<std::string>(), points, from, to,
-                                                     "dir", 70, true, std::vector<std::string>());
-    return way;
-}
-
-std::unique_ptr<POI> generatePOI(IdGenerator *idGenerator, Coordinates center, Meters radius)
-{
-    EntityId id = idGenerator->generateId();
-    Circle circle(center, radius);
-    std::unique_ptr<POI> poi = std::make_unique<POI>(id, ENTITY_NAME, ENTITY_NAME, std::vector<std::string>(), std::vector<std::string>(), circle);
-    return poi;
-}
-
-double fRand(double fMin, double fMax)
-{
-    double f = (double)rand() / RAND_MAX;
-    return fMin + f * (fMax - fMin);
-}
-
-Coordinates randCoord(Latitude minLat, Latitude maxLat, Longitude minLon, Longitude maxLon)
-{
-    Latitude lat = Latitude(fRand(minLat, maxLat));
-    Longitude lon = Longitude(fRand(minLon, maxLon));
-    return Coordinates(lon, lat);
-}
-
-Coordinates randCoord()
-{
-    return randCoord(Latitude(-90), Latitude(90), Longitude(-180), Longitude(180));
-}
-
-std::tuple<Latitude, Latitude, Longitude, Longitude> randBound()
-{
-    Coordinates minCoord = randCoord();
-    Coordinates dif = randCoord(Latitude(-45), Latitude(45), Longitude(-90), Longitude(90));
-    auto bound = std::make_tuple(minCoord.latitude(), Latitude(minCoord.latitude() + dif.latitude()),
-                                 minCoord.longitude(), Longitude(minCoord.longitude() + dif.longitude()));
-    return bound;
-}
-
 TEST(Search, RandomSearchTest)
 {
     std::unique_ptr<IdGenerator> idGenerator = std::make_unique<IdGenerator>();
@@ -147,5 +149,32 @@ TEST(Search, RandomSearchTest)
     {
         generateEntity(gis.get(), idGenerator.get(), std::get<0>(bound), std::get<1>(bound),
                        std::get<2>(bound), std::get<3>(bound));
+    }
+    std::unordered_set<EntityId> inRange;
+    int searches = 100;
+    for (int i = 0; i < searches; i++)
+    {
+        inRange.clear();
+        Meters maxDistance = CoordinatesMath::calculateDistance(Coordinates(std::get<2>(bound), std::get<0>(bound)),
+                                                                Coordinates(std::get<3>(bound), std::get<1>(bound)));
+        Coordinates center = randCoord(std::get<0>(bound), std::get<1>(bound),
+                                       std::get<2>(bound), std::get<3>(bound));
+        Meters radius = Meters(fRand(0, maxDistance));
+
+        auto &entityMap = gis->getEntityMap();
+        for (auto &entityPair : entityMap)
+        {
+            Entity *entity = entityPair.second.get();
+            if (entity->getGeometry()->isInCircle(gis->getTopologicalSearch(), center, radius))
+            {
+                inRange.insert(entity->getId());
+            }
+        }
+        std::vector<EntityId> foundIds = gis->getEntities(getName(), center, radius);
+        ASSERT_EQ(inRange.size(), foundIds.size());
+        for (EntityId id : foundIds)
+        {
+            ASSERT_NE(inRange.find(id), inRange.end());
+        }
     }
 }
