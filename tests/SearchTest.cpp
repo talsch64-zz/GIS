@@ -67,7 +67,7 @@ Coordinates randCoord() {
 
 std::tuple<Latitude, Latitude, Longitude, Longitude> randBound() {
     Coordinates minCoord = randCoord();
-    Coordinates dif = randCoord(Latitude(-2), Latitude(2), Longitude(-4), Longitude(4));
+    Coordinates dif = randCoord(Latitude(-1), Latitude(1), Longitude(-1), Longitude(1));
     auto bound = std::make_tuple(minCoord.latitude(), Latitude(minCoord.latitude() + dif.latitude()),
                                  minCoord.longitude(), Longitude(minCoord.longitude() + dif.longitude()));
     return bound;
@@ -130,10 +130,10 @@ void generateEntity(GISMock *gis, IdGenerator *idGenerator,
 }
 
 TEST(Search, RandomSearchTest) {
-    srand(time(0));
+    srand(56);
 
     std::unique_ptr<IdGenerator> idGenerator = std::make_unique<IdGenerator>();
-    int n = 100;
+    int n = 1000;
     std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
     auto bound = randBound();
     for (int i = 0; i < n; i++) {
@@ -141,13 +141,13 @@ TEST(Search, RandomSearchTest) {
                        std::get<2>(bound), std::get<3>(bound));
     }
     std::unordered_set<EntityId> inRange;
-    int searches = 100;
+    int searches = 1000;
     for (int i = 0; i < searches; i++) {
         inRange.clear();
         Meters maxDistance = Meters(
                 CoordinatesMath::calculateDistance(Coordinates(std::get<2>(bound), std::get<0>(bound)),
                                                    Coordinates(std::get<3>(bound), std::get<1>(bound))) /
-                3);
+                6);
         Coordinates center = randCoord(std::get<0>(bound), std::get<1>(bound),
                                        std::get<2>(bound), std::get<3>(bound));
         Meters radius = Meters(fRand(0, maxDistance));
