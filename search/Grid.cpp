@@ -28,10 +28,10 @@ Coordinates Grid::truncateCoordinates(const Coordinates &coordinates) const {
     return {Longitude(longitude), Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
 }
 
-std::vector<EntityId> Grid::getEntitiesOnGrid(const GridCell &cell) {
+CellEntities Grid::getEntitiesOnGrid(const GridCell &cell) {
     auto pair = grid.find(cell);
     if (pair == grid.end()) {
-        return std::vector<EntityId>();
+        return CellEntities();
     } else {
         return pair->second;
     }
@@ -42,7 +42,7 @@ std::vector<Grid::GridCell> Grid::setEntityOnGrid(const Entity &entity) {
     std::vector<Grid::GridCell> cells = entityGeometry.getGridCells(this);
     EntityId id = entity.getId();
     for (const auto &cell: cells) {
-        grid[cell].push_back(id);
+        grid[cell].insertEntity(id);
     }
     return cells;
 }
@@ -104,15 +104,6 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) c
         Coordinates southEast(truncateCoordinates({Longitude(eastLng), Latitude(southLat)}));
         Coordinates northWest(truncateCoordinates({Longitude(westLng), Latitude(northLat)}));
         Coordinates southWest(truncateCoordinates({Longitude(westLng), Latitude(southLat)}));
-
-//        Coordinates north((Longitude(lng)), Latitude(northLat));
-//        Coordinates south((Longitude(lng)), Latitude(southLat));
-//        Coordinates east((Longitude(eastLng)), Latitude(lat));
-//        Coordinates west((Longitude(westLng)), Latitude(lat));
-//        Coordinates northEast((Longitude(eastLng)), Latitude(northLat));
-//        Coordinates southEast((Longitude(eastLng)), Latitude(southLat));
-//        Coordinates northWest((Longitude(westLng)), Latitude(northLat));
-//        Coordinates southWest((Longitude(westLng)), Latitude(southLat));
 
         if (northLat == 90) {
 //            north = north poll cell

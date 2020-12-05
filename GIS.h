@@ -21,9 +21,9 @@ class EntityJsonParser;
 class GIS {
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     std::shared_ptr<EntityJsonParser> entityJsonParser;
-    std::shared_ptr<Grid> grid;
     EntityJsonSerializer entityJsonSerializer;
     JsonFileWriter jsonFileWriter;
+    std::shared_ptr<Grid> grid;
     std::unique_ptr<TopologicalSearch> topologicalSearch;
     std::unique_ptr<Logger> logger;
 
@@ -45,15 +45,15 @@ public:
     std::optional<Coordinates> getEntityClosestPoint(const EntityId &, const Coordinates &);
 
     /* BFS-like algorithms which spreads to all direction in an even way level-by-level and searches for the closest way.
-     * Once a way found, the spreading is stopped and the function returns the closest point on all
-     * the ways on the current level */
+    * Once a way found, the spreading is stopped and the function returns the closest point on all
+    * the ways on the current level */
     std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords);
 
 
 private:
+
     /* Loads all the entities inside rapidjson::Document */
     std::vector<EntityId> loadEntities(rapidjson::Document &document);
-
 
     std::vector<const Entity *> getEntities(const Coordinates &coordinates, Meters radius);
 

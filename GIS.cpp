@@ -111,8 +111,8 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
         while (!stack.empty()) {
             Grid::GridCell cell = stack.top();
             stack.pop();
-            std::vector<EntityId> cellEntities = grid->getEntitiesOnGrid(cell);
-            for (auto &entityId: cellEntities) {
+            CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
+            for (auto &entityId: cellEntities.getEntities()) {
                 if (idsSeen.find(entityId) != idsSeen.end()) {
                     // if id was already seen
                     continue;
@@ -131,7 +131,6 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                 }
             }
             if (!wayFound) {
-                std::cout.precision(6);
                 std::vector<Grid::GridCell> neighbors = grid->getCellNeighbors(cell);
                 // push to stack all the cells that were not visited yet.
                 for (auto &neighbor: neighbors) {
@@ -193,8 +192,8 @@ std::vector<const Entity *> GIS::getEntities(const Coordinates &coordinates, Met
     std::set<EntityId> searchedEntityIds;
     std::vector<const Entity *> foundEntities;
     for (Grid::GridCell cell : cells) {
-        std::vector<EntityId> cellEntities = grid->getEntitiesOnGrid(cell);
-        for (EntityId id : cellEntities) {
+        CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
+        for (EntityId id : cellEntities.getEntities()) {
             if (searchedEntityIds.find(id) == searchedEntityIds.end()) {
                 searchedEntityIds.insert(id);
                 const Entity *entity = getEntityById(id);

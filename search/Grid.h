@@ -17,22 +17,22 @@ class Circle;
 
 class TopologicalSearch;
 
-//class CellEntities {
-//    //TODO: consider keeping way's segments separated from all other entities
-//    using EntitiesData = std::unordered_set<EntityId>;
-//    EntitiesData entities;
-//
-//public:
-//    using const_iterator = EntitiesData::const_iterator;
-//
-//    void insertEntity(const EntityId &id) {
-//        entities.insert(id);
-//    }
-//
-//    EntitiesData getEntities() {
-//        return entities;
-//    }
-//};
+class CellEntities {
+    //TODO: consider keeping way's segments separated from all other entities
+    using EntitiesData = std::forward_list<EntityId>;
+    EntitiesData entities;
+
+public:
+    using const_iterator = EntitiesData::const_iterator;
+
+    void insertEntity(const EntityId &id) {
+        entities.emplace_front(id);
+    }
+
+    EntitiesData getEntities() {
+        return entities;
+    }
+};
 
 class Grid {
     std::unique_ptr<TopologicalSearch> topologicalSearch;
@@ -44,30 +44,31 @@ public:
     static constexpr double meterPrecision = 1;
 
     using GridCell = Coordinates;
+
     std::vector<GridCell> setEntityOnGrid(const Entity &entity);
 
-    /* returns all the GridCells which contains the PointList */
     std::vector<GridCell> getGeometryGridCells(const PointList &geometry) const;
 
-    /* returns GridCell which contains the Point */
+    /* returns all the GridCells which contains the PointList */
     std::vector<GridCell> getGeometryGridCells(const Point &geometry) const;
 
-    /* returns all the GridCells which contains the Circle */
+    /* returns GridCell which contains the Point */
     std::vector<GridCell> getGeometryGridCells(const Circle &geometry) const;
 
-    /* returns all the neighboring cells of the given GridCell */
+    /* returns all the GridCells which contains the Circle */
     std::vector<GridCell> getCellNeighbors(GridCell initialCell) const;
 
+    /* returns all the neighboring cells of the given GridCell */
     Coordinates truncateCoordinates(const Coordinates &coordinates) const;
 
     /* returns all the entities inside the given GridCell */
-    std::vector<EntityId> getEntitiesOnGrid(const GridCell &cell);
+    CellEntities getEntitiesOnGrid(const GridCell &cell);
 
     void clear();
 
 private:
 
-    std::unordered_map<GridCell, std::vector<EntityId>> grid;
+    std::unordered_map<GridCell, CellEntities> grid;
 
     double truncateDecimalCoordinate(double coordinate) const;
 
@@ -78,7 +79,6 @@ private:
     /* returns all the neighboring GridCells of the poll-GridCell
      * if north is true then return the northern polls neighbors, else southern poll neighbors */
     std::vector<GridCell> getPollCellNeighbors(bool north) const;
-
 
     /* returns the northern cell - Longitude = 0, Latitude = 90
      * There is only one cell with latitude 90 */
