@@ -13,7 +13,7 @@
 #include "search/Grid.h"
 #include "search/TopologicalSearch.h"
 #include "IdGenerator.h"
-#include "GISdefs.h"
+#include "GISNamedTypes.h"
 #include "Logger.h"
 
 class EntityJsonParser;

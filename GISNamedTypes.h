@@ -5,7 +5,7 @@
 #include <utility>
 #include <string>
 #include <cmath>
-//#include "Double.h"
+#include "Double.h"
 #include "NamedType.h"
 
 

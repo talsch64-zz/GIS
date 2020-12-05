@@ -3,7 +3,7 @@
 #include <cmath>
 #include <tuple>
 #include <optional>
-#include "../../GISdefs.h"
+#include "../../GISNamedTypes.h"
 
 using std::sin;
 using std::cos;

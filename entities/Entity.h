@@ -9,7 +9,7 @@
 #include <rapidjson/document.h>
 #include <memory>
 #include <optional>
-#include "../GISdefs.h"
+#include "../GISNamedTypes.h"
 #include "geometry/Geometry.h"
 
 class EntityJsonSerializer;

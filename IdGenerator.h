@@ -3,7 +3,7 @@
 #define EX1_IDGENERATOR_H
 
 #include <string>
-#include "GISdefs.h"
+#include "GISNamedTypes.h"
 
 class IdGenerator {
     int count = 1;

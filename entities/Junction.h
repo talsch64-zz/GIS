@@ -6,7 +6,7 @@
 #define EX1_JUNCTION_H
 
 #include "Entity.h"
-#include "../GISdefs.h"
+#include "../GISNamedTypes.h"
 #include "geometry/Point.h"
 
 class Junction: public Entity {
