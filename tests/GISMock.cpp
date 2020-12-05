@@ -1,8 +1,8 @@
-#include "GISMock.h";
+#include "GISMock.h"
 
 bool GISMock::addEntity(std::unique_ptr<Entity> entity)
 {
-    GIS::addEntity(std::move(entity));
+    return GIS::addEntity(std::move(entity));
 }
 
 const std::unordered_map<EntityId, std::unique_ptr<Entity>> &GISMock::getEntityMap()
