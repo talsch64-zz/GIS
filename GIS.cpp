@@ -190,9 +190,10 @@ std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document)
         try
         {
             std::unique_ptr<Entity> entity = entityJsonParser->parse(jsonEntity, *this);
+            entityId = entity->getId();
             if (addEntity(std::move(entity)))
             {
-                entityIds.push_back(entity->getId());
+                entityIds.push_back(entityId);
             }
         }
         catch (const std::runtime_error &e)
