@@ -70,7 +70,7 @@ TEST(CoordinatesTest, ZulVernLatitudeTest) {
 
 TEST(GISBasic, MygetWayClosestPointTest1) {
     GIS gis;
-    gis.loadMapFile("nyc.json");
+    gis.loadMapFile("nyc2.json");
     Coordinates coord(Longitude(40.731437), Latitude(-73.996967));
     Coordinates expected(Longitude(40.73248), Latitude(-73.99693));
     auto closest = gis.getWayClosestPoint(coord).first;
