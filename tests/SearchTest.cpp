@@ -166,6 +166,9 @@ TEST(Search, RandomSearchTest) {
 //            ASSERT_NE(inRange.find(id), inRange.end());
 //        }
         if (inRange.size() != foundIds.size()) {
+            for (EntityId id : foundIds) {
+                inRange.erase(id);
+            }
             std::cout << "center: (" << center.latitude() << "," << center.longitude() << ")" << std::endl;
             std::cout << "radius: " << radius << std::endl;
             std::unique_ptr<GISMock> gis2 = std::make_unique<GISMock>();
