@@ -7,7 +7,7 @@
 #include "geometry/Geometry.h"
 
 /// Entity derived class which represents a Way in the GIS application
-/// Its Geometry is a Circle that is represented by a radius and center coordinates
+/// Way's geometry is a Circle that is represented by a radius and center coordinates
 
 class Way: public Entity {
     EntityId from;
