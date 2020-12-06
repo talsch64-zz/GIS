@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include<time.h>
 
-TEST(Search, SearchCircleTest) {
+TEST(Search, MySearchCircleTest) {
     GIS gis;
     gis.loadMapFile("gearth.json");
 
@@ -29,7 +29,7 @@ TEST(Search, SearchCircleTest) {
     }
 }
 
-TEST(Search, SearchWaysTest) {
+TEST(Search, MySearchWaysTest) {
     GIS gis;
     auto loadedIds = gis.loadMapFile("ways-search.json");
 
@@ -130,10 +130,10 @@ void generateEntity(GISMock *gis, IdGenerator *idGenerator,
 }
 
 TEST(Search, RandomSearchTest) {
-    srand(time(0));
+    srand(56);
 
     std::unique_ptr<IdGenerator> idGenerator = std::make_unique<IdGenerator>();
-    int n = 1000;
+    int n = 100;
     std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
     auto bound = randBound();
     for (int i = 0; i < n; i++) {
@@ -141,7 +141,7 @@ TEST(Search, RandomSearchTest) {
                        std::get<2>(bound), std::get<3>(bound));
     }
     std::unordered_set<EntityId> inRange;
-    int searches = 1000;
+    int searches = 5;
     for (int i = 0; i < searches; i++) {
         inRange.clear();
         Meters maxDistance = Meters(
