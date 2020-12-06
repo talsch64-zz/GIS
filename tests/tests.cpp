@@ -6,7 +6,7 @@
 
 TEST(Search, SearchCircleTest) {
     GIS gis;
-    gis.loadMapFile("gearth.json");
+    gis.loadMapFile("tests/gearth.json");
 
     std::vector<EntityId> foundEntityIds = gis.getEntities("aaa",
                                                            Coordinates(Longitude(34.783868), Latitude(31.930202)),
@@ -21,7 +21,7 @@ TEST(Search, SearchCircleTest) {
 
 TEST(Search, SearchWaysTest) {
     GIS gis;
-    auto loadedIds = gis.loadMapFile("ways-search.json");
+    auto loadedIds = gis.loadMapFile("tests/ways-search.json");
 
     std::vector<EntityId> foundEntityIds = gis.getEntities("way",
                                                            Coordinates(Longitude(-60.550612),
@@ -38,7 +38,7 @@ TEST(Search, SearchWaysTest) {
 
 TEST(GISBasic, getWayClosestPointTest) {
     GIS gis;
-    gis.loadMapFile("russia.json");
+    gis.loadMapFile("tests/russia.json");
     Coordinates coord(Longitude(90.28674), Latitude(65.77863));
     Coordinates closest = gis.getWayClosestPoint(coord).first;
     Coordinates to(Longitude(90.28177), Latitude(65.89199));
@@ -47,7 +47,7 @@ TEST(GISBasic, getWayClosestPointTest) {
 
 TEST(GISBasic, getWayClosestPointTest2) {
     GIS gis;
-    gis.loadMapFile("russia.json");
+    gis.loadMapFile("tests/russia.json");
     Coordinates coord(Longitude(91.68265), Latitude(65.92547));
     Coordinates closest = gis.getWayClosestPoint(coord).first;
     Coordinates curve(Longitude(90.69101), Latitude(65.98046));
