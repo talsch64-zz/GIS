@@ -5,7 +5,7 @@
 using std::cout;
 using std::endl;
 
-int main() {
+int main(int argc, char **argv) {
     GIS gis;
     gis.loadMapFile("russia.json");
     Coordinates coord(Longitude(90.28674), Latitude(65.77863));
@@ -13,5 +13,6 @@ int main() {
     gis.getWayClosestPoint(coord);
     gis.saveMapFile("output.json");
     
+    ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

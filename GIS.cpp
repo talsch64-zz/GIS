@@ -177,7 +177,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
         std::swap(stack, nextStack);
     }
     return {closest, closestEntityId};
-    //    TODO write to log that way was not found!
+    //    TODO find different solution for the case where not ways are found!
 }
 
 std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document)

@@ -15,6 +15,13 @@ class Grid;
 
 class GeometryJsonSerializer;
 
+
+/// Geometry abstract class
+/// Each Entity has a unique Geometry
+/// Operations supported:
+/// * Get the closest Coordinates on the geometry's perimeter from the given coordinates
+/// * Get all the grid cell that overllap the geometry's perimeter
+/// * JSON serialization
 class Geometry {
 
 protected:
@@ -30,6 +37,7 @@ public:
 
     virtual std::vector<Coordinates> getGridCells(const Grid *grid) = 0;
 
+    /* returns the closest Coordinates on the geometry's perimeter from the given coordinates */
     virtual Coordinates getClosestPoint(const Coordinates &coordinates) const = 0;
 
     virtual bool

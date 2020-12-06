@@ -9,7 +9,7 @@
 #include "Entity.h"
 
 /// Entity derived class which represents a POI in the GIS application
-/// Its Geometry is a Circle that is represented by a radius and center coordinates
+/// POI's geometry is a Circle that is represented by a radius and center coordinates
 
 class POI : public Entity {
     std::vector<std::string> accessibility;
