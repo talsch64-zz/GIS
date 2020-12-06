@@ -13,12 +13,14 @@
 #include "search/Grid.h"
 #include "search/TopologicalSearch.h"
 #include "IdGenerator.h"
-#include "GISdefs.h"
+#include "GISNamedTypes.h"
 #include "Logger.h"
 
 class EntityJsonParser;
 
-class GIS {
+class GIS
+{
+protected:
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     EntityJsonParser *entityJsonParser;
     EntityJsonSerializer entityJsonSerializer;
@@ -36,7 +38,7 @@ public:
 
     std::vector<EntityId> loadMapFile(const std::string &filename);
 
-    const Entity *getEntityById(const EntityId &id) const;
+    Entity *getEntityById(const EntityId &id) const;
 
     std::size_t saveMapFile(const std::string &filename);
 
@@ -48,13 +50,14 @@ public:
 
     std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords);
 
-
-private:
+protected:
     std::vector<EntityId> loadEntities(rapidjson::Document &document);
 
     std::vector<const Entity *> getEntities(const Coordinates &coordinates, Meters radius);
 
     bool filterEntityByName(const Entity *entity, const std::string &search_name);
+
+    bool addEntity(std::unique_ptr<Entity> entity);
 };
 
 #endif //EX1_GIS_H

@@ -3,7 +3,7 @@
 #define EX1_WAY_H
 
 #include "Entity.h"
-#include "../GISdefs.h"
+#include "../GISNamedTypes.h"
 #include "geometry/Geometry.h"
 
 class Way: public Entity {

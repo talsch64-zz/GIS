@@ -199,14 +199,3 @@ void EntityJsonParser::setGenerateIds(bool fileContainsId) {
     EntityJsonParser::_generateIds = !fileContainsId;
 }
 
-
-//std::vector<Coordinates> EntityJsonParser::parseCurves(rapidjson::Value &doc) {
-//    //optional entry
-//    std::vector<Coordinates> curves;
-//    if (doc.HasMember("curves") && doc["curves"].IsArray()) {
-//        for (auto &coordinates : doc["curves"].GetArray()) {
-//            curves.push_back(coordinatesJsonParser.parse(coordinates));
-//        }
-//    }
-//    return curves;
-//}
