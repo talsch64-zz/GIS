@@ -51,12 +51,12 @@ members of GIS are:
  
 ## Grid insertions:
 
-###Adding a way
+### Adding a way
 For adding a way to the grid we need to check all of it's lines, for each line:
 * We split the line into two lines and call the two parts recursively   
 * If the segment we split is completley inside a cell or the distance between the two edges is small enough we stop the splitting and adding the Way's id to the corresponding cells.
 
-###Adding a point 
+### Adding a point 
 We truncate the point to the lower left corner (using floor for truncating)
 
 ### Adding a Circle
@@ -64,10 +64,13 @@ For adding a Circle to the grid we use DFS-like algorithms that spreads to throu
 Once the distnace of the current cell is larger then the radius, we no longer spreading to its neighbors.
 We use unordered_set to track the cells visited so far to avoid duplicates.
 
+## TopologicalSearch
+Handles geographical searches including searching for grid cells in a given circle.
 
-## Error logging
+## Logger
+Handles errors which arise during the JSON parsing and logs them in a logger file.
 
-## Tests
+
 
 
 

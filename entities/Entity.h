@@ -14,6 +14,9 @@
 
 class EntityJsonSerializer;
 
+
+/// Abstract class which is the base class of all the entities in the GIS application
+/// In addition to the basic data members, each derived class has a Geometry (see derived classes documentation)
 class Entity {
     EntityId id;
     std::string name;

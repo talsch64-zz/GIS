@@ -3,6 +3,8 @@
 
 #include <rapidjson/document.h>
 
+
+/// JsonFileWriter handles JSON file writing
 class JsonFileWriter {
 public:
     void write(rapidjson::Document &doc, const std::string &filename);
