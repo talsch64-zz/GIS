@@ -6,6 +6,7 @@
 #include <rapidjson/document.h>
 #include "../../../GISNamedTypes.h"
 
+/// CoordinatesJsonSerializer handles coordinates serialization into JSON format
 class CoordinatesJsonSerializer {
 public:
     rapidjson::Value toJson(Coordinates coordinates, rapidjson::Document::AllocatorType &allocator);

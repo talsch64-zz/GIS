@@ -11,6 +11,8 @@
 
 class GIS;
 
+
+/// EntityJsonParser handles Entity parsing from JSON files and initializing Entity objects and generates Ids if necessary
 class EntityJsonParser {
     GeometryJsonParser geometryJsonParser;
     CoordinatesJsonParser coordinatesJsonParser;
@@ -21,6 +23,8 @@ class EntityJsonParser {
 public:
     std::unique_ptr<Entity> parse(rapidjson::Value &doc, GIS &gis);
 
+    /* returns true if at least one entity in current file contains id.
+     * returns flase if all entities doesn't contain ids */
     bool containsIds (rapidjson:: Value &doc);
 
     void setGenerateIds(bool fileContainsId);

@@ -7,6 +7,8 @@
 #include "../GISNamedTypes.h"
 #include <rapidjson/document.h>
 
+/// CoordinatesJsonParser handles coordinates parsing from JSON files
+
 class CoordinatesJsonParser {
 public:
     Coordinates parse(rapidjson::Value &coordinates);
