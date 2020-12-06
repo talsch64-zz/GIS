@@ -165,6 +165,7 @@ TEST(Search, RandomSearchTest) {
 //        for (EntityId id : foundIds) {
 //            ASSERT_NE(inRange.find(id), inRange.end());
 //        }
+//some
         std::unique_ptr<GISMock> gis2 = std::make_unique<GISMock>();
         for (EntityId id : inRange) {
             auto entity = gis->getEntityById(id);
