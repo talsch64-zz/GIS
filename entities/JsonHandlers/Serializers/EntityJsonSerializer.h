@@ -16,6 +16,7 @@ class Entity;
 
 class Geometry;
 
+/// EntityJsonSerializer handles Entity serialization into JSON format
 class EntityJsonSerializer {
     CoordinatesJsonSerializer coordinatesJsonSerializer;
 

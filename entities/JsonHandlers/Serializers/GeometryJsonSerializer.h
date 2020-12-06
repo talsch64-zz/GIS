@@ -10,6 +10,7 @@
 
 class Circle;
 
+/// GeometryJsonSerializer handles the serialization of the different geometries into JSON format
 class GeometryJsonSerializer {
     CoordinatesJsonSerializer coordinatesJsonSerializer;
 
