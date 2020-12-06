@@ -208,7 +208,7 @@ std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document)
     return entityIds;
 }
 
-const Entity *GIS::getEntityById(const EntityId &id) const
+Entity *GIS::getEntityById(const EntityId &id) const
 {
     auto pair = entities.find(id);
     if (pair == entities.end())
