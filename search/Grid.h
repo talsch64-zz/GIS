@@ -41,7 +41,7 @@ public:
     Grid();
 
     static constexpr double precision = 0.01;
-    static constexpr double safe_precision = 0.015;
+    static constexpr double safe_precision = 1.1 * precision;
 
     static constexpr double meterPrecision = 1;
 
