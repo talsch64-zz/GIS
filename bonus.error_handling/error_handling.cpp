@@ -17,7 +17,7 @@ bool logContainsError(std::string err) {
 TEST(ErrorHandling, ErrorHandlingTest) {
     GIS gis;
 
-    auto entityIds = gis.loadMapFile("map-with-errors.json");
+    auto entityIds = gis.loadMapFile("bonus.error_handling/mapFile.json");
 
     ASSERT_EQ((int) entityIds.size(), 1);
     ASSERT_TRUE(logContainsError("Couldn't load invalid entity - JSON entity doesn't contain name"));
