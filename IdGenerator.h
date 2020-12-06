@@ -5,6 +5,8 @@
 #include <string>
 #include "GISNamedTypes.h"
 
+
+/// IdGenerator generates ids for entities without ids
 class IdGenerator {
     int count = 1;
 public:

@@ -34,6 +34,15 @@ public:
     }
 };
 
+
+/// Grid stores the GIS entities into GridCells
+/// Implemented as a hash-map that maps GridCell to a list of EntityIds of all the entities that runs through the GridCell
+/// Each GridCells represents a range of coordinates determined by a pre-defined coordinates precision.
+/// Operations supported:
+/// * get neighboring cells of a given cell
+/// * get all GridCells that a given Geometry runs through them.
+/// * set entities with different geometries inside the grid
+
 class Grid {
     std::unique_ptr<TopologicalSearch> topologicalSearch;
 
@@ -42,7 +51,7 @@ public:
 
     static constexpr double precision = 0.015625;
 
-    static constexpr double meterPrecision = 1;
+    static constexpr double meterPrecision = 10;
 
     using GridCell = Coordinates;
 

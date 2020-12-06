@@ -18,6 +18,17 @@
 
 class EntityJsonParser;
 
+
+/// GIS application that allows the user to create interactive queries, store spatial data (Entities), and import the data into JSON files.
+/// Operations supported:
+/// * Load entities from JSON files
+/// * Save entities into JSON files
+/// * Clear all data currently stored
+/// * Search entities by ids, names and radius from a given Coordinates
+/// * Search closest point on entities perimeters from a given Coordinates
+/// * Search closest way (and the closest Coordinates on the way) from a given Coordinates
+
+
 class GIS
 {
 protected:
