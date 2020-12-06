@@ -1,103 +1,129 @@
 [
-    {
-        "type": "POI",
-        "id": "P1001",
-        "name": "Washington Square Park",
-        "description": ".*",
-        "category_tags": [],
-        "main_entrance": {
-            "coordinates": [40.73099,-73.99805],
-            "name": "Washington Square Arch",
-            "accessibility": ["by foot", "by wheelchair"]
-        },
-        "geometry": {   
-            "type": "Polygon",
-            "coordinates": [
-                [40.731051, -73.999611], 
-                [40.729606, -73.996602], 
-                [40.730805, -73.995674], 
-                [40.732179, -73.998624]
-            ]
-        }
+  {
+    "type": "POI",
+    "id": "P1001",
+    "name": "Washington Square Park",
+    "description": ".*",
+    "category_tags": [],
+    "main_entrance": {
+      "coordinates": [
+        40.73099,
+        -73.99805
+      ],
+      "name": "Washington Square Arch",
+      "accessibility": [
+        "by foot",
+        "by wheelchair"
+      ]
     },
-
-    {
-        "type": "POI",
-        "id": "P1002",
-        "name": "Washington Square Fountain",
-        "description": "",
-        "category_tags": ["Public"],
-        "geometry": {
-            "type": "Circle",
-            "coordinates": [40.730811, -73.997455],
-            "radius": 822.96
-        }
-    },
-
-    {
-        "type": "Junction",
-        "id": "J1001",
-        "name": "5th Ave & Washington Square N",
-        "description": ".*",
-        "category_tags": [],
-        "coordinates": [40.731437, -73.996967]
-    },
-
-    {
-        "type": "Junction",
-        "id": "J1002",
-        "name": "5th Ave & 8th St",
-        "description": ".*",
-        "category_tags": [],
-        "coordinates": [40.732254, -73.996394]
-    },
-
-    {
-        "type": "Junction",
-        "id": "J1010",
-        "name": "6th Ave & 8th St",
-        "description": "6 Ave & Greenwich Ave & 8th St",
-        "category_tags": [],
-        "coordinates": [40.732254, -73.996394]
-    },
-
-    {
-        "type": "POI",
-        "id": "P1010",
-        "name": "Elmer Holmes Bobst Library",
-        "description": "The Elmer Holmes Bobst Library, often referred to as simply Bobst Library or Bobst, is the main library at New York University in Manhattan, New York City",
-        "category_tags": [],
-        "main_entrance": {
-            "coordinates": [40.729613, -73.997056],
-            "name": "Bobst Library Entrance",
-            "accessibility": ["by foot", "by wheelchair"]
-        },
-        "geometry": {
-            "type": "Polygon",
-            "coordinates": [
-                [40.729824, -73.997302], 
-                [40.729541, -73.996723], 
-                [40.729055, -73.997136], 
-                [40.729338, -73.997717]
-            ]
-        }
-    },
-    {
-        "type": "Way",
-        "id": "W2002",
-        "name": "8th St btw. 6th Ave & 5th Ave",
-        "description": ".*",
-        "category_tags": [],
-        "from": {
-            "entity_id": "J1010"
-        },
-        "to": {
-            "entity_id": "J1002"
-        },
-        "speed_limit": 40,
-        "direction": "unidirectional",
-        "toll_road": false,
-        "curves": [[40.733566, -73.999446]],
-        "restricted": ["trucks"]
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        40.731051,
+        -73.999611
+      ],
+      "radius": 4561.4
     }
+  },
+  {
+    "type": "POI",
+    "id": "P1002",
+    "name": "Washington Square Fountain",
+    "description": "",
+    "category_tags": [
+      "Public"
+    ],
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        40.730811,
+        -73.997455
+      ],
+      "radius": 822.96
+    }
+  },
+  {
+    "type": "Junction",
+    "id": "J1001",
+    "name": "5th Ave & Washington Square N",
+    "description": ".*",
+    "category_tags": [],
+    "coordinates": [
+      40.731437,
+      -73.996967
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "J1002",
+    "name": "5th Ave & 8th St",
+    "description": ".*",
+    "category_tags": [],
+    "coordinates": [
+      40.732254,
+      -73.996394
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "J1010",
+    "name": "6th Ave & 8th St",
+    "description": "6 Ave & Greenwich Ave & 8th St",
+    "category_tags": [],
+    "coordinates": [
+      40.732254,
+      -73.996394
+    ]
+  },
+  {
+    "type": "POI",
+    "id": "P1010",
+    "name": "Elmer Holmes Bobst Library",
+    "description": "The Elmer Holmes Bobst Library, often referred to as simply Bobst Library or Bobst, is the main library at New York University in Manhattan, New York City",
+    "category_tags": [],
+    "main_entrance": {
+      "coordinates": [
+        40.729613,
+        -73.997056
+      ],
+      "name": "Bobst Library Entrance",
+      "accessibility": [
+        "by foot",
+        "by wheelchair"
+      ]
+    },
+    "geometry": {
+      "type": "Circle",
+      "coordinates": [
+        42.731051,
+        5.999611
+      ],
+      "radius": 87.9
+    }
+  },
+  {
+    "type": "Way",
+    "id": "W2002",
+    "name": "8th St btw. 6th Ave & 5th Ave",
+    "description": ".*",
+    "category_tags": [],
+    "from": {
+      "entity_id": "J1010"
+    },
+    "to": {
+      "entity_id": "J1002"
+    },
+    "speed_limit": 40,
+    "direction": "unidirectional",
+    "toll_road": false,
+    "curves": [
+      [
+        40.733566,
+        -73.999446
+      ]
+    ],
+    "restricted": [
+      "trucks"
+    ]
+  }
 ]
