@@ -4,7 +4,7 @@
 #include <cmath>
 #include <tuple>
 #include <optional>
-#include "../../GISNamedTypes.h"
+#include "GISNamedTypes.h"
 
 using std::sin;
 using std::cos;

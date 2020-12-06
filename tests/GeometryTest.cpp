@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "../GISNamedTypes.h"
-#include "../entities/geometry/CoordinatesMath.h"
+#include "../CoordinatesMath.h"
 #include "../entities/geometry/Circle.h"
 #include "../entities/geometry/PointList.h"
 #include "../GIS.h"

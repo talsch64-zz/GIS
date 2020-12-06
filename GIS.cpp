@@ -8,7 +8,7 @@
 #include <stack>
 #include <set>
 #include "entities/EntityJsonParser.h"
-#include "entities/geometry/CoordinatesMath.h"
+#include "CoordinatesMath.h"
 #include <limits.h>
 
 GIS::GIS() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),

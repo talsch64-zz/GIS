@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "../GIS.h"
-#include "../entities/geometry/CoordinatesMath.h"
+#include "../CoordinatesMath.h"
 
 #define METERS_PRECISION 1
 

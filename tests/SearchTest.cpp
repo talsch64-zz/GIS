@@ -5,7 +5,7 @@
 #include "../entities/POI.h"
 #include "../entities/Way.h"
 #include "../entities/Entity.h"
-#include "../entities/geometry/CoordinatesMath.h"
+#include "../CoordinatesMath.h"
 #include "../entities/geometry/Point.h"
 #include "../entities/geometry/Circle.h"
 #include "../entities/geometry/PointList.h"
@@ -133,7 +133,7 @@ TEST(Search, RandomSearchTest) {
     srand(56);
 
     std::unique_ptr<IdGenerator> idGenerator = std::make_unique<IdGenerator>();
-    int n = 100;
+    int n = 1000;
     std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
     auto bound = randBound();
     for (int i = 0; i < n; i++) {
@@ -141,7 +141,7 @@ TEST(Search, RandomSearchTest) {
                        std::get<2>(bound), std::get<3>(bound));
     }
     std::unordered_set<EntityId> inRange;
-    int searches = 5;
+    int searches = 1000;
     for (int i = 0; i < searches; i++) {
         inRange.clear();
         Meters maxDistance = Meters(
