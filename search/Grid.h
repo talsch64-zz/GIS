@@ -40,8 +40,7 @@ class Grid {
 public:
     Grid();
 
-    static constexpr double precision = 0.01;
-    static constexpr double safe_precision = precision * 1.1;
+    static constexpr double precision = 0.015625;
 
     static constexpr double meterPrecision = 1;
 

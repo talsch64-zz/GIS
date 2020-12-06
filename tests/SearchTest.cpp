@@ -161,16 +161,23 @@ TEST(Search, RandomSearchTest) {
         }
         std::vector<EntityId> foundIds = gis->getEntities(getName(), center, radius);
 //        std::cout << i << std::endl;
-//        ASSERT_EQ(inRange.size(), foundIds.size());
-//        for (EntityId id : foundIds) {
-//            ASSERT_NE(inRange.find(id), inRange.end());
-//        }
-        std::unique_ptr<GISMock> gis2 = std::make_unique<GISMock>();
-        for (EntityId id : inRange) {
-            auto entity = gis->getEntityById(id);
-            std::unique_ptr<Entity> entity2(entity);
-            gis2->addEntity(std::move(entity2));
+        ASSERT_EQ(inRange.size(), foundIds.size());
+        for (EntityId id : foundIds) {
+            ASSERT_NE(inRange.find(id), inRange.end());
         }
-        gis2->saveMapFile("failed-entities.json");
+//        if (inRange.size() != foundIds.size()) {
+//            for (EntityId id : foundIds) {
+//                inRange.erase(id);
+//            }
+//            std::cout << "center: (" << center.latitude() << "," << center.longitude() << ")" << std::endl;
+//            std::cout << "radius: " << radius << std::endl;
+//            std::unique_ptr<GISMock> gis2 = std::make_unique<GISMock>();
+//            for (EntityId id : inRange) {
+//                auto entity = gis->getEntityById(id);
+//                std::unique_ptr<Entity> entity2(entity);
+//                gis2->addEntity(std::move(entity2));
+//            }
+//            gis2->saveMapFile("failed-entities.json");
+//        }
     }
 }

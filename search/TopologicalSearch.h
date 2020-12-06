@@ -11,6 +11,7 @@
 #include "../entities/geometry/Point.h"
 
 class TopologicalSearch {
+    double SAFETY_MARGIN = 500;
 public:
     std::vector<Coordinates> searchCircleInGrid(const Grid &grid, const Coordinates &center, Meters radius) const;
 
