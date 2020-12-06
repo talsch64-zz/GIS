@@ -31,7 +31,8 @@ class Coordinates {
     Latitude _latitude;
 
 public:
-    Coordinates(Longitude longitude, Latitude latitude) : _longitude(longitude), _latitude(latitude) {}
+    Coordinates(const Longitude &longitude, const Latitude &latitude) : _longitude(trimLongitude(longitude)),
+                                                                        _latitude(trimLatitude(latitude)) {}
 
     Longitude longitude() const { return _longitude; }
 
@@ -48,6 +49,27 @@ public:
         } else {
             return c.latitude();
         }
+    }
+
+private:
+    Longitude trimLongitude(const Longitude &longitude) {
+        double lon = std::fmod(longitude, 360);
+        if (lon > 180) {
+            lon = lon - 360;
+        } else if (lon <= -180) {
+            lon = lon + 360;
+        }
+        return Longitude(lon);
+    }
+
+    Latitude trimLatitude(const Latitude &latitude) {
+        double lat = std::fmod(latitude, 180);
+        if (lat > 90) {
+            lat = lat - 180;
+        } else if (lat <= -90) {
+            lat = lat + 180;
+        }
+        return Latitude(lat);
     }
 };
 
