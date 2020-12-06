@@ -130,7 +130,7 @@ void generateEntity(GISMock *gis, IdGenerator *idGenerator,
 }
 
 TEST(Search, RandomSearchTest) {
-    srand(56);
+    srand(time(0));
 
     std::unique_ptr<IdGenerator> idGenerator = std::make_unique<IdGenerator>();
     int n = 1000;
