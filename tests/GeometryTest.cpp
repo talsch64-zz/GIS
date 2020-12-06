@@ -63,7 +63,7 @@ TEST(CoordinatesTest, LongitudeTrimTest) {
 }
 TEST(CoordinatesTest, ZulVernLatitudeTest) {
     Coordinates coords {Longitude(0), Latitude(0)};
-    Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 0, Meters(2*CoordinatesMath::pi*6371000));
+    Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 0, Meters(2*std::numbers::pi*6371000));
     EXPECT_LT(abs(target.latitude() - coords.latitude()), 0.00001);
     EXPECT_EQ(target.longitude(), coords.longitude());
 }
