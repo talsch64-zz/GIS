@@ -1,13 +1,13 @@
 #include "gtest/gtest.h"
 #include "../GISNamedTypes.h"
-#include "../entities/geometry/CoordinatesMath.h"
+#include "../CoordinatesMath.h"
 #include "../entities/geometry/Circle.h"
 #include "../entities/geometry/PointList.h"
 #include "../GIS.h"
 #include <numbers>
 
 #define METERS_PRECISION 1
-TEST(ClosestPointTest, ClosestPointWay1) {
+TEST(ClosestPointTest, MyClosestPointWay1) {
     Coordinates c1(Longitude(-2), Latitude(2));
     Coordinates c2(Longitude(-2), Latitude(1));
     Coordinates c3(Longitude(-3), Latitude(0.5));
@@ -68,16 +68,16 @@ TEST(CoordinatesTest, ZulVernLatitudeTest) {
     EXPECT_EQ(target.longitude(), coords.longitude());
 }
 
-TEST(GISBasic, getWayClosestPointTest1) {
+TEST(GISBasic, MygetWayClosestPointTest1) {
     GIS gis;
-    gis.loadMapFile("nyc.json");
+    gis.loadMapFile("nyc2.json");
     Coordinates coord(Longitude(40.731437), Latitude(-73.996967));
     Coordinates expected(Longitude(40.73248), Latitude(-73.99693));
     auto closest = gis.getWayClosestPoint(coord).first;
     EXPECT_LT(CoordinatesMath::calculateDistance(expected, closest), METERS_PRECISION);
 }
 
-TEST(GISBasic, getWayClosestPointTest2) {
+TEST(GISBasic, MygetWayClosestPointTest2) {
     GIS gis;
     gis.loadMapFile("russia.json");
     Coordinates coord(Longitude(90.28674), Latitude(65.77863));
@@ -86,7 +86,7 @@ TEST(GISBasic, getWayClosestPointTest2) {
     EXPECT_TRUE(CoordinatesMath::calculateDistance(to, closest) < METERS_PRECISION);
 }
 
-TEST(GISBasic, getWayClosestPointTest3) {
+TEST(GISBasic, MygetWayClosestPointTest3) {
     GIS gis;
     gis.loadMapFile("russia.json");
     Coordinates coord(Longitude(91.68265), Latitude(65.92547));

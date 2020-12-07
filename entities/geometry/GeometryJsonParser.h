@@ -7,7 +7,6 @@
 #include <rapidjson/document.h>
 #include "Geometry.h"
 #include "Circle.h"
-#include "Polygon.h"
 #include "../CoordinatesJsonParser.h"
 
 

@@ -4,6 +4,10 @@
 
 #include <string>
 
+
+/// Logger - Handles errors which arise during the JSON parsing and logs them in "errors.log" file.
+/// Uses Exceptions catching to handle the different errors.
+/// Each error logged has an indicating message of the error occurred
 class Logger {
     const std::string ERRORS_FILE_PATH = "errors.log";
 

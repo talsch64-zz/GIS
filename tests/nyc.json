@@ -3,21 +3,12 @@
         "type": "POI",
         "id": "P1001",
         "name": "Washington Square Park",
-        "description": ".*",
+        "description": "To circle the square",
         "category_tags": [],
-        "main_entrance": {
-            "coordinates": [40.73099,-73.99805],
-            "name": "Washington Square Arch",
-            "accessibility": ["by foot", "by wheelchair"]
-        },
-        "geometry": {   
-            "type": "Polygon",
-            "coordinates": [
-                [40.731051, -73.999611], 
-                [40.729606, -73.996602], 
-                [40.730805, -73.995674], 
-                [40.732179, -73.998624]
-            ]
+        "geometry": {
+            "type": "Circle",
+            "coordinates": [40.731051, -73.999611],
+            "radius": 3.2
         }
     },
 
@@ -30,7 +21,7 @@
         "geometry": {
             "type": "Circle",
             "coordinates": [40.730811, -73.997455],
-            "radius": 822.96
+            "radius": 0.635
         }
     },
 
@@ -67,21 +58,31 @@
         "name": "Elmer Holmes Bobst Library",
         "description": "The Elmer Holmes Bobst Library, often referred to as simply Bobst Library or Bobst, is the main library at New York University in Manhattan, New York City",
         "category_tags": [],
-        "main_entrance": {
-            "coordinates": [40.729613, -73.997056],
-            "name": "Bobst Library Entrance",
-            "accessibility": ["by foot", "by wheelchair"]
-        },
         "geometry": {
-            "type": "Polygon",
-            "coordinates": [
-                [40.729824, -73.997302], 
-                [40.729541, -73.996723], 
-                [40.729055, -73.997136], 
-                [40.729338, -73.997717]
-            ]
+            "type": "Circle",
+            "coordinates": [40.729824, -73.997302],
+            "radius": 1.2
         }
     },
+
+    {
+        "type": "Way",
+        "id": "W2001",
+        "name": "5th Ave btw. Washington Square N & 8th St",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1002"
+        },
+        "to": {
+            "entity_id": "J1001"
+        },
+        "direction": "unidirectional",
+        "speed_limit": 40,
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+
     {
         "type": "Way",
         "id": "W2002",
@@ -94,10 +95,10 @@
         "to": {
             "entity_id": "J1002"
         },
+        "curves": [[40.733566, -73.999446]],
         "speed_limit": 40,
         "direction": "unidirectional",
         "toll_road": false,
-        "curves": [[40.733566, -73.999446]],
         "restricted": ["trucks"]
     }
 ]

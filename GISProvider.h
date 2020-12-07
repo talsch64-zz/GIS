@@ -2,6 +2,7 @@
 
 #include "GIS.h"
 
+/// GISProvider provides a GIS instance.
 class GISProvider {
 	GISProvider() {}	
 

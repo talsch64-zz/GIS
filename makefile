@@ -4,7 +4,7 @@ GOOGLE_LIB = /usr/src/googletest/googletest/gcc-10-build/lib/
 GOOGLE_TEST_INCLUDE = /usr/src/googletest/googletest/include/
 
 INC_DIRS := . ./entities ./entities/geometry ./entities/JsonHandlers/Serializers ./search ./bonus.error_handling
-SRCS := $(wildcard ./*.cpp ./entities/*.cpp ./entities/geometry/*.cpp ./entities/JsonHandlers/Serializers/*.cpp ./search/*.cpp ./bonus.error_handling/*.cpp) ./tests/tests.cpp
+SRCS := $(wildcard ./*.cpp ./entities/*.cpp ./entities/geometry/*.cpp ./entities/JsonHandlers/Serializers/*.cpp ./search/*.cpp ./bonus.error_handling/*.cpp ./tests/*.cpp)
 DEPS := $(OBJS:.o=.d)
 BUILD_DIR := build
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))

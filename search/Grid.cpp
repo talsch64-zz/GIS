@@ -1,7 +1,7 @@
 #include <unordered_set>
 #include "Grid.h"
 #include "../entities/geometry/Geometry.h"
-#include "../entities/geometry/CoordinatesMath.h"
+#include "../CoordinatesMath.h"
 #include "../entities/geometry/PointList.h"
 #include "../entities/geometry/Point.h"
 #include "../entities/geometry/Circle.h"

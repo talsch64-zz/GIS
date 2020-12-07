@@ -5,7 +5,7 @@
 #include "../entities/POI.h"
 #include "../entities/Way.h"
 #include "../entities/Entity.h"
-#include "../entities/geometry/CoordinatesMath.h"
+#include "../CoordinatesMath.h"
 #include "../entities/geometry/Point.h"
 #include "../entities/geometry/Circle.h"
 #include "../entities/geometry/PointList.h"
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include<time.h>
 
-TEST(Search, SearchCircleTest) {
+TEST(Search, MySearchCircleTest) {
     GIS gis;
     gis.loadMapFile("gearth.json");
 
@@ -29,7 +29,7 @@ TEST(Search, SearchCircleTest) {
     }
 }
 
-TEST(Search, SearchWaysTest) {
+TEST(Search, MySearchWaysTest) {
     GIS gis;
     auto loadedIds = gis.loadMapFile("ways-search.json");
 
