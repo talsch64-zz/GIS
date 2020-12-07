@@ -39,7 +39,7 @@ class Coordinates
     Latitude _latitude;
 
 public:
-    Coordinates(const Longitude &longitude, const Latitude &latitude) : _longitude(trimLongitude(longitude)), _latitude(trimLatitude(latitude)) {}
+    Coordinates(const Longitude &longitude, const Latitude &latitude) : _longitude(trimLongitude(longitude)), _latitude(latitude) {}
 
     Longitude longitude() const { return _longitude; }
 
@@ -76,20 +76,6 @@ private:
             lon = lon + 360;
         }
         return Longitude(lon);
-    }
-
-    Latitude trimLatitude(const Latitude &latitude)
-    {
-        double lat = std::fmod(latitude, 180);
-        if (lat > 90)
-        {
-            lat = lat - 180;
-        }
-        else if (lat <= -90)
-        {
-            lat = lat + 180;
-        }
-        return Latitude(lat);
     }
 };
 
