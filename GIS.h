@@ -40,6 +40,7 @@ protected:
     std::unique_ptr<TopologicalSearch> topologicalSearch;
     std::unique_ptr<Logger> logger;
 
+
 public:
     GIS();
 
@@ -64,8 +65,12 @@ public:
     /* BFS-like algorithms which spreads to all direction in an even way level-by-level and searches for the closest way.
     * Once a way found, the spreading is stopped and the function returns the closest point on all
     * the ways on the current level */
-    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords);
+    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords) const;
 
+    const Way &getWay(const EntityId &id) const;
+
+    /* returns all the Ways the cross the given Junction */
+    std::vector<EntityId> getWaysByJunction(const EntityId &id) const;
 
 private:
 

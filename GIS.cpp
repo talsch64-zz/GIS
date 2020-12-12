@@ -114,7 +114,7 @@ std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &entityId, 
     return entities.find(entityId)->second->getGeometry()->getClosestPoint(coordinates);
 }
 
-std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord)
+std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord) const
 {
     bool wayFound = false;
     std::stack<Grid::GridCell> stack;
@@ -262,3 +262,20 @@ bool GIS::addEntity(std::unique_ptr<Entity> entity)
     }
     return success;
 }
+
+const Way &GIS::getWay(const EntityId &id) const {
+    Entity *entity = entities.find(id)->second.get();
+    if (entity->getType() != "Way") {
+        //TODO print to log entity is not a way
+    }
+    return *(dynamic_cast<Way*>(entity));
+}
+
+std::vector<EntityId> GIS::getWaysByJunction(const EntityId &id) const {
+    Entity *entity = entities.find(id)->second.get();
+    if (entity->getType() != "Junction") {
+        //TODO print to log entity is not a Junction
+    }
+    return (dynamic_cast<Junction*>(entity))->getWays();
+}
+

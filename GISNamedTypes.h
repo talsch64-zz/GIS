@@ -26,6 +26,12 @@ struct Meters : NamedTypeDouble<meters_precision> {
     using NamedTypeDouble<meters_precision>::NamedTypeDouble;
 };
 
+struct Minutes : NamedType<int> {
+    using NamedType<int>::NamedType;
+};
+
+enum class Direction {A_to_B, B_to_A};
+
 class Coordinates {
     Longitude _longitude;
     Latitude _latitude;
