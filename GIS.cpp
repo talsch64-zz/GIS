@@ -7,7 +7,7 @@
 #include <iostream>
 #include <stack>
 #include <set>
-#include "entities/EntityJsonParser.h"
+#include "entities/JsonHandlers/parsers/EntityJsonParser.h"
 #include "CoordinatesMath.h"
 #include <limits.h>
 

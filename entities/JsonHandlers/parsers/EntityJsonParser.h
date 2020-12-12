@@ -2,11 +2,11 @@
 #define EX1_ENTITYJSONPARSER_H
 
 #include <rapidjson/document.h>
-#include "POI.h"
-#include "Junction.h"
-#include "geometry/GeometryJsonParser.h"
-#include "Way.h"
-#include "../IdGenerator.h"
+#include "../../POI.h"
+#include "../../Junction.h"
+#include "GeometryJsonParser.h"
+#include "../../Way.h"
+#include "../../../IdGenerator.h"
 #include<memory>
 
 class GIS;

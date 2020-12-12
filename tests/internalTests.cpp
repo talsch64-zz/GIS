@@ -65,8 +65,8 @@ TEST(Coordinates, DistanceTest2) {
 
 TEST(Coordinates, MidpointVertical) {
     const double lng = -100;
-	Coordinates almost_north_pole{Longitude{lng}, Latitude{89}}; 
-	Coordinates almost_south_pole{Longitude{lng}, Latitude{-89}}; 
+	Coordinates almost_north_pole{Longitude{lng}, Latitude{89}};
+	Coordinates almost_south_pole{Longitude{lng}, Latitude{-89}};
     auto midpoint = CoordinatesMath::midpoint(almost_north_pole, almost_south_pole);
     auto equator_point = Coordinates{Longitude{lng}, Latitude{0}};
 	EXPECT_EQ(midpoint, equator_point);
@@ -74,8 +74,8 @@ TEST(Coordinates, MidpointVertical) {
 
 TEST(Coordinates, MidpointHorizontal0) {
     const double lat = 0;
-	Coordinates point1{Longitude{42}, Latitude{lat}}; 
-	Coordinates point2{Longitude{84}, Latitude{lat}}; 
+	Coordinates point1{Longitude{42}, Latitude{lat}};
+	Coordinates point2{Longitude{84}, Latitude{lat}};
     auto midpoint = CoordinatesMath::midpoint(point1, point2);
     auto expected_midpoint = Coordinates{Longitude{63}, Latitude{lat}};
 	EXPECT_EQ(midpoint, expected_midpoint);
@@ -83,8 +83,8 @@ TEST(Coordinates, MidpointHorizontal0) {
 
 TEST(Coordinates, MidpointHorizontal1) {
     const double lat = -10;
-	Coordinates point1{Longitude{42}, Latitude{lat}}; 
-	Coordinates point2{Longitude{84}, Latitude{lat}}; 
+	Coordinates point1{Longitude{42}, Latitude{lat}};
+	Coordinates point2{Longitude{84}, Latitude{lat}};
     auto midpoint = CoordinatesMath::midpoint(point1, point2);
     auto expected_midpoint = Coordinates{Longitude{63}, Latitude{-10.695563}};
 	EXPECT_EQ(midpoint, expected_midpoint);
@@ -92,8 +92,8 @@ TEST(Coordinates, MidpointHorizontal1) {
 
 TEST(Coordinates, MidpointHorizontal2) {
     const double lat = 35;
-	Coordinates point1{Longitude{135}, Latitude{lat}}; 
-	Coordinates point2{Longitude{45}, Latitude{lat}}; 
+	Coordinates point1{Longitude{135}, Latitude{lat}};
+	Coordinates point2{Longitude{45}, Latitude{lat}};
     auto midpoint = CoordinatesMath::midpoint(point1, point2);
     auto expected_midpoint = Coordinates{Longitude{90}, Latitude{44.719114}};
 	EXPECT_EQ(midpoint, expected_midpoint);
@@ -101,32 +101,32 @@ TEST(Coordinates, MidpointHorizontal2) {
 
 TEST(Coordinates, MidpointHorizontal3) {
     const double lat = 0;
-	Coordinates point1{Longitude{20}, Latitude{lat}}; 
-	Coordinates point2{Longitude{-160}, Latitude{lat}}; 
+	Coordinates point1{Longitude{20}, Latitude{lat}};
+	Coordinates point2{Longitude{-160}, Latitude{lat}};
     auto midpoint = CoordinatesMath::midpoint(point1, point2);
     auto expected_midpoint = Coordinates{Longitude{-70}, Latitude{0}};
 	EXPECT_EQ(midpoint, expected_midpoint);
 }
 
 TEST(Coordinates, MidpointDiagonal) {
-	Coordinates point1{Longitude{120}, Latitude{45}}; 
-	Coordinates point2{Longitude{40}, Latitude{-45}}; 
+	Coordinates point1{Longitude{120}, Latitude{45}};
+	Coordinates point2{Longitude{40}, Latitude{-45}};
     auto midpoint = CoordinatesMath::midpoint(point1, point2);
     auto expected_midpoint = Coordinates{Longitude{80}, Latitude{0}};
 	EXPECT_EQ(midpoint, expected_midpoint);
 }
 
 TEST(Coordinates, InitialBearingNorth) {
-	Coordinates point1{Longitude{40}, Latitude{-65}}; 
-	Coordinates point2{Longitude{40}, Latitude{5}}; 
+	Coordinates point1{Longitude{40}, Latitude{-65}};
+	Coordinates point2{Longitude{40}, Latitude{5}};
     auto bearing = CoordinatesMath::initialBearing(point1, point2);
     auto expected_expected = 0;
 	EXPECT_EQ(bearing, expected_expected);
 }
 
 TEST(Coordinates, InitialBearingSouth) {
-	Coordinates point1{Longitude{40}, Latitude{45}}; 
-	Coordinates point2{Longitude{40}, Latitude{-45}}; 
+	Coordinates point1{Longitude{40}, Latitude{45}};
+	Coordinates point2{Longitude{40}, Latitude{-45}};
     auto bearing = CoordinatesMath::initialBearing(point1, point2);
     auto expected_expected = 180;
 	EXPECT_EQ(bearing, expected_expected);
@@ -134,8 +134,8 @@ TEST(Coordinates, InitialBearingSouth) {
 
 TEST(Coordinates, InitialBearingEast) {
     const double lat = 0;
-	Coordinates point1{Longitude{40}, Latitude{lat}}; 
-	Coordinates point2{Longitude{80}, Latitude{lat}}; 
+	Coordinates point1{Longitude{40}, Latitude{lat}};
+	Coordinates point2{Longitude{80}, Latitude{lat}};
     auto bearing = CoordinatesMath::initialBearing(point1, point2);
     auto expected_expected = 90;
 	EXPECT_EQ(bearing, expected_expected);
@@ -143,8 +143,8 @@ TEST(Coordinates, InitialBearingEast) {
 
 TEST(Coordinates, InitialBearingWest) {
     const double lat = 0;
-	Coordinates point1{Longitude{0}, Latitude{lat}}; 
-	Coordinates point2{Longitude{-179}, Latitude{lat}}; 
+	Coordinates point1{Longitude{0}, Latitude{lat}};
+	Coordinates point2{Longitude{-179}, Latitude{lat}};
     auto bearing = CoordinatesMath::initialBearing(point1, point2);
     auto expected_expected = 270;
 	EXPECT_EQ(bearing, expected_expected);
@@ -152,8 +152,8 @@ TEST(Coordinates, InitialBearingWest) {
 
 TEST(Coordinates, InitialBearingEast2) {
     const double lat = 0;
-	Coordinates point1{Longitude{2}, Latitude{lat}}; 
-	Coordinates point2{Longitude{-179}, Latitude{lat}}; 
+	Coordinates point1{Longitude{2}, Latitude{lat}};
+	Coordinates point2{Longitude{-179}, Latitude{lat}};
     auto bearing = CoordinatesMath::initialBearing(point1, point2);
     auto expected_expected = 90;
 	EXPECT_EQ(bearing, expected_expected);
@@ -161,26 +161,26 @@ TEST(Coordinates, InitialBearingEast2) {
 
 TEST(Coordinates, InitialBearingDiagonal) {
     const std::size_t precision = 10;
-	Coordinates point1{Longitude{32.553212}, Latitude{23.445111}}; 
-	Coordinates point2{Longitude{-10.342237}, Latitude{67.123999}}; 
+	Coordinates point1{Longitude{32.553212}, Latitude{23.445111}};
+	Coordinates point2{Longitude{-10.342237}, Latitude{67.123999}};
     Double<precision> bearing = CoordinatesMath::initialBearing(point1, point2);
     Double<precision> expected_bearing = 340.125719401638;
 	EXPECT_EQ(bearing, expected_bearing);
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentFirst) {
-    Coordinates point{Longitude{40}, Latitude{10}}; 
-    Coordinates seg_1{Longitude{50}, Latitude{0}}; 
-    Coordinates seg_2{Longitude{120}, Latitude{0}}; 
+    Coordinates point{Longitude{40}, Latitude{10}};
+    Coordinates seg_1{Longitude{50}, Latitude{0}};
+    Coordinates seg_2{Longitude{120}, Latitude{0}};
 	Coordinates closest = CoordinatesMath::closestPointOnSegment(point, seg_1, seg_2);
     Coordinates expected_closest{Longitude{50}, Latitude{0}};
     EXPECT_EQ(closest, expected_closest);
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentAlong) {
-    Coordinates point{Longitude{40}, Latitude{10}}; 
-    Coordinates seg_1{Longitude{80}, Latitude{0}}; 
-    Coordinates seg_2{Longitude{-60}, Latitude{0}}; 
+    Coordinates point{Longitude{40}, Latitude{10}};
+    Coordinates seg_1{Longitude{80}, Latitude{0}};
+    Coordinates seg_2{Longitude{-60}, Latitude{0}};
 	auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(point, seg_1, seg_2);
     Coordinates expected_closest{Longitude{40}, Latitude{0}};
     EXPECT_EQ(closest.first, expected_closest);
@@ -191,9 +191,9 @@ TEST(CoordinatesMath, closestPointOnSegmentAlong) {
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentAlongMinus) {
-    Coordinates point{Longitude{40}, Latitude{-10}}; 
-    Coordinates seg_1{Longitude{80}, Latitude{0}}; 
-    Coordinates seg_2{Longitude{-60}, Latitude{0}}; 
+    Coordinates point{Longitude{40}, Latitude{-10}};
+    Coordinates seg_1{Longitude{80}, Latitude{0}};
+    Coordinates seg_2{Longitude{-60}, Latitude{0}};
 	auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(point, seg_1, seg_2);
     Coordinates expected_closest{Longitude{40}, Latitude{0}};
     EXPECT_EQ(closest.first, expected_closest);
@@ -204,18 +204,18 @@ TEST(CoordinatesMath, closestPointOnSegmentAlongMinus) {
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentSecond) {
-    Coordinates point{Longitude{40}, Latitude{10}}; 
-    Coordinates seg_1{Longitude{-60}, Latitude{0}}; 
-    Coordinates seg_2{Longitude{0}, Latitude{0}}; 
+    Coordinates point{Longitude{40}, Latitude{10}};
+    Coordinates seg_1{Longitude{-60}, Latitude{0}};
+    Coordinates seg_2{Longitude{0}, Latitude{0}};
 	Coordinates closest = CoordinatesMath::closestPointOnSegment(point, seg_1, seg_2);
     Coordinates expected_closest{Longitude{0}, Latitude{0}};
     EXPECT_EQ(closest, expected_closest);
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentSameFirst) {
-    Coordinates point{Longitude{40}, Latitude{10}}; 
-    Coordinates seg_1{Longitude{40}, Latitude{10}}; 
-    Coordinates seg_2{Longitude{39.999998}, Latitude{10.000001}}; 
+    Coordinates point{Longitude{40}, Latitude{10}};
+    Coordinates seg_1{Longitude{40}, Latitude{10}};
+    Coordinates seg_2{Longitude{39.999998}, Latitude{10.000001}};
     auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(point, seg_1, seg_2);
     Coordinates expected_closest{Longitude{40}, Latitude{10}};
     EXPECT_EQ(closest.first, expected_closest);
@@ -223,46 +223,46 @@ TEST(CoordinatesMath, closestPointOnSegmentSameFirst) {
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentSameFirst2) {
-    Coordinates point{Longitude{-40}, Latitude{-10}}; 
-    Coordinates seg_1{Longitude{-40}, Latitude{-10}}; 
-    Coordinates seg_2{Longitude{-39.999998}, Latitude{-10.000001}}; 
+    Coordinates point{Longitude{-40}, Latitude{-10}};
+    Coordinates seg_1{Longitude{-40}, Latitude{-10}};
+    Coordinates seg_2{Longitude{-39.999998}, Latitude{-10.000001}};
 	Coordinates closest = CoordinatesMath::closestPointOnSegment(point, seg_1, seg_2);
     Coordinates expected_closest{Longitude{-40}, Latitude{-10}};
     EXPECT_EQ(closest, expected_closest);
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentSameSecond) {
-    Coordinates point{Longitude{40}, Latitude{10}}; 
-    Coordinates seg_1{Longitude{33}, Latitude{11}}; 
-    Coordinates seg_2{Longitude{40}, Latitude{10}}; 
+    Coordinates point{Longitude{40}, Latitude{10}};
+    Coordinates seg_1{Longitude{33}, Latitude{11}};
+    Coordinates seg_2{Longitude{40}, Latitude{10}};
 	Coordinates closest = CoordinatesMath::closestPointOnSegment(point, seg_1, seg_2);
     Coordinates expected_closest{Longitude{40}, Latitude{10}};
     EXPECT_EQ(closest, expected_closest);
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentSameSecond2) {
-    Coordinates point{Longitude{-40}, Latitude{-10}}; 
-    Coordinates seg_1{Longitude{-33}, Latitude{-11}}; 
-    Coordinates seg_2{Longitude{-40}, Latitude{-10}}; 
+    Coordinates point{Longitude{-40}, Latitude{-10}};
+    Coordinates seg_1{Longitude{-33}, Latitude{-11}};
+    Coordinates seg_2{Longitude{-40}, Latitude{-10}};
 	Coordinates closest = CoordinatesMath::closestPointOnSegment(point, seg_1, seg_2);
     Coordinates expected_closest{Longitude{-40}, Latitude{-10}};
     EXPECT_EQ(closest, expected_closest);
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentAndDistanceSecond) {
-    Coordinates point{Longitude{40}, Latitude{10}}; 
-    Coordinates seg_1{Longitude{-60}, Latitude{0}}; 
-    Coordinates seg_2{Longitude{0}, Latitude{0}}; 
+    Coordinates point{Longitude{40}, Latitude{10}};
+    Coordinates seg_1{Longitude{-60}, Latitude{0}};
+    Coordinates seg_2{Longitude{0}, Latitude{0}};
 	auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(point, seg_1, seg_2);
     Coordinates expected_closest{Longitude{0}, Latitude{0}};
     EXPECT_EQ(closest.first, expected_closest);
-    EXPECT_EQ(closest.second, CoordinatesMath::calculateDistance(point, seg_2));    
+    EXPECT_EQ(closest.second, CoordinatesMath::calculateDistance(point, seg_2));
     EXPECT_EQ(closest.second, CoordinatesMath::distanceFromSegment(point, seg_1, seg_2));
     EXPECT_EQ(closest.second, CoordinatesMath::distanceFromSegment(point, seg_2, seg_1));
 }
 
 TEST(CoordinatesMath, ClosestPointOnCircleInsideC) {
-    Coordinates circle_center{Longitude{-20}, Latitude{30}}; 
+    Coordinates circle_center{Longitude{-20}, Latitude{30}};
     Meters circle_radius{2345.13};
     Coordinates c{Longitude{-20.001}, Latitude{30.002}};
 	Coordinates closest = CoordinatesMath::closestPointOnCircle(c, circle_center, circle_radius);
@@ -270,7 +270,7 @@ TEST(CoordinatesMath, ClosestPointOnCircleInsideC) {
 }
 
 TEST(CoordinatesMath, ClosestPointOnCircleOutside) {
-    Coordinates circle_center{Longitude{-20}, Latitude{30}}; 
+    Coordinates circle_center{Longitude{-20}, Latitude{30}};
     Meters circle_radius{22.23};
     Coordinates c{Longitude{-30.001}, Latitude{44.002}};
 	Coordinates closest = CoordinatesMath::closestPointOnCircle(c, circle_center, circle_radius);
@@ -282,7 +282,7 @@ TEST(CoordinatesMath, ClosestPointOnCircleOutside) {
 }
 
 TEST(CoordinatesMath, ClosestPointOnCircleOutside2) {
-    Coordinates circle_center{Longitude{20}, Latitude{0}}; 
+    Coordinates circle_center{Longitude{20}, Latitude{0}};
     Meters circle_radius{22.01};
     Coordinates c{Longitude{-160}, Latitude{0}};
 	Coordinates closest = CoordinatesMath::closestPointOnCircle(c, circle_center, circle_radius);
@@ -314,30 +314,30 @@ TEST(CoordinatesMath, IntersectionWithMeridian) {
 
 TEST(CoordinatesMath, closestPointOnSegmentSameFirst3) {
     //From: https://stackoverflow.com/questions/32771458/distance-from-lat-lng-point-to-minor-arc-segment/35587935#35587935
-    Coordinates p3{Longitude{-62.5}, Latitude{-10.5}}; 
-    Coordinates p1{Longitude{-55.5}, Latitude{-10.1}}; 
-    Coordinates p2{Longitude{-45.1}, Latitude{-15.2}}; 
-    auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(p3, p1, p2);    
+    Coordinates p3{Longitude{-62.5}, Latitude{-10.5}};
+    Coordinates p1{Longitude{-55.5}, Latitude{-10.1}};
+    Coordinates p2{Longitude{-45.1}, Latitude{-15.2}};
+    auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(p3, p1, p2);
     EXPECT_EQ(closest.first, p1);
     EXPECT_EQ(closest.second, Meters{767094.77});
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentSecond2) {
     //From: https://stackoverflow.com/questions/32771458/distance-from-lat-lng-point-to-minor-arc-segment/35587935#35587935
-    Coordinates p3{Longitude{42.0}, Latitude{25.0}}; 
-    Coordinates p1{Longitude{35.61}, Latitude{21.72}}; 
-    Coordinates p2{Longitude{40.70}, Latitude{23.65}}; 
-    auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(p3, p1, p2);    
+    Coordinates p3{Longitude{42.0}, Latitude{25.0}};
+    Coordinates p1{Longitude{35.61}, Latitude{21.72}};
+    Coordinates p2{Longitude{40.70}, Latitude{23.65}};
+    auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(p3, p1, p2);
     EXPECT_EQ(closest.first, p2);
     EXPECT_EQ(closest.second, Meters{199706.84});
 }
 
 TEST(CoordinatesMath, closestPointOnSegmentAlong2) {
     //From: https://stackoverflow.com/questions/32771458/distance-from-lat-lng-point-to-minor-arc-segment/35587935#35587935
-    Coordinates p3{Longitude{69.0}, Latitude{51.0}}; 
-    Coordinates p1{Longitude{60.5}, Latitude{40.5}}; 
-    Coordinates p2{Longitude{80.5}, Latitude{50.5}}; 
-    auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(p3, p1, p2);    
+    Coordinates p3{Longitude{69.0}, Latitude{51.0}};
+    Coordinates p1{Longitude{60.5}, Latitude{40.5}};
+    Coordinates p2{Longitude{80.5}, Latitude{50.5}};
+    auto closest = CoordinatesMath::closestPointOnSegmentAndDistance(p3, p1, p2);
     Coordinates expected_coordinates{Longitude{73.04979}, Latitude{47.475867}};
     EXPECT_EQ(closest.first, expected_coordinates);
     EXPECT_EQ(closest.second, Meters{479609.3});

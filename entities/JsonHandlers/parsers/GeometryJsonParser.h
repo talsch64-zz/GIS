@@ -5,9 +5,9 @@
 
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
-#include "Geometry.h"
-#include "Circle.h"
-#include "../CoordinatesJsonParser.h"
+#include "../../geometry/Geometry.h"
+#include "../../geometry/Circle.h"
+#include "CoordinatesJsonParser.h"
 
 
 class GeometryJsonParser {
