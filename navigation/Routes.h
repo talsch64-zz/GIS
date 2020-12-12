@@ -17,6 +17,8 @@ class Routes {
     bool valid;
 
 public:
+    Routes(const Route &shortestDistanceRoute, const Route &shortestTimeRoute, bool valid);
+
     bool isValid() const; // is route valid
 
     // following functions can be called only if isValid is true - undefined otherwise
