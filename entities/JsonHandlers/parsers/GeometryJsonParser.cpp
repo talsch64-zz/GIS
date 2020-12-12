@@ -1,8 +1,8 @@
 
 #include <memory>
 #include "GeometryJsonParser.h"
-#include "Point.h"
-#include "PointList.h"
+#include "../../geometry/Point.h"
+#include "../../geometry/PointList.h"
 
 std::unique_ptr<Geometry> GeometryJsonParser::parsePOIGeometry(rapidjson::Value &doc) {
     if (!doc.HasMember("geometry") || !doc["geometry"].IsObject()) {

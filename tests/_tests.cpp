@@ -8,8 +8,8 @@
 
 TEST(GISBasic, loadMapFile) {
 	GIS gis = GISProvider::getGIS();
-	std::vector<EntityId> loaded_entities = gis.loadMapFile("nyc.json"); 
-	std::vector<EntityId> expected_entities({EntityId("P1001"), EntityId("P1002"), EntityId("J1001"), EntityId("J1002"), EntityId("J1010"), EntityId("P1010"), EntityId("W2001"), EntityId("W2002")});	
+	std::vector<EntityId> loaded_entities = gis.loadMapFile("nyc.json");
+	std::vector<EntityId> expected_entities({EntityId("P1001"), EntityId("P1002"), EntityId("J1001"), EntityId("J1002"), EntityId("J1010"), EntityId("P1010"), EntityId("W2001"), EntityId("W2002")});
 	EXPECT_EQ(loaded_entities, expected_entities);
 }
 
@@ -18,7 +18,7 @@ TEST(GISBasic, getEntities) {
 	gis.loadMapFile("nyc.json");
 	std::vector<EntityId> entities = gis.getEntities("Washington Square Park");
 	std::sort(entities.begin(), entities.end());
-	std::vector<EntityId> expected_entities({EntityId("P1001")}); 
+	std::vector<EntityId> expected_entities({EntityId("P1001")});
     EXPECT_EQ(entities, expected_entities);
 }
 
