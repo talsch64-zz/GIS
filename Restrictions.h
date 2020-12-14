@@ -1,7 +1,3 @@
-//
-// Created by student on 14/12/2020.
-//
-
 #ifndef GIS_CPP_RESTRICTIONS_H
 #define GIS_CPP_RESTRICTIONS_H
 
@@ -24,7 +20,8 @@ public:
     Restrictions(const char* restrictions);
 
 private:
-    std::unordered_set<std::string> splitRestrictions(const char* restrictions);
+//    TODO move to Utils.h or something
+    std::unordered_set<std::string> split(const char* restrictions, const char *delimiter);
 };
 
 #endif //GIS_CPP_RESTRICTIONS_H
