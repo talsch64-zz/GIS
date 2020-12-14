@@ -19,6 +19,8 @@ public:
      */
     Restrictions(const char* restrictions);
 
+    const std::unordered_set<std::string> &getRestrictions() const;
+
 private:
 //    TODO move to Utils.h or something
     std::unordered_set<std::string> split(const char* restrictions, const char *delimiter);

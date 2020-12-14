@@ -15,3 +15,7 @@ std::unordered_set<std::string> Restrictions::split(const char *restrictions, co
     }
     return restrictionsSet;
 }
+
+const std::unordered_set<std::string> &Restrictions::getRestrictions() const {
+    return restrictions;
+}

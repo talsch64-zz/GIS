@@ -52,7 +52,9 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
                                                      direction, speedLimit, tollRoad,
                                                      restricted);
     ((Junction *)fromEntity)->addWay(id);
-    ((Junction *)toEntity)->addWay(id);
+    if (direction == "bidirectional") {
+        ((Junction *)toEntity)->addWay(id);
+    }
     return way;
 }
 

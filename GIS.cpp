@@ -264,6 +264,9 @@ bool GIS::addEntity(std::unique_ptr<Entity> entity)
 }
 
 const Way &GIS::getWay(const EntityId &id) const {
+    if (entities.find(id) == entities.end()) {
+        //TODO print to log id is not valid
+    }
     Entity *entity = entities.find(id)->second.get();
     if (entity->getType() != "Way") {
         //TODO print to log entity is not a way
@@ -272,6 +275,9 @@ const Way &GIS::getWay(const EntityId &id) const {
 }
 
 std::vector<EntityId> GIS::getWaysByJunction(const EntityId &id) const {
+    if (entities.find(id) == entities.end()) {
+        //TODO print to log id is not valid
+    }
     Entity *entity = entities.find(id)->second.get();
     if (entity->getType() != "Junction") {
         //TODO print to log entity is not a Junction
