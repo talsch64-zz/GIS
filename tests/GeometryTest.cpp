@@ -2,11 +2,14 @@
 #include "../GISNamedTypes.h"
 #include "../CoordinatesMath.h"
 #include "../entities/geometry/Circle.h"
+#include "../entities/Way.h"
 #include "../entities/geometry/PointList.h"
 #include "../GIS.h"
 #include <numbers>
 
 #define METERS_PRECISION 1
+#define WAY_LENGTH_ACCEPTED_ERROR 0.005
+
 TEST(ClosestPointTest, MyClosestPointWay1) {
     Coordinates c1(Longitude(-2), Latitude(2));
     Coordinates c2(Longitude(-2), Latitude(1));
@@ -54,16 +57,18 @@ TEST(CoordinatesMathTest, ShortestDistanceAndCoordinatesTest) {
 }
 
 TEST(CoordinatesTest, LongitudeTrimTest) {
-    Coordinates coords {Longitude(178), Latitude(0)};
+    Coordinates coords{Longitude(178), Latitude(0)};
     Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 90, Meters(200000));
     EXPECT_TRUE(target.longitude() > 0);
     double reverse_bearing = CoordinatesMath::initialBearing(target, coords);
     target = CoordinatesMath::coordinatesByBearingAndDistance(target, reverse_bearing, Meters(200000));
     EXPECT_EQ(coords.longitude(), target.longitude());
 }
+
 TEST(CoordinatesTest, ZulVernLatitudeTest) {
-    Coordinates coords {Longitude(0), Latitude(0)};
-    Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 0, Meters(2*std::numbers::pi*6371000));
+    Coordinates coords{Longitude(0), Latitude(0)};
+    Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 0,
+                                                                          Meters(2 * std::numbers::pi * 6371000));
     EXPECT_LT(abs(target.latitude() - coords.latitude()), 0.00001);
     EXPECT_EQ(target.longitude(), coords.longitude());
 }
@@ -93,4 +98,28 @@ TEST(GISBasic, MygetWayClosestPointTest3) {
     Coordinates closest = gis.getWayClosestPoint(coord).first;
     Coordinates curve(Longitude(90.69101), Latitude(65.98046));
     EXPECT_TRUE(CoordinatesMath::calculateDistance(curve, closest) < METERS_PRECISION);
+}
+
+TEST(WayGeometry, GetWayLengthWithCurves) {
+    GIS gis;
+    gis.loadMapFile("ways.json");
+    double expectedLength = 43633;
+    double acceptedError = WAY_LENGTH_ACCEPTED_ERROR * expectedLength;
+
+    Way *way = (Way *) gis.getEntityById(EntityId("1"));
+    Meters length = way->getLength();
+
+    EXPECT_NEAR(length, expectedLength, acceptedError);
+}
+
+TEST(WayGeometry, GetWayLengthWithoutCurves) {
+    GIS gis;
+    gis.loadMapFile("ways.json");
+    double expectedLength = 21223;
+    double acceptedError = WAY_LENGTH_ACCEPTED_ERROR * expectedLength;
+
+    Way *way = (Way *) gis.getEntityById(EntityId("2"));
+    Meters length = way->getLength();
+
+    EXPECT_NEAR(length, expectedLength, acceptedError);
 }
