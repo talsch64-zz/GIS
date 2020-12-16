@@ -9,6 +9,7 @@
 double Grid::truncateDecimalCoordinate(double coordinate) const {
     return std::floor(coordinate / precision) * precision;
 }
+
 Grid::Grid() : topologicalSearch(std::make_unique<TopologicalSearch>()) {
 }
 
@@ -38,7 +39,7 @@ CellEntities Grid::getEntitiesOnGrid(const GridCell &cell) {
 }
 
 std::vector<Grid::GridCell> Grid::setEntityOnGrid(const Entity &entity) {
-    Geometry &entityGeometry = *(entity.getGeometry().get());
+    const Geometry &entityGeometry = *entity.getGeometry();
     std::vector<Grid::GridCell> cells = entityGeometry.getGridCells(this);
     EntityId id = entity.getId();
     for (const auto &cell: cells) {

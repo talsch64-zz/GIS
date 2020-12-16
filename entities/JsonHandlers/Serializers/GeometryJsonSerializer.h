@@ -15,11 +15,11 @@ class GeometryJsonSerializer {
     CoordinatesJsonSerializer coordinatesJsonSerializer;
 
 public:
-    rapidjson::Value toJson(Circle *geometry, rapidjson::Document::AllocatorType &allocator);
+    rapidjson::Value toJson(const Circle *geometry, rapidjson::Document::AllocatorType &allocator);
 
-    rapidjson::Value toJson(Point *geometry, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator);
+    rapidjson::Value toJson(const Point *geometry, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator);
 
-    rapidjson::Value toJson(PointList *geometry, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator);
+    rapidjson::Value toJson(const PointList *geometry, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator);
 };
 
 

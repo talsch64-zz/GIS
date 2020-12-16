@@ -33,9 +33,9 @@ public:
 
     virtual ~Geometry();
 
-    virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) = 0;
+    virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) const = 0;
 
-    virtual std::vector<Coordinates> getGridCells(const Grid *grid) = 0;
+    virtual std::vector<Coordinates> getGridCells(const Grid *grid) const = 0;
 
     /* returns the closest Coordinates on the geometry's perimeter from the given coordinates */
     virtual Coordinates getClosestPoint(const Coordinates &coordinates) const = 0;

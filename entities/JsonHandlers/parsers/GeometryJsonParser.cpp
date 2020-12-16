@@ -4,7 +4,7 @@
 #include "../../geometry/Point.h"
 #include "../../geometry/PointList.h"
 
-std::unique_ptr<Geometry> GeometryJsonParser::parsePOIGeometry(rapidjson::Value &doc) {
+std::unique_ptr<Circle> GeometryJsonParser::parsePOIGeometry(rapidjson::Value &doc) {
     if (!doc.HasMember("geometry") || !doc["geometry"].IsObject()) {
         throw std::runtime_error("JSON entity doesn't contain geometry");
     }
@@ -34,7 +34,7 @@ std::unique_ptr<Circle> GeometryJsonParser::parseCircle(rapidjson::Value &doc) {
     return circle;
 }
 
-std::unique_ptr<Geometry> GeometryJsonParser::parseWayGeometry(rapidjson::Value &doc, Coordinates &fromCoord, Coordinates &toCoord) {
+std::unique_ptr<PointList> GeometryJsonParser::parseWayGeometry(rapidjson::Value &doc, Coordinates &fromCoord, Coordinates &toCoord) {
 //    std::unique_ptr<PointList> pointList (new PointList());
     std::vector<Coordinates> points;
     points.push_back(fromCoord);
@@ -47,7 +47,7 @@ std::unique_ptr<Geometry> GeometryJsonParser::parseWayGeometry(rapidjson::Value 
     return std::make_unique<PointList>(points);
 }
 
-std::unique_ptr<Geometry> GeometryJsonParser::parseJunctionGeometry(rapidjson::Value &doc) {
+std::unique_ptr<Point> GeometryJsonParser::parseJunctionGeometry(rapidjson::Value &doc) {
     if (!doc.HasMember("coordinates") || !doc["coordinates"].IsArray())  {
         throw std::runtime_error("Invalid coordinates in JSON");
     }

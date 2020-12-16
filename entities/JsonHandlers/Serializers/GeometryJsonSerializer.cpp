@@ -4,7 +4,7 @@
 #include "../../geometry/Point.h"
 #include "../../geometry/PointList.h"
 
-rapidjson::Value GeometryJsonSerializer::toJson(Circle *geometry, rapidjson::Document::AllocatorType &allocator) {
+rapidjson::Value GeometryJsonSerializer::toJson(const Circle *geometry, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json;
     json.SetObject();
 
@@ -22,11 +22,11 @@ rapidjson::Value GeometryJsonSerializer::toJson(Circle *geometry, rapidjson::Doc
     return json;
 }
 
-rapidjson::Value GeometryJsonSerializer::toJson(Point *geometry, rapidjson::Document::AllocatorType &allocator) {
+rapidjson::Value GeometryJsonSerializer::toJson(const Point *geometry, rapidjson::Document::AllocatorType &allocator) {
     return coordinatesJsonSerializer.toJson(geometry->getCoordinates(), allocator);
 }
 
-rapidjson::Value GeometryJsonSerializer::toJson(PointList *geometry, rapidjson::Document::AllocatorType &allocator) {
+rapidjson::Value GeometryJsonSerializer::toJson(const PointList *geometry, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value curves;
     curves.SetArray();
     std::vector<Coordinates> points = geometry->getPoints();

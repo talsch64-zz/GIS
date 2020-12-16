@@ -13,11 +13,15 @@
 /// Entity derived class which represents a junction in the GIS application
 /// Junction's Geometry is a Point which holds a single Coordinates
 class Junction: public Entity {
+    std::unique_ptr<Point> geometry;
+
 public:
     Junction(const EntityId &id, const std::string &name, const std::string &description,
-             const std::vector<std::string> &categoryTags, std::unique_ptr<Geometry> geometry);
+             const std::vector<std::string> &categoryTags, std::unique_ptr<Point> geometry);
 
     rapidjson::Value toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) override;
+
+    const Geometry *getGeometry() const override;
 };
 
 #endif //EX1_JUNCTION_H

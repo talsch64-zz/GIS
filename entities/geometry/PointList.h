@@ -19,12 +19,14 @@ public:
 
     const std::vector<Coordinates> &getPoints() const;
 
-    rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
+    rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) const override;
 
-    std::vector<Coordinates> getGridCells(const Grid *grid) override;
+    std::vector<Coordinates> getGridCells(const Grid *grid) const override;
 
     Coordinates getClosestPoint(const Coordinates &coordinates) const override;
     
     bool isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &center, Meters radius) const override;
+
+    Meters getLength() const;
 };
 #endif //EX1_POINTLIST_H

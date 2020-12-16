@@ -7,6 +7,8 @@
 #include <rapidjson/document.h>
 #include "../../geometry/Geometry.h"
 #include "../../geometry/Circle.h"
+#include "../../geometry/PointList.h"
+#include "../../geometry/Point.h"
 #include "CoordinatesJsonParser.h"
 
 
@@ -17,9 +19,9 @@ private:
     std::unique_ptr<Circle> parseCircle(rapidjson::Value &value);
 
 public:
-    std::unique_ptr<Geometry> parsePOIGeometry(rapidjson::Value &doc);
-    std::unique_ptr<Geometry> parseWayGeometry(rapidjson::Value &doc, Coordinates &fromCoord, Coordinates &toCoord);
-    std::unique_ptr<Geometry> parseJunctionGeometry(rapidjson::Value &doc);
+    std::unique_ptr<Circle> parsePOIGeometry(rapidjson::Value &doc);
+    std::unique_ptr<PointList> parseWayGeometry(rapidjson::Value &doc, Coordinates &fromCoord, Coordinates &toCoord);
+    std::unique_ptr<Point> parseJunctionGeometry(rapidjson::Value &doc);
 
 
 

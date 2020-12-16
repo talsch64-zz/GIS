@@ -43,9 +43,9 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     if (!toEntity || toEntity->getType() != "Junction") {
         throw std::runtime_error("Way does not contain valid to Junction");
     }
-    Coordinates fromCoordinates = ((Point *) fromEntity->getGeometry().get())->getCoordinates();
-    Coordinates toCoordinates = ((Point *) toEntity->getGeometry().get())->getCoordinates();
-    std::unique_ptr<Geometry> geometry = geometryJsonParser.parseWayGeometry(doc, fromCoordinates, toCoordinates);
+    Coordinates fromCoordinates = ((Point *) fromEntity->getGeometry())->getCoordinates();
+    Coordinates toCoordinates = ((Point *) toEntity->getGeometry())->getCoordinates();
+    std::unique_ptr<PointList> geometry = geometryJsonParser.parseWayGeometry(doc, fromCoordinates, toCoordinates);
 
     EntityId id = parseEntityId(doc);
     std::unique_ptr<Way> way = std::make_unique<Way>(id, name, description, categoryTags, std::move(geometry), from, to,
@@ -58,7 +58,7 @@ std::unique_ptr<Junction> EntityJsonParser::parseJunction(rapidjson::Value &doc)
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
-    std::unique_ptr<Geometry> geometry = geometryJsonParser.parseJunctionGeometry(doc);
+    std::unique_ptr<Point> geometry = geometryJsonParser.parseJunctionGeometry(doc);
     EntityId id = parseEntityId(doc);
     std::unique_ptr<Junction> junction = std::make_unique<Junction>(id, name, description, categoryTags,
                                                                     std::move(geometry));
@@ -71,7 +71,7 @@ std::unique_ptr<POI> EntityJsonParser::parsePoi(rapidjson::Value &doc) {
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
     std::vector<std::string> accessibility = parseAccessibility(doc);
-    std::unique_ptr<Geometry> geometry = geometryJsonParser.parsePOIGeometry(doc);
+    std::unique_ptr<Circle> geometry = geometryJsonParser.parsePOIGeometry(doc);
     EntityId id = parseEntityId(doc);
     std::unique_ptr<POI> poi = std::make_unique<POI>(id, name, description, categoryTags, accessibility,
                                                      std::move(geometry));

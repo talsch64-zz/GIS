@@ -16,11 +16,11 @@ public:
         return radius;
     }
 
-    rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
+    rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) const override;
 
     Coordinates getCenter() const;
 
-    std::vector<Coordinates> getGridCells(const Grid *grid) override;
+    std::vector<Coordinates> getGridCells(const Grid *grid) const override;
 
     bool isInCircle(const TopologicalSearch *topologicalSearch, const Coordinates &searchCenter, Meters searchRadius) const override;
 

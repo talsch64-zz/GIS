@@ -4,22 +4,24 @@
 
 #include "Entity.h"
 #include "../GISNamedTypes.h"
-#include "geometry/Geometry.h"
+#include "geometry/PointList.h"
 
 /// Entity derived class which represents a Way in the GIS application
 /// Way's geometry is a Circle that is represented by a radius and center coordinates
 
-class Way: public Entity {
+class Way : public Entity {
     EntityId from;
     EntityId to;
+    std::unique_ptr<PointList> geometry;
     std::string direction;
     int speedLimit;
     bool tollRoad;
     std::vector<std::string> restricted;
+    std::optional<Meters> length;
 
 public:
     Way(const EntityId &id, const std::string &name, const std::string &description,
-        const std::vector<std::string> &categoryTags, std::unique_ptr<Geometry> geometry, EntityId from,
+        const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from,
         EntityId to, std::string direction, int speedLimit, bool tollRoad, std::vector<std::string> restricted);
 
     const EntityId &getFrom() const;
@@ -39,6 +41,12 @@ public:
     /// Get from, to junctions as a pair
     /// \return from, to pair
     std::pair<EntityId, EntityId> getJunctions() const;
+
+    /// Get the length of the way in meters
+    /// \return length in meters
+    Meters getLength();
+
+    const Geometry *getGeometry() const override;
 };
 
 #endif //EX1_WAY_H

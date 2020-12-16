@@ -75,7 +75,7 @@ std::tuple<Latitude, Latitude, Longitude, Longitude> randBound() {
 
 std::unique_ptr<Junction> generateJunction(IdGenerator *idGenerator, Coordinates coord) {
     EntityId id = idGenerator->generateId();
-    std::unique_ptr<Geometry> point = (std::unique_ptr<Geometry>) std::make_unique<Point>(coord);
+    std::unique_ptr<Point> point = std::make_unique<Point>(coord);
     std::unique_ptr<Junction> junction = std::make_unique<Junction>(id, getName(), getName(),
                                                                     std::vector<std::string>(), std::move(point));
     return junction;
@@ -84,7 +84,7 @@ std::unique_ptr<Junction> generateJunction(IdGenerator *idGenerator, Coordinates
 std::unique_ptr<Way>
 generateWay(IdGenerator *idGenerator, std::vector<Coordinates> curves, EntityId from, EntityId to) {
     EntityId id = idGenerator->generateId();
-    std::unique_ptr<Geometry> points = (std::unique_ptr<Geometry>) std::make_unique<PointList>(curves);
+    std::unique_ptr<PointList> points = std::make_unique<PointList>(curves);
     std::unique_ptr<Way> way = std::make_unique<Way>(id, getName(), getName(), std::vector<std::string>(),
                                                      std::move(points), from, to,
                                                      "dir", 70, true, std::vector<std::string>());
@@ -93,7 +93,7 @@ generateWay(IdGenerator *idGenerator, std::vector<Coordinates> curves, EntityId 
 
 std::unique_ptr<POI> generatePOI(IdGenerator *idGenerator, Coordinates center, Meters radius) {
     EntityId id = idGenerator->generateId();
-    std::unique_ptr<Geometry> circle = (std::unique_ptr<Geometry>) std::make_unique<Circle>(center, radius);
+    std::unique_ptr<Circle> circle = std::make_unique<Circle>(center, radius);
     std::unique_ptr<POI> poi = std::make_unique<POI>(id, getName(), getName(), std::vector<std::string>(),
                                                      std::vector<std::string>(), std::move(circle));
     return poi;
