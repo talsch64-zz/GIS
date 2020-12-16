@@ -35,6 +35,10 @@ public:
     const std::vector<std::string> &getRestricted() const;
 
     rapidjson::Value toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) override;
+
+    /// Get from, to junctions as a pair
+    /// \return from, to pair
+    std::pair<EntityId, EntityId> getJunctions() const;
 };
 
 #endif //EX1_WAY_H

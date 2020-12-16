@@ -40,3 +40,7 @@ bool Way::isTollRoad() const {
 const std::vector<std::string> &Way::getRestricted() const {
     return restricted;
 }
+
+std::pair<EntityId, EntityId> Way::getJunctions() const {
+    return std::pair<EntityId, EntityId>(from, to);
+}
