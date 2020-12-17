@@ -6,7 +6,7 @@
 
 std::vector<Coordinates>
 TopologicalSearch::searchCircleInGrid(const Grid &grid, const Coordinates &center, Meters radius) const {
-    radius = Meters(radius + SAFETY_MARGIN);
+    radius = radius + SAFETY_MARGIN;
     std::vector<Coordinates> cellsInCircle;
     std::queue<Coordinates> queue;
     queue.push(grid.truncateCoordinates(center));

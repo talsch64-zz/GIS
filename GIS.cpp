@@ -95,7 +95,22 @@ std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &entityId, 
 }
 
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord) const {
-    return getWayClosestPoint(coord, Restrictions());
+    auto closestWayPair = getWayClosestPoint(coord, Restrictions());
+    const Way &closestWay = getWay(closestWayPair.second);
+    bool valid = true;
+    if (closestWay.isHighway()) {
+        Coordinates closestCoord = closestWay.getGeometry()->getClosestPoint(coord);
+        Meters distance = CoordinatesMath::calculateDistance(closestCoord, coord);
+        //TODO: is Meters comparison correct?
+        if (distance > max_distance_from_highway) {
+            valid = false;
+        }
+    }
+
+    if (!valid) {
+        closestWayPair = getWayClosestPoint(coord, Restrictions("highway"));
+    }
+    return closestWayPair;
 }
 
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
@@ -227,7 +242,7 @@ const Way &GIS::getWay(const EntityId &id) const {
     if (entity->getType() != "Way") {
         //TODO print to log entity is not a way
     }
-    return *(dynamic_cast<Way*>(entity));
+    return *(dynamic_cast<Way *>(entity));
 }
 
 std::vector<EntityId> GIS::getWaysByJunction(const EntityId &id) const {
@@ -238,6 +253,6 @@ std::vector<EntityId> GIS::getWaysByJunction(const EntityId &id) const {
     if (entity->getType() != "Junction") {
         //TODO print to log entity is not a Junction
     }
-    return (dynamic_cast<Junction*>(entity))->getWays();
+    return (dynamic_cast<Junction *>(entity))->getWays();
 }
 

@@ -17,7 +17,7 @@
 /// * Check if a given geometry runs through or overlaps a given circle.
 
 class TopologicalSearch {
-    double SAFETY_MARGIN = 500;
+    const Meters SAFETY_MARGIN = Meters(500);
 public:
     std::vector<Coordinates> searchCircleInGrid(const Grid &grid, const Coordinates &center, Meters radius) const;
 

@@ -41,11 +41,11 @@ Coordinates PointList::getClosestPoint(const Coordinates &coordinates) const {
 }
 
 Meters PointList::getLength() const {
-    double length = 0;
+    Meters length(0);
     for (size_t i = 1; i < points.size(); i++) {
         length += CoordinatesMath::calculateDistance(points[i - 1], points[i]);
     }
-    return Meters(length);
+    return length;
 }
 
 

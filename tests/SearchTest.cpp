@@ -56,8 +56,8 @@ double fRand(double fMin, double fMax) {
 }
 
 Coordinates randCoord(Latitude minLat, Latitude maxLat, Longitude minLon, Longitude maxLon) {
-    Latitude lat = Latitude(fRand(minLat, maxLat));
-    Longitude lon = Longitude(fRand(minLon, maxLon));
+    Latitude lat = Latitude(fRand((double)minLat, (double)maxLat));
+    Longitude lon = Longitude(fRand((double)minLon, (double)maxLon));
     return Coordinates(lon, lat);
 }
 
@@ -107,7 +107,7 @@ void generateEntity(GISMock *gis, IdGenerator *idGenerator,
         Meters maxDistance = Meters(
                 CoordinatesMath::calculateDistance(Coordinates(minLon, minLat), Coordinates(maxLon, maxLat)) / 3);
         Coordinates center = randCoord(minLat, maxLat, minLon, maxLon);
-        Meters radius = Meters(fRand(0, maxDistance));
+        Meters radius = Meters(fRand(0, (double)maxDistance));
         entity = generatePOI(idGenerator, center, radius);
     } else if (num < 66) {
         Coordinates coord = randCoord(minLat, maxLat, minLon, maxLon);
@@ -150,7 +150,7 @@ TEST(Search, RandomSearchTest) {
                 6);
         Coordinates center = randCoord(std::get<0>(bound), std::get<1>(bound),
                                        std::get<2>(bound), std::get<3>(bound));
-        Meters radius = Meters(fRand(0, maxDistance));
+        Meters radius = Meters(fRand(0, (double)maxDistance));
 
         auto &entityMap = gis->getEntityMap();
         for (auto &entityPair : entityMap) {

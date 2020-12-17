@@ -7,7 +7,7 @@
 #include "../GIS.h"
 #include <numbers>
 
-#define METERS_PRECISION 1
+#define METERS_PRECISION Meters(1)
 #define WAY_LENGTH_ACCEPTED_ERROR 0.005
 
 TEST(ClosestPointTest, MyClosestPointWay1) {
@@ -51,15 +51,15 @@ TEST(CoordinatesMathTest, ShortestDistanceAndCoordinatesTest) {
     Meters distance = CoordinatesMath::distanceFromSegment(C, A, B);
     std::pair<Coordinates, Meters> closestPair = CoordinatesMath::closestPointOnSegmentAndDistance(C, A, B);
 
-    EXPECT_LT(abs(closestPair.second - distance), METERS_PRECISION);
-    EXPECT_LT(abs(CoordinatesMath::calculateDistance(C, D) - distance), METERS_PRECISION);
+    EXPECT_NEAR((double)closestPair.second, (double)distance, (double)METERS_PRECISION);
+    EXPECT_NEAR((double)CoordinatesMath::calculateDistance(C, D), (double)distance, (double)METERS_PRECISION);
     EXPECT_LT(CoordinatesMath::calculateDistance(closestPair.first, D), METERS_PRECISION);
 }
 
 TEST(CoordinatesTest, LongitudeTrimTest) {
     Coordinates coords{Longitude(178), Latitude(0)};
     Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 90, Meters(200000));
-    EXPECT_TRUE(target.longitude() > 0);
+    EXPECT_TRUE(target.longitude() > Longitude(0));
     double reverse_bearing = CoordinatesMath::initialBearing(target, coords);
     target = CoordinatesMath::coordinatesByBearingAndDistance(target, reverse_bearing, Meters(200000));
     EXPECT_EQ(coords.longitude(), target.longitude());
@@ -69,7 +69,7 @@ TEST(CoordinatesTest, ZulVernLatitudeTest) {
     Coordinates coords{Longitude(0), Latitude(0)};
     Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 0,
                                                                           Meters(2 * std::numbers::pi * 6371000));
-    EXPECT_LT(abs(target.latitude() - coords.latitude()), 0.00001);
+    EXPECT_NEAR((double)target.latitude(), (double)coords.latitude(), 0.00001);
     EXPECT_EQ(target.longitude(), coords.longitude());
 }
 
@@ -103,25 +103,25 @@ TEST(GISBasic, MygetWayClosestPointTest3) {
 TEST(WayGeometry, GetWayLengthWithCurves) {
     GIS gis;
     gis.loadMapFile("ways.json");
-    double expectedLength = 43633;
-    double acceptedError = WAY_LENGTH_ACCEPTED_ERROR * expectedLength;
+    Meters expectedLength(43633);
+    Meters acceptedError = WAY_LENGTH_ACCEPTED_ERROR * expectedLength;
 
     Way *way = (Way *) gis.getEntityById(EntityId("1"));
     Meters length = way->getLength();
 
-    EXPECT_NEAR(length, expectedLength, acceptedError);
+    EXPECT_NEAR((double)length, (double)expectedLength, (double)acceptedError);
 }
 
 TEST(WayGeometry, GetWayLengthWithoutCurves) {
     GIS gis;
     gis.loadMapFile("ways.json");
-    double expectedLength = 21223;
-    double acceptedError = WAY_LENGTH_ACCEPTED_ERROR * expectedLength;
+    Meters expectedLength(21223);
+    Meters acceptedError = WAY_LENGTH_ACCEPTED_ERROR * expectedLength;
 
     Way *way = (Way *) gis.getEntityById(EntityId("2"));
     Meters length = way->getLength();
 
-    EXPECT_NEAR(length, expectedLength, acceptedError);
+    EXPECT_NEAR((double)length, (double)expectedLength, (double)acceptedError);
 }
 
 //TODO: write tests for closest way with restrictions, GISNavigation closest way
