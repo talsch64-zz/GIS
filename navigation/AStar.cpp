@@ -79,6 +79,8 @@ const std::optional<std::pair<EntityId, Direction>> &AStar::Node::getPrevEdgeWay
     return prevEdgeWay;
 }
 
+
+
 //std::vector<std::shared_ptr<AStar::Node>>
 //AStar::Node::getNeighbors(std::shared_ptr<Node> currNode, std::unordered_map<EntityId, std::shared_ptr<Node>>,
 //                          NavigationGIS &navigationGIS) {

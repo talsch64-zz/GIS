@@ -10,7 +10,7 @@
 #include "../GISNamedTypes.h"
 #include "../entities/Way.h"
 #include "../NavigationGIS.h"
-
+#include "../CoordinatesMath.h"
 class AStar {
 
 public:
@@ -47,7 +47,7 @@ public:
 
     };
 
-    double heuristic(const Coordinates &start, const Coordinates &target);
+    double heuristic(const Coordinates &start, const Coordinates &target) {return (double) CoordinatesMath::calculateDistance(start, target);}
 
     void search(Way *startWay, Way *finalWay, Coordinates start, Coordinates end, NavigationGIS navigationGIS);
 };
