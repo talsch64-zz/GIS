@@ -17,6 +17,6 @@ rapidjson::Value POI::toJson(rapidjson::Document::AllocatorType &allocator) {
     return entityJsonSerializer->toJson(this, allocator);
 }
 
-const Geometry *POI::getGeometry() const {
-    return geometry.get();
+const std::unique_ptr<Geometry> &POI::getGeometry() const {
+    return (const std::unique_ptr<Geometry> &) geometry;
 }

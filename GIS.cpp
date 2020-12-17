@@ -121,9 +121,9 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                     continue;
                 }
                 idsSeen.insert(entityId);
-                Entity *entity = entities.find(entityId)->second.get();
+                const std::unique_ptr<Entity> &entity = entities.find(entityId)->second;
                 if (entity->getType() == "Way") {
-                    Way *way = (Way *) entity;
+                    auto &way = (const std::unique_ptr<Way> &) entity;
                     if (!way->isRestricted(res)) {
                         wayFound = true;
                         Coordinates candidate = entity->getGeometry()->getClosestPoint(coord);

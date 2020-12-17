@@ -72,7 +72,7 @@ public:
      */
     Meters getLength();
 
-    const Geometry *getGeometry() const override;
+    const std::unique_ptr<Geometry> &getGeometry() const override;
 
     /**
      * Does the way contain any of the specified restrictions

@@ -9,6 +9,6 @@ rapidjson::Value Junction::toJson(rapidjson::Document::AllocatorType &allocator)
     return entityJsonSerializer->toJson(this, allocator);
 }
 
-const Geometry *Junction::getGeometry() const {
-    return geometry.get();
+const std::unique_ptr<Geometry> &Junction::getGeometry() const {
+    return (const std::unique_ptr<Geometry> &) geometry;
 }

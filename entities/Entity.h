@@ -46,7 +46,7 @@ public:
 
     void setId(const EntityId &id);
 
-    virtual const Geometry *getGeometry() const = 0;
+    virtual const std::unique_ptr<Geometry> &getGeometry() const = 0;
 
     const std::string &getType() const;
 

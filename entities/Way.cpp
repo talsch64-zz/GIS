@@ -13,8 +13,8 @@ Way::Way(const EntityId &id, const std::string &name, const std::string &descrip
                                                 direction(std::move(direction)), speedLimit(speedLimit),
                                                 tollRoad(tollRoad), restricted(std::move(restricted)) {}
 
-const Geometry *Way::getGeometry() const {
-    return geometry.get();
+const std::unique_ptr<Geometry> &Way::getGeometry() const {
+    return (const std::unique_ptr<Geometry> &) geometry;
 }
 
 rapidjson::Value Way::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {

@@ -21,7 +21,7 @@ public:
 
     rapidjson::Value toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) override;
 
-    const Geometry *getGeometry() const override;
+    const std::unique_ptr<Geometry> &getGeometry() const override;
 };
 
 #endif //EX1_JUNCTION_H

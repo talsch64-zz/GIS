@@ -25,7 +25,7 @@ public:
 
     rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
 
-    const Geometry *getGeometry() const override;
+    const std::unique_ptr<Geometry> &getGeometry() const override;
 };
 
 #endif //EX1_POI_H
