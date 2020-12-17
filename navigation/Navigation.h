@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "NavigationGIS.h"
+#include "../NavigationGIS.h"
 #include "Routes.h"
 #include "../Restrictions.h"
 
