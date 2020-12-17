@@ -7,17 +7,17 @@
 #include "../search/Grid.h"
 #include "../../CoordinatesMath.h"
 
-PointList::PointList(std::vector<Coordinates> &points) : Geometry(), points(std::move(points))  {}
+PointList::PointList(std::vector<Coordinates> &points) : Geometry(), points(std::move(points)) {}
 
 const std::vector<Coordinates> &PointList::getPoints() const {
     return points;
 }
 
-rapidjson::Value PointList::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
+rapidjson::Value PointList::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     return geometryJsonSerializer->toJson(this, allocator);
 }
 
-std::vector<Grid::GridCell> PointList::getGridCells(const Grid *grid) {
+std::vector<Grid::GridCell> PointList::getGridCells(const Grid *grid) const {
     return grid->getGeometryGridCells(*this);
 }
 
@@ -38,6 +38,14 @@ Coordinates PointList::getClosestPoint(const Coordinates &coordinates) const {
         }
     }
     return closestPair.first;
+}
+
+Meters PointList::getLength() const {
+    double length = 0;
+    for (size_t i = 1; i < points.size(); i++) {
+        length += CoordinatesMath::calculateDistance(points[i - 1], points[i]);
+    }
+    return Meters(length);
 }
 
 

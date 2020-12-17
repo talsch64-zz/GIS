@@ -7,7 +7,7 @@
 
 Circle::Circle(const Coordinates &coordinates, const Meters &radius) : Geometry(), radius(radius),
                                                                       coordinates(coordinates) {}
-rapidjson::Value Circle::toJson(rapidjson::Document::AllocatorType &allocator) {
+rapidjson::Value Circle::toJson(rapidjson::Document::AllocatorType &allocator) const {
     return geometryJsonSerializer->toJson(this, allocator);
 }
 
@@ -15,7 +15,7 @@ Coordinates Circle::getCenter() const {
     return coordinates;
 }
 
-std::vector<Grid::GridCell> Circle::getGridCells(const Grid *grid) {
+std::vector<Grid::GridCell> Circle::getGridCells(const Grid *grid) const {
     return grid->getGeometryGridCells(*this);
 }
 

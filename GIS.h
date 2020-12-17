@@ -15,6 +15,7 @@
 #include "IdGenerator.h"
 #include "GISNamedTypes.h"
 #include "Logger.h"
+#include "Restrictions.h"
 
 class EntityJsonParser;
 
@@ -29,8 +30,7 @@ class EntityJsonParser;
 /// * Search closest way (and the closest Coordinates on the way) from a given Coordinates
 
 
-class GIS
-{
+class GIS {
 protected:
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
     std::shared_ptr<EntityJsonParser> entityJsonParser;
@@ -39,7 +39,6 @@ protected:
     std::shared_ptr<Grid> grid;
     std::unique_ptr<TopologicalSearch> topologicalSearch;
     std::unique_ptr<Logger> logger;
-
 
 public:
     GIS();
@@ -65,17 +64,36 @@ public:
     /* BFS-like algorithms which spreads to all direction in an even way level-by-level and searches for the closest way.
     * Once a way found, the spreading is stopped and the function returns the closest point on all
     * the ways on the current level */
-    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords) const;
+    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coord) const;
 
-    const Way &getWay(const EntityId &id) const;
+    /**
+     * Find the closest way to a given coordinate, with restrictions
+     * @param coords Coordinate to search
+     * @param res Restrictions for the ways
+     * @return A pair of the closest point on the way and the entity id of the way
+     */
+    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const;
 
-    /* returns all the Ways the cross the given Junction */
-    std::vector<EntityId> getWaysByJunction(const EntityId &id) const;
+    /**
+ * @brief Get the Way object et EntityId of a Way and return the Way itself.
+ *        In case the id does not represent a valid way throw an exception of your choice.
+ *
+ * @param wayId - ID of Way
+ * @return const Way&
+ */
+    const Way &getWay(const EntityId &wayId) const;
 
-private:
+    /**
+	 * @brief The function shall get EntityId of a Junction and return a vector of Ids of all the ways that start at this junction and those which end at this junction and are bidirectional.
+	 *        If the given Id is not known or is not of a junction the function shall return an empty vector (you may log an error).
+	 *
+	 * @param junctionId
+	 * @return std::vector<EntityId> - A vector of Ids of all the Ways that start at given junction (also bidirectional Ways which end at this junction).
+	 */
+    std::vector<EntityId> getWaysByJunction(const EntityId &junctionId) const;
 
-    /* loads all the entities inside rapidjson::Document */
 protected:
+    /* loads all the entities inside rapidjson::Document */
     std::vector<EntityId> loadEntities(rapidjson::Document &document);
 
     /* returns vector with all the entities within the radius of the given coordinates */

@@ -12,11 +12,11 @@ const Coordinates &Point::getCoordinates() const {
     return coordinates;
 }
 
-rapidjson::Value Point::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) {
+rapidjson::Value Point::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     return geometryJsonSerializer->toJson(this, allocator);
 }
 
-std::vector<Grid::GridCell> Point::getGridCells(const Grid *grid) {
+std::vector<Grid::GridCell> Point::getGridCells(const Grid *grid) const {
     return grid->getGeometryGridCells(*this);
 }
 
