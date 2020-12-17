@@ -13,6 +13,8 @@
 /// Entity derived class which represents a junction in the GIS application
 /// Junction's Geometry is a Point which holds a single Coordinates
 class Junction: public Entity {
+    /* vector with all the ways that cross the junction */
+    std::vector<EntityId> ways;
     std::unique_ptr<Point> geometry;
 
 public:
@@ -22,6 +24,12 @@ public:
     rapidjson::Value toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) override;
 
     const std::unique_ptr<Geometry> &getGeometry() const override;
+
+    /* adds ways id to ways */
+    void addWay(const EntityId &wayId);
+
+    const std::vector<EntityId> &getWays() const;
+
 };
 
 #endif //EX1_JUNCTION_H

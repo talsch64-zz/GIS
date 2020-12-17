@@ -3,9 +3,9 @@
 #include "../GISProvider.h"
 #include "../CoordinatesMath.h"
 
-// Actual naming of test suites and test is up to you
-// However, they should not contain any underscoress (_). See: https://github.com/google/googletest/blob/master/googletest/docs/primer.md
-
+//// Actual naming of test suites and test is up to you
+//// However, they should not contain any underscoress (_). See: https://github.com/google/googletest/blob/master/googletest/docs/primer.md
+//
 TEST(GISBasic, loadMapFile) {
 	GIS gis = GISProvider::getGIS();
 	std::vector<EntityId> loaded_entities = gis.loadMapFile("nyc.json");

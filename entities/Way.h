@@ -29,6 +29,7 @@ public:
 
     const EntityId &getTo() const;
 
+//    TODO change to enum and not a string
     const std::string &getDirection() const;
 
     /**

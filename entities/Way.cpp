@@ -57,7 +57,7 @@ Meters Way::getLength() {
 }
 
 bool Way::isRestricted(const Restrictions &restrictions) const {
-    for (std::string restriction : restrictions.get()) {
+    for (std::string restriction : restrictions.getRestrictions()) {
         if (std::find(restricted.begin(), restricted.end(), restriction) != restricted.end()) {
             return true;
         }
