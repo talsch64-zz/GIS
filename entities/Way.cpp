@@ -55,3 +55,22 @@ Meters Way::getLength() {
     }
     return length.value();
 }
+
+bool Way::isRestricted(const Restrictions &restrictions) const {
+    for (std::string restriction : restrictions.get()) {
+        if (std::find(restricted.begin(), restricted.end(), restriction) != restricted.end()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Way::isBidirectional() const {
+    return direction == "bidirectional";
+}
+
+bool Way::isHighway() const {
+    auto categoryTags = getCategoryTags();
+    bool highway = std::find(categoryTags.begin(), categoryTags.end(), "highway") != categoryTags.end();
+    return highway;
+}
