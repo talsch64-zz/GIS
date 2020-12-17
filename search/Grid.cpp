@@ -84,7 +84,7 @@ void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &c
     addIntervalsGridCells(midPoint, coord2, cells);
 }
 
-
+//TODO change neighbors retrieval with wrap180 function
 std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) const {
     double lat = initialCell.latitude();
     double lng = initialCell.longitude();
@@ -118,7 +118,7 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) c
     return getPollCellNeighbors(lat == 90);
 }
 
-
+//TODO change neighbors retrieval with wrap180 function
 std::vector<Grid::GridCell> Grid::getPollCellNeighbors(bool north) const {
     std::vector<GridCell> neighbors;
     double lng = 0;
