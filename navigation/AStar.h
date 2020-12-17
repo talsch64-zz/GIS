@@ -11,6 +11,7 @@
 #include "../entities/Way.h"
 #include "../NavigationGIS.h"
 #include "../CoordinatesMath.h"
+#include "Route.h"
 
 #define MAX_SPEED 130.0
 
@@ -19,6 +20,9 @@ class AStar {
 public:
     using Edge = std::optional<std::pair<EntityId, Direction>>;
 
+    /**
+     * class Node represents a node in the A* algorithm
+     */
     class Node {
         Coordinates coordinates;
         EntityId junctionId;
@@ -31,7 +35,6 @@ public:
 
 
     public:
-
         Node(const Coordinates &coordinates, const EntityId &junctionId, const Meters &distanceSoFar,
              const Minutes &timeSoFar, double costSoFar,
              double priority, const Edge &prevEdgeWay);
@@ -42,10 +45,6 @@ public:
         double getCostSoFar() const;
 
         const Coordinates &getCoordinates() const;
-
-        void setCost(double _cost);
-
-        void setPriority(double _priority);
 
         double getPriority() const;
 
@@ -79,15 +78,32 @@ public:
         return (double) CoordinatesMath::calculateDistance(start, target) / kmh_to_mh(MAX_SPEED);
     }
 
-    double costByDistance(Way &way) {
+    /**
+     * @brief calculate the cost of the way by distance in meters
+     * @param way
+     * @return the length of the way
+     */
+    double costByDistance(const Way &way) {
         return (double) CoordinatesMath::calculateDistance(way.getFromJunctionCoordinates(),
                                                            way.getToJunctionCoordinates());
     }
 
-    double costByTime(Way &way) {
+    /**
+     * @brief calculates the cost of the way by time in minutes
+     * @param way
+     * @return the time to cross the way in minutes
+     */
+    double costByTime(const Way &way) {
         return (double) way.getLength() / kmh_to_mh(way.getSpeedLimit());
     }
 
+    /**
+     * @brief comparator function for storing Nodes in the priority_queue of A* algorithm.
+     * order of comparison: lowest priority -> shortest distance -> shortest time
+     * @param node1
+     * @param node2
+     * @return true if node1 "larger" then node2, else false
+     */
     bool compareByDistance(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2) {
         if (node1->getPriority() == node2->getPriority()) {
             if (node1->getDistanceSoFar() == node2->getDistanceSoFar()) {
@@ -98,6 +114,13 @@ public:
         return node1->getPriority() > node2->getPriority();
     }
 
+    /**
+     * @brief comparator function for storing Nodes in the priority_queue of A* algorithm.
+     * order of comparison: lowest priority -> shortest time -> shortest distance
+     * @param node1
+     * @param node2
+     * @return true if node1 "larger" then node2, else false
+     */
     bool compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2) {
         if (node1->getPriority() == node2->getPriority()) {
             if (node1->getTimeSoFar() == node2->getTimeSoFar()) {
@@ -112,14 +135,11 @@ public:
         return ((double) speed * 1000) / 60;
     }
 
-
-    void search(Way *startWay, Way *finalWay, Coordinates start, Coordinates end, NavigationGIS navigationGIS);
-
-
-    void search(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination, NavigationGIS navigationGIS,
+    const Route &search(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination, NavigationGIS navigationGIS,
                 double (*heuristicFunc)(const Coordinates &start, const Coordinates &target),
-                double (*costFunc)(Way &way), double (*comparator)(std::shared_ptr<Node>node1, std::shared_ptr<Node>node2));
+                double (*costFunc)(const Way &way), double (*comparator)(std::shared_ptr<Node>node1, std::shared_ptr<Node>node2));
 
+    std::vector<std::pair<EntityId, Direction>> restoreShortestRoute(std::shared_ptr<Node> node);
 };
 
 //TODO delete

@@ -234,7 +234,7 @@ bool GIS::addEntity(std::unique_ptr<Entity> entity) {
     return success;
 }
 
-Way &GIS::getWay(const EntityId &id) const {
+const Way &GIS::getWay(const EntityId &id) const {
     if (entities.find(id) == entities.end()) {
         //TODO print to log id is not valid
     }

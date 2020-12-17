@@ -85,7 +85,7 @@ public:
  * @param wayId - ID of Way
  * @return const Way&
  */
-    Way &getWay(const EntityId &wayId) const;
+    const Way &getWay(const EntityId &wayId) const;
 
     /**
 	 * @brief The function shall get EntityId of a Junction and return a vector of Ids of all the ways that start at this junction and those which end at this junction and are bidirectional.

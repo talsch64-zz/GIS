@@ -1,11 +1,12 @@
 #include "AStar.h"
+#include "Route.h"
 #include "../entities/Way.h"
 #include "../NavigationGIS.h"
 
 
-void AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination, NavigationGIS navigationGIS,
-                   double (*heuristicFunc)(const Coordinates &start, const Coordinates &end), double (*costFunc)(Way &),
-                   double (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
+const Route &AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination, NavigationGIS navigationGIS,
+              double (*heuristicFunc)(const Coordinates &start, const Coordinates &end), double (*costFunc)(const Way &),
+              double (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
 
 
     std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, std::function<bool(
@@ -22,9 +23,10 @@ void AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates 
     std::unordered_set<EntityId> popedJunctions;
 
     queue.push(startNode);
+    std::shared_ptr<Node> currNode;
 
     while (!queue.empty()) {
-        std::shared_ptr<Node> currNode = queue.top();
+        currNode = queue.top();
         queue.pop();
 //        TODO handle bidirectional finalWay
         if (popedJunctions.find(currNode->getJunctionId()) != popedJunctions.end()) {
@@ -40,7 +42,7 @@ void AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates 
         std::vector<std::shared_ptr<Node>> neighbors;
 
         for (auto wayId: wayEdges) {
-            Way &way = navigationGIS.getWay(wayId);
+            const Way &way = navigationGIS.getWay(wayId);
             EntityId neighborId = way.getFromJunctionId() == currNode->getJunctionId() ? way.getToJunctionId()
                                                                                        : way.getFromJunctionId();
             Coordinates neighborCoordinates =
@@ -54,28 +56,43 @@ void AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates 
             Direction direction =
                     way.getFromJunctionId() == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
             std::shared_ptr<Node> neighbor = std::make_shared<Node>(neighborCoordinates, neighborId, distanceSoFar,
-                                                                    timeSoFar, costSoFar, priority, std::make_pair(wayId, direction));
+                                                                    timeSoFar, costSoFar, priority,
+                                                                    std::make_pair(wayId, direction));
 
             queue.push(neighbor);
         }
     }
-
+    if (currNode->getJunctionId() != finalWay->getToJunctionId()) {
+        // no Route was found, return invalid route
+        return std::move(Route(start, destination));
+    }
+    Minutes duration = currNode->getTimeSoFar();
+    Meters distance = currNode->getDistanceSoFar() -
+                      CoordinatesMath::calculateDistance(start, startWay->getFromJunctionCoordinates()) -
+                      CoordinatesMath::calculateDistance(destination, finalWay->getToJunctionCoordinates());
+    std::vector<std::pair<EntityId, Direction>> ways = restoreShortestRoute(currNode);
+    return std::move(Route(start, destination, distance, duration, ways, true));
 }
 
-
-
+std::vector<std::pair<EntityId, Direction>> AStar::restoreShortestRoute(std::shared_ptr<Node> node) {
+    std::vector<std::pair<EntityId, Direction>> ways;
+    while (node->getPrevEdgeWay().has_value()) {
+        ways.push_back(node->getPrevEdgeWay().value());
+    }
+    std::reverse(ways.begin(), ways.end());
+    return ways;
+}
 
 
 AStar::Node::Node(const Coordinates &coordinates, const EntityId &junctionId,
                   const Meters &distanceSoFar, const Minutes &timeSoFar, double costSoFar, double priority,
                   const Edge &prevEdgeWay) : coordinates(coordinates),
-                                                                                      junctionId(junctionId),
-                                                                                      distanceSoFar(distanceSoFar),
-                                                                                      timeSoFar(timeSoFar),
-                                                                                      costSoFar(costSoFar),
-                                                                                      priority(priority),
-                                                                                      prevEdgeWay(prevEdgeWay) {}
-
+                                             junctionId(junctionId),
+                                             distanceSoFar(distanceSoFar),
+                                             timeSoFar(timeSoFar),
+                                             costSoFar(costSoFar),
+                                             priority(priority),
+                                             prevEdgeWay(prevEdgeWay) {}
 
 
 const Coordinates &AStar::Node::getCoordinates() const {
@@ -86,10 +103,6 @@ const EntityId &AStar::Node::getJunctionId() const {
     return junctionId;
 }
 
-
-void AStar::Node::setPriority(double _priority) {
-    priority = _priority;
-}
 
 const AStar::Edge &AStar::Node::getPrevEdgeWay() const {
     return prevEdgeWay;

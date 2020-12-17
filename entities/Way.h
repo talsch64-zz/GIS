@@ -18,7 +18,7 @@ class Way : public Entity {
     int speedLimit;
     bool tollRoad;
     std::vector<std::string> restricted;
-    std::optional<Meters> length;
+    mutable std::optional<Meters> length;
 
 public:
     Way(const EntityId &id, const std::string &name, const std::string &description,
@@ -76,7 +76,7 @@ public:
      * Get the length of the way in meters
      * @return length in meters
      */
-    Meters getLength();
+    Meters getLength() const;
 
     const std::unique_ptr<Geometry> &getGeometry() const override;
 

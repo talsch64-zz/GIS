@@ -49,7 +49,7 @@ std::pair<EntityId, EntityId> Way::getJunctions() const {
     return std::pair<EntityId, EntityId>(from, to);
 }
 
-Meters Way::getLength() {
+Meters Way::getLength() const {
     if (!length.has_value()) {
         length = geometry->getLength();
     }

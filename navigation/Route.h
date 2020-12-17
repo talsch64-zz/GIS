@@ -27,7 +27,12 @@
      /**
      * @brief Constructor for Route
      */
-     Route(Coordinates _startPoint, Coordinates _endPoint, Meters _length, Minutes _duration, std::vector<std::pair<EntityId, Direction>> _ways, bool _valid);
+     Route(Coordinates startPoint, Coordinates endPoint, Meters length, Minutes duration, std::vector<std::pair<EntityId, Direction>> ways, bool valid);
+
+     /**
+     * @brief Constructor for invalid Route initialization
+     */
+     Route(Coordinates startPoint, Coordinates endPoint);
 
      /**
      * @brief Get the ways constructing the Route and direction per way
