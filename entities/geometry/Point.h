@@ -15,9 +15,9 @@ public:
 
     Point(const Coordinates &coordinates);
 
-    rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) override;
+    rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) const override;
 
-    std::vector<Coordinates> getGridCells(const Grid *grid) override;
+    std::vector<Coordinates> getGridCells(const Grid *grid) const override;
 
     Coordinates getClosestPoint(const Coordinates &coord) const override;
 
