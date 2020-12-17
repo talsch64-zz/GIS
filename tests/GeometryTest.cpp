@@ -123,3 +123,5 @@ TEST(WayGeometry, GetWayLengthWithoutCurves) {
 
     EXPECT_NEAR(length, expectedLength, acceptedError);
 }
+
+//TODO: write tests for closest way with restrictions, GISNavigation closest way
