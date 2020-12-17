@@ -21,11 +21,11 @@ rapidjson::Value Way::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAlloca
     return entityJsonSerializer->toJson(this, allocator);
 }
 
-const EntityId &Way::getFrom() const {
+const EntityId &Way::getFromJunctionId() const {
     return from;
 }
 
-const EntityId &Way::getTo() const {
+const EntityId &Way::getToJunctionId() const {
     return to;
 }
 
@@ -81,5 +81,4 @@ const Coordinates &Way::getFromJunctionCoordinates() const {
 
 const Coordinates &Way::getToJunctionCoordinates() const {
     return geometry->getPoints().back();
-
 }

@@ -47,9 +47,9 @@ EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &al
     tollRoad.SetBool(entity->isTollRoad());
     json.AddMember("toll_road", tollRoad, allocator);
 
-    json = setString(std::move(json), "from", entity->getFrom(), allocator);
+    json = setString(std::move(json), "from", entity->getFromJunctionId(), allocator);
 
-    json = setString(std::move(json), "to", entity->getTo(), allocator);
+    json = setString(std::move(json), "to", entity->getToJunctionId(), allocator);
 
     json = setStringVector(std::move(json), "restricted", entity->getRestricted(), allocator);
     rapidjson::Value curves = entity->getGeometry()->toJson(allocator);

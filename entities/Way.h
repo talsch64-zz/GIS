@@ -25,9 +25,9 @@ public:
         const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from,
         EntityId to, std::string direction, int speedLimit, bool tollRoad, std::vector<std::string> restricted);
 
-    const EntityId &getFrom() const;
+    const EntityId &getFromJunctionId() const;
 
-    const EntityId &getTo() const;
+    const EntityId &getToJunctionId() const;
 
 //    TODO change to enum and not a string
     const std::string &getDirection() const;
