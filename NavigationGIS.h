@@ -58,7 +58,8 @@ public:
      * @param wayId
      * @return const Way&
      */
-    const Way& getWay(const EntityId& wayId) const {
+     //TODO return the const, used in A* algorithm as non const
+    Way& getWay(const EntityId& wayId) const {
         return gis.getWay(wayId);
     }
 };

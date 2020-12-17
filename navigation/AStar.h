@@ -17,30 +17,33 @@ public:
     class Node {
         Coordinates coordinates;
         EntityId junctionId;
-        double g_n;
-        // f_n = g(n) + h(n) where h is the heuristic function
-        double f_n;
+        double cost;
+        // priority(n) = cost(n) + h(n) where h is the heuristic function
+        double priority;
         std::optional<std::pair<EntityId, Direction>> prevEdgeWay;
 
     public:
-        double getCost();
 
 
         Node(const Coordinates &coordinates, const EntityId &junctionId, double g_n, std::optional<std::pair<EntityId, Direction>> prevEdgeWay);
 
+        double getCost() const;
+
+        const std::optional<std::pair<EntityId, Direction>> &getPrevEdgeWay() const;
+
         const Coordinates &getCoordinates() const;
 
-        void setGN(double gN);
+        void setCost(double _cost);
 
-        void setFN(double fN);
+        void setPriority(double _priority);
 
         const EntityId &getJunctionId() const;
 
         bool operator<(const Node &other) {
-            return f_n > other.f_n;
+            return priority > other.priority;
         }
 
-        std::vector<std::shared_ptr<AStar::Node>> getNeighbors(std::shared_ptr<Node> currNode, std::unordered_map<EntityId, std::shared_ptr<Node>, NavigationGIS)
+        std::vector<std::shared_ptr<AStar::Node>> getNeighbors(std::shared_ptr<Node> currNode, std::unordered_map<EntityId, std::shared_ptr<Node>>, NavigationGIS &gis);
 
     };
 
