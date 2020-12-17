@@ -74,3 +74,12 @@ bool Way::isHighway() const {
     bool highway = std::find(categoryTags.begin(), categoryTags.end(), "highway") != categoryTags.end();
     return highway;
 }
+
+const Coordinates &Way::getFromJunctionCoordinates() const {
+    return geometry->getPoints().front();
+}
+
+const Coordinates &Way::getToJunctionCoordinates() const {
+    return geometry->getPoints().back();
+
+}

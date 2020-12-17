@@ -32,6 +32,11 @@ public:
 //    TODO change to enum and not a string
     const std::string &getDirection() const;
 
+    const Coordinates& getFromJunctionCoordinates() const;
+
+    const Coordinates& getToJunctionCoordinates() const;
+
+
     /**
      * @brief
      *
