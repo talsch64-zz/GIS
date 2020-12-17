@@ -4,13 +4,14 @@
 
 #include <unordered_set>
 #include <string>
+#include <vector>
 
 /**
  * @brief Restrictions class
  *
  */
 class Restrictions {
-    std::unordered_set<std::string> restrictions;
+    std::vector<std::string> restrictions;
 public:
     /**
      * @brief Construct a new Restrictions object
@@ -18,12 +19,13 @@ public:
      * @param restrictions
      */
     Restrictions(const char* restrictions);
+    Restrictions();
 
-    const std::unordered_set<std::string> &getRestrictions() const;
+    const std::vector<std::string> &getRestrictions() const;
 
 private:
 //    TODO move to Utils.h or something
-    std::unordered_set<std::string> split(const char* restrictions, const char *delimiter);
+    std::vector<std::string> split(const char* restrictions, const char *delimiter);
 };
 
 #endif //GIS_CPP_RESTRICTIONS_H

@@ -4,18 +4,20 @@
 Restrictions::Restrictions(const char *restrictions): restrictions(split(restrictions, " ,")) {}
 
 
-std::unordered_set<std::string> Restrictions::split(const char *restrictions, const char* delimiter) {
-    std::unordered_set<std::string> restrictionsSet;
+std::vector<std::string> Restrictions::split(const char *restrictions, const char* delimiter) {
+    std::vector<std::string> restrictionsVector;
     char restrictionsCopy[strlen(restrictions)];
     strcpy(restrictionsCopy, restrictions);
     char* restriction = strtok(restrictionsCopy, delimiter);
     while (restriction != nullptr) {
-        restrictionsSet.insert(std::string(restriction));
+        restrictionsVector.push_back(std::string(restriction));
         restriction = strtok (nullptr, delimiter);
     }
-    return restrictionsSet;
+    return restrictionsVector;
 }
 
-const std::unordered_set<std::string> &Restrictions::getRestrictions() const {
+const std::vector<std::string> &Restrictions::getRestrictions() const {
     return restrictions;
 }
+
+Restrictions::Restrictions(): restrictions(std::vector<std::string>()) {}
