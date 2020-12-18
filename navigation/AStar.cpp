@@ -115,7 +115,7 @@ AStar::searchShortestRoute(const Way &startWay, const Way &finalWay, Coordinates
     Meters distance = currNode->getDistanceSoFar() - trimFrontDistance - trimTailDistance;
 
     // if the way's direction is A_To_B we need to subtract the redundant time from start point to from junction, else from to junction
-    Minutes trimFrontTime = timeFromWaysEnd(finalWay, destination, ways.front().second == Direction::A_to_B);
+    Minutes trimFrontTime = timeFromWaysEnd(startWay, start, ways.front().second == Direction::A_to_B);
     // if the way's direction is A_To_B we need to subtract the redundant time from destination point to from junction, else from to junction
     Minutes trimTailTime = timeFromWaysEnd(finalWay, destination, ways.back().second == Direction::A_to_B);
     Minutes duration = currNode->getTimeSoFar() - trimFrontTime - trimTailTime;
