@@ -118,6 +118,11 @@ private:
                 double (*heuristicFunc)(const Coordinates &start, const Coordinates &target),
                 double (*costFunc)(const Way &way), bool (*comparator)(std::shared_ptr<Node>node1, std::shared_ptr<Node>node2));
 
+    /**
+     *
+     * @param node final Node of the search
+     * @return all the ways of the Route by order
+     */
     std::vector<std::pair<EntityId, Direction>> restoreShortestRoute(std::shared_ptr<Node> node);
 
 private:
@@ -138,7 +143,6 @@ private:
      * @return the time it take to get from the edge of the Way to the given coordinates in MAX_SPEED
      */
     Minutes timeFromWaysEnd(const Way &way, Coordinates coordinates, bool from);
-
 
 };
 

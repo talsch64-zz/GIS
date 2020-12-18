@@ -1,3 +1,4 @@
+#include <iostream>
 #include "AStar.h"
 #include "Route.h"
 #include "../entities/Way.h"
@@ -22,7 +23,7 @@ AStar::searchShortestRoute(const Way &startWay, const Way &finalWay, Coordinates
                            double (*costFunc)(const Way &),
                            bool (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
 
-
+/*-------------------------------- initialize first Node --------------------------------*/
     std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, std::function<bool(
             std::shared_ptr<Node>, std::shared_ptr<Node>)>> queue(comparator);
     Coordinates initialCoordinates = startWay.getToJunctionCoordinates(); // starting from to coordinates after we crossed the entire Way
@@ -34,7 +35,6 @@ AStar::searchShortestRoute(const Way &startWay, const Way &finalWay, Coordinates
                                                              initialDistance, initialTime, initialCost, initialPriority,
                                                              Edge(std::make_pair(startWay.getId(), Direction::A_to_B)), nullptr);
 
-    std::unordered_set<EntityId> popedJunctions; // we do lazy deletions so we need to keep track of which junction where already visited and poped from the queue
     queue.push(startNode);
     // if start way is bidirectional add another Node to the queue:
     if (startWay.isBidirectional()) {
@@ -47,18 +47,21 @@ AStar::searchShortestRoute(const Way &startWay, const Way &finalWay, Coordinates
         queue.push(startNode2);
     }
 
+    std::unordered_set<EntityId> popedJunctions; // we do lazy deletions so we need to keep track of which junction where already visited and poped from the queue
     std::shared_ptr<Node> currNode;
+
+/*-------------------------------- performing A* algorithm with the queue --------------------------------*/
     while (!queue.empty()) {
         currNode = queue.top();
         queue.pop();
         if (popedJunctions.find(currNode->getJunctionId()) != popedJunctions.end()) {
-            //      if node was already poped from the queue we can skip its copy
+            //  if node was already poped from the queue we can skip its copy
             continue;
         }
         popedJunctions.insert(currNode->getJunctionId());
         if (currNode->getJunctionId() == finalWay.getFromJunctionId() ||
             finalWay.isBidirectional() && currNode->getJunctionId() == finalWay.getToJunctionId()) {
-            //        reached the final way :)
+            //  reached the final way and initializing the final Node
             Direction direction =
                     currNode->getJunctionId() == finalWay.getFromJunctionId() ? Direction::A_to_B : Direction::B_to_A;
 
@@ -80,8 +83,8 @@ AStar::searchShortestRoute(const Way &startWay, const Way &finalWay, Coordinates
         }
 
         std::vector<EntityId> wayEdgesIds = navigationGIS.getWaysByJunction(currNode->getJunctionId());
+        for (auto wayId: wayEdgesIds) {  // visiting all the neighbors and adding them to the queue
 
-        for (auto wayId: wayEdgesIds) {
             const Way &way = navigationGIS.getWay(wayId);
             Direction direction =
                     way.getFromJunctionId() == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
@@ -108,16 +111,16 @@ AStar::searchShortestRoute(const Way &startWay, const Way &finalWay, Coordinates
 
     std::vector<std::pair<EntityId, Direction>> ways = restoreShortestRoute(currNode);
 
-    // if the way's direction is A_To_B we need to subtract the redundant distance from start point to from junction, else from to junction
-    Meters trimFrontDistance = distanceFromWaysEnd(startWay, start, ways.front().second == Direction::A_to_B);
-    // if the way's direction is A_To_B we need to subtract the redundant distance from destination point to from junction, else from to junction
-    Meters trimTailDistance = distanceFromWaysEnd(finalWay, destination, ways.back().second == Direction::A_to_B);
-    Meters distance = currNode->getDistanceSoFar() - trimFrontDistance - trimTailDistance;
+    // if the way's direction is A_To_B we need to subtract the redundant distance from start point to "from" junction, else from "to" junction
+    Meters redundantFrontDistance = distanceFromWaysEnd(startWay, start, ways.front().second == Direction::A_to_B);
+    // if the way's direction is A_To_B we need to subtract the redundant distance from destination point to "to" junction, else from "from" junction
+    Meters redundantTailDistance = distanceFromWaysEnd(finalWay, destination, ways.back().second == Direction::B_to_A);
+    Meters distance = currNode->getDistanceSoFar() - redundantFrontDistance - redundantTailDistance;
 
-    // if the way's direction is A_To_B we need to subtract the redundant time from start point to from junction, else from to junction
+    // if the way's direction is A_To_B we need to subtract the redundant time from start point to "from" junction, else from "to" junction
     Minutes trimFrontTime = timeFromWaysEnd(startWay, start, ways.front().second == Direction::A_to_B);
-    // if the way's direction is A_To_B we need to subtract the redundant time from destination point to from junction, else from to junction
-    Minutes trimTailTime = timeFromWaysEnd(finalWay, destination, ways.back().second == Direction::A_to_B);
+    // if the way's direction is A_To_B we need to subtract the redundant time from destination point to "to" junction, else from "from" junction
+    Minutes trimTailTime = timeFromWaysEnd(finalWay, destination, ways.back().second == Direction::B_to_A);
     Minutes duration = currNode->getTimeSoFar() - trimFrontTime - trimTailTime;
 
     return std::move(Route(start, destination, distance, duration, ways, true));
