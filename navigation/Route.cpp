@@ -27,10 +27,10 @@ bool Route::isValid() {
 }
 
 Route::Route(Coordinates startPoint, Coordinates endPoint, Meters length, Minutes duration,
-             std::vector<std::pair<EntityId, Direction>> _ways, bool valid) : startPoint(startPoint),
+             std::vector<std::pair<EntityId, Direction>> ways, bool valid) : startPoint(startPoint),
                                                                               endPoint(endPoint), length(length),
                                                                               duration(duration),
-                                                                              ways(std::move(_ways)), valid(valid) {}
+                                                                              ways(std::move(ways)), valid(valid) {}
 
 Route::Route(Coordinates startPoint, Coordinates endPoint) : startPoint(startPoint), endPoint(endPoint), length(MAXFLOAT),
                  duration(MAXFLOAT), ways(std::vector<std::pair<EntityId, Direction>>()), valid(false) {

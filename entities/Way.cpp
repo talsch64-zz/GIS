@@ -75,10 +75,19 @@ bool Way::isHighway() const {
     return highway;
 }
 
-const Coordinates &Way::getFromJunctionCoordinates() const {
+const Coordinates Way::getFromJunctionCoordinates() const {
     return geometry->getPoints().front();
 }
 
-const Coordinates &Way::getToJunctionCoordinates() const {
+const Coordinates Way::getToJunctionCoordinates() const {
     return geometry->getPoints().back();
+}
+
+Minutes Way::getTime() const {
+    return Minutes((double) getLength() / kmh_to_mpm(getSpeedLimit()));
+
+}
+
+double Way::kmh_to_mpm(int speed) {
+    return (double) speed * 1000 / 60;
 }

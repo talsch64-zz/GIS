@@ -20,8 +20,8 @@ public:
     AStar(const NavigationGIS &navigationGIS);
 
 //    TODO add navigationGIS as a member
-    const Route &shortestByDistance(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination);
-    const Route &shortestByTime(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination);
+    Route shortestByDistance(const Way &startWay, const Way &finalWay, Coordinates start, Coordinates destination);
+    Route shortestByTime(const Way &startWay, const Way &finalWay, Coordinates start, Coordinates destination);
 
 private:
     const NavigationGIS &navigationGIS;
@@ -39,12 +39,12 @@ private:
         // priority(n) = cost(n) + h(n) where h is the heuristic function
         double priority;
         Edge prevEdgeWay;
-
+        std::shared_ptr<Node> prevNode;
 
     public:
         Node(const Coordinates &coordinates, const EntityId &junctionId, const Meters &distanceSoFar,
              const Minutes &timeSoFar, double costSoFar,
-             double priority, const Edge &prevEdgeWay);
+             double priority, const Edge &prevEdgeWay, std::shared_ptr<Node> prevNode);
 
 
         const Edge &getPrevEdgeWay() const;
@@ -60,6 +60,9 @@ private:
         const Meters &getDistanceSoFar() const;
 
         const Minutes &getTimeSoFar() const;
+
+        const std::shared_ptr<Node> &getPrevNode() const;
+
 
 
     };
@@ -112,15 +115,32 @@ private:
      */
     static bool compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2);
 
-    const Route &search(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination,
+    Route searchShortestRoute(const Way &startWay, const Way &finalWay, Coordinates start, Coordinates destination,
                 double (*heuristicFunc)(const Coordinates &start, const Coordinates &target),
                 double (*costFunc)(const Way &way), bool (*comparator)(std::shared_ptr<Node>node1, std::shared_ptr<Node>node2));
 
     std::vector<std::pair<EntityId, Direction>> restoreShortestRoute(std::shared_ptr<Node> node);
 
-    inline static double kmh_to_mh(int speed) {
-        return ((double) speed * 1000) / 60;
-    }
+private:
+    /**
+     * @brief calculates the aerial distance between the given coordinates and the end of the way
+     * @param way
+     * @param coordinates
+     * @param from if true then calculate the distance from the from junction, else false
+     * @return the aerial distance between the given coordinates and the end of the way
+     */
+    Meters distanceFromWaysEnd(const Way &way, Coordinates coordinates, bool from);
+
+    /**
+     * @brief calculate the time it take to get from the edge of the Way to the given coordinates in MAX_SPEED
+     * @param way
+     * @param coordinates
+     * @param from if true then calculate the time from the from junction, else false
+     * @return the time it take to get from the edge of the Way to the given coordinates in MAX_SPEED
+     */
+    Minutes timeFromWaysEnd(const Way &way, Coordinates coordinates, bool from);
+
+
 };
 
 #endif //GIS_CPP_ASTAR_H

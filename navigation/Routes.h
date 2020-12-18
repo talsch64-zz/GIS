@@ -24,7 +24,6 @@ public:
     Routes(const Route &shortestDistanceRoute, const Route &shortestTimeRoute, bool valid);
 
 
-
     /**
      * @brief
      *

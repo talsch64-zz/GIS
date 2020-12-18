@@ -32,9 +32,9 @@ public:
 //    TODO change to enum and not a string
     const std::string &getDirection() const;
 
-    const Coordinates& getFromJunctionCoordinates() const;
+    const Coordinates getFromJunctionCoordinates() const;
 
-    const Coordinates& getToJunctionCoordinates() const;
+    const Coordinates getToJunctionCoordinates() const;
 
 
     /**
@@ -78,6 +78,8 @@ public:
      */
     Meters getLength() const;
 
+    Minutes getTime() const;
+
     const std::unique_ptr<Geometry> &getGeometry() const override;
 
     /**
@@ -86,6 +88,14 @@ public:
      * @return is the way restricted
      */
     bool isRestricted(const Restrictions &restrictions) const;
+
+    /**
+     * @brief converts speed kilometers per hour to meters per minute
+     * @param speed
+     * @return Minutes
+     */
+//TODO move to some other class
+    static inline double kmh_to_mpm(int speed);
 };
 
 #endif //EX1_WAY_H
