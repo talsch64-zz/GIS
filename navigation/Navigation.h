@@ -30,7 +30,6 @@ public:
      * @param end
      * @return Routes
      */
-    //    TODO implement A*
     Routes getRoutes(const Coordinates& start, const Coordinates& end) const;
 
     /**

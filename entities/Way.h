@@ -21,6 +21,10 @@ class Way : public Entity {
     mutable std::optional<Meters> length;
 
 public:
+    enum class trafficDirection {
+        unidirectional, bidirectional
+    };
+
     Way(const EntityId &id, const std::string &name, const std::string &description,
         const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from,
         EntityId to, std::string direction, int speedLimit, bool tollRoad, std::vector<std::string> restricted);
@@ -31,6 +35,9 @@ public:
 
 //    TODO change to enum and not a string
     const std::string &getDirection() const;
+
+//    const trafficDirection getDirection() const;
+
 
     const Coordinates getFromJunctionCoordinates() const;
 

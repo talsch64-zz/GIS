@@ -1,10 +1,7 @@
 
 #include <gtest/gtest.h>
 #include "../Restrictions.h"
-#include "../GISNamedTypes.h"
 
-
-//TODO make it work! it works on main but for some reason it doesn't compile here
 
 TEST(RestrictionsTest, basicRestrictions) {
     Restrictions r("aa, bb cc ,");

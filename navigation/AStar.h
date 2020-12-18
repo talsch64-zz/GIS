@@ -16,15 +16,14 @@
 #define MAX_SPEED 130.0
 
 class AStar {
+    const NavigationGIS &navigationGIS;
+
 public:
     AStar(const NavigationGIS &navigationGIS);
-
-//    TODO add navigationGIS as a member
     Route shortestByDistance(const Way &startWay, const Way &finalWay, Coordinates start, Coordinates destination);
     Route shortestByTime(const Way &startWay, const Way &finalWay, Coordinates start, Coordinates destination);
 
 private:
-    const NavigationGIS &navigationGIS;
     using Edge = std::optional<std::pair<EntityId, Direction>>;
 
     /**

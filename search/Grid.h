@@ -18,7 +18,6 @@ class Circle;
 class TopologicalSearch;
 
 class CellEntities {
-    //TODO: consider keeping way's segments separated from all other entities
     using EntitiesData = std::forward_list<EntityId>;
     EntitiesData entities;
 

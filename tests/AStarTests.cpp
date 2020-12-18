@@ -16,6 +16,8 @@ TEST(GISBasic, routeToFrom) {
     auto size = routes.shortestDistance().getWays().size();
     for(const auto &way: routes.shortestDistance().getWays()) {
     std::cout << "ID: " <<  static_cast<std::string>(way.first) <<  " Direction: " << ((way.second == Direction::A_to_B) ? "A_B" : "B_A") << std::endl;
+    std::cout << "shortestDistanceRoute: distance: " << (double) routes.shortestDistance().totalLength() << ", time: " << (double) routes.shortestDistance().estimatedDuration() << std::endl;
+    std::cout << "shortestTimeRoute: distance: " << (double) routes.shortestTime().totalLength() << ", time: " << (double) routes.shortestTime().estimatedDuration() << std::endl;
     }
     EXPECT_EQ(size,3);
 }
@@ -32,6 +34,8 @@ TEST(GISBasic, routeFromTo) {
     auto size = routes.shortestDistance().getWays().size();
     for(const auto &way : routes.shortestDistance().getWays()) {
     std::cout << "ID: " <<  static_cast<std::string>(way.first) <<  " Direction: " << ((way.second == Direction::A_to_B) ? "A_B" : "B_A") << std::endl;
+    std::cout << "shortestDistanceRoute: distance: " << (double) routes.shortestDistance().totalLength() << ", time: " << (double) routes.shortestDistance().estimatedDuration() << std::endl;
+    std::cout << "shortestTimeRoute: distance: " << (double) routes.shortestTime().totalLength() << ", time: " << (double) routes.shortestTime().estimatedDuration() << std::endl;
     }
     EXPECT_EQ(size,3);
 }
