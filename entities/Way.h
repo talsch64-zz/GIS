@@ -18,8 +18,6 @@ class Way : public Entity {
     EntityId from;
     EntityId to;
     std::unique_ptr<PointList> geometry;
-//    TODO delete
-//    std::string direction;
     TrafficDirection direction;
     int speedLimit;
     bool tollRoad;
@@ -35,9 +33,6 @@ public:
     const EntityId &getFromJunctionId() const;
 
     const EntityId &getToJunctionId() const;
-
-//    TODO change to enum and not a string
-//    const std::string &getDirection() const;
 
     const TrafficDirection getDirection() const;
 
