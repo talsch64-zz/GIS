@@ -38,7 +38,8 @@ rapidjson::Value EntityJsonSerializer::toJson(Junction *entity, rapidjson::Docum
 rapidjson::Value
 EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &allocator) {
     rapidjson::Value json = entityToJson(entity, allocator);
-    json = setString(std::move(json), "direction", entity->getDirection(), allocator);
+    std::string direction = entity->getDirection() == TrafficDirection::unidirectional ? "unidirectional" : "bidirectional";
+    json = setString(std::move(json), "direction", direction, allocator);
     rapidjson::Value speedLimit;
     speedLimit.SetInt(entity->getSpeedLimit());
     json.AddMember("speed_limit", speedLimit, allocator);

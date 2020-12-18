@@ -10,34 +10,36 @@
 /// Entity derived class which represents a Way in the GIS application
 /// Way's geometry is a Circle that is represented by a radius and center coordinates
 
+enum class TrafficDirection {
+    unidirectional, bidirectional
+};
+
 class Way : public Entity {
     EntityId from;
     EntityId to;
     std::unique_ptr<PointList> geometry;
-    std::string direction;
+//    TODO delete
+//    std::string direction;
+    TrafficDirection direction;
     int speedLimit;
     bool tollRoad;
     std::vector<std::string> restricted;
     mutable std::optional<Meters> length;
 
 public:
-    enum class trafficDirection {
-        unidirectional, bidirectional
-    };
 
     Way(const EntityId &id, const std::string &name, const std::string &description,
         const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from,
-        EntityId to, std::string direction, int speedLimit, bool tollRoad, std::vector<std::string> restricted);
+        EntityId to, TrafficDirection direction, int speedLimit, bool tollRoad, std::vector<std::string> restricted);
 
     const EntityId &getFromJunctionId() const;
 
     const EntityId &getToJunctionId() const;
 
 //    TODO change to enum and not a string
-    const std::string &getDirection() const;
+//    const std::string &getDirection() const;
 
-//    const trafficDirection getDirection() const;
-
+    const TrafficDirection getDirection() const;
 
     const Coordinates getFromJunctionCoordinates() const;
 

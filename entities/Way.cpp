@@ -7,10 +7,10 @@
 
 Way::Way(const EntityId &id, const std::string &name, const std::string &description,
          const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from, EntityId to,
-         std::string direction, int speedLimit, bool tollRoad,
+         TrafficDirection direction, int speedLimit, bool tollRoad,
          std::vector<std::string> restricted) : Entity(id, name, description, categoryTags, "Way"),
                                                 from(std::move(from)), to(std::move(to)), geometry(std::move(geometry)),
-                                                direction(std::move(direction)), speedLimit(speedLimit),
+                                                direction(direction), speedLimit(speedLimit),
                                                 tollRoad(tollRoad), restricted(std::move(restricted)) {}
 
 const std::unique_ptr<Geometry> &Way::getGeometry() const {
@@ -29,7 +29,7 @@ const EntityId &Way::getToJunctionId() const {
     return to;
 }
 
-const std::string &Way::getDirection() const {
+const TrafficDirection Way::getDirection() const {
     return direction;
 }
 
@@ -66,7 +66,7 @@ bool Way::isRestricted(const Restrictions &restrictions) const {
 }
 
 bool Way::isBidirectional() const {
-    return direction == "bidirectional";
+    return direction == TrafficDirection::bidirectional;
 }
 
 bool Way::isHighway() const {

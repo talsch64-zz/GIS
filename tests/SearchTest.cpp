@@ -87,7 +87,7 @@ generateWay(IdGenerator *idGenerator, std::vector<Coordinates> curves, EntityId 
     std::unique_ptr<PointList> points = std::make_unique<PointList>(curves);
     std::unique_ptr<Way> way = std::make_unique<Way>(id, getName(), getName(), std::vector<std::string>(),
                                                      std::move(points), from, to,
-                                                     "dir", 70, true, std::vector<std::string>());
+                                                     TrafficDirection::unidirectional, 70, true, std::vector<std::string>());
     return way;
 }
 

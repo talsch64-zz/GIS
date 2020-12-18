@@ -28,7 +28,7 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);
-    std::string direction = parseDirection(doc);
+    TrafficDirection direction = parseDirection(doc);
     int speedLimit = parseSpeedLimit(doc);
     bool tollRoad = parseTollRoad(doc);
     std::vector<std::string> restricted = parseRestricted(doc);
@@ -51,9 +51,9 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     std::unique_ptr<Way> way = std::make_unique<Way>(id, name, description, categoryTags, std::move(geometry), from, to,
                                                      direction, speedLimit, tollRoad,
                                                      restricted);
-    ((Junction *)fromEntity)->addWay(id);
+    ((Junction *) fromEntity)->addWay(id);
     if (way->isBidirectional()) {
-        ((Junction *)toEntity)->addWay(id);
+        ((Junction *) toEntity)->addWay(id);
     }
 
     return way;
@@ -139,12 +139,18 @@ std::vector<std::string> EntityJsonParser::parseAccessibility(rapidjson::Value &
     return accessibility;
 }
 
-std::string EntityJsonParser::parseDirection(rapidjson::Value &doc) {
+TrafficDirection EntityJsonParser::parseDirection(rapidjson::Value &doc) {
     std::string direction;
-    if (doc.HasMember("direction") && doc["direction"].IsString()) {
-        direction = doc["direction"].GetString();
+    if (!(doc.HasMember("direction") && doc["direction"].IsString())) {
+        throw std::runtime_error("Way entity has no direction");
+
     }
-    return direction;
+    direction = doc["direction"].GetString();
+
+    if (direction != "unidirectional" && direction != "bidirectional") {
+        throw std::runtime_error("Invalid direction for Way entity");
+    }
+    return direction == "bidirectional" ? TrafficDirection::bidirectional : TrafficDirection::unidirectional;
 }
 
 int EntityJsonParser::parseSpeedLimit(rapidjson::Value &doc) {
