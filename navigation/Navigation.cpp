@@ -15,18 +15,18 @@ Routes Navigation::getRoutes(const Coordinates &start, const Coordinates &end) c
     if (endPair.second == EntityId("")) {
 //        TODO return invalid Routes because there is no ways on earth
     }
-    AStar star(navigationGIS);
     const Way &startWay = navigationGIS.getWay(startPair.second);
     const Coordinates &startPoint = startPair.first;
     const Way &endWay = navigationGIS.getWay(endPair.second);
     const Coordinates &destinationPoint = endPair.first;
+    AStar star(navigationGIS, startPoint, destinationPoint, startWay, endWay);
 
-    Route shortestByDistance = star.shortestByDistance(startWay, endWay, startPoint, destinationPoint);
+    Route shortestByDistance = star.shortestByDistance();
     if (!shortestByDistance.isValid()) {
 //        initialize invalid Routes
         return Routes(Route(startPoint, destinationPoint), Route(startPoint, destinationPoint), false);
     }
-    Route shortestByTime = star.shortestByDistance(startWay, endWay, startPoint, destinationPoint);
+    Route shortestByTime = star.shortestByDistance();
     return Routes(shortestByDistance, shortestByTime, true);
 }
 
