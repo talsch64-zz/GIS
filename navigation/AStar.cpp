@@ -3,10 +3,17 @@
 #include "../entities/Way.h"
 #include "../NavigationGIS.h"
 
+AStar::AStar(const NavigationGIS &navigationGis) : navigationGIS(navigationGis) {}
 
-const Route &AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination, NavigationGIS navigationGIS,
-              double (*heuristicFunc)(const Coordinates &start, const Coordinates &end), double (*costFunc)(const Way &),
-              double (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
+const Route &AStar::shortestByDistance(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination) {
+    return search(startWay, finalWay, start, destination, distanceHeuristic, costByDistance, compareByDistance);
+}
+
+const Route &
+AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination,
+              double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
+              double (*costFunc)(const Way &),
+              bool (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
 
 
     std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, std::function<bool(
@@ -83,6 +90,47 @@ std::vector<std::pair<EntityId, Direction>> AStar::restoreShortestRoute(std::sha
     return ways;
 }
 
+double AStar::distanceHeuristic(const Coordinates &start, const Coordinates &target) {
+    return (double) CoordinatesMath::calculateDistance(start, target);
+}
+
+double AStar::timeHeuristic(const Coordinates &start, const Coordinates &target) {
+    // meters per hour
+    return (double) CoordinatesMath::calculateDistance(start, target) / kmh_to_mh(MAX_SPEED);
+}
+
+double AStar::costByDistance(const Way &way) {
+    return (double) CoordinatesMath::calculateDistance(way.getFromJunctionCoordinates(),
+                                                       way.getToJunctionCoordinates());
+}
+
+double AStar::costByTime(const Way &way) {
+    return (double) way.getLength() / kmh_to_mh(way.getSpeedLimit());
+}
+
+bool AStar::compareByDistance(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2) {
+    if (node1->getPriority() == node2->getPriority()) {
+        if (node1->getDistanceSoFar() == node2->getDistanceSoFar()) {
+            return node1->getTimeSoFar() > node2->getTimeSoFar() ? true : false;
+        }
+        return node1->getDistanceSoFar() > node2->getDistanceSoFar();
+    }
+    return node1->getPriority() > node2->getPriority();
+
+}
+
+bool AStar::compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2) {
+    if (node1->getPriority() == node2->getPriority()) {
+        if (node1->getTimeSoFar() == node2->getTimeSoFar()) {
+            return node1->getDistanceSoFar() > node2->getDistanceSoFar() ? true : false;
+        }
+        return node1->getTimeSoFar() > node2->getTimeSoFar();
+    }
+    return node1->getPriority() > node2->getPriority();
+}
+
+
+
 
 AStar::Node::Node(const Coordinates &coordinates, const EntityId &junctionId,
                   const Meters &distanceSoFar, const Minutes &timeSoFar, double costSoFar, double priority,
@@ -124,53 +172,3 @@ double AStar::Node::getCostSoFar() const {
     return costSoFar;
 }
 
-
-
-//TODO delete function
-//void AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates end, NavigationGIS navigationGIS) {
-////    TODO add heuristics as parameter
-//    std::unordered_map<EntityId, std::shared_ptr<AStar::Node>> nodes;
-//    std::priority_queue<std::shared_ptr<AStar::Node>> queue;
-//    std::shared_ptr<AStar::Node> startNode = std::make_shared<AStar::Node>(startWay->getToJunctionCoordinates(),
-//                                                                           startWay->getToJunctionId(), 0,
-//                                                                           std::optional<std::pair<EntityId, Direction>>());
-//    startNode->setPriority(heuristic(startWay->getToJunctionCoordinates(), end));
-//    queue.push(startNode);
-//
-//
-//    while (!queue.empty()) {
-//        std::shared_ptr<Node> currNode = queue.top();
-//        queue.pop();
-////        TODO handle bidirectional finalWay
-//        if (currNode->getJunctionId() == finalWay->getFromJunctionId()) {
-//            break;
-//        }
-//
-//        std::vector<EntityId> wayEdges = navigationGIS.getWaysByJunction(currNode->getJunctionId());
-//        std::vector<std::shared_ptr<AStar::Node>> neighbors;
-//
-//        for (auto wayId: wayEdges) {
-//            Way &way = navigationGIS.getWay(wayId);
-//            EntityId neighborId = way.getFromJunctionId() == currNode->getJunctionId() ? way.getToJunctionId() : way.getFromJunctionId();
-//            Coordinates neighborCoordinates =
-//                    way.getFromJunctionCoordinates() == currNode->getCoordinates() ? way.getToJunctionCoordinates()
-//                                                                                   : way.getFromJunctionCoordinates();
-//            auto findNeighbor = nodes.find(neighborId);
-//            std::shared_ptr<AStar::Node> neighbor;
-//            double newCost = (double) way.getLength() + currNode->getCost();
-//            if (findNeighbor != nodes.end()) {
-//                neighbor = findNeighbor->second;
-//                if (neighbor->getCost() > newCost) {
-//                    neighbor->setCost(newCost);
-//                }
-//            } else {
-//                Direction direction =
-//                        way.getFromJunctionId() == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
-//                neighbor = std::make_shared<AStar::Node>(neighborCoordinates, neighborId,
-//                                                         newCost, std::make_pair(way.getId(), direction));
-//            }
-//            neighbor->setPriority(heuristic(neighborCoordinates, end));
-//        }
-//
-//    }
-//}
