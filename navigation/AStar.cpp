@@ -44,6 +44,7 @@ AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates desti
             //      if node was already poped from the queue we can skip its copy
             continue;
         }
+        popedJunctions.insert(currNode->getJunctionId());
 //        reached the destination :)
         if (currNode->getJunctionId() == finalWay->getFromJunctionId()) {
             break;
