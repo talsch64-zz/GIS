@@ -2,11 +2,11 @@
 #include "Navigation.h"
 #include "AStar.h"
 
-Navigation::Navigation(const NavigationGIS &gis) : gis(gis) {}
+Navigation::Navigation(const NavigationGIS &navigationGis) : navigationGIS(navigationGis) {}
 
-Routes Navigation::getRoutes(const Coordinates &start, const Coordinates &end) const {
-    AStar star;
-    Route shortestByDistance = star.
-    return Routes(Route(), Route(), false);
-}
+//Routes Navigation::getRoutes(const Coordinates &start, const Coordinates &end) const {
+//    AStar star(navigationGIS);
+//    Route shortestByDistance = star.shortestByDistance()
+//    return Routes(Route(), Route(), false);
+//}
 

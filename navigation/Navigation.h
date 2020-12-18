@@ -13,15 +13,15 @@
  *
  */
 class Navigation {
-    NavigationGIS gis;
+    NavigationGIS navigationGIS;
 
 public:
     /**
      * @brief Construct a new Navigation object
      *
-     * @param gis - Note: you get a const ref of NavigationGIS
+     * @param navigationGis - Note: you get a const ref of NavigationGIS
      */
-    Navigation(const NavigationGIS& gis);
+    Navigation(const NavigationGIS& navigationGis);
 
     /**
      * @brief Get the Routes object

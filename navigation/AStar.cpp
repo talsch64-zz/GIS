@@ -9,6 +9,10 @@ const Route &AStar::shortestByDistance(Way *startWay, Way *finalWay, Coordinates
     return search(startWay, finalWay, start, destination, distanceHeuristic, costByDistance, compareByDistance);
 }
 
+const Route &AStar::shortestByTime(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination) {
+    return search(startWay, finalWay, start, destination, timeHeuristic, costByTime, compareByTime);
+}
+
 const Route &
 AStar::search(Way *startWay, Way *finalWay, Coordinates start, Coordinates destination,
               double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
@@ -128,8 +132,6 @@ bool AStar::compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> nod
     }
     return node1->getPriority() > node2->getPriority();
 }
-
-
 
 
 AStar::Node::Node(const Coordinates &coordinates, const EntityId &junctionId,
