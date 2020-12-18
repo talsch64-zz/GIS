@@ -1,0 +1,378 @@
+[
+    {
+        "type": "POI",
+        "id": "P1001",
+        "name": "Brazil Parking",
+        "description": ".*",
+        "category_tags": [],
+        "geometry": {
+            "type": "Circle",
+            "coordinates": [34.795978, 32.111876],
+            "radius": 3
+        }
+    },
+
+    {
+        "type": "POI",
+        "id": "P1002",
+        "name": "Reading Terminal",
+        "description": "",
+        "category_tags": ["Public"],
+        "geometry": {
+            "type": "Circle",
+            "coordinates": [34.779861, 32.099197],
+            "radius": 0.635
+        }
+    },
+
+
+
+
+    {
+        "type": "Junction",
+        "id": "J1001",
+        "name": "Antin sqaure",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.801290, 32.113357]
+    },
+
+    {
+        "type": "Junction",
+        "id": "J1002",
+        "name": "Brodetsky Einstein",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.797724, 32.113040]
+    },
+    {
+        "type": "Junction",
+        "id": "J1003",
+        "name": "Brodetsky 43",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.797991, 32.1115927]
+    },
+    {
+        "type": "Junction",
+        "id": "J1004",
+        "name": "Brazil roundabout",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.796037, 32.111320]
+    },
+    {
+        "type": "Junction",
+        "id": "J1005",
+        "name": "Neto Brodetski",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.798289, 32.110007]
+    },
+    {
+        "type": "Junction",
+        "id": "J1006",
+        "name": "Brodetsky Reading",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.794560, 32.104911]
+    },
+    {
+        "type": "Junction",
+        "id": "J1007",
+        "name": "Reading Chaim Levanon",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.794504, 32.103082]
+    },
+    {
+        "type": "Junction",
+        "id": "J1008",
+        "name": "Namir Chaim Levanon",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.792848, 32.102826]
+    },
+    {
+        "type": "Junction",
+        "id": "J1009",
+        "name": "Rokach Bridge",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.793441, 32.099840]
+    },
+    {
+        "type": "Junction",
+        "id": "J1010",
+        "name": "Shai Agnon Tel-Aviv Port",
+        "description": "",
+        "category_tags": [],
+        "coordinates": [34.781947, 32.101965]
+    },
+    {
+        "type": "Junction",
+        "id": "J1011",
+        "name": "Rokach Ibn Gabirol",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.783335, 32.098680]
+    },
+    {
+        "type": "Junction",
+        "id": "J1012",
+        "name": "Antin sqaure",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [34.779953, 32.098561]
+    },
+    
+
+
+
+
+
+    {
+        "type": "Way",
+        "id": "W2001",
+        "name": "Chaim Levanon",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1001"
+        },
+        "to": {
+            "entity_id": "J1007"
+        },
+        "curves": [[34.801618, 32.109300], [34.800972, 32.107170], [34.799795, 32.105332]],
+        "direction": "bidirectional",
+        "speed_limit": 50,
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+
+    {
+        "type": "Way",
+        "id": "W2002",
+        "name": "Einstein St",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1001"
+        },
+        "to": {
+            "entity_id": "J1002"
+        },
+        "speed_limit": 50,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2003",
+        "name": "Brodetsky",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1002"
+        },
+        "to": {
+            "entity_id": "J1003"
+        },
+        "speed_limit": 40,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2004",
+        "name": "Brazil",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1003"
+        },
+        "to": {
+            "entity_id": "J1004"
+        },
+        "speed_limit": 40,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2005",
+        "name": "Brodetsky",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1003"
+        },
+        "to": {
+            "entity_id": "J1005"
+        },
+        "speed_limit": 40,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2006",
+        "name": "brodetsky",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1005"
+        },
+        "to": {
+            "entity_id": "J1006"
+        },
+        "curves": [[34.798488, 32.108488],[34.797229,32.106168],[34.796539,32.105649]],
+        "speed_limit": 50,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2007",
+        "name": "Reading",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1005"
+        },
+        "to": {
+            "entity_id": "J1006"
+        },
+        "curves": [[34.796534, 32.109743],[34.795094,32.109425],[34.794416,32.108922],[34.794077,32.107836],[34.794133,32.106989]],
+        "speed_limit": 50,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2008",
+        "name": "Reading",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1006"
+        },
+        "to": {
+            "entity_id": "J1007"
+        },
+        "speed_limit": 50,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2009",
+        "name": "Chaim Levanon",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1007"
+        },
+        "to": {
+            "entity_id": "J1008"
+        },
+        "speed_limit": 50,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2010",
+        "name": "Namir Road",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1008"
+        },
+        "to": {
+            "entity_id": "J1009"
+        },
+        "speed_limit": 80,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2011",
+        "name": "Shai Agnon",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1008"
+        },
+        "to": {
+            "entity_id": "J1010"
+        },
+        "curves": [[34.791035, 32.103112]],
+        "speed_limit": 50,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2012",
+        "name": "Rokach Blvd",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1009"
+        },
+        "to": {
+            "entity_id": "J1011"
+        },
+        "curves": [[34.789502, 32.099030]],
+        "speed_limit": 80,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2013",
+        "name": "Ibn Gabirol",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1010"
+        },
+        "to": {
+            "entity_id": "J1011"
+        },
+        "speed_limit": 50,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2014",
+        "name": "Rokach Blvd",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1011"
+        },
+        "to": {
+            "entity_id": "J1012"
+        },
+        "speed_limit": 80,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    }
+]
