@@ -95,22 +95,7 @@ std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &entityId, 
 }
 
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord) const {
-    auto closestWayPair = getWayClosestPoint(coord, Restrictions());
-    const Way &closestWay = getWay(closestWayPair.second);
-    bool valid = true;
-    if (closestWay.isHighway()) {
-        Coordinates closestCoord = closestWay.getGeometry()->getClosestPoint(coord);
-        Meters distance = CoordinatesMath::calculateDistance(closestCoord, coord);
-        //TODO: is Meters comparison correct?
-        if (distance > max_distance_from_highway) {
-            valid = false;
-        }
-    }
-
-    if (!valid) {
-        closestWayPair = getWayClosestPoint(coord, Restrictions("highway"));
-    }
-    return closestWayPair;
+    return getWayClosestPoint(coord, Restrictions());
 }
 
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
@@ -131,23 +116,26 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
             stack.pop();
             CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
             for (auto &entityId : cellEntities.getEntities()) {
-                if (idsSeen.find(entityId) != idsSeen.end()) {
-                    // if id was already seen
+                if (idsSeen.find(entityId) != idsSeen.end()) {  // id was already seen
                     continue;
                 }
                 idsSeen.insert(entityId);
                 const std::unique_ptr<Entity> &entity = entities.find(entityId)->second;
-                if (entity->getType() == "Way") {
-                    auto &way = (const std::unique_ptr<Way> &) entity;
-                    if (!way->isRestricted(res)) {
-                        wayFound = true;
-                        Coordinates candidate = entity->getGeometry()->getClosestPoint(coord);
-                        Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
-                        if (distance < shortestDistance) {
-                            closest = candidate;
-                            shortestDistance = distance;
-                            closestEntityId = entityId;
-                        }
+                if (!(entity->getType() == "Way")) { // not a way
+                    continue;
+                }
+                auto &way = (const std::unique_ptr<Way> &) entity;
+                if (way->isRestricted(res)) {  // way is restricted
+                    continue;
+                }
+                Coordinates candidate = entity->getGeometry()->getClosestPoint(coord);
+                Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
+                if (!way->isHighway() || way->isHighway() && distance < max_distance_from_highway) {
+                    wayFound = true;
+                    if (distance < shortestDistance) {
+                        closest = candidate;
+                        shortestDistance = distance;
+                        closestEntityId = entityId;
                     }
                 }
             }
