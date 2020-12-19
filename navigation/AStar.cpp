@@ -25,7 +25,6 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
                            double (*costFunc)(const Way &),
                            bool (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
 
-    bool firstJunctionFound = false;
 /*-------------------------------- initialize initial Nodes --------------------------------*/
     std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, std::function<bool(
             std::shared_ptr<Node>, std::shared_ptr<Node>)>> queue(comparator);
