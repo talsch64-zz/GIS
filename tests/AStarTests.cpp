@@ -126,6 +126,7 @@ TEST_F(IsraelMapTest, differentRoutes) {
     EXPECT_TRUE(routes.isValid());
     EXPECT_EQ(distRouteSize, 7);
     EXPECT_EQ(timeRouteSize, 5);
+    printRoutes(routes);
 
 }
 
