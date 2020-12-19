@@ -302,6 +302,81 @@
         "coordinates": [32.25747, 35.18467]
     },
     {
+        "type": "Junction",
+        "id": "J1035",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.18469, 34.85686]
+    },
+    {
+        "type": "Junction",
+        "id": "J1036",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.18353, 34.81738]
+    },
+    {
+        "type": "Junction",
+        "id": "J1037",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.15044, 34.85382]
+    },
+    {
+        "type": "Way",
+        "id": "W2048",
+        "name": "unreachable",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1037"
+        },
+        "to": {
+            "entity_id": "J1035"
+        },
+        "speed_limit": 30,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2049",
+        "name": "unreachable",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1037"
+        },
+        "to": {
+            "entity_id": "J1036"
+        },
+        "speed_limit": 30,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2050",
+        "name": "unreachable",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1035"
+        },
+        "to": {
+            "entity_id": "J1036"
+        },
+        "speed_limit": 30,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
         "type": "Way",
         "id": "W2047",
         "name": "unreachable",
