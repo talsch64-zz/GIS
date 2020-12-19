@@ -60,7 +60,7 @@ private:
         Meters distanceSoFar;
         Minutes timeSoFar;
         double costSoFar;
-        // priority(n) = cost(n) + h(n) where h is the heuristic function
+        // priority(n) = cost(n) + heuristicFunc(n)
         double priority;
         Edge prevEdgeWay;
         std::shared_ptr<Node> prevNode;
@@ -148,24 +148,6 @@ private:
     std::vector<std::pair<EntityId, Direction>> restoreShortestRoute(std::shared_ptr<Node> node);
 
 private:
-    /**
-     * @brief calculates the aerial distance between the given coordinates and the end of the way
-     * @param way
-     * @param coordinates
-     * @param front if true then calculate the distance from the "from" junction, else from "to" junction
-     * @return the aerial distance between the given coordinates and the end of the way
-     */
-    Meters distanceFromWaysEnd(const Way &way, Coordinates coordinates, bool front);
-
-    /**
-     * @brief calculate the time it take to get from the edge of the Way to the given coordinates in MAX_SPEED
-     * @param way
-     * @param coordinates
-     * @param front if true then calculate the time from the "from" junction, else from "to" junction
-     * @return the time it take to get from the edge of the Way to the given coordinates in MAX_SPEED
-     */
-    Minutes timeFromWaysEnd(const Way &way, Coordinates coordinates, bool front);
-
 
     /**
      * @brief creates the neighbor node to the current node
@@ -184,10 +166,20 @@ private:
      * @param heuristicFunc
      * @param costFunc
      * @param direction if direction is A_to_B initialize node that represents "to" junction, else "from" junction.
-     * @return
+     * @return initialNode
      */
     std::shared_ptr<Node> createInitialNode(double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
                                             double (*costFunc)(const Way &), Direction direction);
+
+    /**
+     * @brief initializes the final Node! represent the destination point and not a junction!
+     * @param currNode node that represents a junction of the final way.
+     * @param heuristicFunc
+     * @param costFunc
+     * @return final node :)
+     */
+    std::shared_ptr<Node> createFinalNode(std::shared_ptr<Node> currNode, double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
+                                            double (*costFunc)(const Way &));
 
 
 };

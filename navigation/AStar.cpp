@@ -35,16 +35,21 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
     if (startWay.isBidirectional()) {
         queue.push(createInitialNode(heuristicFunc, costFunc, Direction::B_to_A));
     }
-
-    std::unordered_set<EntityId> popedJunctions; // we do lazy deletions so we need to keep track of which junction where already visited and poped from the queue
+    // we do lazy deletions so we need to keep track of which junctions where already visited and poped from the queue
+    std::unordered_set<EntityId> popedJunctions;
     std::shared_ptr<Node> currNode;
 
 /*-------------------------------- performing A* algorithm with the queue --------------------------------*/
     while (!queue.empty()) {
         currNode = queue.top();
         queue.pop();
+
+        if (currNode->getJunctionId() == EntityId("")) {   // reached destination!!!
+            break;
+        }
+
         if (popedJunctions.find(currNode->getJunctionId()) != popedJunctions.end()) {
-            //  if node was already poped from the queue we can skip its copy
+            //  if node was already poped from the queue we can skip its copy, lazy deletions
             continue;
         }
         popedJunctions.insert(currNode->getJunctionId());
@@ -52,8 +57,7 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
         //  reached the final way and initializing the final Node
         if (currNode->getJunctionId() == finalWay.getFromJunctionId() ||
             finalWay.isBidirectional() && currNode->getJunctionId() == finalWay.getToJunctionId()) {
-            currNode = createNeighbor(currNode, finalWay.getId(), heuristicFunc, costFunc);
-            break;
+            queue.push(createFinalNode(currNode, heuristicFunc, costFunc));
         }
 
         std::vector<EntityId> wayEdgesIds = navigationGIS.getWaysByJunction(currNode->getJunctionId());
@@ -63,22 +67,14 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
         }
     }
 /*-------------------------------- After search finished --------------------------------*/
-    if (currNode->getJunctionId() != finalWay.getToJunctionId() &&
-        currNode->getJunctionId() != finalWay.getFromJunctionId()) {
-        // no Route was found, return invalid route
+//TODO maybe make EntityId optional field, more elegant
+    if (currNode->getJunctionId() != EntityId("")) {
+        // no Route was found, return invalid route. Empty entityId means currNode is a final Node represents destination point
         return Route::invalidRoute(origin, destination);
     }
 
     std::vector<std::pair<EntityId, Direction>> ways = restoreShortestRoute(currNode);
-
-    /* subtract the redundant distance and from currNode and the destination point */
-    Meters redundantTailDistance = distanceFromWaysEnd(finalWay, destination, ways.back().second == Direction::B_to_A);
-    Meters distance = currNode->getDistanceSoFar() - redundantTailDistance;
-
-    Minutes redundantTailTime = timeFromWaysEnd(finalWay, destination, ways.back().second == Direction::B_to_A);
-    Minutes duration = currNode->getTimeSoFar() - redundantTailTime;
-
-    return std::move(Route(origin, destination, distance, duration, ways, true));
+    return std::move(Route(origin, destination, currNode->getDistanceSoFar(), currNode->getTimeSoFar(), ways, true));
 }
 
 std::vector<std::pair<EntityId, Direction>> AStar::restoreShortestRoute(std::shared_ptr<Node> node) {
@@ -123,17 +119,6 @@ bool AStar::compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> nod
     return node1->getPriority() > node2->getPriority();
 }
 
-Meters AStar::distanceFromWaysEnd(const Way &way, Coordinates coordinates, bool front) {
-    Coordinates endCoordinates = front ? way.getFromJunctionCoordinates() : way.getToJunctionCoordinates();
-    return CoordinatesMath::calculateDistance(endCoordinates, coordinates);
-}
-
-Minutes AStar::timeFromWaysEnd(const Way &way, Coordinates coordinates, bool front) {
-    Coordinates endCoordinates = front ? way.getFromJunctionCoordinates() : way.getToJunctionCoordinates();
-    return calculateTime(CoordinatesMath::calculateDistance(endCoordinates, coordinates),
-                         way.getSpeedLimit());
-}
-
 std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNode, EntityId wayId,
                                                    double (*heuristicFunc)(const Coordinates &, const Coordinates &),
                                                    double (*costFunc)(const Way &)) {
@@ -143,7 +128,6 @@ std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNod
     EntityId neighborId = direction == Direction::A_to_B ? way.getToJunctionId() : way.getFromJunctionId();
     Coordinates neighborCoordinates = direction == Direction::A_to_B ? way.getToJunctionCoordinates()
                                                                      : way.getFromJunctionCoordinates();
-
     Meters distanceSoFar = currNode->getDistanceSoFar() + way.getLength();
     Minutes timeSoFar = currNode->getTimeSoFar() + way.getTime();
     double costSoFar = currNode->getCostSoFar() + costFunc(way);
@@ -157,15 +141,16 @@ std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNod
 
 std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(const Coordinates &, const Coordinates &),
                                                       double (*costFunc)(const Way &), Direction direction) {
-//  If direction is A_To_B then the Node start at "to" junction, else from "from" junction.
-//  We implemented the algorithm such that the initial Node already has a "kilometrage" of the startWay
+    //  If direction is A_To_B then the Node start at "to" junction, else from "from" junction.
+    //  We implemented the algorithm such that the initial Node already has a "kilometrage" of the startWay
     Coordinates initialCoordinates = direction == Direction::A_to_B ? startWay.getToJunctionCoordinates()
                                                                     : startWay.getFromJunctionCoordinates();
-//    the distance from origin point to the initial node
+    Coordinates oppositeCoordinates = direction == Direction::A_to_B ? startWay.getFromJunctionCoordinates()
+                                                                     : startWay.getToJunctionCoordinates();
+    //  the distance from origin point to the initial node
     Meters initialDistance =
-            startWay.getLength() - distanceFromWaysEnd(startWay, origin, direction == Direction::A_to_B);
-//    TODO create time function
-//    the time from origin point to the initial node
+            startWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, origin);
+    //  the time from origin point to the initial node
     Minutes initialTime = calculateTime(initialDistance, startWay.getSpeedLimit());
     EntityId initialJunctionId =
             direction == Direction::A_to_B ? startWay.getToJunctionId() : startWay.getFromJunctionId();
@@ -179,6 +164,33 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
                                                                                    direction)),
                                                                nullptr);
     return initialNode;
+}
+
+std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNode,
+                                                    double (*heuristicFunc)(const Coordinates &, const Coordinates &),
+                                                    double (*costFunc)(const Way &)
+) {
+    Direction direction =
+            finalWay.getFromJunctionId() == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
+    // if direction is A_to_B we want to trim the aerial distance from "to" Junction to destination point, else from "from" Junction
+    Coordinates oppositeCoordinates = direction == Direction::A_to_B ? finalWay.getToJunctionCoordinates()
+                                                                     : finalWay.getFromJunctionCoordinates();
+    // currNode represents the opposite junction of endCoordinates
+    Meters distanceFromCurrNode =
+            finalWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, destination);
+    //  the total time to reach destination point
+    Minutes finalTime = calculateTime(distanceFromCurrNode, finalWay.getSpeedLimit()) + currNode->getTimeSoFar();
+    //  the total distance to reach destination point
+    Meters finalDistance = distanceFromCurrNode + currNode->getDistanceSoFar();
+    double finalCost = costFunc == costByTime ? (double) finalTime : (double) finalDistance;
+    double finalPriority = finalCost; // reached destination so priority = cost :)
+    std::shared_ptr<Node> finalNode = std::make_shared<Node>(destination, EntityId(""),
+                                                             finalDistance, finalTime, finalCost,
+                                                             finalPriority,
+                                                             Edge(std::make_pair(finalWay.getId(),
+                                                                                 direction)),
+                                                             currNode);
+    return finalNode;
 }
 
 
