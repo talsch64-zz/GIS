@@ -126,7 +126,7 @@ TEST_F(IsraelMapTest, differentRoutes) {
     EXPECT_TRUE(routes.isValid());
     EXPECT_EQ(distRouteSize, 7);
     EXPECT_EQ(timeRouteSize, 5);
-    printRoutes(routes);
+//    printRoutes(routes);
 
 }
 
@@ -135,11 +135,12 @@ TEST_F(IsraelMapTest, invalidRoutes) {
                        Latitude(35.18944)); // point on W2047 which is isolated
     Coordinates destination(Longitude(32.10885), Latitude(34.85451)); // J1020
     auto routes = navigation.getRoutes(origin, destination);
+    std::cout << routes.getErrorMessage() << std::endl;
     EXPECT_TRUE(!routes.isValid());
 
 }
 
-
+//TODO delete code!!!!
 //TEST(GISBasic, routeToFrom) {
 //    GIS gis = GISProvider::getGIS();
 //    NavigationGIS navGis(gis);

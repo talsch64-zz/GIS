@@ -16,6 +16,7 @@
  */
 
  class Route {
+     //TODO change to optional if possible
      Coordinates startPoint;
      Coordinates endPoint;
      Meters length;
@@ -28,11 +29,6 @@
      * @brief Constructor for Route
      */
      Route(Coordinates startPoint, Coordinates endPoint, Meters length, Minutes duration, std::vector<std::pair<EntityId, Direction>> ways, bool valid);
-
-     /**
-     * @brief Constructor for invalid Route initialization
-     */
-     Route(Coordinates startPoint, Coordinates endPoint);
 
      /**
      * @brief Get the ways constructing the Route and direction per way
@@ -75,6 +71,21 @@
       * @return true if route is valid, else false
       */
      bool isValid();
+
+
+     /**
+      * @brief initializing invalid Route
+      * @param start
+      * @param end
+      * @return invalid route
+      */
+     static Route invalidRoute(const Coordinates &start, const Coordinates &end);
+     /**
+      * @brief initializing invalid Route
+      * @return invalid route
+      */
+     static Route invalidRoute();
+
 
  };
 

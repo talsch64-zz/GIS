@@ -62,10 +62,11 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
             queue.push(neighbor);
         }
     }
+/*-------------------------------- After search finished --------------------------------*/
     if (currNode->getJunctionId() != finalWay.getToJunctionId() &&
         currNode->getJunctionId() != finalWay.getFromJunctionId()) {
         // no Route was found, return invalid route
-        return std::move(Route(origin, destination));
+        return Route::invalidRoute(origin, destination);
     }
 
     std::vector<std::pair<EntityId, Direction>> ways = restoreShortestRoute(currNode);
