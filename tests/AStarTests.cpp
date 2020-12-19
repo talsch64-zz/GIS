@@ -87,8 +87,6 @@ TEST_F(IsraelMapTest, onHighway) {
     EXPECT_EQ(distRouteSize, 9);
     EXPECT_EQ(timeRouteSize, 6);
 //    printRoutes(routes);
-
-
 }
 
 
@@ -100,7 +98,7 @@ TEST_F(IsraelMapTest, highwayTooFar) {
     auto timeRouteSize = routes.shortestTime().getWays().size();
     EXPECT_EQ(distRouteSize, 8);
     EXPECT_EQ(timeRouteSize, 7);
-    printRoutes(routes);
+//    printRoutes(routes);
 
 }
 
