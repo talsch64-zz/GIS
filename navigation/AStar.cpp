@@ -25,6 +25,7 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
                            double (*costFunc)(const Way &),
                            bool (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
 
+    bool firstJunctionFound = false;
 /*-------------------------------- initialize initial Nodes --------------------------------*/
     std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, std::function<bool(
             std::shared_ptr<Node>, std::shared_ptr<Node>)>> queue(comparator);
@@ -100,11 +101,11 @@ double AStar::distanceHeuristic(const Coordinates &coordinates, const Coordinate
 
 double AStar::timeHeuristic(const Coordinates &coordinates, const Coordinates &destination) {
     // meters per minute
-    return (double) CoordinatesMath::calculateDistance(coordinates, destination) / Way::kmh_to_mpm(MAX_SPEED);
+    return (double) CoordinatesMath::calculateDistance(coordinates, destination) / Way::kmh_to_mm(MAX_SPEED);
 }
 
 double AStar::costByDistance(const Way &way) {
-    return double(way.getLength());
+    return (double)way.getLength();
 }
 
 double AStar::costByTime(const Way &way) {
@@ -133,7 +134,7 @@ Meters AStar::distanceFromWaysEnd(const Way &way, Coordinates coordinates, bool 
 Minutes AStar::timeFromWaysEnd(const Way &way, Coordinates coordinates, bool front) {
     Coordinates endCoordinates = front ? way.getFromJunctionCoordinates() : way.getToJunctionCoordinates();
     return Minutes((double) CoordinatesMath::calculateDistance(endCoordinates, coordinates) /
-                   Way::kmh_to_mpm(way.getSpeedLimit()));
+                           Way::kmh_to_mm(way.getSpeedLimit()));
 }
 
 std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNode, EntityId wayId,

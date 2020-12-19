@@ -83,10 +83,9 @@ const Coordinates Way::getToJunctionCoordinates() const {
 }
 
 Minutes Way::getTime() const {
-    return Minutes((double) getLength() / kmh_to_mpm(getSpeedLimit()));
-
+    return Minutes((double) getLength() / kmh_to_mm(speedLimit));
 }
 
-double Way::kmh_to_mpm(int speed) {
+double Way::kmh_to_mm(int speed) {
     return (double) speed * 1000 / 60;
 }

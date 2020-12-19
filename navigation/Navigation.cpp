@@ -26,7 +26,7 @@ Routes Navigation::getRoutes(const Coordinates &start, const Coordinates &end) c
 //        initialize invalid Routes
         return Routes(Route(startPoint, destinationPoint), Route(startPoint, destinationPoint), false);
     }
-    Route shortestByTime = star.shortestByDistance();
+    Route shortestByTime = star.shortestByTime();
     return Routes(shortestByDistance, shortestByTime, true);
 }
 

@@ -100,7 +100,7 @@ public:
      * @return Minutes
      */
 //TODO move to some other class
-    static inline double kmh_to_mpm(int speed);
+    static inline double kmh_to_mm(int speed);
 };
 
 #endif //EX1_WAY_H
