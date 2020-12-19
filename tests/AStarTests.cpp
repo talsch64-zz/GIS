@@ -23,6 +23,11 @@ public:
 
     }
     void printRoutes(Routes routes) {
+        if (!routes.isValid()) {
+            //TODO add invalid messgae of the routes
+            std::cout << "invalid routes!!" << std::endl;
+            return;
+        }
         std::cout << std::endl << "---ShortestDistance Route--- " << std::endl;
 
         for (const auto &way : routes.shortestDistance().getWays()) {
@@ -55,6 +60,7 @@ TEST_F(IsraelMapTest, routeToFrom) {
     Coordinates to(Longitude(32.11265), Latitude(34.79254)); // J1014
     auto routes = navigation.getRoutes(from, to);
     auto size = routes.shortestDistance().getWays().size();
+    EXPECT_TRUE(routes.isValid());
     EXPECT_EQ(size, 5);
 }
 
@@ -64,6 +70,7 @@ TEST_F(IsraelMapTest, routeFromTo) {
     Coordinates from(Longitude(32.11265), Latitude(34.79254)); // J1014
     auto routes = navigation.getRoutes(from, to);
     auto size = routes.shortestDistance().getWays().size();
+    EXPECT_TRUE(routes.isValid());
     EXPECT_EQ(size, 5);
 }
 
@@ -74,6 +81,7 @@ TEST_F(IsraelMapTest, niceRoute) {
     auto routes = navigation.getRoutes(origin, destination);
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
+    EXPECT_TRUE(routes.isValid());
     EXPECT_EQ(distRouteSize, 11);
     EXPECT_EQ(timeRouteSize, 10);
 }
@@ -84,6 +92,7 @@ TEST_F(IsraelMapTest, onHighway) {
     auto routes = navigation.getRoutes(origin, destination);
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
+    EXPECT_TRUE(routes.isValid());
     EXPECT_EQ(distRouteSize, 9);
     EXPECT_EQ(timeRouteSize, 6);
 //    printRoutes(routes);
@@ -96,6 +105,7 @@ TEST_F(IsraelMapTest, highwayTooFar) {
     auto routes = navigation.getRoutes(origin, destination);
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
+    EXPECT_TRUE(routes.isValid());
     EXPECT_EQ(distRouteSize, 8);
     EXPECT_EQ(timeRouteSize, 7);
 //    printRoutes(routes);
@@ -106,18 +116,27 @@ TEST_F(IsraelMapTest, highwayTooFar) {
 TEST_F(IsraelMapTest, differentRoutes) {
     Coordinates origin(Longitude(32.50365),
                        Latitude(35.06183)); // near J1026, closestWayPoint is on a highway (less then 3 meters away)
-    Coordinates destination(Longitude(32.10885), Latitude(34.85451)); // J2020
+    Coordinates destination(Longitude(32.10885), Latitude(34.85451)); // J1020
 
     auto routes = navigation.getRoutes(origin, destination);
     auto sizeTime = routes.shortestTime().getWays().size();
     auto sizeDistance = routes.shortestDistance().getWays().size();
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
+    EXPECT_TRUE(routes.isValid());
     EXPECT_EQ(distRouteSize, 7);
     EXPECT_EQ(timeRouteSize, 5);
 
 }
 
+TEST_F(IsraelMapTest, invalidRoutes) {
+    Coordinates origin(Longitude(32.31719),
+                       Latitude(35.18944)); // point on W2047 which is isolated
+    Coordinates destination(Longitude(32.10885), Latitude(34.85451)); // J1020
+    auto routes = navigation.getRoutes(origin, destination);
+    EXPECT_TRUE(!routes.isValid());
+
+}
 
 
 //TEST(GISBasic, routeToFrom) {

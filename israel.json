@@ -286,6 +286,39 @@
         "coordinates": [32.21902, 34.92392]
     },
     {
+        "type": "Junction",
+        "id": "J1033",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.33931, 35.19085]
+    },
+    {
+        "type": "Junction",
+        "id": "J1034",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.25747, 35.18467]
+    },
+    {
+        "type": "Way",
+        "id": "W2047",
+        "name": "unreachable",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1033"
+        },
+        "to": {
+            "entity_id": "J1034"
+        },
+        "speed_limit": 30,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
         "type": "Way",
         "id": "W2042",
         "name": "b",
