@@ -2,7 +2,7 @@
 #include "JsonHandlers/Serializers/EntityJsonSerializer.h"
 
 #include "Way.h"
-
+#include "../Utils.h"
 #include <utility>
 
 Way::Way(const EntityId &id, const std::string &name, const std::string &description,
@@ -86,6 +86,4 @@ Minutes Way::getTime() const {
     return Minutes((double) getLength() / kmh_to_mm(speedLimit));
 }
 
-double Way::kmh_to_mm(int speed) {
-    return (double) speed * 1000 / 60;
-}
+

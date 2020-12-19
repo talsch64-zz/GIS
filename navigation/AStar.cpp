@@ -3,6 +3,7 @@
 #include "Route.h"
 #include "../entities/Way.h"
 #include "../NavigationGIS.h"
+#include "../Utils.h"
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
@@ -96,7 +97,7 @@ double AStar::distanceHeuristic(const Coordinates &coordinates, const Coordinate
 
 double AStar::timeHeuristic(const Coordinates &coordinates, const Coordinates &destination) {
     // meters per minute
-    return (double) CoordinatesMath::calculateDistance(coordinates, destination) / Way::kmh_to_mm(MAX_SPEED);
+    return (double) calculateTime(CoordinatesMath::calculateDistance(coordinates, destination), MAX_SPEED);
 }
 
 double AStar::costByDistance(const Way &way) {
@@ -128,8 +129,8 @@ Meters AStar::distanceFromWaysEnd(const Way &way, Coordinates coordinates, bool 
 
 Minutes AStar::timeFromWaysEnd(const Way &way, Coordinates coordinates, bool front) {
     Coordinates endCoordinates = front ? way.getFromJunctionCoordinates() : way.getToJunctionCoordinates();
-    return Minutes((double) CoordinatesMath::calculateDistance(endCoordinates, coordinates) /
-                   Way::kmh_to_mm(way.getSpeedLimit()));
+    return calculateTime(CoordinatesMath::calculateDistance(endCoordinates, coordinates),
+                         way.getSpeedLimit());
 }
 
 std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNode, EntityId wayId,
@@ -164,7 +165,7 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
             startWay.getLength() - distanceFromWaysEnd(startWay, origin, direction == Direction::A_to_B);
 //    TODO create time function
 //    the time from origin point to the initial node
-    Minutes initialTime((double) initialDistance / Way::kmh_to_mm(startWay.getSpeedLimit()));
+    Minutes initialTime = calculateTime(initialDistance, startWay.getSpeedLimit());
     EntityId initialJunctionId =
             direction == Direction::A_to_B ? startWay.getToJunctionId() : startWay.getFromJunctionId();
 //    TODO find a better solution to update the initial cost
