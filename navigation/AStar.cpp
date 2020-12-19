@@ -150,8 +150,6 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
     //  the distance from origin point to the initial node
     Meters initialDistance =
             startWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, origin);
-    std::cout << "distance from junction to origin:  "<< (double) initialDistance << std::endl;
-
     //  the time from origin point to the initial node
     Minutes initialTime = calculateTime(initialDistance, startWay.getSpeedLimit());
     EntityId initialJunctionId =
@@ -180,7 +178,6 @@ std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNo
     // currNode represents the opposite junction of endCoordinates
     Meters distanceFromCurrNode =
             finalWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, destination);
-    std::cout << "distance from junction to destination:  "<< (double) distanceFromCurrNode << std::endl;
     //  the total time to reach destination point
     Minutes finalTime = calculateTime(distanceFromCurrNode, finalWay.getSpeedLimit()) + currNode->getTimeSoFar();
     //  the total distance to reach destination point

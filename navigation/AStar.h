@@ -147,8 +147,6 @@ private:
      */
     std::vector<std::pair<EntityId, Direction>> restoreShortestRoute(std::shared_ptr<Node> node);
 
-private:
-
     /**
      * @brief creates the neighbor node to the current node
      * @param currNode
