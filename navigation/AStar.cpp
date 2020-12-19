@@ -167,7 +167,8 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
     Minutes initialTime((double) initialDistance / Way::kmh_to_mm(startWay.getSpeedLimit()));
     EntityId initialJunctionId =
             direction == Direction::A_to_B ? startWay.getToJunctionId() : startWay.getFromJunctionId();
-    double initialCost = costFunc(startWay);
+//    TODO find a better solution to update the initial cost
+    double initialCost = costFunc == costByTime ? double(initialTime) : double(initialDistance);
     double initialPriority = heuristicFunc(initialCoordinates, destination) + initialCost;
     std::shared_ptr<Node> initialNode = std::make_shared<Node>(initialCoordinates, initialJunctionId,
                                                                initialDistance, initialTime, initialCost,

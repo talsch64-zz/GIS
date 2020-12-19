@@ -72,17 +72,21 @@ TEST_F(IsraelMapTest, niceRoute) {
                        Latitude(35.06183)); // J1026, closestWayPoint is on a highway (less then 3 meters away)
     Coordinates destination(Longitude(32.11181), Latitude(34.79474)); // on W2041, between J1004 and J1014
     auto routes = navigation.getRoutes(origin, destination);
-    auto size = routes.shortestDistance().getWays().size();
-    EXPECT_EQ(size, 8);
+    auto distRouteSize = routes.shortestDistance().getWays().size();
+    auto timeRouteSize = routes.shortestTime().getWays().size();
+    EXPECT_EQ(distRouteSize, 11);
+    EXPECT_EQ(timeRouteSize, 10);
 }
 
 TEST_F(IsraelMapTest, onHighway) {
     Coordinates origin(Longitude(32.50428), Latitude(35.06188)); // on a highway
     Coordinates destination(Longitude(32.057), Latitude(34.86717)); // on W2023, between J1022 and J1023
     auto routes = navigation.getRoutes(origin, destination);
-    auto size = routes.shortestDistance().getWays().size();
-    EXPECT_EQ(std::string(routes.shortestDistance().getWays().begin()->first), "W2017");
-    EXPECT_EQ(size, 6);
+    auto distRouteSize = routes.shortestDistance().getWays().size();
+    auto timeRouteSize = routes.shortestTime().getWays().size();
+    EXPECT_EQ(distRouteSize, 9);
+    EXPECT_EQ(timeRouteSize, 6);
+
 }
 
 
@@ -90,11 +94,10 @@ TEST_F(IsraelMapTest, highwayTooFar) {
     Coordinates origin(Longitude(32.4618), Latitude(35.08074)); // highway is the closest but too far away
     Coordinates destination(Longitude(32.057), Latitude(34.86717)); // on W2023, between J1022 and J1023
     auto routes = navigation.getRoutes(origin, destination);
-    auto disrtanceSize = routes.shortestDistance().getWays().size();
-    auto timeSize = routes.shortestTime().getWays().size();
-    EXPECT_EQ(disrtanceSize, 8);
-    EXPECT_EQ(timeSize, 7);
-
+    auto distRouteSize = routes.shortestDistance().getWays().size();
+    auto timeRouteSize = routes.shortestTime().getWays().size();
+    EXPECT_EQ(distRouteSize, 8);
+    EXPECT_EQ(timeRouteSize, 7);
 }
 
 
@@ -106,8 +109,10 @@ TEST_F(IsraelMapTest, differentRoutes) {
     auto routes = navigation.getRoutes(origin, destination);
     auto sizeTime = routes.shortestTime().getWays().size();
     auto sizeDistance = routes.shortestDistance().getWays().size();
-    EXPECT_EQ(sizeTime, 5);
-    EXPECT_EQ(sizeDistance, 4);
+    auto distRouteSize = routes.shortestDistance().getWays().size();
+    auto timeRouteSize = routes.shortestTime().getWays().size();
+    EXPECT_EQ(distRouteSize, 7);
+    EXPECT_EQ(timeRouteSize, 5);
     printRoutes(routes);
 
 }
