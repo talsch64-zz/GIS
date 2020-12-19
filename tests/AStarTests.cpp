@@ -86,18 +86,22 @@ TEST_F(IsraelMapTest, onHighway) {
     auto timeRouteSize = routes.shortestTime().getWays().size();
     EXPECT_EQ(distRouteSize, 9);
     EXPECT_EQ(timeRouteSize, 6);
+//    printRoutes(routes);
+
 
 }
 
 
 TEST_F(IsraelMapTest, highwayTooFar) {
-    Coordinates origin(Longitude(32.4618), Latitude(35.08074)); // highway is the closest but too far away
+    Coordinates origin(Longitude(32.4618), Latitude(35.08074)); // highway W2017 is the closest but too far away
     Coordinates destination(Longitude(32.057), Latitude(34.86717)); // on W2023, between J1022 and J1023
     auto routes = navigation.getRoutes(origin, destination);
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
     EXPECT_EQ(distRouteSize, 8);
     EXPECT_EQ(timeRouteSize, 7);
+    printRoutes(routes);
+
 }
 
 
@@ -113,7 +117,6 @@ TEST_F(IsraelMapTest, differentRoutes) {
     auto timeRouteSize = routes.shortestTime().getWays().size();
     EXPECT_EQ(distRouteSize, 7);
     EXPECT_EQ(timeRouteSize, 5);
-    printRoutes(routes);
 
 }
 
