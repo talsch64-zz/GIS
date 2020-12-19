@@ -46,10 +46,11 @@ std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS
     Coordinates fromCoordinates = ((std::unique_ptr<Point> &) fromEntity->getGeometry())->getCoordinates();
     Coordinates toCoordinates = ((std::unique_ptr<Point> &) toEntity->getGeometry())->getCoordinates();
     std::unique_ptr<PointList> geometry = geometryJsonParser.parseWayGeometry(doc, fromCoordinates, toCoordinates);
+    bool highway = std::find(categoryTags.begin(), categoryTags.end(), "highway") != categoryTags.end();
 
     EntityId id = parseEntityId(doc);
     std::unique_ptr<Way> way = std::make_unique<Way>(id, name, description, categoryTags, std::move(geometry), from, to,
-                                                     direction, speedLimit, tollRoad,
+                                                     direction, speedLimit, tollRoad, highway,
                                                      restricted);
     ((Junction *) fromEntity)->addWay(id);
     if (way->isBidirectional()) {

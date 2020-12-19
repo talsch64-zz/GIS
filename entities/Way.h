@@ -21,6 +21,7 @@ class Way : public Entity {
     TrafficDirection direction;
     int speedLimit;
     bool tollRoad;
+    bool highway;
     std::vector<std::string> restricted;
     mutable std::optional<Meters> length;
 
@@ -28,7 +29,7 @@ public:
 
     Way(const EntityId &id, const std::string &name, const std::string &description,
         const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from,
-        EntityId to, TrafficDirection direction, int speedLimit, bool tollRoad, std::vector<std::string> restricted);
+        EntityId to, TrafficDirection direction, int speedLimit, bool tollRoad, bool highway, std::vector<std::string> restricted);
 
     const EntityId &getFromJunctionId() const;
 

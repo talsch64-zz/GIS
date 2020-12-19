@@ -7,11 +7,12 @@
 
 Way::Way(const EntityId &id, const std::string &name, const std::string &description,
          const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from, EntityId to,
-         TrafficDirection direction, int speedLimit, bool tollRoad,
+         TrafficDirection direction, int speedLimit, bool tollRoad, bool highway,
          std::vector<std::string> restricted) : Entity(id, name, description, categoryTags, "Way"),
                                                 from(std::move(from)), to(std::move(to)), geometry(std::move(geometry)),
                                                 direction(direction), speedLimit(speedLimit),
-                                                tollRoad(tollRoad), restricted(std::move(restricted)) {}
+                                                tollRoad(tollRoad), highway(highway),
+                                                restricted(std::move(restricted)) {}
 
 const std::unique_ptr<Geometry> &Way::getGeometry() const {
     return (const std::unique_ptr<Geometry> &) geometry;
@@ -58,7 +59,7 @@ Meters Way::getLength() const {
 
 bool Way::isRestricted(const Restrictions &restrictions) const {
     for (std::string restriction : restrictions.getRestrictions()) {
-        if (std::find(restricted.begin(), restricted.end(), restriction) != restricted.end()) {
+        if(restriction == "highway" && isHighway() || restriction == "toll" && isTollRoad()) {
             return true;
         }
     }
@@ -70,8 +71,6 @@ bool Way::isBidirectional() const {
 }
 
 bool Way::isHighway() const {
-    auto categoryTags = getCategoryTags();
-    bool highway = std::find(categoryTags.begin(), categoryTags.end(), "highway") != categoryTags.end();
     return highway;
 }
 
