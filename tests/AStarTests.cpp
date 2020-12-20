@@ -327,3 +327,18 @@ TEST_F(IsraelMapTest, parallelRoutes) {
 //    printRoutes(routes);
 }
 
+
+/**
+ * Two parallel routes (same speed limits and length)
+ * 1. W2060 -> W2051
+ * 2. W2059 -> W2058 -> W2057 -> W2051
+ * Expected Routes result should be the first one
+ */
+TEST_F(IsraelMapTest, minimalWaysRoute) {
+    Coordinates destination(Longitude(32.34981), Latitude(35.22814)); // origin is J1045
+    Coordinates origin(Longitude(32.24811), Latitude(35.34327)); // destination is J1038
+    auto routes = navigation.getRoutes(origin, destination);
+    EXPECT_TRUE(routes.isValid());
+    EXPECT_LT(routes.shortestDistance().getWays().size(), 4);
+//    printRoutes(routes);
+}

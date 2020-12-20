@@ -363,6 +363,102 @@
         "coordinates": [32.37458, 35.13005]
     },
     {
+        "type": "Junction",
+        "id": "J1043",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.22866, 35.22379]
+    },
+    {
+        "type": "Junction",
+        "id": "J1044",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.24144, 35.30207]
+    },
+    {
+        "type": "Junction",
+        "id": "J1045",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.24811, 35.34327]
+    },
+    {
+        "type": "Way",
+        "id": "W2057",
+        "name": "fast",
+        "description": ".*",
+        "category_tags": [],
+        "curves": [],
+        "from": {
+            "entity_id": "J1043"
+        },
+        "to": {
+            "entity_id": "J1039"
+        },
+        "speed_limit": 100,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2058",
+        "name": "fast",
+        "description": ".*",
+        "category_tags": [],
+        "curves": [],
+        "from": {
+            "entity_id": "J1044"
+        },
+        "to": {
+            "entity_id": "J1043"
+        },
+        "speed_limit": 100,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2059",
+        "name": "fast",
+        "description": ".*",
+        "category_tags": [],
+        "curves": [],
+        "from": {
+            "entity_id": "J1045"
+        },
+        "to": {
+            "entity_id": "J1044"
+        },
+        "speed_limit": 100,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2060",
+        "name": "fast",
+        "description": ".*",
+        "category_tags": [],
+        "curves": [[32.22866, 35.22379], [32.24144, 35.30207]],
+        "from": {
+            "entity_id": "J1045"
+        },
+        "to": {
+            "entity_id": "J1039"
+        },
+        "speed_limit": 100,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
         "type": "Way",
         "id": "W2054",
         "name": "fast",

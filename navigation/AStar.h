@@ -62,13 +62,14 @@ private:
         double costSoFar;
         // priority(n) = cost(n) + heuristicFunc(n)
         double priority;
+        unsigned int waysCount;
         Edge prevEdgeWay;
         std::shared_ptr<Node> prevNode;
 
     public:
         Node(const Coordinates &coordinates, const EntityId &junctionId, const Meters &distanceSoFar,
              const Minutes &timeSoFar, double costSoFar,
-             double priority, const Edge &prevEdgeWay, std::shared_ptr<Node> prevNode);
+             double priority, unsigned int waysCount, const Edge &prevEdgeWay, std::shared_ptr<Node> prevNode);
 
 
         const Edge &getPrevEdgeWay() const;
@@ -84,6 +85,8 @@ private:
         const Meters &getDistanceSoFar() const;
 
         const Minutes &getTimeSoFar() const;
+
+        unsigned int getWaysCount() const;
 
         const std::shared_ptr<Node> &getPrevNode() const;
 

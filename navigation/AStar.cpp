@@ -107,6 +107,9 @@ double AStar::costByTime(const Way &way) {
 
 bool AStar::compareByDistance(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2) {
     if (node1->getPriority() == node2->getPriority()) {
+        if (node1->getTimeSoFar() ==  node2->getTimeSoFar()) {
+            return node1->getWaysCount() > node2->getWaysCount();
+        }
         return node1->getTimeSoFar() > node2->getTimeSoFar();
     }
     return node1->getPriority() > node2->getPriority();
@@ -114,6 +117,9 @@ bool AStar::compareByDistance(std::shared_ptr<Node> node1, std::shared_ptr<Node>
 
 bool AStar::compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2) {
     if (node1->getPriority() == node2->getPriority()) {
+        if (node1->getDistanceSoFar() == node2->getDistanceSoFar()) {
+            return node1->getWaysCount() > node2->getWaysCount();
+        }
         return node1->getDistanceSoFar() > node2->getDistanceSoFar();
     }
     return node1->getPriority() > node2->getPriority();
@@ -135,6 +141,7 @@ std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNod
 
     std::shared_ptr<Node> neighbor = std::make_shared<Node>(neighborCoordinates, neighborId, distanceSoFar,
                                                             timeSoFar, costSoFar, priority,
+                                                            currNode->getWaysCount() + 1,
                                                             std::make_pair(wayId, direction), currNode);
     return neighbor;
 }
@@ -159,7 +166,7 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
     double initialPriority = heuristicFunc(initialCoordinates, destination) + initialCost;
     std::shared_ptr<Node> initialNode = std::make_shared<Node>(initialCoordinates, initialJunctionId,
                                                                initialDistance, initialTime, initialCost,
-                                                               initialPriority,
+                                                               initialPriority, 1,
                                                                Edge(std::make_pair(startWay.getId(),
                                                                                    direction)),
                                                                nullptr);
@@ -186,7 +193,7 @@ std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNo
     double finalPriority = finalCost; // reached destination so priority = cost :)
     std::shared_ptr<Node> finalNode = std::make_shared<Node>(destination, EntityId(""),
                                                              finalDistance, finalTime, finalCost,
-                                                             finalPriority,
+                                                             finalPriority, currNode->getWaysCount() + 1,
                                                              Edge(std::make_pair(finalWay.getId(),
                                                                                  direction)),
                                                              currNode);
@@ -196,12 +203,14 @@ std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNo
 
 AStar::Node::Node(const Coordinates &coordinates, const EntityId &junctionId,
                   const Meters &distanceSoFar, const Minutes &timeSoFar, double costSoFar, double priority,
+                  unsigned int waysCount,
                   const Edge &prevEdgeWay, std::shared_ptr<Node> prevNode) : coordinates(coordinates),
                                                                              junctionId(junctionId),
                                                                              distanceSoFar(distanceSoFar),
                                                                              timeSoFar(timeSoFar),
                                                                              costSoFar(costSoFar),
                                                                              priority(priority),
+                                                                             waysCount(waysCount),
                                                                              prevEdgeWay(prevEdgeWay),
                                                                              prevNode(prevNode) {}
 
@@ -237,5 +246,9 @@ double AStar::Node::getCostSoFar() const {
 
 const std::shared_ptr<AStar::Node> &AStar::Node::getPrevNode() const {
     return prevNode;
+}
+
+unsigned int AStar::Node::getWaysCount() const {
+    return waysCount;
 }
 
