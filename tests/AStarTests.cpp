@@ -15,15 +15,15 @@ public:
     IsraelMapTest() : gis(GISProvider::getGIS()), navGis(gis), navigation(navGis) {
     }
 
-    void SetUp() {
+    void SetUp() override {
         gis.loadMapFile("israel.json");
     }
 
-    void TearDown() {
+    void TearDown() override {
 
     }
 
-    std::vector<EntityId> getWaysIds(Route route) {
+    std::vector<EntityId> getWaysIds(const Route &route) {
         std::vector<EntityId> ids;
         if (route.isValid()) {
             for (auto pair: route.getWays()) {
@@ -33,7 +33,7 @@ public:
         return ids;
     }
 
-    void printRoutes(Routes routes) {
+    void printRoutes(const Routes &routes) {
         if (!routes.isValid()) {
             //TODO add invalid messgae of the routes
             std::cout << "invalid routes!!" << std::endl;
@@ -134,7 +134,7 @@ TEST_F(IsraelMapTest, niceRoute) {
  * Starts from a point on a highway - the closest way is W2017 which is a highway
  */
 TEST_F(IsraelMapTest, onHighway) {
-    Coordinates origin(Longitude(32.50428), Latitude(35.06188)); // on a highway W2017
+    Coordinates origin(Longitude(32.50412), Latitude(35.06188)); // on a highway W2017
     Coordinates destination(Longitude(32.057), Latitude(34.86717)); // on W2023, between J1022 and J1023
     auto routes = navigation.getRoutes(origin, destination);
     EXPECT_TRUE(routes.isValid());
@@ -266,6 +266,11 @@ TEST_F(IsraelMapTest, bidirectionalSingleWay) {
 //    printRoutes(routes);
 }
 
+/**
+ * Start way and final way are both W2052 which is bidirectional and also very slow.
+ * The shortest time route should include another way.
+ * The shortest distance route should be different from the shortest time route.
+ */
 TEST_F(IsraelMapTest, singleSlowWayVsFastWay) {
     Coordinates origin(Longitude(32.49647),
                        Latitude(35.03114)); // near J1026 on W2052

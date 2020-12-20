@@ -8,6 +8,9 @@
  *
  */
 class NavigationValidator {
+    GIS gis;
+
+
 public:
     /**
      * @brief Construct a new Navigation Validator object

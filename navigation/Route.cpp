@@ -22,7 +22,7 @@ const std::vector<std::pair<EntityId, Direction>> &Route::getWays() const {
     return ways;
 }
 
-bool Route::isValid() {
+bool Route::isValid() const {
     return valid;
 }
 

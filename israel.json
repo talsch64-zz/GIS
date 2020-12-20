@@ -25,9 +25,6 @@
         }
     },
 
-
-
-
     {
         "type": "Junction",
         "id": "J1001",
@@ -1076,6 +1073,23 @@
         },
         "to": {
             "entity_id": "J1017"
+        },
+        "speed_limit": 70,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": []
+    },
+    {
+        "type": "Way",
+        "id": "W2053",
+        "name": "b",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1018"
+        },
+        "to": {
+            "entity_id": "J1020"
         },
         "speed_limit": 70,
         "direction": "bidirectional",

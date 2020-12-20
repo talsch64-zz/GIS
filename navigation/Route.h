@@ -16,7 +16,6 @@
  */
 
  class Route {
-     //TODO change to optional if possible
      Coordinates startPoint;
      Coordinates endPoint;
      Meters length;
@@ -70,7 +69,7 @@
       *
       * @return true if route is valid, else false
       */
-     bool isValid();
+     bool isValid() const;
 
 
      /**
