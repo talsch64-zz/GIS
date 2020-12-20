@@ -6,13 +6,13 @@
 #include "../navigation/Navigation.h"
 #include "../entities/Way.h"
 
-class IsraelMapTest: public ::testing::Test {
+class IsraelMapTest : public ::testing::Test {
 protected:
     GIS gis;
     NavigationGIS navGis;
     Navigation navigation;
 public:
-    IsraelMapTest(): gis(GISProvider::getGIS()), navGis(gis), navigation(gis) {
+    IsraelMapTest() : gis(GISProvider::getGIS()), navGis(gis), navigation(gis) {
     }
 
     void SetUp() {
@@ -22,6 +22,7 @@ public:
     void TearDown() {
 
     }
+
     void printRoutes(Routes routes) {
         if (!routes.isValid()) {
             //TODO add invalid messgae of the routes
@@ -47,7 +48,8 @@ public:
                       << (double) gis.getWay(way.first).getTime() << std::endl;
             std::cout << "==================================" << std::endl;
         }
-        std::cout << "ShortestDistanceRoute - distance: " << (double) routes.shortestDistance().totalLength() << ", time: "
+        std::cout << "ShortestDistanceRoute - distance: " << (double) routes.shortestDistance().totalLength()
+                  << ", time: "
                   << (double) routes.shortestDistance().estimatedDuration() << std::endl;
         std::cout << "ShortestTimeRoute - distance: " << (double) routes.shortestTime().totalLength() << ", time: "
                   << (double) routes.shortestTime().estimatedDuration() << std::endl;
@@ -129,9 +131,11 @@ TEST_F(IsraelMapTest, differentRoutes) {
 //    printRoutes(routes);
 
 }
+
 TEST_F(IsraelMapTest, differentRoutesOpposite) {
     Coordinates destination(Longitude(32.50365),
-                       Latitude(35.06183)); // near J1026, closestWayPoint is on a highway (less then 3 meters away)
+                            Latitude(
+                                    35.06183)); // near J1026, closestWayPoint is on a highway (less then 3 meters away)
     Coordinates origin(Longitude(32.10885), Latitude(34.85451)); // J1020
 
     auto routes = navigation.getRoutes(origin, destination);
@@ -166,19 +170,32 @@ TEST_F(IsraelMapTest, unidirectionalSingleWayInvalid) {
     EXPECT_EQ(routes.getErrorMessage(), "Routes contain only one unidirectional way!");
 }
 
-TEST_F(IsraelMapTest, bidirectionalSingleWay2) {
+TEST_F(IsraelMapTest, bidirectionalSingleWay) {
     Coordinates destination(Longitude(32.34981),
                             Latitude(35.22814)); // J1038
     Coordinates origin(Longitude(32.25985), Latitude(35.22334)); // J1039
     auto routes = navigation.getRoutes(origin, destination);
-    auto way =  routes.shortestDistance().getWays().front();
+    auto way = routes.shortestDistance().getWays().front();
     EXPECT_TRUE(routes.isValid());
-//  TODO size should be 1 but it makes automatic U-turn. Fix it.
-//    EXPECT_EQ(routes.shortestDistance().getWays().size(), 1);
+//  size should be 1 but it makes automatic U-turn
+//  EXPECT_EQ(routes.shortestDistance().getWays().size(), 1);
     EXPECT_EQ(way.first, EntityId("W2051"));
     EXPECT_EQ(gis.getWay(way.first).getLength(), routes.shortestDistance().totalLength());
     EXPECT_EQ(gis.getWay(way.first).getTime(), routes.shortestDistance().estimatedDuration());
-    printRoutes(routes);
+//    printRoutes(routes);
+}
+
+TEST_F(IsraelMapTest, singleSlowWayVsFastWay) {
+    Coordinates origin(Longitude(32.49647),
+                       Latitude(35.03114)); // near J1026 on W2052
+    Coordinates destination(Longitude(32.37961), Latitude(34.97144)); // J1029
+    auto routes = navigation.getRoutes(origin, destination);
+    EXPECT_TRUE(routes.isValid());
+    auto shortestDistanceRoute = routes.shortestDistance();
+    auto shortestTimeRoute = routes.shortestTime();
+    EXPECT_LT(shortestDistanceRoute.totalLength(), shortestTimeRoute.totalLength());
+    EXPECT_LT(shortestTimeRoute.estimatedDuration(), shortestDistanceRoute.estimatedDuration());
+//    printRoutes(routes);
 }
 /**
  * This test tests that the route found is indeed the shortest route when the final way is bidirectional.
@@ -188,7 +205,7 @@ TEST_F(IsraelMapTest, bidirectionalSingleWay2) {
  * The expected Route is J1037-->J1036-->destination.
  */
 TEST_F(IsraelMapTest, finalBidirectionalWay) {
-    Coordinates origin(Longitude(32.15044),Latitude(34.85382)); // origin is J1037
+    Coordinates origin(Longitude(32.15044), Latitude(34.85382)); // origin is J1037
     Coordinates destination(Longitude(32.18378), Latitude(34.82216)); // near J1036, on way W2050
     auto routes = navigation.getRoutes(origin, destination);
     EXPECT_TRUE(routes.isValid());

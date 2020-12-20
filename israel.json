@@ -343,6 +343,24 @@
     },
     {
         "type": "Way",
+        "id": "W2052",
+        "name": "u",
+        "description": ".*",
+        "category_tags": [],
+        "curves": [[32.47729, 34.95149]],
+        "from": {
+            "entity_id": "J1026"
+        },
+        "to": {
+            "entity_id": "J1029"
+        },
+        "speed_limit": 20,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
         "id": "W2048",
         "name": "u",
         "description": ".*",
@@ -354,7 +372,7 @@
             "entity_id": "J1035"
         },
         "speed_limit": 30,
-        "direction": "u",
+        "direction": "bidirectional",
         "toll_road": false,
         "restricted": ["trucks"]
     },
