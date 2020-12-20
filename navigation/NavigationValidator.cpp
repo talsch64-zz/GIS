@@ -20,8 +20,8 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
     if (!routes.isValid()) {
         return false;
     }
-    std::pair<Coordinates, EntityId> startPair = gis.getWayClosestPoint(start);
-    std::pair<Coordinates, EntityId> endPair = gis.getWayClosestPoint(end);
+    std::pair<Coordinates, EntityId> startPair = gis.getWayClosestPoint(start, restrictions);
+    std::pair<Coordinates, EntityId> endPair = gis.getWayClosestPoint(end, restrictions);
 
     Coordinates origin = startPair.first;
     Coordinates destination = endPair.first;

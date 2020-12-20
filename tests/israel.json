@@ -388,6 +388,23 @@
     },
     {
         "type": "Way",
+        "id": "W2017",
+        "name": "b",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1026"
+        },
+        "to": {
+            "entity_id": "J1025"
+        },
+        "speed_limit": 120,
+        "direction": "bidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
         "id": "W2057",
         "name": "fast",
         "description": ".*",
@@ -527,7 +544,7 @@
         },
         "speed_limit": 20,
         "direction": "bidirectional",
-        "toll_road": false,
+        "toll_road": true,
         "restricted": ["trucks"]
     },
     {
@@ -696,23 +713,6 @@
             "entity_id": "J1020"
         },
         "speed_limit": 30,
-        "direction": "bidirectional",
-        "toll_road": false,
-        "restricted": ["trucks"]
-    },
-    {
-        "type": "Way",
-        "id": "W2017",
-        "name": "b",
-        "description": ".*",
-        "category_tags": ["highway"],
-        "from": {
-            "entity_id": "J1026"
-        },
-        "to": {
-            "entity_id": "J1025"
-        },
-        "speed_limit": 120,
         "direction": "bidirectional",
         "toll_road": false,
         "restricted": ["trucks"]
@@ -1337,7 +1337,7 @@
         },
         "speed_limit": 80,
         "direction": "bidirectional",
-        "toll_road": false,
+        "toll_road": true,
         "restricted": []
     },
     {
