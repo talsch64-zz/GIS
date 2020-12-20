@@ -5,6 +5,7 @@
 #include "../CoordinatesMath.h"
 #include "../navigation/Navigation.h"
 #include "../entities/Way.h"
+#include "../Utils.h"
 
 class IsraelMapTest : public ::testing::Test {
 protected:
@@ -295,8 +296,6 @@ TEST_F(IsraelMapTest, finalBidirectionalWay) {
     Coordinates destination(Longitude(32.18378), Latitude(34.82216)); // near J1036, on way W2050
     auto routes = navigation.getRoutes(origin, destination);
     EXPECT_TRUE(routes.isValid());
-    auto sizeTime = routes.shortestTime().getWays().size();
-    auto sizeDistance = routes.shortestDistance().getWays().size();
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
     EXPECT_EQ(distRouteSize, 2);
@@ -307,112 +306,24 @@ TEST_F(IsraelMapTest, finalBidirectionalWay) {
 //    printRoutes(routes);
 }
 
-//TODO delete code!!!!
-//TEST(GISBasic, routeToFrom) {
-//    GIS gis = GISProvider::getGIS();
-//    NavigationGIS navGis(gis);
-//    Navigation nav(navGis);
-//    Coordinates from(Longitude(32.113357), Latitude(34.801290));
-//    Coordinates to(Longitude(32.111320), Latitude(34.796037));
-//    gis.loadMapFile("israel.json");
-//    auto routes = nav.getRoutes(from, to);
-//    auto size = routes.shortestDistance().getWays().size();
-//    EXPECT_EQ(size, 3);
-//}
-//
-//
-//TEST(GISBasic, routeFromTo) {
-//    GIS gis = GISProvider::getGIS();
-//    NavigationGIS navGis(gis);
-//    Navigation nav(navGis);
-//    Coordinates to(Longitude(32.113357), Latitude(34.801290));
-//    Coordinates from(Longitude(32.11181), Latitude(34.79474));
-//    gis.loadMapFile("route_test.json");
-//    auto routes = nav.getRoutes(from, to);
-//    auto size = routes.shortestDistance().getWays().size();
-//    EXPECT_EQ(size, 3);
-//}
-//
-//TEST(GISBasic, niceRoute) {
-//    GIS gis = GISProvider::getGIS();
-//    NavigationGIS navGis(gis);
-//    Navigation nav(navGis);
-//    Coordinates origin(Longitude(32.50365),
-//                       Latitude(35.06183)); // J1026, closestWayPoint is on a highway (less then 3 meters away)
-//    Coordinates destination(Longitude(32.11181), Latitude(34.79474)); // on W2041, between J1004 and J1014
-//    gis.loadMapFile("israel.json");
-//    auto routes = nav.getRoutes(origin, destination);
-//    auto size = routes.shortestDistance().getWays().size();
-//    std::cout << "============================== test 3 ==============================" << std::endl << std::endl;
-//    std::cout << "============================== Shortest Distance: ==============================" << std::endl
-//              << std::endl;
-//    for (const auto &way : routes.shortestDistance().getWays()) {
-//        std::cout << "ID: " << static_cast<std::string>(way.first) << " Direction: "
-//                  << ((way.second == Direction::A_to_B) ? "A_B" : "B_A") << std::endl;
-//        std::cout << "length: " << (double) navGis.getWay(way.first).getLength() << ", time: "
-//                  << (double) navGis.getWay(way.first).getTime() << std::endl;
-//        std::cout << "==================================" << std::endl;
-//
-//    }
-//
-//    std::cout << "--------------------------------------------------------" << std::endl;
-//    std::cout << "============================== Shortest Time: ==============================" << std::endl
-//              << std::endl;
-//
-//    for (const auto &way : routes.shortestTime().getWays()) {
-//        std::cout << "ID: " << static_cast<std::string>(way.first) << " Direction: "
-//                  << ((way.second == Direction::A_to_B) ? "A_B" : "B_A") << std::endl;
-//        std::cout << "length: " << (double) navGis.getWay(way.first).getLength() << ", time: "
-//                  << (double) navGis.getWay(way.first).getTime() << std::endl;
-//        std::cout << "==================================" << std::endl;
-//
-//    }
-//    std::cout << "shortestDistanceRoute: distance: " << (double) routes.shortestDistance().totalLength() << ", time: "
-//              << (double) routes.shortestDistance().estimatedDuration() << std::endl;
-//    std::cout << "shortestTimeRoute: distance: " << (double) routes.shortestTime().totalLength() << ", time: "
-//              << (double) routes.shortestTime().estimatedDuration() << std::endl << std::endl;
-//    EXPECT_EQ(size, 8);
-//}
-//
-//TEST(GISBasic, onHighway) {
-//    GIS gis = GISProvider::getGIS();
-//    NavigationGIS navGis(gis);
-//    Navigation nav(navGis);
-//    Coordinates origin(Longitude(32.50428), Latitude(35.06188)); // on a highway
-//    Coordinates destination(Longitude(32.057), Latitude(34.86717)); // on W2023, between J1022 and J1023
-//    gis.loadMapFile("israel.json");
-//    auto routes = nav.getRoutes(origin, destination);
-//    auto size = routes.shortestDistance().getWays().size();
-//    EXPECT_EQ(std::string(routes.shortestDistance().getWays().begin()->first), "W2017");
-//    EXPECT_EQ(size, 6);
-//}
-//
-//
-//TEST(GISBasic, highwayTooFar) {
-//    GIS gis = GISProvider::getGIS();
-//    NavigationGIS navGis(gis);
-//    Navigation nav(navGis);
-//    Coordinates origin(Longitude(32.4618), Latitude(35.08074)); // highway is the closest but too far away
-//    Coordinates destination(Longitude(32.057), Latitude(34.86717)); // on W2023, between J1022 and J1023
-//    gis.loadMapFile("israel.json");
-//    auto routes = nav.getRoutes(origin, destination);
-//    auto size = routes.shortestDistance().getWays().size();
-//    EXPECT_EQ(std::string(routes.shortestDistance().getWays().begin()->first), "W2036"); // not an highway
-//    EXPECT_EQ(size, 6);
-//}
-//
-//
-//TEST(GISBasic, differentRoutes) {
-//    GIS gis = GISProvider::getGIS();
-//    NavigationGIS navGis(gis);
-//    Navigation nav(navGis);
-//    Coordinates origin(Longitude(32.50365),
-//                       Latitude(35.06183)); // J1026, closestWayPoint is on a highway (less then 3 meters away)
-//    Coordinates destination(Longitude(32.10885), Latitude(34.85451)); // J2020
-//    gis.loadMapFile("israel.json");
-//    auto routes = nav.getRoutes(origin, destination);
-//    auto size = routes.shortestDistance().getWays().size();
-//    EXPECT_EQ(size, 6);
-//}
-
+/**
+ * Tests to parallel ways with different speed:
+ * W2054 (speed limit = 100) is parallel to W2055 (speed limit = 20)
+ * Both ways are connected to W2056
+ * Expected shortest distance route should run on W2054 because it is faster: W2056 --> W2054
+ */
+TEST_F(IsraelMapTest, parallelRoutes) {
+    Coordinates origin(Longitude(32.37458), Latitude(35.13005)); // origin is J1042
+    Coordinates destination(Longitude(32.51105), Latitude(35.20316)); // destination is J1040
+    auto routes = navigation.getRoutes(origin, destination);
+    EXPECT_TRUE(routes.isValid());
+    const Way &W2054 = gis.getWay(EntityId("W2054"));
+    const Way &W2055 = gis.getWay(EntityId("W2055"));
+    const Way &W2056 = gis.getWay(EntityId("W2056"));
+    Minutes expectedTime = calculateTime(W2054.getLength(), W2054.getSpeedLimit()) + calculateTime(W2056.getLength(), W2056.getSpeedLimit());
+    EXPECT_EQ(expectedTime, routes.shortestDistance().estimatedDuration());
+    Minutes notExpectedTime = calculateTime(W2055.getLength(), W2055.getSpeedLimit()) + calculateTime(W2056.getLength(), W2056.getSpeedLimit());
+    EXPECT_NE(notExpectedTime, routes.shortestDistance().estimatedDuration());
+//    printRoutes(routes);
+}
 
