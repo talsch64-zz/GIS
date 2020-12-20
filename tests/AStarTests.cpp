@@ -300,7 +300,8 @@ TEST_F(IsraelMapTest, singleSlowWayVsFastWay) {
                        Latitude(35.03114)); // near J1026 on W2052
     Coordinates destination(Longitude(32.37961), Latitude(34.97144)); // J1029
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
     auto shortestDistanceRoute = routes.shortestDistance();
     auto shortestTimeRoute = routes.shortestTime();
     EXPECT_LT(shortestDistanceRoute.totalLength(), shortestTimeRoute.totalLength());
@@ -318,7 +319,8 @@ TEST_F(IsraelMapTest, finalBidirectionalWay) {
     Coordinates origin(Longitude(32.15044), Latitude(34.85382)); // origin is J1037
     Coordinates destination(Longitude(32.18378), Latitude(34.82216)); // near J1036, on way W2050
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
     EXPECT_EQ(distRouteSize, 2);
@@ -339,7 +341,8 @@ TEST_F(IsraelMapTest, parallelRoutes) {
     Coordinates origin(Longitude(32.37458), Latitude(35.13005)); // origin is J1042
     Coordinates destination(Longitude(32.51105), Latitude(35.20316)); // destination is J1040
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
     const Way &W2054 = gis.getWay(EntityId("W2054"));
     const Way &W2055 = gis.getWay(EntityId("W2055"));
     const Way &W2056 = gis.getWay(EntityId("W2056"));
@@ -363,7 +366,8 @@ TEST_F(IsraelMapTest, minimalWaysRoute) {
     Coordinates destination(Longitude(32.34981), Latitude(35.22814)); // origin is J1045
     Coordinates origin(Longitude(32.24811), Latitude(35.34327)); // destination is J1038
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
     EXPECT_LT(routes.shortestDistance().getWays().size(), 4);
 //    printRoutes(routes);
 }
