@@ -119,10 +119,14 @@ TEST_F(IsraelMapTest, niceRoute) {
     Coordinates destination(Longitude(32.11181), Latitude(34.79474)); // on W2041, between J1004 and J1014
     auto routes = navigation.getRoutes(origin, destination);
     EXPECT_TRUE(routes.isValid());
-    auto distRouteSize = routes.shortestDistance().getWays().size();
-    auto timeRouteSize = routes.shortestTime().getWays().size();
-    EXPECT_EQ(distRouteSize, 11);
-    EXPECT_EQ(timeRouteSize, 10);
+    auto shortestDistanceWays = getWaysIds(routes.shortestDistance());
+    auto id = std::find(shortestDistanceWays.begin(), shortestDistanceWays.end(), EntityId("W2045"));
+    // shortestDistanceRoute runs through W2045
+    EXPECT_NE(id, shortestDistanceWays.end());
+    auto shortestTimeWays = getWaysIds(routes.shortestTime());
+    id = std::find(shortestTimeWays.begin(), shortestTimeWays.end(), EntityId("W2045"));
+    // shortestTimeRoute does not run through W2045
+    EXPECT_EQ(id, shortestTimeWays.end());
 //    printRoutes(routes);
 }
 
@@ -136,7 +140,7 @@ TEST_F(IsraelMapTest, onHighway) {
     EXPECT_TRUE(routes.isValid());
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
-    EXPECT_NE(distRouteSize, timeRouteSize); // routes should be different
+    EXPECT_NE(distRouteSize, timeRouteSize); // routes should be different according to the map
     EXPECT_EQ(routes.shortestDistance().getWays().front().first, EntityId("W2017")); //highway
     EXPECT_EQ(routes.shortestTime().getWays().front().first, EntityId("W2017")); //highway
 //    printRoutes(routes);
@@ -171,12 +175,21 @@ TEST_F(IsraelMapTest, differentRoutes) {
 
     auto routes = navigation.getRoutes(origin, destination);
     EXPECT_TRUE(routes.isValid());
-    auto sizeTime = routes.shortestTime().getWays().size();
-    auto sizeDistance = routes.shortestDistance().getWays().size();
-    auto distRouteSize = routes.shortestDistance().getWays().size();
-    auto timeRouteSize = routes.shortestTime().getWays().size();
-    EXPECT_EQ(distRouteSize, 7);
-    EXPECT_EQ(timeRouteSize, 5);
+    auto shortestDistanceWays = getWaysIds(routes.shortestDistance());
+    auto id = std::find(shortestDistanceWays.begin(), shortestDistanceWays.end(), EntityId("W2045"));
+    // shortestDistanceRoute runs through W2045
+    EXPECT_NE(id, shortestDistanceWays.end());
+    id = std::find(shortestDistanceWays.begin(), shortestDistanceWays.end(), EntityId("W2018"));
+    // shortestDistanceRoute does not run through W2018
+    EXPECT_EQ(id, shortestDistanceWays.end());
+
+    auto shortestTimeWays = getWaysIds(routes.shortestTime());
+    id = std::find(shortestTimeWays.begin(), shortestTimeWays.end(), EntityId("W2045"));
+    // shortestTimeRoute does not run through W2045
+    EXPECT_EQ(id, shortestTimeWays.end());
+    // shortestTimeRoute run through W2018
+    id = std::find(shortestTimeWays.begin(), shortestTimeWays.end(), EntityId("W2018"));
+    EXPECT_NE(id, shortestTimeWays.end());
 //    printRoutes(routes);
 
 }
@@ -209,6 +222,9 @@ TEST_F(IsraelMapTest, differentRoutesOpposite) {
 
 }
 
+/**
+ * Unreachble way test - expected to find invalid route
+ */
 TEST_F(IsraelMapTest, invalidRoutesUnreachable) {
     Coordinates origin(Longitude(32.31719),
                        Latitude(35.18944)); // point on W2047 which is isolated
@@ -218,6 +234,9 @@ TEST_F(IsraelMapTest, invalidRoutesUnreachable) {
     EXPECT_EQ(routes.getErrorMessage(), "Routes not found!");
 }
 
+/**
+ * First and final way are the same way which is unidirectional - Expected to find invalid route
+ */
 TEST_F(IsraelMapTest, unidirectionalSingleWayInvalid) {
 //    W2047 is unidirectional
     Coordinates origin(Longitude(32.31719),
@@ -228,6 +247,10 @@ TEST_F(IsraelMapTest, unidirectionalSingleWayInvalid) {
     EXPECT_EQ(routes.getErrorMessage(), "Routes contain only one unidirectional way!");
 }
 
+
+/**
+ * First and final way are the same way which is bidirectional - Expected to find valid route
+ */
 TEST_F(IsraelMapTest, bidirectionalSingleWay) {
     Coordinates destination(Longitude(32.34981),
                             Latitude(35.22814)); // J1038
