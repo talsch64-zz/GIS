@@ -4,6 +4,7 @@
 #include "../GISProvider.h"
 #include "../CoordinatesMath.h"
 #include "../navigation/Navigation.h"
+#include "../navigation/NavigationValidator.h"
 #include "../entities/Way.h"
 #include "../Utils.h"
 
@@ -12,8 +13,10 @@ protected:
     GIS gis;
     NavigationGIS navGis;
     Navigation navigation;
+    NavigationValidator validator;
+
 public:
-    IsraelMapTest() : gis(GISProvider::getGIS()), navGis(gis), navigation(navGis) {
+    IsraelMapTest() : gis(GISProvider::getGIS()), navGis(gis), navigation(navGis), validator(gis) {
     }
 
     void SetUp() override {
@@ -76,6 +79,11 @@ TEST_F(IsraelMapTest, oppositeRoutesByDistance) {
     Coordinates to(Longitude(32.11265), Latitude(34.79254)); // J1014
     auto routes = navigation.getRoutes(from, to);
     EXPECT_TRUE(routes.isValid());
+
+    EXPECT_TRUE(validator.validateRoute(from, to, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(from, to, routes.shortestTime()));
+
+
     auto size1 = routes.shortestDistance().getWays().size();
     EXPECT_EQ(size1, 5);
     auto reverseRoutes = navigation.getRoutes(to, from);
@@ -83,10 +91,10 @@ TEST_F(IsraelMapTest, oppositeRoutesByDistance) {
     auto size2 = routes.shortestDistance().getWays().size();
     EXPECT_EQ(size2, 5);
     auto from_to_ways = routes.shortestDistance().getWays();
-    auto to_from_ways =  reverseRoutes.shortestDistance().getWays();
+    auto to_from_ways = reverseRoutes.shortestDistance().getWays();
     for (int i = 0; i < 5; i++) {
-        EXPECT_EQ(from_to_ways[i].first, to_from_ways[4-i].first);
-        EXPECT_NE(from_to_ways[i].second, to_from_ways[4-i].second);
+        EXPECT_EQ(from_to_ways[i].first, to_from_ways[4 - i].first);
+        EXPECT_NE(from_to_ways[i].second, to_from_ways[4 - i].second);
     }
 }
 
@@ -98,19 +106,24 @@ TEST_F(IsraelMapTest, oppositeRoutesByTime) {
     Coordinates from(Longitude(32.113357), Latitude(34.801290)); // J1001
     Coordinates to(Longitude(32.11265), Latitude(34.79254)); // J1014
     auto routes = navigation.getRoutes(from, to);
-    EXPECT_TRUE(routes.isValid());
+
+    EXPECT_TRUE(validator.validateRoute(from, to, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(from, to, routes.shortestTime()));
+
     auto size1 = routes.shortestTime().getWays().size();
-    EXPECT_EQ(size1, 5);
+
     auto reverseRoutes = navigation.getRoutes(to, from);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(validator.validateRoute(to, from, reverseRoutes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(to, from, reverseRoutes.shortestTime()));
+
     auto size2 = routes.shortestTime().getWays().size();
-    EXPECT_EQ(size2, 5);
+    EXPECT_EQ(size1, size2);
 
     auto from_to_ways = routes.shortestTime().getWays();
-    auto to_from_ways =  reverseRoutes.shortestTime().getWays();
+    auto to_from_ways = reverseRoutes.shortestTime().getWays();
     for (int i = 0; i < 5; i++) {
-        EXPECT_EQ(from_to_ways[i].first, to_from_ways[4-i].first);
-        EXPECT_NE(from_to_ways[i].second, to_from_ways[4-i].second);
+        EXPECT_EQ(from_to_ways[i].first, to_from_ways[4 - i].first);
+        EXPECT_NE(from_to_ways[i].second, to_from_ways[4 - i].second);
     }
 }
 
@@ -119,7 +132,10 @@ TEST_F(IsraelMapTest, niceRoute) {
                        Latitude(35.06183)); // J1026, closestWayPoint is on a highway (less then 3 meters away)
     Coordinates destination(Longitude(32.11181), Latitude(34.79474)); // on W2041, between J1004 and J1014
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(routes.isValid());
+
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
+
     auto shortestDistanceWays = getWaysIds(routes.shortestDistance());
     auto id = std::find(shortestDistanceWays.begin(), shortestDistanceWays.end(), EntityId("W2045"));
     // shortestDistanceRoute runs through W2045
@@ -138,7 +154,8 @@ TEST_F(IsraelMapTest, onHighway) {
     Coordinates origin(Longitude(32.50412), Latitude(35.06188)); // on a highway W2017
     Coordinates destination(Longitude(32.057), Latitude(34.86717)); // on W2023, between J1022 and J1023
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
     EXPECT_NE(distRouteSize, timeRouteSize); // routes should be different according to the map
@@ -154,7 +171,8 @@ TEST_F(IsraelMapTest, highwayTooFar) {
     Coordinates origin(Longitude(32.4618), Latitude(35.08074)); // highway W2017 is the closest but too far away
     Coordinates destination(Longitude(32.057), Latitude(34.86717)); // on W2023, between J1022 and J1023
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
     EXPECT_NE(routes.shortestDistance().getWays().front().first, EntityId("W2017")); //highway too far
     EXPECT_NE(routes.shortestTime().getWays().front().first, EntityId("W2017")); //highway too far
     auto shortestDistanceWays = getWaysIds(routes.shortestDistance());
@@ -175,7 +193,8 @@ TEST_F(IsraelMapTest, differentRoutes) {
     Coordinates destination(Longitude(32.10885), Latitude(34.85451)); // J1020
 
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
     auto shortestDistanceWays = getWaysIds(routes.shortestDistance());
     auto id = std::find(shortestDistanceWays.begin(), shortestDistanceWays.end(), EntityId("W2045"));
     // shortestDistanceRoute runs through W2045
@@ -207,7 +226,8 @@ TEST_F(IsraelMapTest, differentRoutesOpposite) {
     Coordinates origin(Longitude(32.10885), Latitude(34.85451)); // J1020
     // from J1026 to J1020:
     auto routes = navigation.getRoutes(destination, origin);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(validator.validateRoute(destination, origin, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(destination, origin, routes.shortestTime()));
     auto shortestDistanceWays = getWaysIds(routes.shortestDistance());
     auto id = std::find(shortestDistanceWays.begin(), shortestDistanceWays.end(), EntityId("W2045"));
     EXPECT_NE(id, shortestDistanceWays.end());
@@ -231,7 +251,8 @@ TEST_F(IsraelMapTest, invalidRoutesUnreachable) {
                        Latitude(35.18944)); // point on W2047 which is isolated
     Coordinates destination(Longitude(32.10885), Latitude(34.85451)); // J1020
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(!routes.isValid());
+    EXPECT_FALSE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_FALSE(validator.validateRoute(origin, destination, routes.shortestTime()));
     EXPECT_EQ(routes.getErrorMessage(), "Routes not found!");
 }
 
@@ -244,7 +265,8 @@ TEST_F(IsraelMapTest, unidirectionalSingleWayInvalid) {
                        Latitude(35.18944)); // point on W2047 which is isolated
     Coordinates destination(Longitude(32.33931), Latitude(35.19085)); // J1033 which is on W2047
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_TRUE(!routes.isValid());
+    EXPECT_FALSE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_FALSE(validator.validateRoute(origin, destination, routes.shortestTime()));
     EXPECT_EQ(routes.getErrorMessage(), "Routes contain only one unidirectional way!");
 }
 
@@ -258,9 +280,10 @@ TEST_F(IsraelMapTest, bidirectionalSingleWay) {
     Coordinates origin(Longitude(32.25985), Latitude(35.22334)); // J1039
     auto routes = navigation.getRoutes(origin, destination);
     auto way = routes.shortestDistance().getWays().front();
-    EXPECT_TRUE(routes.isValid());
-//  size should be 1 but it makes automatic U-turn
-//  EXPECT_EQ(routes.shortestDistance().getWays().size(), 1);
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
+    //  size should be 1 but it makes automatic U-turn
+    //  EXPECT_EQ(routes.shortestDistance().getWays().size(), 1);
     EXPECT_EQ(way.first, EntityId("W2051"));
     EXPECT_EQ(gis.getWay(way.first).getLength(), routes.shortestDistance().totalLength());
     EXPECT_EQ(gis.getWay(way.first).getTime(), routes.shortestDistance().estimatedDuration());
@@ -320,9 +343,11 @@ TEST_F(IsraelMapTest, parallelRoutes) {
     const Way &W2054 = gis.getWay(EntityId("W2054"));
     const Way &W2055 = gis.getWay(EntityId("W2055"));
     const Way &W2056 = gis.getWay(EntityId("W2056"));
-    Minutes expectedTime = calculateTime(W2054.getLength(), W2054.getSpeedLimit()) + calculateTime(W2056.getLength(), W2056.getSpeedLimit());
+    Minutes expectedTime = calculateTime(W2054.getLength(), W2054.getSpeedLimit()) +
+                           calculateTime(W2056.getLength(), W2056.getSpeedLimit());
     EXPECT_EQ(expectedTime, routes.shortestDistance().estimatedDuration());
-    Minutes notExpectedTime = calculateTime(W2055.getLength(), W2055.getSpeedLimit()) + calculateTime(W2056.getLength(), W2056.getSpeedLimit());
+    Minutes notExpectedTime = calculateTime(W2055.getLength(), W2055.getSpeedLimit()) +
+                              calculateTime(W2056.getLength(), W2056.getSpeedLimit());
     EXPECT_NE(notExpectedTime, routes.shortestDistance().estimatedDuration());
 //    printRoutes(routes);
 }

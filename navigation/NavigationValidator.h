@@ -8,7 +8,7 @@
  *
  */
 class NavigationValidator {
-    GIS gis;
+    const GIS &gis;
 
 
 public:
