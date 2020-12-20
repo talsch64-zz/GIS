@@ -12,7 +12,7 @@ protected:
     NavigationGIS navGis;
     Navigation navigation;
 public:
-    IsraelMapTest() : gis(GISProvider::getGIS()), navGis(gis), navigation(gis) {
+    IsraelMapTest() : gis(GISProvider::getGIS()), navGis(gis), navigation(navGis) {
     }
 
     void SetUp() {
