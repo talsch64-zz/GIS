@@ -16,8 +16,7 @@ Routes Navigation::getRoutes(const Coordinates &start, const Coordinates &end) c
     const Way &endWay = navigationGIS.getWay(endPair.second);
     const Coordinates &destinationPoint = endPair.first;
     if (startWay.getId() == endWay.getId() && !startWay.isBidirectional()) {
-        return Routes(Route::invalidRoute(), Route::invalidRoute(), false, "Routes contain only one unidirectional way");
-
+        return Routes(Route::invalidRoute(), Route::invalidRoute(), false, "Routes contain only one unidirectional way!");
     }
     AStar star(navigationGIS, startPoint, destinationPoint, startWay, endWay);
     Route shortestByDistance = star.shortestByDistance();

@@ -326,9 +326,25 @@
         "coordinates": [32.15044, 34.85382]
     },
     {
+        "type": "Junction",
+        "id": "J1038",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.34981, 35.22814]
+    },
+    {
+        "type": "Junction",
+        "id": "J1039",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.25985, 35.22334]
+    },
+    {
         "type": "Way",
         "id": "W2048",
-        "name": "unreachable",
+        "name": "u",
         "description": ".*",
         "category_tags": [],
         "from": {
@@ -338,14 +354,14 @@
             "entity_id": "J1035"
         },
         "speed_limit": 30,
-        "direction": "bidirectional",
+        "direction": "u",
         "toll_road": false,
         "restricted": ["trucks"]
     },
     {
         "type": "Way",
         "id": "W2049",
-        "name": "unreachable",
+        "name": "u",
         "description": ".*",
         "category_tags": [],
         "from": {
@@ -362,7 +378,7 @@
     {
         "type": "Way",
         "id": "W2050",
-        "name": "unreachable",
+        "name": "u",
         "description": ".*",
         "category_tags": [],
         "from": {
@@ -370,6 +386,23 @@
         },
         "to": {
             "entity_id": "J1036"
+        },
+        "speed_limit": 30,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2051",
+        "name": "unreachable",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1038"
+        },
+        "to": {
+            "entity_id": "J1039"
         },
         "speed_limit": 30,
         "direction": "bidirectional",
@@ -389,7 +422,7 @@
             "entity_id": "J1034"
         },
         "speed_limit": 30,
-        "direction": "bidirectional",
+        "direction": "unidirectional",
         "toll_road": false,
         "restricted": ["trucks"]
     },
@@ -457,7 +490,7 @@
             "entity_id": "J1032"
         },
         "speed_limit": 30,
-        "direction": "bidirectional",
+        "direction": "unidirectional",
         "toll_road": false,
         "restricted": ["trucks"]
     },

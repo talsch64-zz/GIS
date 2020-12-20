@@ -129,15 +129,56 @@ TEST_F(IsraelMapTest, differentRoutes) {
 //    printRoutes(routes);
 
 }
+TEST_F(IsraelMapTest, differentRoutesOpposite) {
+    Coordinates destination(Longitude(32.50365),
+                       Latitude(35.06183)); // near J1026, closestWayPoint is on a highway (less then 3 meters away)
+    Coordinates origin(Longitude(32.10885), Latitude(34.85451)); // J1020
 
-TEST_F(IsraelMapTest, invalidRoutes) {
+    auto routes = navigation.getRoutes(origin, destination);
+    EXPECT_TRUE(routes.isValid());
+    auto sizeTime = routes.shortestTime().getWays().size();
+    auto sizeDistance = routes.shortestDistance().getWays().size();
+    auto distRouteSize = routes.shortestDistance().getWays().size();
+    auto timeRouteSize = routes.shortestTime().getWays().size();
+    EXPECT_LT(routes.shortestDistance().estimatedDuration(), Minutes(60)); // The reverse route is not the same
+    EXPECT_EQ(distRouteSize, 5);
+    EXPECT_EQ(timeRouteSize, 5);
+    printRoutes(routes);
+
+}
+
+TEST_F(IsraelMapTest, invalidRoutesUnreachable) {
     Coordinates origin(Longitude(32.31719),
                        Latitude(35.18944)); // point on W2047 which is isolated
     Coordinates destination(Longitude(32.10885), Latitude(34.85451)); // J1020
     auto routes = navigation.getRoutes(origin, destination);
-    std::cout << routes.getErrorMessage() << std::endl;
     EXPECT_TRUE(!routes.isValid());
+    EXPECT_EQ(routes.getErrorMessage(), "Routes not found!");
+}
 
+TEST_F(IsraelMapTest, unidirectionalSingleWayInvalid) {
+//    W2047 is unidirectional
+    Coordinates origin(Longitude(32.31719),
+                       Latitude(35.18944)); // point on W2047 which is isolated
+    Coordinates destination(Longitude(32.33931), Latitude(35.19085)); // J1033 which is on W2047
+    auto routes = navigation.getRoutes(origin, destination);
+    EXPECT_TRUE(!routes.isValid());
+    EXPECT_EQ(routes.getErrorMessage(), "Routes contain only one unidirectional way!");
+}
+
+TEST_F(IsraelMapTest, bidirectionalSingleWay2) {
+    Coordinates destination(Longitude(32.34981),
+                            Latitude(35.22814)); // J1038
+    Coordinates origin(Longitude(32.25985), Latitude(35.22334)); // J1039
+    auto routes = navigation.getRoutes(origin, destination);
+    auto way =  routes.shortestDistance().getWays().front();
+    EXPECT_TRUE(routes.isValid());
+//  TODO size should be 1 but it makes automatic U-turn. Fix it.
+//    EXPECT_EQ(routes.shortestDistance().getWays().size(), 1);
+    EXPECT_EQ(way.first, EntityId("W2051"));
+    EXPECT_EQ(gis.getWay(way.first).getLength(), routes.shortestDistance().totalLength());
+    EXPECT_EQ(gis.getWay(way.first).getTime(), routes.shortestDistance().estimatedDuration());
+    printRoutes(routes);
 }
 /**
  * This test tests that the route found is indeed the shortest route when the final way is bidirectional.
