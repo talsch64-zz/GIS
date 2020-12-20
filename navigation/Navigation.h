@@ -38,9 +38,9 @@ public:
      *
      * @param start
      * @param end
-     * @param res - Restricted Ways
+     * @param restrictions - Restricted Ways
      * @return Routes
      */
     //    TODO implement method for bonus after Rectriction implementation
-    Routes getRoutes(const Coordinates& start, const Coordinates& end, const Restrictions& res) const;
+    Routes getRoutes(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions) const;
 };

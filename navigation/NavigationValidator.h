@@ -24,11 +24,11 @@ public:
      *
      * @param start - Start Point
      * @param end - End Point
-     * @param r - Route to be verified
+     * @param routes - Route to be verified
      * @return true - Route is valid
      * @return false - Route is not valid
      */
-    bool validateRoute(const Coordinates& start, const Coordinates& end, const Route& r) const;
+    bool validateRoute(const Coordinates& start, const Coordinates& end, const Route& routes) const;
 
     /**
      * @brief Validates the given Route with Restricitons from Start Point to End Point on referenced GIS
@@ -36,11 +36,11 @@ public:
      *
      * @param start - Start Point
      * @param end - End Point
-     * @param res - Restricions for Route
-     * @param r - Route to be verified
+     * @param restrictions - Restricions for Route
+     * @param routes - Route to be verified
      * @return true - Route is valid
      * @return false - Route is not valid
      */
-    bool validateRoute(const Coordinates& start, const Coordinates& end, const Restrictions& res, const Route& r) const;
+    bool validateRoute(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions, const Route& routes) const;
 };
 

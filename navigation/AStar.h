@@ -23,6 +23,7 @@
  * If the first way is bidirectional then we initialize two node.
  * Once one of the Junctions of the final way is reached (if the way is bidirectional), we retract the route that led to the way.
  * If the final way is unidirectional, the algorithm retracts the Route after finding the "from" junction of the final way.
+ * Supports restrictions!!!!!
 
  */
 class AStar {
@@ -31,6 +32,7 @@ class AStar {
     const Coordinates destination;
     const Way &startWay;
     const Way &finalWay;
+    Restrictions restrictions;
 
 public:
     /**
@@ -43,6 +45,19 @@ public:
      */
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
           const Way &startWay, const Way &finalWay);
+
+
+    /**
+     *
+     * @param navigationGis
+     * @param origin
+     * @param destination
+     * @param startWay the way which the origin point is located on.
+     * @param finalWay the way which the destination point is located on.
+     * @param restrictions
+     */
+    AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
+          const Way &startWay, const Way &finalWay, const Restrictions &restrictions);
 
     Route shortestByDistance();
 

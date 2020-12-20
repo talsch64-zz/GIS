@@ -9,7 +9,16 @@
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
              const Way &startWay, const Way &finalWay) : navigationGIS(navigationGis), origin(origin),
                                                          destination(destination), startWay(startWay),
-                                                         finalWay(finalWay) {}
+                                                         finalWay(finalWay), restrictions(Restrictions()) {}
+
+
+AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
+             const Way &startWay, const Way &finalWay, const Restrictions &restrictions) : navigationGIS(navigationGis),
+                                                                                           origin(origin),
+                                                                                           destination(destination),
+                                                                                           startWay(startWay),
+                                                                                           finalWay(finalWay),
+                                                                                           restrictions(restrictions) {}
 
 Route
 AStar::shortestByDistance() {
@@ -62,6 +71,9 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
 
         std::vector<EntityId> wayEdgesIds = navigationGIS.getWaysByJunction(currNode->getJunctionId());
         for (auto wayId: wayEdgesIds) {  // visit all the neighbors and add them to the queue
+            if (navigationGIS.getWay(wayId).isRestricted(restrictions)) {
+                continue;
+            }
             std::shared_ptr<Node> neighbor = createNeighbor(currNode, wayId, heuristicFunc, costFunc);
             queue.push(neighbor);
         }
@@ -199,6 +211,7 @@ std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNo
                                                              currNode);
     return finalNode;
 }
+
 
 
 AStar::Node::Node(const Coordinates &coordinates, const EntityId &junctionId,
