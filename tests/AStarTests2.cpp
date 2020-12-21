@@ -96,4 +96,28 @@ TEST(AStar, HighwayTooFar) {
     const Route &shortestTime = routes.shortestTime();
     assertRoute(expectedDistanceRoute, shortestDistance);
     assertRoute(expectedDistanceRoute, shortestTime);
+    EXPECT_TRUE(routes.isValid());
+}
+
+TEST(AStar, HighwayWithinThreeMeters) {
+    GIS gis;
+    gis.loadMapFile("astar3b.json");
+    NavigationGIS navigationGis(gis);
+    Navigation navigation(navigationGis);
+    std::vector<std::pair<EntityId, Direction>> expectedDistanceRoute = {
+            std::make_pair(EntityId("way1"), Direction::A_to_B),
+            std::make_pair(EntityId("way2"), Direction::B_to_A)
+    };
+    Coordinates startCoord(Longitude(  20.86452069048904),
+                           Latitude(  43.992280969386));
+    Coordinates endCoord(Longitude(20.88795928805733),
+                         Latitude(43.99705953606207));
+
+    Routes routes = navigation.getRoutes(startCoord, endCoord);
+
+    const Route &shortestDistance = routes.shortestDistance();
+    const Route &shortestTime = routes.shortestTime();
+    assertRoute(expectedDistanceRoute, shortestDistance);
+    assertRoute(expectedDistanceRoute, shortestTime);
+    EXPECT_TRUE(routes.isValid());
 }
