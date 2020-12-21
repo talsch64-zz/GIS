@@ -1,3 +1,6 @@
+#ifndef GIS_CPP_GISMOCK_H
+#define GIS_CPP_GISMOCK_H
+
 #include "../GIS.h"
 
 class GISMock : public GIS
@@ -7,3 +10,5 @@ public:
     const std::unordered_map<EntityId, std::unique_ptr<Entity>> &getEntityMap();
     TopologicalSearch *getTopologicalSearch();
 };
+
+#endif
