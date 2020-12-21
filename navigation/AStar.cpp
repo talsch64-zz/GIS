@@ -39,14 +39,27 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
     std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, std::function<bool(
             std::shared_ptr<Node>, std::shared_ptr<Node>)>> queue(comparator);
 
-    queue.push(createInitialNode(heuristicFunc, costFunc, Direction::A_to_B));
+// For lazy deletions efficiency - each node inserted to the queue only if its priority <= the curr priority of the node (represented by its junction id)
+// This map is not a mandatory, it just increases efficiency (redundant nodes are not added to the queue)
+    std::unordered_map<EntityId, double> minNodes;
+
+    std::shared_ptr<Node> initialNode = createInitialNode(heuristicFunc, costFunc, Direction::A_to_B);
+    queue.push(initialNode);
+
+    minNodes.insert(std::pair<EntityId, double>(initialNode->getJunctionId(), initialNode->getPriority()));
+
     // if start way is bidirectional add another Node to the queue:
     if (startWay.isBidirectional()) {
-        queue.push(createInitialNode(heuristicFunc, costFunc, Direction::B_to_A));
+        initialNode = createInitialNode(heuristicFunc, costFunc, Direction::B_to_A);
+        queue.push(initialNode);
+        minNodes.insert(std::pair<EntityId, double>(initialNode->getJunctionId(), initialNode->getPriority()));
     }
+
     // we do lazy deletions so we need to keep track of which junctions where already visited and poped from the queue
     std::unordered_set<EntityId> popedJunctions;
     std::shared_ptr<Node> currNode;
+
+
 
 /*-------------------------------- performing A* algorithm with the queue --------------------------------*/
     while (!queue.empty()) {
@@ -75,7 +88,15 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
                 continue;
             }
             std::shared_ptr<Node> neighbor = createNeighbor(currNode, wayId, heuristicFunc, costFunc);
-            queue.push(neighbor);
+            EntityId neighborJunctionId = neighbor->getJunctionId();
+            if(minNodes.find(neighborJunctionId) == minNodes.end() || neighbor->getPriority() <= minNodes.find(neighborJunctionId)->second) {
+                // add to queue only if the priority is <= from the current min priority of the junction
+                if(!(minNodes.find(neighborJunctionId) == minNodes.end())) {
+                    minNodes.erase(neighborJunctionId);
+                }
+                minNodes.insert(std::pair(neighborJunctionId, neighbor->getPriority()));
+                queue.push(neighbor);
+            }
         }
     }
 /*-------------------------------- After search finished --------------------------------*/
@@ -119,7 +140,7 @@ double AStar::costByTime(const Way &way) {
 
 bool AStar::compareByDistance(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2) {
     if (node1->getPriority() == node2->getPriority()) {
-        if (node1->getTimeSoFar() ==  node2->getTimeSoFar()) {
+        if (node1->getTimeSoFar() == node2->getTimeSoFar()) {
             return node1->getWaysCount() > node2->getWaysCount();
         }
         return node1->getTimeSoFar() > node2->getTimeSoFar();
@@ -211,7 +232,6 @@ std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNo
                                                              currNode);
     return finalNode;
 }
-
 
 
 AStar::Node::Node(const Coordinates &coordinates, const EntityId &junctionId,
