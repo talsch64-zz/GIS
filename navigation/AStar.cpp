@@ -46,6 +46,7 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
     }
     // we do lazy deletions so we need to keep track of which junctions where already visited and poped from the queue
     std::unordered_set<EntityId> popedJunctions;
+//    std::unordered_map<EntityId, std::shared_ptr<Node>> minNodes;
     std::shared_ptr<Node> currNode;
 
 /*-------------------------------- performing A* algorithm with the queue --------------------------------*/
