@@ -12,7 +12,8 @@
 #include <limits.h>
 
 GIS::GIS() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
-             topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()) {
+             topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()),
+             ids(std::vector<EntityId>()) {
     logger->initialize();
 }
 
@@ -45,6 +46,9 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
         }
     }
 
+    ids.reserve(ids.size() + distance(entityIds.begin(), entityIds.end()));
+    ids.insert(ids.end(), entityIds.begin(), entityIds.end());
+
     return entityIds;
 }
 
@@ -52,8 +56,8 @@ std::size_t GIS::saveMapFile(const std::string &filename) {
     rapidjson::Document doc;
     doc.SetArray();
     std::size_t size = 0;
-    for (auto &entityPair : entities) {
-        rapidjson::Value entityVal = entityPair.second->toJson(doc.GetAllocator());
+    for (EntityId id: ids) {
+        rapidjson::Value entityVal = entities[id]->toJson(doc.GetAllocator());
         doc.PushBack(entityVal, doc.GetAllocator());
         size++;
     }

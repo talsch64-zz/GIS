@@ -47,6 +47,7 @@ protected:
     std::shared_ptr<Grid> grid;
     std::unique_ptr<TopologicalSearch> topologicalSearch;
     std::unique_ptr<Logger> logger;
+    std::vector<EntityId> ids;
 
 public:
     GIS();
