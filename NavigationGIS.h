@@ -3,19 +3,15 @@
 #include "GIS.h"
 
 /**
- * @brief NavigationGIS class 
+ * @brief NavigationGIS class
  *        The class below would be provided by the course staff, see Dependencies comment below
  *        This is a Proxy class for your GIS, the purpose of it is to:
  *        [1] restrict the navigation system to use only certain methods of the GIS class
  *        [2] allow monitoring the calls to GIS by the navigation system via this proxy
- * 
+ *
  */
 class NavigationGIS {
-    const GIS &gis;
-    /**
-     * Max distance to be from a highway for it to be a valid start of a route
-     */
-    const Meters max_distance_from_highway = Meters(3);
+    const GIS& gis;
 
 public:
     /**
@@ -23,7 +19,7 @@ public:
      *
      * @param gis
      */
-    NavigationGIS(const GIS &gis);
+    NavigationGIS(const GIS& gis): gis(gis) {}
 
     /**
      * @brief Get the Ways By Junction object
@@ -31,7 +27,9 @@ public:
      * @param junctionId
      * @return std::vector<EntityId>
      */
-    std::vector<EntityId> getWaysByJunction(const EntityId &junctionId) const;
+    std::vector<EntityId> getWaysByJunction(const EntityId& junctionId) const {
+        return gis.getWaysByJunction(junctionId);
+    }
 
     /**
      * @brief Get the Way Closest Point object
@@ -39,7 +37,9 @@ public:
      * @param coords
      * @return std::pair<Coordinates, EntityId>
      */
-    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords) const;
+    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates& coords) const {
+        return gis.getWayClosestPoint(coords);
+    }
 
     /**
      * @brief Get the Way Closest Point object
@@ -48,7 +48,9 @@ public:
      * @param res
      * @return std::pair<Coordinates, EntityId>
      */
-    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coords, const Restrictions &res) const;
+    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates& coords, const Restrictions& res) const {
+        return gis.getWayClosestPoint(coords, res);
+    }
 
     /**
      * @brief Get the Way object
@@ -56,5 +58,7 @@ public:
      * @param wayId
      * @return const Way&
      */
-    const Way &getWay(const EntityId &wayId) const;
+    const Way& getWay(const EntityId& wayId) const {
+        return gis.getWay(wayId);
+    }
 };

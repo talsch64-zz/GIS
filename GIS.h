@@ -32,13 +32,22 @@ class EntityJsonParser;
 
 class GIS {
 protected:
+    /**
+     * Max distance to be from a highway for it to be a valid start of a route
+     */
+    const Meters max_distance_from_highway = Meters(3);
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
+public:
+    const Meters &getMaxDistanceFromHighway() const;
+
+protected:
     std::shared_ptr<EntityJsonParser> entityJsonParser;
     EntityJsonSerializer entityJsonSerializer;
     JsonFileWriter jsonFileWriter;
     std::shared_ptr<Grid> grid;
     std::unique_ptr<TopologicalSearch> topologicalSearch;
     std::unique_ptr<Logger> logger;
+    std::vector<EntityId> ids;
 
 public:
     GIS();
@@ -102,6 +111,13 @@ protected:
     bool filterEntityByName(const Entity *entity, const std::string &search_name);
 
     bool addEntity(std::unique_ptr<Entity> entity);
+
+    /**
+     * @brief validate that the way found is
+     * @param id
+     * @return
+     */
+    std::pair<Coordinates, EntityId> validateHighwayCondition(const EntityId &id) const;
 };
 
 #endif //EX1_GIS_H

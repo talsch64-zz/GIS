@@ -12,7 +12,8 @@
 #include <limits.h>
 
 GIS::GIS() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
-             topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()) {
+             topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()),
+             ids(std::vector<EntityId>()) {
     logger->initialize();
 }
 
@@ -45,6 +46,9 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
         }
     }
 
+    ids.reserve(ids.size() + distance(entityIds.begin(), entityIds.end()));
+    ids.insert(ids.end(), entityIds.begin(), entityIds.end());
+
     return entityIds;
 }
 
@@ -52,8 +56,8 @@ std::size_t GIS::saveMapFile(const std::string &filename) {
     rapidjson::Document doc;
     doc.SetArray();
     std::size_t size = 0;
-    for (auto &entityPair : entities) {
-        rapidjson::Value entityVal = entityPair.second->toJson(doc.GetAllocator());
+    for (EntityId id: ids) {
+        rapidjson::Value entityVal = entities[id]->toJson(doc.GetAllocator());
         doc.PushBack(entityVal, doc.GetAllocator());
         size++;
     }
@@ -116,23 +120,26 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
             stack.pop();
             CellEntities cellEntities = grid->getEntitiesOnGrid(cell);
             for (auto &entityId : cellEntities.getEntities()) {
-                if (idsSeen.find(entityId) != idsSeen.end()) {
-                    // if id was already seen
+                if (idsSeen.find(entityId) != idsSeen.end()) {  // id was already seen
                     continue;
                 }
                 idsSeen.insert(entityId);
                 const std::unique_ptr<Entity> &entity = entities.find(entityId)->second;
-                if (entity->getType() == "Way") {
-                    auto &way = (const std::unique_ptr<Way> &) entity;
-                    if (!way->isRestricted(res)) {
-                        wayFound = true;
-                        Coordinates candidate = entity->getGeometry()->getClosestPoint(coord);
-                        Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
-                        if (distance < shortestDistance) {
-                            closest = candidate;
-                            shortestDistance = distance;
-                            closestEntityId = entityId;
-                        }
+                if (!(entity->getType() == "Way")) { // not a way
+                    continue;
+                }
+                auto &way = (const std::unique_ptr<Way> &) entity;
+                if (way->isRestricted(res)) {  // way is restricted
+                    continue;
+                }
+                Coordinates candidate = entity->getGeometry()->getClosestPoint(coord);
+                Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
+                if (!way->isHighway() || way->isHighway() && distance < max_distance_from_highway) {
+                    wayFound = true;
+                    if (distance < shortestDistance) {
+                        closest = candidate;
+                        shortestDistance = distance;
+                        closestEntityId = entityId;
                     }
                 }
             }
@@ -227,7 +234,7 @@ const Way &GIS::getWay(const EntityId &id) const {
     if (entity->getType() != "Way") {
         //TODO print to log entity is not a way
     }
-    return *(dynamic_cast<Way*>(entity));
+    return *(dynamic_cast<Way *>(entity));
 }
 
 std::vector<EntityId> GIS::getWaysByJunction(const EntityId &id) const {
@@ -238,6 +245,10 @@ std::vector<EntityId> GIS::getWaysByJunction(const EntityId &id) const {
     if (entity->getType() != "Junction") {
         //TODO print to log entity is not a Junction
     }
-    return (dynamic_cast<Junction*>(entity))->getWays();
+    return (dynamic_cast<Junction *>(entity))->getWays();
+}
+
+const Meters &GIS::getMaxDistanceFromHighway() const {
+    return max_distance_from_highway;
 }
 

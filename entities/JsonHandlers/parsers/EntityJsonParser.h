@@ -51,7 +51,7 @@ private:
 
     std::unique_ptr<Way> parseWay(rapidjson::Value &doc, const GIS &gis);
 
-    std::string parseDirection(rapidjson::Value &doc);
+    TrafficDirection parseDirection(rapidjson::Value &doc);
 
     int parseSpeedLimit(rapidjson::Value &doc);
 

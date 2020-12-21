@@ -10,27 +10,37 @@
 /// Entity derived class which represents a Way in the GIS application
 /// Way's geometry is a Circle that is represented by a radius and center coordinates
 
+enum class TrafficDirection {
+    unidirectional, bidirectional
+};
+
 class Way : public Entity {
     EntityId from;
     EntityId to;
     std::unique_ptr<PointList> geometry;
-    std::string direction;
+    TrafficDirection direction;
     int speedLimit;
     bool tollRoad;
+    bool highway;
     std::vector<std::string> restricted;
-    std::optional<Meters> length;
+    mutable std::optional<Meters> length;
 
 public:
+
     Way(const EntityId &id, const std::string &name, const std::string &description,
         const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from,
-        EntityId to, std::string direction, int speedLimit, bool tollRoad, std::vector<std::string> restricted);
+        EntityId to, TrafficDirection direction, int speedLimit, bool tollRoad, bool highway, std::vector<std::string> restricted);
 
-    const EntityId &getFrom() const;
+    const EntityId &getFromJunctionId() const;
 
-    const EntityId &getTo() const;
+    const EntityId &getToJunctionId() const;
 
-//    TODO change to enum and not a string
-    const std::string &getDirection() const;
+    const TrafficDirection getDirection() const;
+
+    const Coordinates getFromJunctionCoordinates() const;
+
+    const Coordinates getToJunctionCoordinates() const;
+
 
     /**
      * @brief
@@ -71,7 +81,9 @@ public:
      * Get the length of the way in meters
      * @return length in meters
      */
-    Meters getLength();
+    Meters getLength() const;
+
+    Minutes getTime() const;
 
     const std::unique_ptr<Geometry> &getGeometry() const override;
 
@@ -81,6 +93,13 @@ public:
      * @return is the way restricted
      */
     bool isRestricted(const Restrictions &restrictions) const;
+
+    /**
+     * @brief converts speed kilometers per hour to meters per minute
+     * @param speed
+     * @return Minutes
+     */
+
 };
 
 #endif //EX1_WAY_H

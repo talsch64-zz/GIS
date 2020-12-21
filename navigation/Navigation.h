@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "NavigationGIS.h"
 #include "Routes.h"
 #include "../Restrictions.h"
+#include "../NavigationGIS.h"
 
 /**
  * @brief Navigation class.
@@ -13,15 +13,15 @@
  *
  */
 class Navigation {
-    NavigationGIS gis;
+    NavigationGIS navigationGIS;
 
 public:
     /**
      * @brief Construct a new Navigation object
      *
-     * @param gis - Note: you get a const ref of NavigationGIS
+     * @param navigationGis - Note: you get a const ref of NavigationGIS
      */
-    Navigation(const NavigationGIS& gis);
+    Navigation(const NavigationGIS& navigationGis);
 
     /**
      * @brief Get the Routes object
@@ -30,7 +30,6 @@ public:
      * @param end
      * @return Routes
      */
-    //    TODO implement A*
     Routes getRoutes(const Coordinates& start, const Coordinates& end) const;
 
     /**
@@ -39,9 +38,9 @@ public:
      *
      * @param start
      * @param end
-     * @param res - Restricted Ways
+     * @param restrictions - Restricted Ways
      * @return Routes
      */
     //    TODO implement method for bonus after Rectriction implementation
-    Routes getRoutes(const Coordinates& start, const Coordinates& end, const Restrictions& res) const;
+    Routes getRoutes(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions) const;
 };

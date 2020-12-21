@@ -15,13 +15,24 @@
 class Routes {
     Route shortestDistanceRoute;
     Route shortestTimeRoute;
+public:
+    Routes(const Route &shortestDistanceRoute, const Route &shortestTimeRoute, bool valid,
+           const std::string &errorMessage);
+
+private:
     bool valid;
+    std::string errorMessage;
 public:
     /**
      * @brief Constructor for Routes Object
      *
      */
     Routes(const Route &shortestDistanceRoute, const Route &shortestTimeRoute, bool valid);
+
+    /**
+     * @brief Constructor for invalid Route;
+     */
+    Routes();
 
 
 

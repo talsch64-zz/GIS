@@ -23,9 +23,6 @@ public:
 
     const std::vector<std::string> &getRestrictions() const;
 
-private:
-//    TODO move to Utils.h or something
-    std::vector<std::string> split(const char* restrictions, const char *delimiter);
 };
 
 #endif //GIS_CPP_RESTRICTIONS_H

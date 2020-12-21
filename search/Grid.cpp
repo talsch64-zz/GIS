@@ -15,18 +15,18 @@ Grid::Grid() : topologicalSearch(std::make_unique<TopologicalSearch>()) {
 
 Coordinates Grid::truncateCoordinates(const Coordinates &coordinates) const {
 //    north poll
-    if (coordinates.latitude() == 90) {
+    if (coordinates.latitude() == Latitude(90)) {
         return getNorthernCell();
     }
 //    south poll
-    if (coordinates.latitude() == -90) {
+    if (coordinates.latitude() == Latitude(-90)) {
         return getSouthernCell();
     }
-    double longitude = truncateDecimalCoordinate(coordinates.longitude());
+    double longitude = truncateDecimalCoordinate((double)coordinates.longitude());
     if (longitude == -180) {
         longitude = 180;
     }
-    return {Longitude(longitude), Latitude{truncateDecimalCoordinate(coordinates.latitude())}};
+    return {Longitude(longitude), Latitude{truncateDecimalCoordinate((double)coordinates.latitude())}};
 }
 
 CellEntities Grid::getEntitiesOnGrid(const GridCell &cell) {
@@ -74,7 +74,7 @@ void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &c
                                  std::unordered_set<GridCell> &cells) const {
     GridCell cell1 = truncateCoordinates(coord1);
     GridCell cell2 = truncateCoordinates(coord2);
-    if (cell1 == cell2 || CoordinatesMath::calculateDistance(coord1, coord2) < meterPrecision) {
+    if (cell1 == cell2 || CoordinatesMath::calculateDistance(coord1, coord2) < Meters(meterPrecision)) {
         cells.insert(cell1);
         cells.insert(cell2);
         return;
@@ -85,18 +85,17 @@ void Grid::addIntervalsGridCells(const Coordinates &coord1, const Coordinates &c
     addIntervalsGridCells(midPoint, coord2, cells);
 }
 
-//TODO change neighbors retrieval with wrap180 function
 std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) const {
-    double lat = initialCell.latitude();
-    double lng = initialCell.longitude();
+    double lat = (double)initialCell.latitude();
+    double lng = (double)initialCell.longitude();
 
 // initialCell is not a poll cell
     if (lat < 90 && lat > -90) {
-//      just to be safe we multiplied precision :)
         double northLat = lat + precision;
         double southLat = lat - precision;
-        double eastLng = lng + precision;
-        double westLng = lng - precision;
+        double eastLng =  CoordinatesMath::wrap180(lng + precision);
+        double westLng = CoordinatesMath::wrap180(lng - precision);
+
 
         Coordinates north(truncateCoordinates({Longitude(lng), Latitude(northLat)}));
         Coordinates south(truncateCoordinates({Longitude(lng), Latitude(southLat)}));
@@ -119,14 +118,13 @@ std::vector<Grid::GridCell> Grid::getCellNeighbors(Grid::GridCell initialCell) c
     return getPollCellNeighbors(lat == 90);
 }
 
-//TODO change neighbors retrieval with wrap180 function
 std::vector<Grid::GridCell> Grid::getPollCellNeighbors(bool north) const {
     std::vector<GridCell> neighbors;
     double lng = 0;
     double lat = 90 - precision;
     if (!north) lat = -lat;
     while (lng < 360) {
-        neighbors.emplace_back(Longitude(lng), Latitude(lat));
+        neighbors.emplace_back(Longitude(CoordinatesMath::wrap180(lng)), Latitude(lat));
         lng = truncateDecimalCoordinate(lng + precision);
     }
     return neighbors;
