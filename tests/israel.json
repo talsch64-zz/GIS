@@ -459,7 +459,7 @@
     },
     {
         "type": "Way",
-        "id": "W2060",
+        "id": "W20600",
         "name": "fast",
         "description": ".*",
         "category_tags": [],
@@ -1426,5 +1426,698 @@
         "direction": "bidirectional",
         "toll_road": false,
         "restricted": []
+    },
+    {
+        "type": "Junction",
+        "id": "J1046",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.04487, 35.29326]
+    },
+    {
+        "type": "Junction",
+        "id": "J1047",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.04988, 35.21991]
+    },
+    {
+        "type": "Junction",
+        "id": "J1048",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.01146, 35.15948]
+    },
+    {
+        "type": "Junction",
+        "id": "J1050",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.85645, 35.37372]
+    },
+    {
+        "type": "Junction",
+        "id": "J1051",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.87628, 35.1842]
+    },
+    {
+        "type": "Junction",
+        "id": "J1052",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.99282, 35.3229]
+    },
+    {
+        "type": "Junction",
+        "id": "J1054",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.79111, 35.07571]
+    },
+    {
+        "type": "Junction",
+        "id": "J1055",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.82379, 35.28445]
+    },
+    {
+        "type": "Junction",
+        "id": "J1056",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.01029, 35.50281]
+    },
+    {
+        "type": "Junction",
+        "id": "J1057",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.95165, 35.38435]
+    },
+    {
+        "type": "Junction",
+        "id": "J1058",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.95165, 35.25801]
+    },
+    {
+        "type": "Junction",
+        "id": "J1059",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.94932, 35.15913]
+    },
+    {
+        "type": "Junction",
+        "id": "J1060",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.92135, 35.26899]
+    },
+    {
+        "type": "Junction",
+        "id": "J1061",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.88171, 35.08635]
+    },
+    {
+        "type": "Junction",
+        "id": "J1062",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.83038, 35.19346]
+    },
+    {
+        "type": "Junction",
+        "id": "J1063",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.03725, 35.38092]
+    },
+    {
+        "type": "Junction",
+        "id": "J1064",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.99533, 35.43585]
+    },
+    {
+        "type": "Junction",
+        "id": "J1065",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.93067, 35.46812]
+    },
+    {
+        "type": "Junction",
+        "id": "J1066",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.91144, 35.32873]
+    },
+    {
+        "type": "Junction",
+        "id": "J1067",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.00058, 35.22917]
+    },
+    {
+        "type": "Junction",
+        "id": "J1068",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.79888, 35.3459]
+    },
+    {
+        "type": "Junction",
+        "id": "J1069",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.88987, 35.2429]
+    },
+    {
+        "type": "Junction",
+        "id": "J1070",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [31.92135, 35.4283]
+    },
+    {
+        "type": "Way",
+        "id": "W2060",
+        "name": "",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1056"
+        },
+        "to": {
+            "entity_id": "J1065"
+        },
+        "speed_limit": 80,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2061",
+        "name": "t-",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1064"
+        },
+        "to": {
+            "entity_id": "J1070"
+        },
+        "speed_limit": 120,
+        "direction": "bidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2062",
+        "name": "-",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1056"
+        },
+        "to": {
+            "entity_id": "J1063"
+        },
+        "speed_limit": 90,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2063",
+        "name": "-",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1064"
+        },
+        "to": {
+            "entity_id": "J1056"
+        },
+        "speed_limit": 70,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2064",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1057"
+        },
+        "to": {
+            "entity_id": "J1064"
+        },
+        "speed_limit": 40,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2065",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1063"
+        },
+        "to": {
+            "entity_id": "J1052"
+        },
+        "speed_limit": 40,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2066",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1057"
+        },
+        "to": {
+            "entity_id": "J1063"
+        },
+        "speed_limit": 85,
+        "direction": "bidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2067",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1057"
+        },
+        "to": {
+            "entity_id": "J1066"
+        },
+        "speed_limit": 100,
+        "direction": "unidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2068",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1057"
+        },
+        "to": {
+            "entity_id": "J1058"
+        },
+        "speed_limit": 70,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2069",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1058"
+        },
+        "to": {
+            "entity_id": "J1052"
+        },
+        "speed_limit": 110,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2070",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1057"
+        },
+        "to": {
+            "entity_id": "J1052"
+        },
+        "speed_limit": 100,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2071",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1046"
+        },
+        "to": {
+            "entity_id": "J1052"
+        },
+        "speed_limit": 90,
+        "direction": "bidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2072",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1046"
+        },
+        "to": {
+            "entity_id": "J1063"
+        },
+        "speed_limit": 90,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2073",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1065"
+        },
+        "to": {
+            "entity_id": "J1050"
+        },
+        "speed_limit": 120,
+        "direction": "bidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2074",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1050"
+        },
+        "to": {
+            "entity_id": "J1070"
+        },
+        "speed_limit": 80,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2075",
+        "name": "to einstein square",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1065"
+        },
+        "to": {
+            "entity_id": "J1070"
+        },
+        "speed_limit": 130,
+        "direction": "bidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2076",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1055"
+        },
+        "to": {
+            "entity_id": "J1066"
+        },
+        "speed_limit": 90,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2077",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1068"
+        },
+        "to": {
+            "entity_id": "J1066"
+        },
+        "speed_limit": 50,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2078",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1050"
+        },
+        "to": {
+            "entity_id": "J1068"
+        },
+        "speed_limit": 130,
+        "direction": "bidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2079",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1066"
+        },
+        "to": {
+            "entity_id": "J1050"
+        },
+        "speed_limit": 90,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2080",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1050"
+        },
+        "to": {
+            "entity_id": "J1057"
+        },
+        "speed_limit": 90,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2081",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1055"
+        },
+        "to": {
+            "entity_id": "J1068"
+        },
+        "speed_limit": 90,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2082",
+        "name": "te",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1058"
+        },
+        "to": {
+            "entity_id": "J1060"
+        },
+        "speed_limit": 120,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2083",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1060"
+        },
+        "to": {
+            "entity_id": "J1066"
+        },
+        "speed_limit": 50,
+        "direction": "bidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2084",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1057"
+        },
+        "to": {
+            "entity_id": "J1060"
+        },
+        "speed_limit": 60,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2085",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1064"
+        },
+        "to": {
+            "entity_id": "J1050"
+        },
+        "speed_limit": 70,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2086",
+        "name": "te",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J1046"
+        },
+        "to": {
+            "entity_id": "J1058"
+        },
+        "speed_limit": 90,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Junction",
+        "id": "from",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.25899, 35.63047]
+    },
+    {
+        "type": "Junction",
+        "id": "to",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.22966, 35.49212]
+    },
+    {
+        "type": "Junction",
+        "id": "B",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.27561, 35.57125]
+    },
+    {
+        "type": "Junction",
+        "id": "A",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.26828, 35.51512]
+    },
+    {
+        "type": "Way",
+        "id": "way",
+        "name": "",
+        "description": ".*",
+        "category_tags": [],
+        "from": {
+            "entity_id": "from"
+        },
+        "to": {
+            "entity_id": "to"
+        },
+        "curves": [[32.24215, 35.63974],[32.20875, 35.48731],[32.24593, 35.4722],[32.25377, 35.51512],[32.29441, 35.51649],[32.30746, 35.57966],[32.26451, 35.56833]],
+        "speed_limit": 80,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
     }
 ]

@@ -144,7 +144,6 @@ TEST_F(IsraelMapTest, niceRoute) {
     id = std::find(shortestTimeWays.begin(), shortestTimeWays.end(), EntityId("W2045"));
     // shortestTimeRoute does not run through W2045
     EXPECT_EQ(id, shortestTimeWays.end());
-//    printRoutes(routes);
 }
 
 /**
@@ -161,7 +160,6 @@ TEST_F(IsraelMapTest, onHighway) {
     EXPECT_NE(distRouteSize, timeRouteSize); // routes should be different according to the map
     EXPECT_EQ(routes.shortestDistance().getWays().front().first, EntityId("W2017")); //highway
     EXPECT_EQ(routes.shortestTime().getWays().front().first, EntityId("W2017")); //highway
-//    printRoutes(routes);
 }
 
 /**
@@ -183,7 +181,6 @@ TEST_F(IsraelMapTest, highwayTooFar) {
     id = std::find(shortestTimeWays.begin(), shortestTimeWays.end(), EntityId("W2045"));
     // shortestTimeRoute does not run through W2045
     EXPECT_EQ(id, shortestTimeWays.end());
-//    printRoutes(routes);
 }
 
 
@@ -210,8 +207,6 @@ TEST_F(IsraelMapTest, differentRoutes) {
     // shortestTimeRoute run through W2018
     id = std::find(shortestTimeWays.begin(), shortestTimeWays.end(), EntityId("W2018"));
     EXPECT_NE(id, shortestTimeWays.end());
-//    printRoutes(routes);
-
 }
 
 /**
@@ -239,8 +234,6 @@ TEST_F(IsraelMapTest, differentRoutesOpposite) {
     auto invalidId = std::find(shortestDistanceWays.begin(), shortestDistanceWays.end(), EntityId("W2045"));
     // The reverse route from J2020 to J1026 is not the same because there is a unidirectional way.
     EXPECT_EQ(invalidId, shortestDistanceWays.end());
-//    printRoutes(routes);
-
 }
 
 /**
@@ -267,27 +260,21 @@ TEST_F(IsraelMapTest, unidirectionalSingleWayInvalid) {
     auto routes = navigation.getRoutes(origin, destination);
     EXPECT_FALSE(validator.validateRoute(origin, destination, routes.shortestDistance()));
     EXPECT_FALSE(validator.validateRoute(origin, destination, routes.shortestTime()));
-    EXPECT_EQ(routes.getErrorMessage(), "Routes contain only one unidirectional way!");
+    EXPECT_EQ(routes.getErrorMessage(), "Routes contain only one way!");
 }
 
 
 /**
- * First and final way are the same way which is bidirectional - Expected to find valid route
+ * First and final way are the same way which is bidirectional - Expected to find invalid route
  */
 TEST_F(IsraelMapTest, bidirectionalSingleWay) {
     Coordinates destination(Longitude(32.34981),
                             Latitude(35.22814)); // J1038
     Coordinates origin(Longitude(32.25985), Latitude(35.22334)); // J1039
     auto routes = navigation.getRoutes(origin, destination);
-    auto way = routes.shortestDistance().getWays().front();
-    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
-    EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
-    //  size should be 1 but it makes automatic U-turn
-    //  EXPECT_EQ(routes.shortestDistance().getWays().size(), 1);
-    EXPECT_EQ(way.first, EntityId("W2051"));
-    EXPECT_EQ(gis.getWay(way.first).getLength(), routes.shortestDistance().totalLength());
-    EXPECT_EQ(gis.getWay(way.first).getTime(), routes.shortestDistance().estimatedDuration());
-//    printRoutes(routes);
+    EXPECT_FALSE(validator.validateRoute(origin, destination, routes.shortestDistance()));
+    EXPECT_FALSE(validator.validateRoute(origin, destination, routes.shortestTime()));
+    EXPECT_FALSE(false);
 }
 
 /**
@@ -306,7 +293,6 @@ TEST_F(IsraelMapTest, singleSlowWayVsFastWay) {
     auto shortestTimeRoute = routes.shortestTime();
     EXPECT_LT(shortestDistanceRoute.totalLength(), shortestTimeRoute.totalLength());
     EXPECT_LT(shortestTimeRoute.estimatedDuration(), shortestDistanceRoute.estimatedDuration());
-//    printRoutes(routes);
 }
 /**
  * This test tests that the route found is indeed the shortest route when the final way is bidirectional.
@@ -328,7 +314,6 @@ TEST_F(IsraelMapTest, finalBidirectionalWay) {
     auto ways = routes.shortestDistance().getWays();
     EXPECT_EQ(ways.front().first, EntityId("W2049"));
     EXPECT_EQ(ways.back().first, EntityId("W2050"));
-//    printRoutes(routes);
 }
 
 /**
@@ -352,7 +337,6 @@ TEST_F(IsraelMapTest, parallelRoutes) {
     Minutes notExpectedTime = calculateTime(W2055.getLength(), W2055.getSpeedLimit()) +
                               calculateTime(W2056.getLength(), W2056.getSpeedLimit());
     EXPECT_NE(notExpectedTime, routes.shortestDistance().estimatedDuration());
-//    printRoutes(routes);
 }
 
 
@@ -371,7 +355,6 @@ TEST_F(IsraelMapTest, minimalWaysRoute) {
     EXPECT_LT(routes.shortestDistance().getWays().size(), 4);
 //    printRoutes(routes);
 }
-
 
 
 /**
@@ -457,7 +440,6 @@ TEST_F(IsraelMapTest, highWayRestrictions) {
     auto shortestTimeWays = getWaysIds(routes.shortestTime());
     id = std::find(shortestTimeWays.begin(), shortestTimeWays.end(), EntityId("W2045"));
     EXPECT_EQ(id, shortestTimeWays.end());   // should not include W2045
-
 
     EXPECT_NE(routes.shortestTime().estimatedDuration(), restrictedRoutes.shortestTime().estimatedDuration());
 
