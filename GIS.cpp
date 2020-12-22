@@ -134,7 +134,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                 }
                 Coordinates candidate = entity->getGeometry()->getClosestPoint(coord);
                 Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
-                if (!way->isHighway() || way->isHighway() && distance < max_distance_from_highway) {
+                if (!way->isHighway() || (way->isHighway() && distance < max_distance_from_highway)) {
                     wayFound = true;
                     if (distance < shortestDistance) {
                         closest = candidate;

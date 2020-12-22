@@ -16,6 +16,7 @@
  */
 
  class Route {
+ protected:
      Coordinates startPoint;
      Coordinates endPoint;
      Meters length;

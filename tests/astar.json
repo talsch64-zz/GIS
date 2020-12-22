@@ -1,0 +1,243 @@
+[
+  {
+    "type": "Junction",
+    "id": "junction3",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      22.35379193485179,
+      -30.55108950876453
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction1",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      22.550769137849,
+      -30.54453221670962
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction6",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      22.33710020880707,
+      -30.5165527424936
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction5",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      22.52120927995394,
+      -30.59054608014573
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction2",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      22.61177747471426,
+      -30.74212558050946
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction7",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      22.29320307549522,
+      -30.50923463558863
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction8",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      22.273619,
+      -30.497604
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction4",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      22.57676323126267,
+      -30.64052973777345
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "way3",
+    "name": "way",
+    "description": "desc",
+    "from": {
+      "entity_id": "junction1"
+    },
+    "to": {
+      "entity_id": "junction3"
+    },
+    "curves": [
+      [
+        22.52120927995394,
+        -30.59054608014573
+      ],
+      [
+        22.50413058473537,
+        -30.64429188412252
+      ],
+      [
+        22.48995611809598,
+        -30.55398499179682
+      ],
+      [
+        22.47504007898203,
+        -30.69445167918647
+      ],
+      [
+        22.42850639826701,
+        -30.63122087205292
+      ],
+      [
+        22.37960167173526,
+        -30.7515152988302
+      ]
+    ],
+    "speed_limit": 70,
+    "direction": "unidirectional",
+    "toll_road": false,
+    "restricted": [
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "way1",
+    "name": "way",
+    "description": "desc",
+    "from": {
+      "entity_id": "junction2"
+    },
+    "to": {
+      "entity_id": "junction1"
+    },
+    "curves": [
+      [
+        22.52207477596384,
+        -30.71657526105651
+      ],
+      [
+        22.58479748152545,
+        -30.65849011428035
+      ],
+      [
+        22.5209683497732,
+        -30.59048944926591
+      ]
+    ],
+    "speed_limit": 70,
+    "direction": "unidirectional",
+    "toll_road": false,
+    "restricted": [
+      "trucks"
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "way4",
+    "name": "way",
+    "description": "desc",
+    "from": {
+      "entity_id": "junction3"
+    },
+    "to": {
+      "entity_id": "junction6"
+    },
+    "curves": [
+      [
+        22.39048779498085,
+        -30.51831944208639
+      ]
+    ],
+    "speed_limit": 70,
+    "direction": "unidirectional",
+    "toll_road": true,
+    "restricted": [
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "way2",
+    "name": "way",
+    "description": "desc",
+    "from": {
+      "entity_id": "junction1"
+    },
+    "to": {
+      "entity_id": "junction3"
+    },
+    "curves": [
+      [
+        22.43983982470916,
+        -30.50806303140578
+      ],
+      [
+        22.42528244173555,
+        -30.57662477817529
+      ]
+    ],
+    "speed_limit": 70,
+    "direction": "unidirectional",
+    "toll_road": false,
+    "restricted": [
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "way5",
+    "name": "way",
+    "description": "desc",
+    "from": {
+      "entity_id": "junction3"
+    },
+    "to": {
+      "entity_id": "junction6"
+    },
+    "speed_limit": 70,
+    "direction": "unidirectional",
+    "toll_road": false,
+    "restricted": [
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "way6",
+    "name": "way",
+    "description": "desc",
+    "from": {
+      "entity_id": "junction6"
+    },
+    "to": {
+      "entity_id": "junction8"
+    },
+    "curves": [
+    ],
+    "speed_limit": 70,
+    "direction": "unidirectional",
+    "toll_road": false,
+    "restricted": [
+    ]
+  }
+]

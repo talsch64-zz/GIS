@@ -15,6 +15,7 @@ enum class TrafficDirection {
 };
 
 class Way : public Entity {
+protected:
     EntityId from;
     EntityId to;
     std::unique_ptr<PointList> geometry;
