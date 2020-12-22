@@ -27,9 +27,9 @@ Coordinates RandTestUtils::randCoord() {
 
 Bound RandTestUtils::randBound() {
     Coordinates minCoord = randCoord();
-    Coordinates dif = randCoord(Latitude(-1), Latitude(1), Longitude(-1), Longitude(1));
-    auto bound = std::make_tuple(minCoord.latitude(), Latitude(minCoord.latitude() + dif.latitude()),
-                                 minCoord.longitude(), Longitude(minCoord.longitude() + dif.longitude()));
+    Coordinates dif = randCoord(Bound(Latitude(-1), Latitude(1), Longitude(-1), Longitude(1)));
+    auto bound = Bound(minCoord.latitude(), Latitude(minCoord.latitude() + dif.latitude()),
+                       minCoord.longitude(), Longitude(minCoord.longitude() + dif.longitude()));
     return bound;
 }
 
