@@ -41,6 +41,11 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
         return false;
     }
 
+    if (finalWay.isHighway() &&
+        CoordinatesMath::calculateDistance(end, destination) > gis.getMaxDistanceFromHighway()) {
+        return false;
+    }
+
     if (startWay.isRestricted(restrictions)) {
         return false;
     }
