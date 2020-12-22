@@ -24,13 +24,25 @@ public:
 
     static Coordinates randCoord();
 
+    static Bound randBound();
+
     static std::vector<Junction *>
-    generateJunctions(std::unique_ptr<GISMock> gis, IdGenerator *idGenerator, int n, Bound bound);
+    generateJunctions(GISMock &gis, IdGenerator &idGenerator, int n, Bound bound);
 
     static std::vector<Way *>
-    generateWays(std::unique_ptr<GISMock> gis, IdGenerator *idGenerator, int n, Bound bound,
+    generateWays(GISMock &gis, IdGenerator &idGenerator, int n, Bound bound,
                  std::vector<Junction *> junctions);
 
+    /**
+     * Call this in the test AFTER the regular A*, because it adds fake ways and junctions which may mess up the next searches
+     * @param gis
+     * @param idGenerator
+     * @param bestTimeRoute
+     * @param bestDistanceRoute
+     * @param start
+     * @param end
+     * @return
+     */
     static Routes
     getBestRoutes(GISMock &gis, IdGenerator &idGenerator, RouteMock &bestTimeRoute, RouteMock &bestDistanceRoute,
                   const Coordinates &start, const Coordinates &end);

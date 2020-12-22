@@ -25,27 +25,35 @@ Coordinates RandTestUtils::randCoord() {
     return randCoord(Bound(Latitude(-90), Latitude(90), Longitude(-180), Longitude(180)));
 }
 
+Bound RandTestUtils::randBound() {
+    Coordinates minCoord = randCoord();
+    Coordinates dif = randCoord(Latitude(-1), Latitude(1), Longitude(-1), Longitude(1));
+    auto bound = std::make_tuple(minCoord.latitude(), Latitude(minCoord.latitude() + dif.latitude()),
+                                 minCoord.longitude(), Longitude(minCoord.longitude() + dif.longitude()));
+    return bound;
+}
+
 std::vector<Junction *>
-RandTestUtils::generateJunctions(std::unique_ptr<GISMock> gis, IdGenerator *idGenerator, int n, Bound bound) {
+RandTestUtils::generateJunctions(GISMock &gis, IdGenerator &idGenerator, int n, Bound bound) {
     std::vector<Junction *> junctions;
     for (int i = 0; i < n; i++) {
-        EntityId id = idGenerator->generateId();
+        EntityId id = idGenerator.generateId();
         Coordinates coord = randCoord(bound);
         std::unique_ptr<Point> point = std::make_unique<Point>(coord);
         std::unique_ptr<Junction> junction = std::make_unique<Junction>(id, "junction", "junction",
                                                                         std::vector<std::string>(), std::move(point));
         junctions.push_back(junction.get());
-        gis->addEntity(std::move(junction));
+        gis.addEntity(std::move(junction));
     }
     return junctions;
 }
 
 std::vector<Way *>
-RandTestUtils::generateWays(std::unique_ptr<GISMock> gis, IdGenerator *idGenerator, int n, Bound bound,
+RandTestUtils::generateWays(GISMock &gis, IdGenerator &idGenerator, int n, Bound bound,
                             std::vector<Junction *> junctions) {
     std::vector<Way *> ways;
     for (int i = 0; i < n; i++) {
-        EntityId id = idGenerator->generateId();
+        EntityId id = idGenerator.generateId();
         Junction *from = junctions[randInt(0, junctions.size() - 1)];
         Junction *to = junctions[randInt(0, junctions.size() - 1)];
         int curvesAmount = randInt(0, 3);
@@ -61,7 +69,7 @@ RandTestUtils::generateWays(std::unique_ptr<GISMock> gis, IdGenerator *idGenerat
                                                          dir, speed, false, false,
                                                          std::vector<std::string>());
         ways.push_back(way.get());
-        gis->addEntity(std::move(way));
+        gis.addEntity(std::move(way));
         from->addWay(id);
         if (dir == TrafficDirection::bidirectional) {
             to->addWay(id);
@@ -186,7 +194,8 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator, Rout
     gis.addEntity(std::move(fakeEndJunction));
 
     NavigationGIS navGis(gis);
-    getBestRoutesDFS(navGis, bestTimeRoute, bestDistanceRoute, ways, fakeStartJunctionId, fakeEndJunctionId, fakeStartJunctionId, Meters(0), Minutes(0));
+    getBestRoutesDFS(navGis, bestTimeRoute, bestDistanceRoute, ways, fakeStartJunctionId, fakeEndJunctionId,
+                     fakeStartJunctionId, Meters(0), Minutes(0));
     auto timeWays = bestTimeRoute.getWays();
     Direction timeStartWayDir = timeWays.front().first == fakeStartWayId ? Direction::A_to_B : Direction::B_to_A;
     Direction timeEndWayDir = timeWays.back().first == fakeEndWayId ? Direction::A_to_B : Direction::B_to_A;
@@ -197,7 +206,8 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator, Rout
     bestTimeRoute.setWays(timeWays);
 
     auto distanceWays = bestDistanceRoute.getWays();
-    Direction distanceStartWayDir = distanceWays.front().first == fakeStartWayId ? Direction::A_to_B : Direction::B_to_A;
+    Direction distanceStartWayDir =
+            distanceWays.front().first == fakeStartWayId ? Direction::A_to_B : Direction::B_to_A;
     Direction distanceEndWayDir = distanceWays.back().first == fakeEndWayId ? Direction::A_to_B : Direction::B_to_A;
     distanceWays.front().first = startWay.getId();
     distanceWays.front().second = distanceStartWayDir;
