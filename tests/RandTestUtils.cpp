@@ -186,7 +186,7 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator, Rout
     gis.addEntity(std::move(fakeEndJunction));
 
     NavigationGIS navGis(gis);
-    getBestRoutesDFS(navGis, bestTimeRoute, bestDistanceRoute, ways, startId, endId, startId, Meters(0), Minutes(0));
+    getBestRoutesDFS(navGis, bestTimeRoute, bestDistanceRoute, ways, fakeStartJunctionId, fakeEndJunctionId, fakeStartJunctionId, Meters(0), Minutes(0));
     auto timeWays = bestTimeRoute.getWays();
     Direction timeStartWayDir = timeWays.front().first == fakeStartWayId ? Direction::A_to_B : Direction::B_to_A;
     Direction timeEndWayDir = timeWays.back().first == fakeEndWayId ? Direction::A_to_B : Direction::B_to_A;
