@@ -4,6 +4,7 @@
 #include "../NavigationGIS.h"
 #include "../navigation/Navigation.h"
 #include "RandTestUtils.h"
+#include "../navigation/NavigationValidator.h"
 
 void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, const Route &actual) {
     auto routeIterator = actual.getWays().begin();
@@ -39,6 +40,7 @@ TEST(AStar, BasicPathTest) {
     gis.loadMapFile("astar.json");
     NavigationGIS navigationGis(gis);
     Navigation navigation(navigationGis);
+    NavigationValidator navigationValidator(gis);
     std::vector<std::pair<EntityId, Direction>> expectedDistanceRoute = {
             std::make_pair(EntityId("way1"), Direction::A_to_B),
             std::make_pair(EntityId("way2"), Direction::A_to_B),
@@ -50,21 +52,13 @@ TEST(AStar, BasicPathTest) {
     Coordinates endCoord(Longitude(22.273619),
                          Latitude(-30.497604));
 
-//    Routes routes = navigation.getRoutes(startCoord, endCoord);
-    IdGenerator idGenerator;
-    std::unique_ptr<RouteMock> bestTimeRoute = std::make_unique<RouteMock>(startCoord, endCoord, Meters(0), Minutes(0),
-                                                                           std::vector<std::pair<EntityId, Direction>>(),
-                                                                           false);
-    std::unique_ptr<RouteMock> bestDistanceRoute = std::make_unique<RouteMock>(startCoord, endCoord, Meters(0),
-                                                                               Minutes(0),
-                                                                               std::vector<std::pair<EntityId, Direction>>(),
-                                                                               false);
-    Routes routes = RandTestUtils::getBestRoutes(gis, idGenerator, startCoord, endCoord);
+    Routes routes = navigation.getRoutes(startCoord, endCoord);
     const Route &shortestDistance = routes.shortestDistance();
     const Route &shortestTime = routes.shortestTime();
     assertRoute(expectedDistanceRoute, shortestDistance);
     assertRoute(expectedDistanceRoute, shortestTime);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestDistance));
+    EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestTime));
 }
 
 TEST(AStar, WrongPathsAppearCloserToTarget) {
@@ -72,6 +66,7 @@ TEST(AStar, WrongPathsAppearCloserToTarget) {
     gis.loadMapFile("astar2.json");
     NavigationGIS navigationGis(gis);
     Navigation navigation(navigationGis);
+    NavigationValidator navigationValidator(gis);
     std::vector<std::pair<EntityId, Direction>> expectedDistanceRoute = {
             std::make_pair(EntityId("way4"), Direction::B_to_A),
             std::make_pair(EntityId("way2"), Direction::A_to_B),
@@ -89,7 +84,8 @@ TEST(AStar, WrongPathsAppearCloserToTarget) {
     const Route &shortestTime = routes.shortestTime();
     assertRoute(expectedDistanceRoute, shortestDistance);
     assertRoute(expectedDistanceRoute, shortestTime);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestDistance));
+    EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestTime));
 }
 
 TEST(AStar, InvalidRouteLastWayHighway) {
@@ -111,6 +107,7 @@ TEST(AStar, HighwayTooFar) {
     gis.loadMapFile("astar3b.json");
     NavigationGIS navigationGis(gis);
     Navigation navigation(navigationGis);
+    NavigationValidator navigationValidator(gis);
     std::vector<std::pair<EntityId, Direction>> expectedDistanceRoute = {
             std::make_pair(EntityId("way3"), Direction::B_to_A),
             std::make_pair(EntityId("way2"), Direction::A_to_B)
@@ -125,7 +122,8 @@ TEST(AStar, HighwayTooFar) {
     const Route &shortestTime = routes.shortestTime();
     assertRoute(expectedDistanceRoute, shortestDistance);
     assertRoute(expectedDistanceRoute, shortestTime);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestDistance));
+    EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestTime));
 }
 
 TEST(AStar, HighwayWithinThreeMeters) {
@@ -133,6 +131,7 @@ TEST(AStar, HighwayWithinThreeMeters) {
     gis.loadMapFile("astar3b.json");
     NavigationGIS navigationGis(gis);
     Navigation navigation(navigationGis);
+    NavigationValidator navigationValidator(gis);
     std::vector<std::pair<EntityId, Direction>> expectedDistanceRoute = {
             std::make_pair(EntityId("way1"), Direction::A_to_B),
             std::make_pair(EntityId("way2"), Direction::B_to_A)
@@ -148,7 +147,8 @@ TEST(AStar, HighwayWithinThreeMeters) {
     const Route &shortestTime = routes.shortestTime();
     assertRoute(expectedDistanceRoute, shortestDistance);
     assertRoute(expectedDistanceRoute, shortestTime);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestDistance));
+    EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestTime));
 }
 
 /**
@@ -166,9 +166,9 @@ TEST(AStar, HeartOfGold) {
         Coordinates endCoord = RandTestUtils::randCoord(bound);
         NavigationGIS navigationGis(*gis);
         Navigation navigation(navigationGis);
+        NavigationValidator navigationValidator(*gis);
 
         Routes routes = navigation.getRoutes(startCoord, endCoord);
-
         Routes routesExpected = RandTestUtils::getBestRoutes(*gis, idGenerator, startCoord, endCoord);
 
         compareRoutes(routes, routesExpected);
