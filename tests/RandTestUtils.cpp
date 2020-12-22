@@ -154,7 +154,7 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator, Rout
     auto fakeStartTo2 = (Junction *) gis.getEntityById(startWay.getFromJunctionId());
     if (startWay.isBidirectional()) {
         generateWay(gis, fakeStartWayId2, curves, *fakeStartJunction,
-                    *fakeStartTo2, TrafficDirection::unidirectional, startWay.getSpeedLimit();
+                    *fakeStartTo2, TrafficDirection::unidirectional, startWay.getSpeedLimit());
     }
     gis.addEntity(std::move(fakeStartJunction));
 
@@ -165,16 +165,16 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator, Rout
                                                                            std::move(endPoint));
     EntityId fakeEndWayId = idGenerator.generateId();
     auto fakeEndFrom = (Junction *) gis.getEntityById(endWay.getFromJunctionId());
-    generateWay(fakeEndWayId, curves, *fakeEndFrom,
-                fakeEndJunctionId, TrafficDirection::unidirectional,
+    generateWay(gis, fakeEndWayId, curves, *fakeEndFrom,
+                *fakeEndJunction, TrafficDirection::unidirectional,
                 endWay.getSpeedLimit());
 
     EntityId fakeEndWayId2 = idGenerator.generateId();
     auto fakeEndFrom2 = (Junction *) gis.getEntityById(endWay.getToJunctionId());
     if (endWay.isBidirectional()) {
-        generateWay(fakeEndWayId2, curves, *fakeEndFrom2,
+        generateWay(gis, fakeEndWayId2, curves, *fakeEndFrom2,
                     *fakeEndJunction, TrafficDirection::unidirectional,
-                    endWay.getSpeedLimit();
+                    endWay.getSpeedLimit());
     }
     gis.addEntity(std::move(fakeEndJunction));
 
