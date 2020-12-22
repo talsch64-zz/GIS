@@ -31,7 +31,7 @@ public:
 
     static void
     generateWay(GISMock &gis, const EntityId &id, const std::vector<Coordinates> &curves, Junction &from,
-                Junction &to, const TrafficDirection &dir, int speedLimit);
+                Junction &to, const TrafficDirection &dir, int speedLimit, std::optional<Meters> length);
 
     static void
     generateWays(GISMock &gis, IdGenerator &idGenerator, int n, Bound bound,
@@ -48,8 +48,7 @@ public:
      * @return
      */
     static Routes
-    getBestRoutes(GISMock &gis, IdGenerator &idGenerator, RouteMock &bestTimeRoute, RouteMock &bestDistanceRoute,
-                  const Coordinates &start, const Coordinates &end);
+    getBestRoutes(GISMock &gis, IdGenerator &idGenerator, const Coordinates &start, const Coordinates &end);
 
     static void getBestRoutesDFS(NavigationGIS &navGis, RouteMock &bestTimeRoute, RouteMock &bestDistanceRoute,
                                  std::vector<std::pair<EntityId, Direction>> ways, const EntityId &start,
