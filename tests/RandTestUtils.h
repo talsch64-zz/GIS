@@ -10,8 +10,10 @@
 #include "GISMock.h"
 #include "../navigation/Routes.h"
 #include "RouteMock.h"
+#include "../NavigationGIS.h"
 
 class RandTestUtils {
+public:
     static int randInt(int min, int max);
 
     static double randDouble(double min, double max);
@@ -29,9 +31,14 @@ class RandTestUtils {
     generateWays(std::unique_ptr<GISMock> gis, IdGenerator *idGenerator, int n, Bound bound,
                  std::vector<Junction *> junctions);
 
-    static void getBestRoutesDFS(RouteMock *bestTimeRoute, RouteMock *bestDistanceRoute, std::unordered_map<EntityId, Junction *> junctions,
-                                 std::vector<std::pair<EntityId, Direction>> ways, Junction *start, Junction *end,
-                                 Junction *current, Meters currentLength, Minutes currentTime);
+    static Routes
+    getBestRoutes(GISMock &gis, IdGenerator &idGenerator, RouteMock &bestTimeRoute, RouteMock &bestDistanceRoute,
+                  const Coordinates &start, const Coordinates &end);
+
+    static void getBestRoutesDFS(NavigationGIS &navGis, RouteMock &bestTimeRoute, RouteMock &bestDistanceRoute,
+                                 std::vector<std::pair<EntityId, Direction>> ways, const EntityId &start,
+                                 const EntityId &end,
+                                 const EntityId &current, Meters currentLength, Minutes currentTime);
 };
 
 

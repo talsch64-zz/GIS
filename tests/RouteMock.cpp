@@ -11,3 +11,7 @@ void RouteMock::setDuration(Minutes duration) {
 void RouteMock::setWays(std::vector<std::pair<EntityId, Direction>> ways) {
     this->ways = ways;
 }
+
+void RouteMock::setValid(bool valid) {
+    this->valid = valid;
+}
