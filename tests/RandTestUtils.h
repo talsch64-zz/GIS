@@ -29,7 +29,11 @@ public:
     static std::vector<Junction *>
     generateJunctions(GISMock &gis, IdGenerator &idGenerator, int n, Bound bound);
 
-    static std::vector<Way *>
+    static void
+    generateWay(GISMock &gis, const EntityId &id, const std::vector<Coordinates> &curves, Junction &from,
+                Junction &to, const TrafficDirection &dir, int speedLimit);
+
+    static void
     generateWays(GISMock &gis, IdGenerator &idGenerator, int n, Bound bound,
                  std::vector<Junction *> junctions);
 

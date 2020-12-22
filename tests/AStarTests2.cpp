@@ -160,25 +160,28 @@ TEST(AStar, HighwayWithinThreeMeters
 TEST(AStar, HeartOfGold) {
     std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
     IdGenerator idGenerator;
-    int v = 10, e = 20;
-    Bound bound = RandTestUtils::randBound();
-    auto junctions = RandTestUtils::generateJunctions(*gis, idGenerator, v, bound);
-    RandTestUtils::generateWays(*gis, idGenerator, v, bound, junctions);
-    Coordinates startCoord = RandTestUtils::randCoord(bound);
-    Coordinates endCoord = RandTestUtils::randCoord(bound);
-    NavigationGIS navigationGis(*gis);
-    Navigation navigation(navigationGis);
+    int v = 10, e = 30, reps = 10;
+    for (int i = 0; i < reps; i++) {
+        Bound bound = RandTestUtils::randBound();
+        auto junctions = RandTestUtils::generateJunctions(*gis, idGenerator, v, bound);
+        RandTestUtils::generateWays(*gis, idGenerator, e, bound, junctions);
+        Coordinates startCoord = RandTestUtils::randCoord(bound);
+        Coordinates endCoord = RandTestUtils::randCoord(bound);
+        NavigationGIS navigationGis(*gis);
+        Navigation navigation(navigationGis);
 
-    Routes routes = navigation.getRoutes(startCoord, endCoord);
-    std::unique_ptr<RouteMock> bestTimeRoute = std::make_unique<RouteMock>(startCoord, endCoord, Meters(0), Minutes(0),
-                                                                           std::vector<std::pair<EntityId, Direction>>(),
-                                                                           false);
-    std::unique_ptr<RouteMock> bestDistanceRoute = std::make_unique<RouteMock>(startCoord, endCoord, Meters(0),
-                                                                               Minutes(0),
+        Routes routes = navigation.getRoutes(startCoord, endCoord);
+        std::unique_ptr<RouteMock> bestTimeRoute = std::make_unique<RouteMock>(startCoord, endCoord, Meters(0), Minutes(0),
                                                                                std::vector<std::pair<EntityId, Direction>>(),
                                                                                false);
-    Routes routesExpected = RandTestUtils::getBestRoutes(*gis, idGenerator, *bestTimeRoute, *bestDistanceRoute,
-                                                         startCoord, endCoord);
+        std::unique_ptr<RouteMock> bestDistanceRoute = std::make_unique<RouteMock>(startCoord, endCoord, Meters(0),
+                                                                                   Minutes(0),
+                                                                                   std::vector<std::pair<EntityId, Direction>>(),
+                                                                                   false);
+        Routes routesExpected = RandTestUtils::getBestRoutes(*gis, idGenerator, *bestTimeRoute, *bestDistanceRoute,
+                                                             startCoord, endCoord);
 
-    compareRoutes(routes, routesExpected);
+        compareRoutes(routes, routesExpected);
+        gis->clear();
+    }
 }
