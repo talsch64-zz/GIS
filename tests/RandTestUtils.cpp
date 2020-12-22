@@ -97,11 +97,13 @@ RandTestUtils::getBestRoutesDFS(NavigationGIS &navGis, RouteMock &bestTimeRoute,
             bestTimeRoute.setDuration(currentTime);
             bestTimeRoute.setLength(currentLength);
             bestTimeRoute.setWays(ways);
+            bestTimeRoute.setValid(true);
         }
         if (!bestDistanceRoute.isValid() || currentLength < bestDistanceRoute.totalLength()) {
             bestDistanceRoute.setDuration(currentTime);
             bestDistanceRoute.setLength(currentLength);
             bestDistanceRoute.setWays(ways);
+            bestDistanceRoute.setValid(true);
         }
     } else {
         for (const EntityId &wayId : navGis.getWaysByJunction(current)) {
@@ -118,7 +120,7 @@ RandTestUtils::getBestRoutesDFS(NavigationGIS &navGis, RouteMock &bestTimeRoute,
                 waysCopy.emplace_back(std::make_pair(wayId, dir));
                 EntityId next = current == way.getFromJunctionId() ? way.getToJunctionId() : way.getFromJunctionId();
                 Meters newLength = currentLength + way.getLength();
-                Minutes newTime = currentTime + Minutes(way.getLength() / 1000 / way.getSpeedLimit() / 60);
+                Minutes newTime = currentTime + Minutes(way.getLength() / 1000 / way.getSpeedLimit() * 60);
                 getBestRoutesDFS(navGis, bestTimeRoute, bestDistanceRoute, waysCopy, start, end, next, newLength,
                                  newTime);
             }

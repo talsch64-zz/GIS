@@ -107,8 +107,7 @@ TEST(AStar, InvalidRouteLastWayHighway) {
     EXPECT_FALSE(routes.isValid());
 }
 
-TEST(AStar, HighwayTooFar
-) {
+TEST(AStar, HighwayTooFar) {
     GIS gis;
     gis.loadMapFile("astar3b.json");
     NavigationGIS navigationGis(gis);
@@ -130,8 +129,7 @@ TEST(AStar, HighwayTooFar
     EXPECT_TRUE(routes.isValid());
 }
 
-TEST(AStar, HighwayWithinThreeMeters
-) {
+TEST(AStar, HighwayWithinThreeMeters) {
     GIS gis;
     gis.loadMapFile("astar3b.json");
     NavigationGIS navigationGis(gis);
