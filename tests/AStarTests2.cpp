@@ -7,27 +7,27 @@
 
 void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, const Route &actual) {
     auto routeIterator = actual.getWays().begin();
-    ASSERT_EQ(actual.getWays().size(), expected.size());
+    EXPECT_EQ(actual.getWays().size(), expected.size());
     for (auto &wayPair : expected) {
-        ASSERT_EQ(wayPair.first, routeIterator->first);
-        ASSERT_EQ(wayPair.second, routeIterator->second);
+        EXPECT_EQ(wayPair.first, routeIterator->first);
+        EXPECT_EQ(wayPair.second, routeIterator->second);
         routeIterator++;
     }
 }
 
 void compareRoutes(const Route &routeA, const Route &routeB) {
-    ASSERT_EQ(routeA.isValid(), routeB.isValid());
+    EXPECT_EQ(routeA.isValid(), routeB.isValid());
     if (routeA.isValid()) {
         assertRoute(routeA.getWays(), routeB);
-        ASSERT_DOUBLE_EQ((double) routeA.totalLength(), (double) routeB.totalLength());
-        ASSERT_DOUBLE_EQ((double) routeA.estimatedDuration(), (double) routeB.estimatedDuration());
-        ASSERT_EQ(routeA.getWayStartPoint(), routeB.getWayStartPoint());
-        ASSERT_EQ(routeA.getWayEndPoint(), routeB.getWayEndPoint());
+        EXPECT_DOUBLE_EQ((double) routeA.totalLength(), (double) routeB.totalLength());
+        EXPECT_DOUBLE_EQ((double) routeA.estimatedDuration(), (double) routeB.estimatedDuration());
+        EXPECT_EQ(routeA.getWayStartPoint(), routeB.getWayStartPoint());
+        EXPECT_EQ(routeA.getWayEndPoint(), routeB.getWayEndPoint());
     }
 }
 
 void compareRoutes(const Routes &routesA, const Routes &routesB) {
-    ASSERT_EQ(routesA.isValid(), routesB.isValid());
+    EXPECT_EQ(routesA.isValid(), routesB.isValid());
     if (routesA.isValid()) {
         compareRoutes(routesA.shortestTime(), routesB.shortestTime());
         compareRoutes(routesA.shortestDistance(), routesB.shortestDistance());
@@ -157,7 +157,7 @@ TEST(AStar, HighwayWithinThreeMeters) {
 TEST(AStar, HeartOfGold) {
     std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
     IdGenerator idGenerator;
-    int v = 6, e = 12, reps = 10;
+    int v = 8, e = 14, reps = 50;
     for (int i = 0; i < reps; i++) {
         Bound bound = RandTestUtils::randBound();
         auto junctions = RandTestUtils::generateJunctions(*gis, idGenerator, v, bound);
