@@ -70,8 +70,34 @@ Handles geographical searches including searching for grid cells in a given circ
 ## Logger
 Handles errors which arise during the JSON parsing and logs them in a logger file.
 
+## Navigation
+Handles navigation queries - manages the search for the shortest route and the fastest route.
+Supports also queries with custom restrictions such as avoid highway or toll roads.
 
+## Route
+Route class describes a route between two points and the ways in which the route goes through.
+* Information available about the Route:
+* Distance (in Meters),
+* Duration (in Minutes),
+* Start and end points,
+* All the ways in which the route goes through (and the directions),
+* Is the route valid.
 
+## Routes
+Routes class hold the two shortest routes - by distance and time.
+* Operation supported:
+* get shortest route by distance and by time,
+* are the shortest routes valid,
+* get error message in case the routes are not valid.
 
+## NavigationValidator
+Validates if a route is valid 
 
-
+## AStar
+AStar class implements the A* algorithm.
+ * Allows to find the shortest Route from origin point to destination point By distance and by time.
+ * We implemented the algorithm such that the initial Node already has a "kilometrage" of the startWay.
+ * If the first way is bidirectional then we initialize two node.
+ * Once one of the Junctions of the final way is reached (if the way is bidirectional), we retract the route that led to the way.
+ * If the final way is unidirectional, the algorithm retracts the Route after finding the "from" junction of the final way.
+ * Supports restrictions!!!!!
