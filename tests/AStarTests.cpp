@@ -84,14 +84,13 @@ TEST_F(IsraelMapTest, oppositeRoutesByDistance) {
 
 
     auto size1 = routes.shortestDistance().getWays().size();
-    EXPECT_EQ(size1, (size_t)5);
     auto reverseRoutes = navigation.getRoutes(to, from);
     EXPECT_TRUE(routes.isValid());
     auto size2 = routes.shortestDistance().getWays().size();
-    EXPECT_EQ(size2, (size_t)5);
+    EXPECT_EQ(size1, size2);
     auto from_to_ways = routes.shortestDistance().getWays();
     auto to_from_ways = reverseRoutes.shortestDistance().getWays();
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < (int)size1; i++) {
         EXPECT_EQ(from_to_ways[i].first, to_from_ways[4 - i].first);
         EXPECT_NE(from_to_ways[i].second, to_from_ways[4 - i].second);
     }
@@ -120,7 +119,7 @@ TEST_F(IsraelMapTest, oppositeRoutesByTime) {
 
     auto from_to_ways = routes.shortestTime().getWays();
     auto to_from_ways = reverseRoutes.shortestTime().getWays();
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < (int)size1; i++) {
         EXPECT_EQ(from_to_ways[i].first, to_from_ways[4 - i].first);
         EXPECT_NE(from_to_ways[i].second, to_from_ways[4 - i].second);
     }
