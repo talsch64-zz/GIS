@@ -39,7 +39,6 @@ public:
 
     void printRoutes(const Routes &routes) {
         if (!routes.isValid()) {
-            //TODO add invalid messgae of the routes
             std::cout << "invalid routes!!" << std::endl;
             return;
         }
@@ -362,7 +361,6 @@ TEST_F(IsraelMapTest, minimalWaysRoute) {
  */
 
 
-// TODO add one more test to check toll+highway restrictions
 /**
  * origin is J1026 and destination is J1020
  * four ways exit J1020 but all of them but slowest one are toll roads.
