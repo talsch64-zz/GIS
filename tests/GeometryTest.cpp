@@ -5,6 +5,7 @@
 #include "../entities/Way.h"
 #include "../entities/geometry/PointList.h"
 #include "../GIS.h"
+#include "../NavigationGIS.h"
 #include <numbers>
 
 #define METERS_PRECISION Meters(1)
@@ -51,8 +52,8 @@ TEST(CoordinatesMathTest, ShortestDistanceAndCoordinatesTest) {
     Meters distance = CoordinatesMath::distanceFromSegment(C, A, B);
     std::pair<Coordinates, Meters> closestPair = CoordinatesMath::closestPointOnSegmentAndDistance(C, A, B);
 
-    EXPECT_NEAR((double)closestPair.second, (double)distance, (double)METERS_PRECISION);
-    EXPECT_NEAR((double)CoordinatesMath::calculateDistance(C, D), (double)distance, (double)METERS_PRECISION);
+    EXPECT_NEAR((double) closestPair.second, (double) distance, (double) METERS_PRECISION);
+    EXPECT_NEAR((double) CoordinatesMath::calculateDistance(C, D), (double) distance, (double) METERS_PRECISION);
     EXPECT_LT(CoordinatesMath::calculateDistance(closestPair.first, D), METERS_PRECISION);
 }
 
@@ -69,7 +70,7 @@ TEST(CoordinatesTest, ZulVernLatitudeTest) {
     Coordinates coords{Longitude(0), Latitude(0)};
     Coordinates target = CoordinatesMath::coordinatesByBearingAndDistance(coords, 0,
                                                                           Meters(2 * std::numbers::pi * 6371000));
-    EXPECT_NEAR((double)target.latitude(), (double)coords.latitude(), 0.00001);
+    EXPECT_NEAR((double) target.latitude(), (double) coords.latitude(), 0.00001);
     EXPECT_EQ(target.longitude(), coords.longitude());
 }
 
@@ -109,7 +110,7 @@ TEST(WayGeometry, GetWayLengthWithCurves) {
     Way *way = (Way *) gis.getEntityById(EntityId("1"));
     Meters length = way->getLength();
 
-    EXPECT_NEAR((double)length, (double)expectedLength, (double)acceptedError);
+    EXPECT_NEAR((double) length, (double) expectedLength, (double) acceptedError);
 }
 
 TEST(WayGeometry, GetWayLengthWithoutCurves) {
@@ -121,7 +122,26 @@ TEST(WayGeometry, GetWayLengthWithoutCurves) {
     Way *way = (Way *) gis.getEntityById(EntityId("2"));
     Meters length = way->getLength();
 
-    EXPECT_NEAR((double)length, (double)expectedLength, (double)acceptedError);
+    EXPECT_NEAR((double) length, (double) expectedLength, (double) acceptedError);
 }
 
-//TODO: write tests for closest way with restrictions, GISNavigation closest way
+TEST(ClosestWay, ClosestWayWithRestrictions) {
+    GIS gis;
+    NavigationGIS navigationGis(gis);
+    Coordinates coord(Longitude(23.916374), Latitude(-30.671331));
+    gis.loadMapFile("astar.json");
+
+    Restrictions restrictions1("highway  , toll");
+    Restrictions restrictions2("  highway ");
+    Restrictions restrictions3("toll");
+    Restrictions restrictions4("");
+    auto closestWay1 = navigationGis.getWayClosestPoint(coord, restrictions1);
+    auto closestWay2 = navigationGis.getWayClosestPoint(coord, restrictions2);
+    auto closestWay3 = navigationGis.getWayClosestPoint(coord, restrictions3);
+    auto closestWay4 = navigationGis.getWayClosestPoint(coord, restrictions4);
+
+    ASSERT_EQ(closestWay1.second, EntityId("way1"));
+    ASSERT_EQ(closestWay2.second, EntityId("way8"));
+    ASSERT_EQ(closestWay3.second, EntityId("way1"));
+    ASSERT_EQ(closestWay4.second, EntityId("way8"));
+}
