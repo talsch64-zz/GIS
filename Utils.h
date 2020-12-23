@@ -13,7 +13,7 @@ public:
      */
     static double kmh_to_mm(int speed);
 
-    static inline Minutes calculateTime(Meters distance, int speed);
+    static Minutes calculateTime(Meters distance, int speed);
 
     /**
      * @brief split string to tokens by given delimiters

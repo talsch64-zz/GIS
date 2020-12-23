@@ -72,7 +72,7 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
     EntityId currJunctionValidator("");
 
     // -------------- validate all the ways found --------------
-    for (int i = 0; i < ways.size() - 1; i++) {
+    for (size_t i = 0; i < ways.size() - 1; i++) {
         EntityId currWayId = ways[i].first;
         Direction currWayDirection = ways[i].second;
         const Way &currWay = gis.getWay(ways[i].first);

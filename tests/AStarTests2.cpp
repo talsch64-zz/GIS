@@ -8,10 +8,10 @@
 
 void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, const Route &actual) {
     auto routeIterator = actual.getWays().begin();
-//    EXPECT_EQ(actual.getWays().size(), expected.size());
+    EXPECT_EQ(actual.getWays().size(), expected.size());
     for (auto &wayPair : expected) {
-//        EXPECT_EQ(wayPair.first, routeIterator->first);
-//        EXPECT_EQ(wayPair.second, routeIterator->second);
+        EXPECT_EQ(wayPair.first, routeIterator->first);
+        EXPECT_EQ(wayPair.second, routeIterator->second);
         routeIterator++;
     }
 }
@@ -19,7 +19,7 @@ void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, co
 void compareRoutes(const Route &actualRoute, const Route &expectedRoute, bool distance) {
     EXPECT_EQ(actualRoute.isValid(), expectedRoute.isValid());
     if (actualRoute.isValid()) {
-        assertRoute(expectedRoute.getWays(), actualRoute);
+//        assertRoute(expectedRoute.getWays(), actualRoute);
         if (distance) {
             EXPECT_DOUBLE_EQ((double) actualRoute.totalLength(), (double) expectedRoute.totalLength());
             EXPECT_LE(actualRoute.estimatedDuration(), expectedRoute.estimatedDuration());
@@ -27,8 +27,8 @@ void compareRoutes(const Route &actualRoute, const Route &expectedRoute, bool di
             EXPECT_LE(actualRoute.totalLength(), expectedRoute.totalLength());
             EXPECT_DOUBLE_EQ((double) actualRoute.estimatedDuration(), (double) expectedRoute.estimatedDuration());
         }
-//        EXPECT_EQ(actualRoute.getWayStartPoint(), expectedRoute.getWayStartPoint());
-//        EXPECT_EQ(actualRoute.getWayEndPoint(), expectedRoute.getWayEndPoint());
+        EXPECT_EQ(actualRoute.getWayStartPoint(), expectedRoute.getWayStartPoint());
+        EXPECT_EQ(actualRoute.getWayEndPoint(), expectedRoute.getWayEndPoint());
     }
 }
 

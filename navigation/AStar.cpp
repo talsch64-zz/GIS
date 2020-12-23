@@ -77,9 +77,10 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
         popedJunctions.insert(currNode->getJunctionId());
 
         //  reached the final way and initializing the final Node
+        //TODO: are parentheses right??
         if (currNode->getJunctionId() == finalWay.getFromJunctionId() ||
-            finalWay.isBidirectional() && currNode->getJunctionId() == finalWay.getToJunctionId()) {
-            queue.push(createFinalNode(currNode, heuristicFunc, costFunc));
+            (finalWay.isBidirectional() && currNode->getJunctionId() == finalWay.getToJunctionId())) {
+            queue.push(createFinalNode(currNode, costFunc));
         }
 
         std::vector<EntityId> wayEdgesIds = navigationGIS.getWaysByJunction(currNode->getJunctionId());
@@ -89,9 +90,10 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
             }
             std::shared_ptr<Node> neighbor = createNeighbor(currNode, wayId, heuristicFunc, costFunc);
             EntityId neighborJunctionId = neighbor->getJunctionId();
-            if(minNodes.find(neighborJunctionId) == minNodes.end() || neighbor->getPriority() <= minNodes.find(neighborJunctionId)->second) {
+            if (minNodes.find(neighborJunctionId) == minNodes.end() ||
+                neighbor->getPriority() <= minNodes.find(neighborJunctionId)->second) {
                 // add to queue only if the priority is <= from the current min priority of the junction
-                if(!(minNodes.find(neighborJunctionId) == minNodes.end())) {
+                if (!(minNodes.find(neighborJunctionId) == minNodes.end())) {
                     minNodes.erase(neighborJunctionId);
                 }
                 minNodes.insert(std::pair(neighborJunctionId, neighbor->getPriority()));
@@ -207,9 +209,7 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
 }
 
 std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNode,
-                                                    double (*heuristicFunc)(const Coordinates &, const Coordinates &),
-                                                    double (*costFunc)(const Way &)
-) {
+                                                    double (*costFunc)(const Way &)) {
     Direction direction =
             finalWay.getFromJunctionId() == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
     // if direction is A_to_B we want to trim the aerial distance from "to" Junction to destination point, else from "from" Junction

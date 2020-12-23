@@ -113,7 +113,7 @@ RandTestUtils::getBestRoutesDFS(NavigationGIS &navGis, RouteMock &bestTimeRoute,
     } else {
         for (const EntityId &wayId : navGis.getWaysByJunction(current)) {
             bool alreadyInPath = false;
-            for (int i = 0; i < ways.size() && !alreadyInPath; i++) {
+            for (size_t i = 0; i < ways.size() && !alreadyInPath; i++) {
                 if (ways[i].first == wayId) {
                     alreadyInPath = true;
                 }

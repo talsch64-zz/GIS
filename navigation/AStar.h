@@ -194,8 +194,7 @@ private:
      * @param costFunc
      * @return final node :)
      */
-    std::shared_ptr<Node> createFinalNode(std::shared_ptr<Node> currNode, double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
-                                            double (*costFunc)(const Way &));
+    std::shared_ptr<Node> createFinalNode(std::shared_ptr<Node> currNode, double (*costFunc)(const Way &));
 
 
 };
