@@ -16,12 +16,17 @@ void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, co
     }
 }
 
-void compareRoutes(const Route &actualRoute, const Route &expectedRoute) {
+void compareRoutes(const Route &actualRoute, const Route &expectedRoute, bool distance) {
     EXPECT_EQ(actualRoute.isValid(), expectedRoute.isValid());
     if (actualRoute.isValid()) {
         assertRoute(expectedRoute.getWays(), actualRoute);
-        EXPECT_DOUBLE_EQ((double) actualRoute.totalLength(), (double) expectedRoute.totalLength());
-        EXPECT_DOUBLE_EQ((double) actualRoute.estimatedDuration(), (double) expectedRoute.estimatedDuration());
+        if (distance) {
+            EXPECT_DOUBLE_EQ((double) actualRoute.totalLength(), (double) expectedRoute.totalLength());
+            EXPECT_LE(actualRoute.estimatedDuration(), expectedRoute.estimatedDuration());
+        } else {
+            EXPECT_LE(actualRoute.totalLength(), expectedRoute.totalLength());
+            EXPECT_DOUBLE_EQ((double) actualRoute.estimatedDuration(), (double) expectedRoute.estimatedDuration());
+        }
 //        EXPECT_EQ(actualRoute.getWayStartPoint(), expectedRoute.getWayStartPoint());
 //        EXPECT_EQ(actualRoute.getWayEndPoint(), expectedRoute.getWayEndPoint());
     }
@@ -30,8 +35,8 @@ void compareRoutes(const Route &actualRoute, const Route &expectedRoute) {
 void compareRoutes(const Routes &actualRoute, const Routes &expectedRoute) {
     EXPECT_EQ(actualRoute.isValid(), expectedRoute.isValid());
     if (actualRoute.isValid()) {
-        compareRoutes(actualRoute.shortestTime(), expectedRoute.shortestTime());
-        compareRoutes(actualRoute.shortestDistance(), expectedRoute.shortestDistance());
+        compareRoutes(actualRoute.shortestTime(), expectedRoute.shortestTime(), false);
+        compareRoutes(actualRoute.shortestDistance(), expectedRoute.shortestDistance(), true);
     }
 }
 
@@ -155,11 +160,10 @@ TEST(AStar, HighwayWithinThreeMeters) {
  * Beware! Infinite Improbability Drive may cause unexpected results!
  */
 TEST(AStar, HeartOfGold) {
-    srand(56);
     std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
-    IdGenerator idGenerator;
-    int v = 8, e = 14, reps = 50;
+    int v = 8, e = 14, reps = 100;
     for (int i = 0; i < reps; i++) {
+        IdGenerator idGenerator;
         Bound bound = RandTestUtils::randBound();
         auto junctions = RandTestUtils::generateJunctions(*gis, idGenerator, v, bound);
         RandTestUtils::generateWays(*gis, idGenerator, e, bound, junctions);
