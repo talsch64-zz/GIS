@@ -331,11 +331,11 @@ TEST_F(IsraelMapTest, parallelRoutes) {
     const Way &W2054 = gis.getWay(EntityId("W2054"));
     const Way &W2055 = gis.getWay(EntityId("W2055"));
     const Way &W2056 = gis.getWay(EntityId("W2056"));
-    Minutes expectedTime = calculateTime(W2054.getLength(), W2054.getSpeedLimit()) +
-                           calculateTime(W2056.getLength(), W2056.getSpeedLimit());
+    Minutes expectedTime = Utils::calculateTime(W2054.getLength(), W2054.getSpeedLimit()) +
+                           Utils::calculateTime(W2056.getLength(), W2056.getSpeedLimit());
     EXPECT_EQ(expectedTime, routes.shortestDistance().estimatedDuration());
-    Minutes notExpectedTime = calculateTime(W2055.getLength(), W2055.getSpeedLimit()) +
-                              calculateTime(W2056.getLength(), W2056.getSpeedLimit());
+    Minutes notExpectedTime = Utils::calculateTime(W2055.getLength(), W2055.getSpeedLimit()) +
+                              Utils::calculateTime(W2056.getLength(), W2056.getSpeedLimit());
     EXPECT_NE(notExpectedTime, routes.shortestDistance().estimatedDuration());
 }
 

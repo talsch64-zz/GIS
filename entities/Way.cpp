@@ -30,7 +30,7 @@ const EntityId &Way::getToJunctionId() const {
     return to;
 }
 
-const TrafficDirection Way::getDirection() const {
+TrafficDirection Way::getDirection() const {
     return direction;
 }
 
@@ -59,7 +59,7 @@ Meters Way::getLength() const {
 
 bool Way::isRestricted(const Restrictions &restrictions) const {
     for (std::string restriction : restrictions.getRestrictions()) {
-        if(restriction == "highway" && isHighway() || restriction == "toll" && isTollRoad()) {
+        if ((restriction == "highway" && isHighway()) || (restriction == "toll" && isTollRoad())) {
             return true;
         }
     }
@@ -83,7 +83,7 @@ const Coordinates Way::getToJunctionCoordinates() const {
 }
 
 Minutes Way::getTime() const {
-    return Minutes((double) getLength() / kmh_to_mm(speedLimit));
+    return Minutes((double) getLength() / Utils::kmh_to_mm(speedLimit));
 }
 
 

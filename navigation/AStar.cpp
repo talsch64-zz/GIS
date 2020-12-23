@@ -127,7 +127,7 @@ double AStar::distanceHeuristic(const Coordinates &coordinates, const Coordinate
 
 double AStar::timeHeuristic(const Coordinates &coordinates, const Coordinates &destination) {
     // meters per minute
-    return (double) calculateTime(CoordinatesMath::calculateDistance(coordinates, destination), MAX_SPEED);
+    return (double) Utils::calculateTime(CoordinatesMath::calculateDistance(coordinates, destination), MAX_SPEED);
 }
 
 double AStar::costByDistance(const Way &way) {
@@ -191,7 +191,7 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
     Meters initialDistance =
             startWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, origin);
     //  the time from origin point to the initial node
-    Minutes initialTime = calculateTime(initialDistance, startWay.getSpeedLimit());
+    Minutes initialTime = Utils::calculateTime(initialDistance, startWay.getSpeedLimit());
     EntityId initialJunctionId =
             direction == Direction::A_to_B ? startWay.getToJunctionId() : startWay.getFromJunctionId();
 //    TODO find a better solution to update the initial cost
@@ -219,7 +219,7 @@ std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNo
     Meters distanceFromCurrNode =
             finalWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, destination);
     //  the total time to reach destination point
-    Minutes finalTime = calculateTime(distanceFromCurrNode, finalWay.getSpeedLimit()) + currNode->getTimeSoFar();
+    Minutes finalTime = Utils::calculateTime(distanceFromCurrNode, finalWay.getSpeedLimit()) + currNode->getTimeSoFar();
     //  the total distance to reach destination point
     Meters finalDistance = distanceFromCurrNode + currNode->getDistanceSoFar();
     double finalCost = costFunc == costByTime ? (double) finalTime : (double) finalDistance;

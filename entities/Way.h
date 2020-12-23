@@ -36,7 +36,7 @@ public:
 
     const EntityId &getToJunctionId() const;
 
-    const TrafficDirection getDirection() const;
+    TrafficDirection getDirection() const;
 
     const Coordinates getFromJunctionCoordinates() const;
 

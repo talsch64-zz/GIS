@@ -13,9 +13,9 @@
 /// Entity derived class which represents a junction in the GIS application
 /// Junction's Geometry is a Point which holds a single Coordinates
 class Junction: public Entity {
+    std::unique_ptr<Point> geometry;
     /* vector with all the ways that cross the junction */
     std::vector<EntityId> ways;
-    std::unique_ptr<Point> geometry;
 
 public:
     Junction(const EntityId &id, const std::string &name, const std::string &description,

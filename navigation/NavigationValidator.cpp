@@ -103,7 +103,7 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
                                                   : CoordinatesMath::calculateDistance(origin,
                                                                                        startWay.getToJunctionCoordinates());
     length -= redundantLengthFromStart;
-    time -= calculateTime(redundantLengthFromStart, startWay.getSpeedLimit());
+    time -= Utils::calculateTime(redundantLengthFromStart, startWay.getSpeedLimit());
 
 
     Meters redundantLengthFromEnd =
@@ -112,7 +112,7 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
                                                 : CoordinatesMath::calculateDistance(destination,
                                                                                      finalWay.getFromJunctionCoordinates());
     length -= redundantLengthFromEnd;
-    time -= calculateTime(redundantLengthFromEnd, finalWay.getSpeedLimit());
+    time -= Utils::calculateTime(redundantLengthFromEnd, finalWay.getSpeedLimit());
 
     if (routes.totalLength() != length || routes.estimatedDuration() != time) {
         return false;
