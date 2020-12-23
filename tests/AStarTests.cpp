@@ -90,9 +90,9 @@ TEST_F(IsraelMapTest, oppositeRoutesByDistance) {
     EXPECT_EQ(size1, size2);
     auto from_to_ways = routes.shortestDistance().getWays();
     auto to_from_ways = reverseRoutes.shortestDistance().getWays();
-    for (int i = 0; i < (int)size1; i++) {
-        EXPECT_EQ(from_to_ways[i].first, to_from_ways[4 - i].first);
-        EXPECT_NE(from_to_ways[i].second, to_from_ways[4 - i].second);
+    for (int i = 0; i < (int) size1; i++) {
+        EXPECT_EQ(from_to_ways[i].first, to_from_ways[(int)size1 - 1 - i].first);
+        EXPECT_NE(from_to_ways[i].second, to_from_ways[(int)size1 - 1 - i].second);
     }
 }
 
@@ -119,9 +119,9 @@ TEST_F(IsraelMapTest, oppositeRoutesByTime) {
 
     auto from_to_ways = routes.shortestTime().getWays();
     auto to_from_ways = reverseRoutes.shortestTime().getWays();
-    for (int i = 0; i < (int)size1; i++) {
-        EXPECT_EQ(from_to_ways[i].first, to_from_ways[4 - i].first);
-        EXPECT_NE(from_to_ways[i].second, to_from_ways[4 - i].second);
+    for (int i = 0; i < (int) size1; i++) {
+        EXPECT_EQ(from_to_ways[i].first, to_from_ways[(int)size1 - 1 - i].first);
+        EXPECT_NE(from_to_ways[i].second, to_from_ways[(int)size1 - 1 - i].second);
     }
 }
 
@@ -307,8 +307,8 @@ TEST_F(IsraelMapTest, finalBidirectionalWay) {
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
-    EXPECT_EQ(distRouteSize, (size_t)2);
-    EXPECT_EQ(timeRouteSize, (size_t)2);
+    EXPECT_EQ(distRouteSize, (size_t) 2);
+    EXPECT_EQ(timeRouteSize, (size_t) 2);
     auto ways = routes.shortestDistance().getWays();
     EXPECT_EQ(ways.front().first, EntityId("W2049"));
     EXPECT_EQ(ways.back().first, EntityId("W2050"));
@@ -350,7 +350,7 @@ TEST_F(IsraelMapTest, minimalWaysRoute) {
     auto routes = navigation.getRoutes(origin, destination);
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
-    EXPECT_LT(routes.shortestDistance().getWays().size(), (size_t)4);
+    EXPECT_LT(routes.shortestDistance().getWays().size(), (size_t) 4);
 //    printRoutes(routes);
 }
 
