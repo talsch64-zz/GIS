@@ -168,7 +168,7 @@ TEST(AStar, HeartOfGold) {
         auto junctions = RandTestUtils::generateJunctions(*gis, idGenerator, v, bound);
         RandTestUtils::generateWays(*gis, idGenerator, e, bound, junctions);
         std::cout << "rep" << i << std::endl;
-        gis->saveMapFile("HeartOfGoldTest_rep" + std::to_string(i) + ".json");
+//        gis->saveMapFile("HeartOfGoldTest_rep" + std::to_string(i) + ".json");
 
         Coordinates startCoord = RandTestUtils::randCoord(bound);
         Coordinates endCoord = RandTestUtils::randCoord(bound);

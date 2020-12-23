@@ -9,7 +9,6 @@
 #include <set>
 #include "entities/JsonHandlers/parsers/EntityJsonParser.h"
 #include "CoordinatesMath.h"
-#include <limits.h>
 
 GIS::GIS() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
              topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()),
