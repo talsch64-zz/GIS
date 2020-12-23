@@ -77,7 +77,6 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
         popedJunctions.insert(currNode->getJunctionId());
 
         //  reached the final way and initializing the final Node
-        //TODO: are parentheses right??
         if (currNode->getJunctionId() == finalWay.getFromJunctionId() ||
             (finalWay.isBidirectional() && currNode->getJunctionId() == finalWay.getToJunctionId())) {
             queue.push(createFinalNode(currNode, costFunc));
@@ -102,7 +101,6 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
         }
     }
 /*-------------------------------- After search finished --------------------------------*/
-//TODO maybe make EntityId optional field, more elegant
     if (currNode->getJunctionId() != EntityId("")) {
         // no Route was found, return invalid route. Empty entityId means currNode is a final Node represents destination point
         return Route::invalidRoute(origin, destination);
