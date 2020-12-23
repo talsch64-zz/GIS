@@ -118,7 +118,7 @@ protected:
 
 
     /**
-     * Is way valid as a closest way to a coordinate
+     * Is way restricted (aka invalid) as a closest way to a coordinate
      * @param way Way object
      * @param res Restrictions on the way
      * @param distanceFromCoord distance from the searched coordinate
