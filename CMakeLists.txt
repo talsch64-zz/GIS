@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.15)
 project(ex1)
 include_directories(include)
 
-#TODO: uncomment, it's just too annoying during development
 set(CMAKE_CXX_FLAGS "-std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG")
 set(CMAKE_CXX_STANDARD 20)
 
