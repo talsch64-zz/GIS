@@ -16,22 +16,22 @@ void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, co
     }
 }
 
-void compareRoutes(const Route &routeA, const Route &routeB) {
-    EXPECT_EQ(routeA.isValid(), routeB.isValid());
-    if (routeA.isValid()) {
-        assertRoute(routeA.getWays(), routeB);
-        EXPECT_DOUBLE_EQ((double) routeA.totalLength(), (double) routeB.totalLength());
-        EXPECT_DOUBLE_EQ((double) routeA.estimatedDuration(), (double) routeB.estimatedDuration());
-//        EXPECT_EQ(routeA.getWayStartPoint(), routeB.getWayStartPoint());
-//        EXPECT_EQ(routeA.getWayEndPoint(), routeB.getWayEndPoint());
+void compareRoutes(const Route &actualRoute, const Route &expectedRoute) {
+    EXPECT_EQ(actualRoute.isValid(), expectedRoute.isValid());
+    if (actualRoute.isValid()) {
+        assertRoute(expectedRoute.getWays(), actualRoute);
+        EXPECT_DOUBLE_EQ((double) actualRoute.totalLength(), (double) expectedRoute.totalLength());
+        EXPECT_DOUBLE_EQ((double) actualRoute.estimatedDuration(), (double) expectedRoute.estimatedDuration());
+//        EXPECT_EQ(actualRoute.getWayStartPoint(), expectedRoute.getWayStartPoint());
+//        EXPECT_EQ(actualRoute.getWayEndPoint(), expectedRoute.getWayEndPoint());
     }
 }
 
-void compareRoutes(const Routes &routesA, const Routes &routesB) {
-    EXPECT_EQ(routesA.isValid(), routesB.isValid());
-    if (routesA.isValid()) {
-        compareRoutes(routesA.shortestTime(), routesB.shortestTime());
-        compareRoutes(routesA.shortestDistance(), routesB.shortestDistance());
+void compareRoutes(const Routes &actualRoute, const Routes &expectedRoute) {
+    EXPECT_EQ(actualRoute.isValid(), expectedRoute.isValid());
+    if (actualRoute.isValid()) {
+        compareRoutes(actualRoute.shortestTime(), expectedRoute.shortestTime());
+        compareRoutes(actualRoute.shortestDistance(), expectedRoute.shortestDistance());
     }
 }
 
@@ -163,16 +163,18 @@ TEST(AStar, HeartOfGold) {
         Bound bound = RandTestUtils::randBound();
         auto junctions = RandTestUtils::generateJunctions(*gis, idGenerator, v, bound);
         RandTestUtils::generateWays(*gis, idGenerator, e, bound, junctions);
+        gis->saveMapFile("HeartOfGoldTest_rep" + std::to_string(i) + ".json");
+
         Coordinates startCoord = RandTestUtils::randCoord(bound);
         Coordinates endCoord = RandTestUtils::randCoord(bound);
         NavigationGIS navigationGis(*gis);
         Navigation navigation(navigationGis);
-        NavigationValidator navigationValidator(*gis);
 
         Routes routes = navigation.getRoutes(startCoord, endCoord);
         Routes routesExpected = RandTestUtils::getBestRoutes(*gis, idGenerator, startCoord, endCoord);
 
         compareRoutes(routes, routesExpected);
+        std::cout << "rep" << i << std::endl;
         gis->clear();
     }
 }

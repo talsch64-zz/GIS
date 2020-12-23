@@ -21,6 +21,7 @@ std::size_t GIS::clear() {
     int size = entities.size();
     entities.clear();
     grid->clear();
+    ids.clear();
     return size;
 }
 
@@ -45,9 +46,6 @@ std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
             entityIds = loadEntities(document);
         }
     }
-
-    ids.reserve(ids.size() + distance(entityIds.begin(), entityIds.end()));
-    ids.insert(ids.end(), entityIds.begin(), entityIds.end());
 
     return entityIds;
 }
@@ -233,6 +231,7 @@ bool GIS::addEntity(std::unique_ptr<Entity> entity) {
     if (entities.find(entityId) == entities.end()) {
         grid->setEntityOnGrid(*entity);
         entities.emplace(entityId, std::move(entity));
+        ids.push_back(entityId);
     } else {
         success = false;
         logger->error("Entity with id '" + (std::string) entityId + "' already exists");

@@ -116,7 +116,6 @@ protected:
 
     bool addEntity(std::unique_ptr<Entity> entity);
 
-
     /**
      * Is way restricted (aka invalid) as a closest way to a coordinate
      * @param way Way object
