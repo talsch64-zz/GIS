@@ -140,6 +140,9 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
     std::vector<std::pair<EntityId, Direction>> ways;
     const Way &startWay = gis.getWay(startWayPair.second);
     const Way &endWay = gis.getWay(endWayPair.second);
+    if (startWay.getId() == endWay.getId()) {
+        return Routes(Route::invalidRoute(), Route::invalidRoute(), false, "");
+    }
 
     EntityId fakeStartJunctionId = idGenerator.generateId();
     std::unique_ptr<Point> startPoint = std::make_unique<Point>(startWayPair.first);
@@ -191,10 +194,12 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
     gis.addEntity(std::move(fakeEndJunction));
 
     NavigationGIS navGis(gis);
-    std::unique_ptr<RouteMock> bestTimeRoute = std::make_unique<RouteMock>(startWayPair.first, endWayPair.first, Meters(0), Minutes(0),
+    std::unique_ptr<RouteMock> bestTimeRoute = std::make_unique<RouteMock>(startWayPair.first, endWayPair.first,
+                                                                           Meters(0), Minutes(0),
                                                                            std::vector<std::pair<EntityId, Direction>>(),
                                                                            false);
-    std::unique_ptr<RouteMock> bestDistanceRoute = std::make_unique<RouteMock>(startWayPair.first, endWayPair.first, Meters(0),
+    std::unique_ptr<RouteMock> bestDistanceRoute = std::make_unique<RouteMock>(startWayPair.first, endWayPair.first,
+                                                                               Meters(0),
                                                                                Minutes(0),
                                                                                std::vector<std::pair<EntityId, Direction>>(),
                                                                                false);
