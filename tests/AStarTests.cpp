@@ -85,11 +85,11 @@ TEST_F(IsraelMapTest, oppositeRoutesByDistance) {
 
 
     auto size1 = routes.shortestDistance().getWays().size();
-    EXPECT_EQ(size1, 5);
+    EXPECT_EQ(size1, (size_t)5);
     auto reverseRoutes = navigation.getRoutes(to, from);
     EXPECT_TRUE(routes.isValid());
     auto size2 = routes.shortestDistance().getWays().size();
-    EXPECT_EQ(size2, 5);
+    EXPECT_EQ(size2, (size_t)5);
     auto from_to_ways = routes.shortestDistance().getWays();
     auto to_from_ways = reverseRoutes.shortestDistance().getWays();
     for (int i = 0; i < 5; i++) {
@@ -309,8 +309,8 @@ TEST_F(IsraelMapTest, finalBidirectionalWay) {
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
     auto distRouteSize = routes.shortestDistance().getWays().size();
     auto timeRouteSize = routes.shortestTime().getWays().size();
-    EXPECT_EQ(distRouteSize, 2);
-    EXPECT_EQ(timeRouteSize, 2);
+    EXPECT_EQ(distRouteSize, (size_t)2);
+    EXPECT_EQ(timeRouteSize, (size_t)2);
     auto ways = routes.shortestDistance().getWays();
     EXPECT_EQ(ways.front().first, EntityId("W2049"));
     EXPECT_EQ(ways.back().first, EntityId("W2050"));
@@ -352,7 +352,7 @@ TEST_F(IsraelMapTest, minimalWaysRoute) {
     auto routes = navigation.getRoutes(origin, destination);
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
-    EXPECT_LT(routes.shortestDistance().getWays().size(), 4);
+    EXPECT_LT(routes.shortestDistance().getWays().size(), (size_t)4);
 //    printRoutes(routes);
 }
 
