@@ -1,7 +1,3 @@
-//
-// Created by student on 20/12/2020.
-//
-
 #include "NavigationValidator.h"
 #include "Route.h"
 #include "../entities/Way.h"
@@ -29,9 +25,12 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
     EntityId startWayId = startPair.second;
     EntityId finalWayId = endPair.second;
 
+    if (startWayId == finalWayId) { // illegal!
+        return false;
+    }
+
     const Way &startWay = gis.getWay(startWayId);
     const Way &finalWay = gis.getWay(endPair.second);
-
 
     if (origin != routes.getWayStartPoint() || destination != routes.getWayEndPoint()) {
         return false;
@@ -42,12 +41,17 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
         return false;
     }
 
+    if (finalWay.isHighway() &&
+        CoordinatesMath::calculateDistance(end, destination) > gis.getMaxDistanceFromHighway()) {
+        return false;
+    }
+
     if (startWay.isRestricted(restrictions)) {
         return false;
     }
 
     std::vector<std::pair<EntityId, Direction>> ways = routes.getWays();
-    if (ways.size() == 0 || ways.front().first != startWayId || ways.back().first != finalWayId) {
+    if (ways.size() <= 1 || ways.front().first != startWayId || ways.back().first != finalWayId) {
         return false;
     }
 
@@ -75,7 +79,6 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
         EntityId nextWayId = ways[i + 1].first;
         Direction nextWayDirection = ways[i + 1].second;
         const Way &nextWay = gis.getWay(nextWayId);
-
 
         EntityId currJunction =
                 currWayDirection == Direction::A_to_B ? currWay.getToJunctionId() : currWay.getFromJunctionId();
@@ -110,7 +113,6 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
                                                                                      finalWay.getFromJunctionCoordinates());
     length -= redundantLengthFromEnd;
     time -= calculateTime(redundantLengthFromEnd, finalWay.getSpeedLimit());
-
 
     if (routes.totalLength() != length || routes.estimatedDuration() != time) {
         return false;
