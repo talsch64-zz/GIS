@@ -36,6 +36,7 @@ protected:
      * Max distance to be from a highway for it to be a valid start of a route
      */
     const Meters max_distance_from_highway = Meters(3);
+    const int max_closest_way_grid_levels = 300;
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
 public:
     const Meters &getMaxDistanceFromHighway() const;
@@ -112,12 +113,17 @@ protected:
 
     bool addEntity(std::unique_ptr<Entity> entity);
 
+
     /**
-     * @brief validate that the way found is
-     * @param id
+     * Is way valid as a closest way to a coordinate
+     * @param way Way object
+     * @param res Restrictions on the way
+     * @param distanceFromCoord distance from the searched coordinate
      * @return
      */
-    std::pair<Coordinates, EntityId> validateHighwayCondition(const EntityId &id) const;
+    bool isWayRestricted(const Way &way, const Restrictions &res, const Meters &distanceFromCoord) const;
+
+    std::optional<std::pair<Coordinates, EntityId>> getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const;
 };
 
 #endif //EX1_GIS_H

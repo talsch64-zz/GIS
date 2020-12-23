@@ -104,6 +104,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
 
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
     bool wayFound = false;
+    int level = 0;
     std::stack<Grid::GridCell> stack;
     std::unordered_set<Grid::GridCell> cellsVisited;
     std::unordered_set<EntityId> idsSeen;
@@ -114,7 +115,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
     stack.push(grid->truncateCoordinates(coord));
     cellsVisited.insert(grid->truncateCoordinates(coord));
 
-    while (!stack.empty()) {
+    while (!stack.empty() && level < max_closest_way_grid_levels) {
         while (!stack.empty()) {
             Grid::GridCell cell = stack.top();
             stack.pop();
@@ -129,12 +130,9 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                     continue;
                 }
                 auto &way = (const std::unique_ptr<Way> &) entity;
-                if (way->isRestricted(res)) {  // way is restricted
-                    continue;
-                }
                 Coordinates candidate = entity->getGeometry()->getClosestPoint(coord);
                 Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
-                if (!way->isHighway() || (way->isHighway() && distance < max_distance_from_highway)) {
+                if (!isWayRestricted(*way, res, distance)) {
                     wayFound = true;
                     if (distance < shortestDistance) {
                         closest = candidate;
@@ -157,9 +155,25 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
             }
         }
         std::swap(stack, nextStack);
+        level++;
     }
-    return {closest, closestEntityId};
-    //    TODO find different solution for the case where not ways are found!
+
+    std::pair<Coordinates, EntityId> result = std::make_pair(closest, closestEntityId);
+    if (!wayFound) {
+        auto fallback = getWayClosestPointFallback(coord, res);
+        if (fallback.has_value()) {
+            result = fallback.value();
+        }
+    }
+    return result;
+}
+
+bool GIS::isWayRestricted(const Way &way, const Restrictions &res, const Meters &distanceFromCoord) const {
+    bool restricted = way.isRestricted(res);
+    if (!restricted) {
+        restricted = way.isHighway() && distanceFromCoord > max_distance_from_highway;
+    }
+    return restricted;
 }
 
 std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
@@ -250,5 +264,24 @@ std::vector<EntityId> GIS::getWaysByJunction(const EntityId &id) const {
 
 const Meters &GIS::getMaxDistanceFromHighway() const {
     return max_distance_from_highway;
+}
+
+std::optional<std::pair<Coordinates, EntityId>>
+GIS::getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const {
+    std::optional<std::pair<Coordinates, EntityId>> foundWay;
+    Meters shortestDistance(0);
+    for (auto &entityPair : entities) {
+        Entity &entity = *entityPair.second;
+        if (entity.getType() == "Way") {
+            Way &way = (Way &) entity;
+            Coordinates closestPoint = way.getGeometry()->getClosestPoint(coord);
+            Meters distance = CoordinatesMath::calculateDistance(coord, closestPoint);
+            if (!isWayRestricted(way, res, distance) && (!foundWay.has_value() || distance < shortestDistance)) {
+                foundWay = std::make_pair(closestPoint, way.getId());
+                shortestDistance = distance;
+            }
+        }
+    }
+    return foundWay;
 }
 
