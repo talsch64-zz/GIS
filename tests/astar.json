@@ -71,12 +71,62 @@
   },
   {
     "type": "Junction",
-    "id": "junction4",
+    "id": "junction9",
     "name": "junction",
     "description": "desc",
     "coordinates": [
-      22.57676323126267,
-      -30.64052973777345
+      22.27361882127767,
+      -30.49760427805912
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction10",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      23.68538454379997,
+      -30.47987254039789
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction11",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      23.72475473170662,
+      -30.87610938202106
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction12",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      24.21512952724429,
+      -30.53635325820765
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction13",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      23.80642546764672,
+      -30.28492861129933
+    ]
+  },
+  {
+    "type": "Junction",
+    "id": "junction14",
+    "name": "junction",
+    "description": "desc",
+    "coordinates": [
+      24.06028771380747,
+      -30.55367096120651
     ]
   },
   {
@@ -238,6 +288,70 @@
     "direction": "unidirectional",
     "toll_road": false,
     "restricted": [
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "way7",
+    "name": "way",
+    "description": "desc",
+    "from": {
+      "entity_id": "junction10"
+    },
+    "to": {
+      "entity_id": "junction11"
+    },
+    "speed_limit": 120,
+    "direction": "unidirectional",
+    "toll_road": true,
+    "category_tags": [
+      "highway",
+      "interstate"
+    ],
+    "restricted": [
+      "cars"
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "way8",
+    "name": "way",
+    "description": "desc",
+    "from": {
+      "entity_id": "junction11"
+    },
+    "to": {
+      "entity_id": "junction12"
+    },
+    "speed_limit": 50,
+    "direction": "bidirectional",
+    "toll_road": true,
+    "category_tags": [
+      "local road"
+    ],
+    "restricted": [
+    ]
+  },
+  {
+    "type": "Way",
+    "id": "way9",
+    "name": "way",
+    "description": "desc",
+    "from": {
+      "entity_id": "junction14"
+    },
+    "to": {
+      "entity_id": "junction13"
+    },
+    "speed_limit": 50,
+    "direction": "unidirectional",
+    "toll_road": false,
+    "category_tags": [
+      "highway"
+    ],
+    "restricted": [
+      "cars",
+      "motorcycles"
     ]
   }
 ]
