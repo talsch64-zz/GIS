@@ -1,0 +1,11 @@
+To tests the navigation with toll and highway restrictions we built a map named "israel.json" and ran the following search:
+- origin point is Junction "J1026"
+- destination point is Junction "J1020"
+
+There are four ways leaving J1026, three of them are highways and toll roads and only one of them is not.
+The fourth way leads to the slowest route of all possible routes (but with the shortest distance).
+The route that starts with this non-toll and non-highway way must run through 
+run through Way "W2045", and no other route does.
+
+ The expected output of the test is that the shortestTimeRoute would be different
+with and without restrictions of "highway"/"toll" and this is what the test checks.
