@@ -1,10 +1,6 @@
-//
-// Created by Tal on 19/11/2020.
-//
-
 #include "Point.h"
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
-#include "../search/Grid.h"
+#include "../../search/Grid.h"
 
 Point::Point(const Coordinates &coordinates) : Geometry(), coordinates(coordinates) {}
 

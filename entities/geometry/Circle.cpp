@@ -1,7 +1,7 @@
 #include "Circle.h"
 #include "../../CoordinatesMath.h"
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
-#include "../search/Grid.h"
+#include "../../search/Grid.h"
 #include "../../search/TopologicalSearch.h"
 
 
