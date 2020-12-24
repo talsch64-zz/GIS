@@ -4,7 +4,7 @@
 #include "../GISProvider.h"
 #include "../CoordinatesMath.h"
 #include "../navigation/Navigation.h"
-#include "../navigation/NavigationValidator.h"
+#include "NavigationValidator.h"
 #include "../entities/Way.h"
 #include "../Utils.h"
 

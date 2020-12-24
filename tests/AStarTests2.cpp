@@ -4,7 +4,7 @@
 #include "../NavigationGIS.h"
 #include "../navigation/Navigation.h"
 #include "RandTestUtils.h"
-#include "../navigation/NavigationValidator.h"
+#include "NavigationValidator.h"
 
 void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, const Route &actual) {
     auto routeIterator = actual.getWays().begin();

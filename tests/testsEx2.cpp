@@ -15,7 +15,7 @@
 #include "../navigation/Navigation.h"
 #include "../navigation/Routes.h"
 #include "../navigation/Route.h"
-#include "../navigation/NavigationValidator.h"
+#include "NavigationValidator.h"
 
 /**
  * @brief Returns input file entites in order defined
