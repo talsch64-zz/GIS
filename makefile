@@ -3,7 +3,7 @@ COMP = g++-10
 GOOGLE_LIB = /usr/src/googletest/googletest/gcc-10-build/lib/
 GOOGLE_TEST_INCLUDE = /usr/src/googletest/googletest/include/
 
-SRCS := $(wildcard ./GIS.cpp ./Logger.cpp ./main.cpp ./Restrictions.cpp ./Utils.cpp ./entities/*.cpp ./entities/geometry/*.cpp ./entities/JsonHandlers/Serializers/*.cpp ./entities/JsonHandlers/parsers/*.cpp ./search/*.cpp ./bonus.error_handling/*.cpp ./bonus.avoid_toll/*.cpp ./tests/*.cpp ./navigation/*.cpp)
+SRCS := $(wildcard ./GIS.cpp ./Logger.cpp ./main.cpp ./Restrictions.cpp ./Utils.cpp ./entities/*.cpp ./entities/geometry/*.cpp ./entities/JsonHandlers/Serializers/*.cpp ./entities/JsonHandlers/parsers/*.cpp ./search/*.cpp ./bonus.avoid_tolls/*.cpp ./tests/*.cpp ./navigation/*.cpp)
 DEPS := $(OBJS:.o=.d)
 BUILD_DIR := build
 
