@@ -3,7 +3,7 @@
 #include "Route.h"
 #include "../GIS/entities/Way.h"
 #include "../Common/NavigationGIS.h"
-#include "../Utils.h"
+#include "../UserCommon/Utils.h"
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,

@@ -2,7 +2,7 @@
 #include "../Navigation/Route.h"
 #include "../GIS/entities/Way.h"
 #include "../Common/CoordinatesMath.h"
-#include "../Utils.h"
+#include "../UserCommon/Utils.h"
 
 NavigationValidator::NavigationValidator(const AbstractGIS &gis) : gis(gis) {
 }

@@ -6,7 +6,7 @@
 #include "../Navigation/Navigation_315524694.h"
 #include "NavigationValidator.h"
 #include "../GIS/entities/Way.h"
-#include "../Utils.h"
+#include "../UserCommon/Utils.h"
 
 class IsraelMapTest : public ::testing::Test {
 protected:

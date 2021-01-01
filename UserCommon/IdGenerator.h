@@ -3,7 +3,7 @@
 #define EX1_IDGENERATOR_H
 
 #include <string>
-#include "Common/GISNamedTypes.h"
+#include "../Common/GISNamedTypes.h"
 
 
 /// IdGenerator generates ids for entities without ids

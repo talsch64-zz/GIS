@@ -9,7 +9,7 @@
 #include "../GIS/entities/geometry/Point.h"
 #include "../GIS/entities/geometry/Circle.h"
 #include "../GIS/entities/geometry/PointList.h"
-#include "../IdGenerator.h"
+#include "../UserCommon/IdGenerator.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include<time.h>

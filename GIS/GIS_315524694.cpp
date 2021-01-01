@@ -9,7 +9,7 @@
 #include <set>
 #include "entities/JsonHandlers/parsers/EntityJsonParser.h"
 #include "../Common/CoordinatesMath.h"
-#include "../Utils.h"
+#include "../UserCommon/Utils.h"
 #include <climits>
 
 GIS_315524694::GIS_315524694() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),

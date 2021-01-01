@@ -12,9 +12,9 @@
 #include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
 #include "search/Grid.h"
 #include "search/TopologicalSearch.h"
-#include "../IdGenerator.h"
+#include "../UserCommon/IdGenerator.h"
 #include "../Common/GISNamedTypes.h"
-#include "../Logger.h"
+#include "../UserCommon/Logger.h"
 #include "../Common/Restrictions.h"
 #include "../Common/AbstractGIS.h"
 

@@ -2,9 +2,9 @@
 #define GIS_CPP_UTILS_H
 
 #include <vector>
-#include "Common/GISNamedTypes.h"
-#include "Common/AbstractWay.h"
-#include "Common/Restrictions.h"
+#include "../Common/GISNamedTypes.h"
+#include "../Common/AbstractWay.h"
+#include "../Common/Restrictions.h"
 
 class Utils {
 public:
