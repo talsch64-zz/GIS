@@ -10,7 +10,11 @@
 #include "entities/JsonHandlers/parsers/EntityJsonParser.h"
 #include "../Common/CoordinatesMath.h"
 #include "../UserCommon/Utils.h"
+#include "../Common/GISRegistration.h"
 #include <climits>
+
+//TODO: uncomment
+//REGISTER_GIS(GIS_315524694) // Registering the GIS
 
 GIS_315524694::GIS_315524694() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
              topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()),
