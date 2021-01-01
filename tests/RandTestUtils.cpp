@@ -98,15 +98,17 @@ RandTestUtils::getBestRoutesDFS(NavigationGIS &navGis, RouteMock *bestTimeRoute,
                                 const EntityId &end, const EntityId &current, Meters currentLength,
                                 Minutes currentTime) {
     if (current == end) {
-        if (!bestTimeRoute || currentTime < bestTimeRoute->estimatedDuration()) {
+        if (!bestTimeRoute->isValid() || currentTime < bestTimeRoute->estimatedDuration()) {
             bestTimeRoute->setDuration(currentTime);
             bestTimeRoute->setLength(currentLength);
             bestTimeRoute->setWays(ways);
+            bestTimeRoute->setValid(true);
         }
-        if (!bestDistanceRoute || currentLength < bestDistanceRoute->totalLength()) {
+        if (!bestDistanceRoute->isValid() || currentLength < bestDistanceRoute->totalLength()) {
             bestDistanceRoute->setDuration(currentTime);
             bestDistanceRoute->setLength(currentLength);
             bestDistanceRoute->setWays(ways);
+            bestDistanceRoute->setValid(true);
         }
     } else {
         for (const EntityId &wayId : navGis.getWaysByJunction(current)) {
@@ -133,15 +135,15 @@ RandTestUtils::getBestRoutesDFS(NavigationGIS &navGis, RouteMock *bestTimeRoute,
     }
 }
 
-Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
-                                    const Coordinates &start, const Coordinates &end) {
+std::unique_ptr<Routes> RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
+                                                     const Coordinates &start, const Coordinates &end) {
     auto startWayTuple = gis.getWayClosestPoint(start);
     auto endWayTuple = gis.getWayClosestPoint(end);
     std::vector<std::pair<EntityId, Direction>> ways;
     const AbstractWay &startWay = gis.getWay(std::get<1>(startWayTuple));
     const AbstractWay &endWay = gis.getWay(std::get<1>(endWayTuple));
     if (startWay.getId() == endWay.getId()) {
-        return Routes(nullptr, nullptr, false, "");
+        return std::make_unique<Routes>(nullptr, nullptr, false, "");
     }
 
     EntityId fakeStartJunctionId = idGenerator.generateId();
@@ -197,11 +199,13 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
     gis.addEntity(std::move(fakeEndJunction));
 
     NavigationGIS navGis(gis);
-    std::unique_ptr<RouteMock> bestTimeRoute = std::make_unique<RouteMock>(std::get<0>(startWayTuple), std::get<0>(endWayTuple),
+    std::unique_ptr<RouteMock> bestTimeRoute = std::make_unique<RouteMock>(std::get<0>(startWayTuple),
+                                                                           std::get<0>(endWayTuple),
                                                                            Meters(0), Minutes(0),
                                                                            std::vector<std::pair<EntityId, Direction>>(),
                                                                            false);
-    std::unique_ptr<RouteMock> bestDistanceRoute = std::make_unique<RouteMock>(std::get<0>(startWayTuple), std::get<0>(endWayTuple),
+    std::unique_ptr<RouteMock> bestDistanceRoute = std::make_unique<RouteMock>(std::get<0>(startWayTuple),
+                                                                               std::get<0>(endWayTuple),
                                                                                Meters(0),
                                                                                Minutes(0),
                                                                                std::vector<std::pair<EntityId, Direction>>(),
@@ -229,6 +233,7 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
         bestDistanceRoute->setWays(distanceWays);
     }
 
-    Routes routes(std::move(bestDistanceRoute), std::move(bestTimeRoute), bestDistanceRoute->isValid(), "");
+    auto routes = std::make_unique<Routes>(std::move(bestDistanceRoute), std::move(bestTimeRoute),
+                                           bestDistanceRoute->isValid(), "");
     return routes;
 }

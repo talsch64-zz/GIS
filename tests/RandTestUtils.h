@@ -47,7 +47,7 @@ public:
      * @param end
      * @return
      */
-    static Routes
+    static std::unique_ptr<Routes>
     getBestRoutes(GISMock &gis, IdGenerator &idGenerator, const Coordinates &start, const Coordinates &end);
 
     static void getBestRoutesDFS(NavigationGIS &navGis, RouteMock *bestTimeRoute, RouteMock *bestDistanceRoute,

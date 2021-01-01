@@ -29,7 +29,7 @@ void compareRoutes(const AbstractRoute &actualRoute, const AbstractRoute &expect
     EXPECT_EQ(actualRoute.getWayEndPoint(), expectedRoute.getWayEndPoint());
 }
 
-void compareRoutes(const Routes &actualRoute, const Routes &expectedRoute) {
+void compareRoutes(const AbstractRoutes &actualRoute, const AbstractRoutes &expectedRoute) {
     EXPECT_EQ(actualRoute.isValid(), expectedRoute.isValid());
     if (actualRoute.isValid()) {
         compareRoutes(actualRoute.shortestTime(), expectedRoute.shortestTime(), false);
@@ -81,9 +81,9 @@ TEST(AStar, WrongPathsAppearCloserToTarget) {
     Coordinates endCoord(Longitude(32.81894402639684),
                          Latitude(39.92570973912446));
 
-    Routes routes = navigation.getRoutes(startCoord, endCoord);
-    const Route &shortestDistance = routes.shortestDistance();
-    const Route &shortestTime = routes.shortestTime();
+    auto routes = navigation.getRoutes(startCoord, endCoord);
+    const AbstractRoute &shortestDistance = routes->shortestDistance();
+    const AbstractRoute &shortestTime = routes->shortestTime();
     assertRoute(expectedDistanceRoute, shortestDistance);
     assertRoute(expectedDistanceRoute, shortestTime);
     EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestDistance));
@@ -100,8 +100,8 @@ TEST(AStar, InvalidRouteLastWayHighway) {
     Coordinates endCoord(Longitude(20.88795928805733),
                          Latitude(43.99705953606207));
 
-    Routes routes = navigation.getRoutes(startCoord, endCoord);
-    EXPECT_FALSE(routes.isValid());
+    auto routes = navigation.getRoutes(startCoord, endCoord);
+    EXPECT_FALSE(routes->isValid());
 }
 
 TEST(AStar, HighwayTooFar) {
@@ -119,9 +119,9 @@ TEST(AStar, HighwayTooFar) {
     Coordinates endCoord(Longitude(20.88795928805733),
                          Latitude(43.99705953606207));
 
-    Routes routes = navigation.getRoutes(startCoord, endCoord);
-    const Route &shortestDistance = routes.shortestDistance();
-    const Route &shortestTime = routes.shortestTime();
+    auto routes = navigation.getRoutes(startCoord, endCoord);
+    const AbstractRoute &shortestDistance = routes->shortestDistance();
+    const AbstractRoute &shortestTime = routes->shortestTime();
     assertRoute(expectedDistanceRoute, shortestDistance);
     assertRoute(expectedDistanceRoute, shortestTime);
     EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestDistance));
@@ -143,10 +143,10 @@ TEST(AStar, HighwayWithinThreeMeters) {
     Coordinates endCoord(Longitude(20.88795928805733),
                          Latitude(43.99705953606207));
 
-    Routes routes = navigation.getRoutes(startCoord, endCoord);
+    auto routes = navigation.getRoutes(startCoord, endCoord);
 
-    const Route &shortestDistance = routes.shortestDistance();
-    const Route &shortestTime = routes.shortestTime();
+    const AbstractRoute &shortestDistance = routes->shortestDistance();
+    const AbstractRoute &shortestTime = routes->shortestTime();
     assertRoute(expectedDistanceRoute, shortestDistance);
     assertRoute(expectedDistanceRoute, shortestTime);
     EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestDistance));
@@ -172,10 +172,10 @@ TEST(AStar, HeartOfGold) {
         NavigationGIS navigationGis(*gis);
         Navigation navigation(navigationGis);
 
-        Routes routes = navigation.getRoutes(startCoord, endCoord);
-        Routes routesExpected = RandTestUtils::getBestRoutes(*gis, idGenerator, startCoord, endCoord);
+        auto routes = navigation.getRoutes(startCoord, endCoord);
+        auto routesExpected = RandTestUtils::getBestRoutes(*gis, idGenerator, startCoord, endCoord);
 
-        compareRoutes(routes, routesExpected);
+        compareRoutes(*routes, *routesExpected);
         gis->clear();
     }
 }

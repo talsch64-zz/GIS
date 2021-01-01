@@ -415,11 +415,11 @@ TEST(GISEx2, NavigationTest) {
 
     Coordinates start{ex2_map1_P1}; // Note: this point is not on a way (could be on way in other cases)
     Coordinates end{ex2_map1_P2}; // Note: this point is not on a way (could be on way in other cases)
-    Routes routes = navigation.getRoutes(start, end);
-    EXPECT_TRUE(routes.isValid());
+    auto routes = navigation.getRoutes(start, end);
+    EXPECT_TRUE(routes->isValid());
 
-    const Route &shortest_distance_route = routes.shortestDistance();
-    const Route &shortest_time_route = routes.shortestTime();
+    const AbstractRoute &shortest_distance_route = routes->shortestDistance();
+    const AbstractRoute &shortest_time_route = routes->shortestTime();
 
     EXPECT_EQ(shortest_distance_route.getWays(), ex2_map1_best_route_ways);
     EXPECT_EQ(shortest_time_route.getWays(), ex2_map1_best_route_ways);
