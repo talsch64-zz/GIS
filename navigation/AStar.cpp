@@ -2,23 +2,25 @@
 #include "AStar.h"
 #include "Route.h"
 #include "../entities/Way.h"
-#include "../NavigationGIS.h"
+#include "../Common/NavigationGIS.h"
 #include "../Utils.h"
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-             const Way &startWay, const Way &finalWay) : navigationGIS(navigationGis), origin(origin),
-                                                         destination(destination), startWay(startWay),
-                                                         finalWay(finalWay), restrictions(Restrictions()) {}
+             const AbstractWay &startWay, const AbstractWay &finalWay) : navigationGIS(navigationGis), origin(origin),
+                                                                         destination(destination), startWay(startWay),
+                                                                         finalWay(finalWay),
+                                                                         restrictions(Restrictions("")) {}
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-             const Way &startWay, const Way &finalWay, const Restrictions &restrictions) : navigationGIS(navigationGis),
-                                                                                           origin(origin),
-                                                                                           destination(destination),
-                                                                                           startWay(startWay),
-                                                                                           finalWay(finalWay),
-                                                                                           restrictions(restrictions) {}
+             const AbstractWay &startWay, const AbstractWay &finalWay, const Restrictions &restrictions)
+        : navigationGIS(navigationGis),
+          origin(origin),
+          destination(destination),
+          startWay(startWay),
+          finalWay(finalWay),
+          restrictions(restrictions) {}
 
 Route
 AStar::shortestByDistance() {
@@ -32,7 +34,7 @@ AStar::shortestByTime() {
 
 Route
 AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
-                           double (*costFunc)(const Way &),
+                           double (*costFunc)(const AbstractWay &),
                            bool (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
 
 /*-------------------------------- initialize initial Nodes --------------------------------*/
@@ -77,14 +79,15 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
         popedJunctions.insert(currNode->getJunctionId());
 
         //  reached the final way and initializing the final Node
-        if (currNode->getJunctionId() == finalWay.getFromJunctionId() ||
-            (finalWay.isBidirectional() && currNode->getJunctionId() == finalWay.getToJunctionId())) {
+        auto idPair = finalWay.getJunctions();
+        if (currNode->getJunctionId() == idPair.first ||
+            (finalWay.isBidirectional() && currNode->getJunctionId() == idPair.second)) {
             queue.push(createFinalNode(currNode, costFunc));
         }
 
         std::vector<EntityId> wayEdgesIds = navigationGIS.getWaysByJunction(currNode->getJunctionId());
         for (auto wayId: wayEdgesIds) {  // visit all the neighbors and add them to the queue
-            if (navigationGIS.getWay(wayId).isRestricted(restrictions)) {
+            if (Utils::isWayRestricted(navigationGIS.getWay(wayId), restrictions)) {
                 continue;
             }
             std::shared_ptr<Node> neighbor = createNeighbor(currNode, wayId, heuristicFunc, costFunc);
@@ -130,12 +133,12 @@ double AStar::timeHeuristic(const Coordinates &coordinates, const Coordinates &d
     return (double) Utils::calculateTime(CoordinatesMath::calculateDistance(coordinates, destination), MAX_SPEED);
 }
 
-double AStar::costByDistance(const Way &way) {
+double AStar::costByDistance(const AbstractWay &way) {
     return (double) way.getLength();
 }
 
-double AStar::costByTime(const Way &way) {
-    return (double) way.getTime();
+double AStar::costByTime(const AbstractWay &way) {
+    return (double) Utils::getWayDuration(way.getLength(), way.getSpeedLimit());
 }
 
 bool AStar::compareByDistance(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2) {
@@ -160,15 +163,17 @@ bool AStar::compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> nod
 
 std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNode, EntityId wayId,
                                                    double (*heuristicFunc)(const Coordinates &, const Coordinates &),
-                                                   double (*costFunc)(const Way &)) {
-    const Way &way = navigationGIS.getWay(wayId);
+                                                   double (*costFunc)(const AbstractWay &)) {
+    const AbstractWay &way = navigationGIS.getWay(wayId);
+    auto idPair = way.getJunctions();
+    auto fromId = idPair.first, toId = idPair.second;
     Direction direction =
-            way.getFromJunctionId() == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
-    EntityId neighborId = direction == Direction::A_to_B ? way.getToJunctionId() : way.getFromJunctionId();
+            fromId == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
+    EntityId neighborId = direction == Direction::A_to_B ? toId : fromId;
     Coordinates neighborCoordinates = direction == Direction::A_to_B ? way.getToJunctionCoordinates()
                                                                      : way.getFromJunctionCoordinates();
     Meters distanceSoFar = currNode->getDistanceSoFar() + way.getLength();
-    Minutes timeSoFar = currNode->getTimeSoFar() + way.getTime();
+    Minutes timeSoFar = currNode->getTimeSoFar() + Utils::getWayDuration(way.getLength(), way.getSpeedLimit());
     double costSoFar = currNode->getCostSoFar() + costFunc(way);
     double priority = costSoFar + heuristicFunc(neighborCoordinates, destination);
 
@@ -180,7 +185,7 @@ std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNod
 }
 
 std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(const Coordinates &, const Coordinates &),
-                                                      double (*costFunc)(const Way &), Direction direction) {
+                                                      double (*costFunc)(const AbstractWay &), Direction direction) {
     //  If direction is A_To_B then the Node start at "to" junction, else from "from" junction.
     //  We implemented the algorithm such that the initial Node already has a "kilometrage" of the startWay
     Coordinates initialCoordinates = direction == Direction::A_to_B ? startWay.getToJunctionCoordinates()
@@ -192,8 +197,11 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
             startWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, origin);
     //  the time from origin point to the initial node
     Minutes initialTime = Utils::calculateTime(initialDistance, startWay.getSpeedLimit());
+    auto idPair = startWay.getJunctions();
+    auto fromId = idPair.first;
+    auto toId = idPair.second;
     EntityId initialJunctionId =
-            direction == Direction::A_to_B ? startWay.getToJunctionId() : startWay.getFromJunctionId();
+            direction == Direction::A_to_B ? toId : fromId;
 //    TODO find a better solution to update the initial cost
     double initialCost = costFunc == costByTime ? double(initialTime) : double(initialDistance);
     double initialPriority = heuristicFunc(initialCoordinates, destination) + initialCost;
@@ -207,9 +215,12 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
 }
 
 std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNode,
-                                                    double (*costFunc)(const Way &)) {
+                                                    double (*costFunc)(const AbstractWay &)) {
+    auto idPair = finalWay.getJunctions();
+    auto fromId = idPair.first;
+    auto tiId = idPair.second;
     Direction direction =
-            finalWay.getFromJunctionId() == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
+            fromId == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
     // if direction is A_to_B we want to trim the aerial distance from "to" Junction to destination point, else from "from" Junction
     Coordinates oppositeCoordinates = direction == Direction::A_to_B ? finalWay.getToJunctionCoordinates()
                                                                      : finalWay.getFromJunctionCoordinates();

@@ -1,7 +1,7 @@
 #include <memory>
 #include "EntityJsonParser.h"
 #include "../../Way.h"
-#include "../../../GIS.h"
+#include "../../../GIS/GIS.h"
 #include "../../geometry/PointList.h"
 
 std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc, GIS &gis) {

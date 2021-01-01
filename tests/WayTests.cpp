@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../GISNamedTypes.h"
-#include "../GIS.h"
+#include "../Common/GISNamedTypes.h"
+#include "../GIS/GIS.h"
 
 TEST(GISWays, getWayByJunctionUnidirectional) {
     GIS gis;

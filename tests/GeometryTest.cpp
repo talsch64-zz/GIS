@@ -1,11 +1,11 @@
 #include "gtest/gtest.h"
-#include "../GISNamedTypes.h"
-#include "../CoordinatesMath.h"
+#include "../Common/GISNamedTypes.h"
+#include "../Common/CoordinatesMath.h"
 #include "../entities/geometry/Circle.h"
 #include "../entities/Way.h"
 #include "../entities/geometry/PointList.h"
-#include "../GIS.h"
-#include "../NavigationGIS.h"
+#include "../GIS/GIS.h"
+#include "../Common/NavigationGIS.h"
 #include <numbers>
 
 #define METERS_PRECISION Meters(1)

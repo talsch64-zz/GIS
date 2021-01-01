@@ -1,14 +1,14 @@
 #include "NavigationValidator.h"
 #include "../navigation/Route.h"
 #include "../entities/Way.h"
-#include "../CoordinatesMath.h"
+#include "../Common/CoordinatesMath.h"
 #include "../Utils.h"
 
 NavigationValidator::NavigationValidator(const GIS &gis): gis(gis) {
 }
 
 bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Route &routes) const {
-    return validateRoute(start, end, Restrictions(), routes);
+    return validateRoute(start, end, Restrictions(""), routes);
 }
 
 bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
@@ -46,7 +46,7 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
         return false;
     }
 
-    if (startWay.isRestricted(restrictions)) {
+    if (Utils::isWayRestricted(startWay, restrictions) {
         return false;
     }
 
@@ -66,7 +66,7 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
             initialDirection == Direction::A_to_B ? startWay.getToJunctionId() : startWay.getFromJunctionId();
 
     Meters length = startWay.getLength();
-    Minutes time = startWay.getTime();
+    Minutes time = Utils::getWayDuration(startWay.getLength(), startWay.getSpeedLimit());
 
 
     EntityId currJunctionValidator("");
@@ -94,7 +94,7 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
             return false; // next way is restricted
         }
         length += nextWay.getLength();
-        time += nextWay.getTime();
+        time += Utils::getWayDuration(nextWay.getLength(), nextWay.getSpeedLimit());
     }
 
     Meters redundantLengthFromStart =

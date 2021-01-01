@@ -7,11 +7,11 @@
 
 // Ex1
 #include "../GISProvider.h"
-#include "../CoordinatesMath.h"
+#include "../Common/CoordinatesMath.h"
 
 // Ex2
-#include "../NavigationGIS.h"
-#include "../GISNamedTypes.h"
+#include "../Common/NavigationGIS.h"
+#include "../Common/GISNamedTypes.h"
 #include "../navigation/Navigation.h"
 #include "../navigation/Routes.h"
 #include "../navigation/Route.h"

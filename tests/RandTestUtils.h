@@ -1,7 +1,7 @@
 #ifndef GIS_CPP_RANDTESTUTILS_H
 #define GIS_CPP_RANDTESTUTILS_H
 
-#include "../GIS.h"
+#include "../GIS/GIS.h"
 #include "Bound.h"
 #include "../entities/Entity.h"
 #include "../entities/Junction.h"
@@ -10,7 +10,7 @@
 #include "GISMock.h"
 #include "../navigation/Routes.h"
 #include "RouteMock.h"
-#include "../NavigationGIS.h"
+#include "../Common/NavigationGIS.h"
 
 class RandTestUtils {
 public:

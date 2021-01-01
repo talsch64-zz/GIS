@@ -1,6 +1,6 @@
 #include "RandTestUtils.h"
 #include "WayMock.h"
-#include "../CoordinatesMath.h"
+#include "../Common/CoordinatesMath.h"
 
 int RandTestUtils::randInt(int min, int max) {
     double f = (double) rand() / RAND_MAX;

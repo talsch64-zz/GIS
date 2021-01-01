@@ -5,7 +5,7 @@
 #ifndef EX1_POINT_H
 #define EX1_POINT_H
 #include "Geometry.h"
-#include "../../GISNamedTypes.h"
+#include "../../Common/GISNamedTypes.h"
 
 
 class Point: public Geometry {

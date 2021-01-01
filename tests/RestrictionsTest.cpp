@@ -1,6 +1,6 @@
 
 #include <gtest/gtest.h>
-#include "../Restrictions.h"
+#include "../Common/Restrictions.h"
 
 
 TEST(RestrictionsTest, basicRestrictions) {

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../GIS.h"
+#include "../GIS/GIS.h"
 
 TEST(LoadSaveMap, LoadSaveLoadTest) {
     GIS gis, gis2;

@@ -21,3 +21,17 @@ std::vector<std::string> Utils::split(const char *array, const char *delimiters)
     }
     return vector;
 }
+
+bool Utils::isWayRestricted(const AbstractWay &way, const Restrictions &restrictions) {
+    for (std::string restriction : restrictions.getRestrictions()) {
+        if ((restriction == "highway" && way.isHighway()) || (restriction == "toll" && way.isToll())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+Minutes Utils::getWayDuration(Meters length, int speed) {
+    return Minutes((double) length / kmh_to_mm(speed));
+}
+

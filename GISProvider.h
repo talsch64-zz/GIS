@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GIS.h"
+#include "GIS/GIS.h"
 
 /// GISProvider provides a GIS instance.
 class GISProvider {

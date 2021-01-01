@@ -7,10 +7,10 @@
 #include <unordered_map>
 #include <functional>
 #include <memory>
-#include "../GISNamedTypes.h"
+#include "../Common/GISNamedTypes.h"
 #include "../entities/Way.h"
-#include "../NavigationGIS.h"
-#include "../CoordinatesMath.h"
+#include "../Common/NavigationGIS.h"
+#include "../Common/CoordinatesMath.h"
 #include "Route.h"
 
 #define MAX_SPEED 130.0
@@ -30,8 +30,8 @@ class AStar {
     const NavigationGIS &navigationGIS;
     const Coordinates origin;
     const Coordinates destination;
-    const Way &startWay;
-    const Way &finalWay;
+    const AbstractWay &startWay;
+    const AbstractWay &finalWay;
     Restrictions restrictions;
 
 public:
@@ -44,7 +44,7 @@ public:
      * @param finalWay the way which the destination point is located on.
      */
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-          const Way &startWay, const Way &finalWay);
+          const AbstractWay &startWay, const AbstractWay &finalWay);
 
 
     /**
@@ -57,7 +57,7 @@ public:
      * @param restrictions
      */
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-          const Way &startWay, const Way &finalWay, const Restrictions &restrictions);
+          const AbstractWay &startWay, const AbstractWay &finalWay, const Restrictions &restrictions);
 
     Route shortestByDistance();
 
@@ -127,14 +127,14 @@ private:
      * @param way
      * @return the length of the way
      */
-    static double costByDistance(const Way &way);
+    static double costByDistance(const AbstractWay &way);
 
     /**
      * @brief calculates the cost of the way by time in minutes
      * @param way
      * @return the time to cross the way in minutes
      */
-    static double costByTime(const Way &way);
+    static double costByTime(const AbstractWay &way);
 
     /**
      * @brief comparator function for storing Nodes in the priority_queue of A* algorithm.
@@ -155,7 +155,7 @@ private:
     static bool compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2);
 
     Route searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, const Coordinates &target),
-                              double (*costFunc)(const Way &way),
+                              double (*costFunc)(const AbstractWay &way),
                               bool (*comparator)(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2));
 
     /**
@@ -175,7 +175,7 @@ private:
      */
     std::shared_ptr<Node> createNeighbor(std::shared_ptr<Node> currNode, EntityId wayId,
                                          double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
-                                         double (*costFunc)(const Way &));
+                                         double (*costFunc)(const AbstractWay &));
 
     /**
      * @brief initializes the first Node according to the given direction.
@@ -185,7 +185,7 @@ private:
      * @return initialNode
      */
     std::shared_ptr<Node> createInitialNode(double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
-                                            double (*costFunc)(const Way &), Direction direction);
+                                            double (*costFunc)(const AbstractWay &), Direction direction);
 
     /**
      * @brief initializes the final Node! represent the destination point and not a junction!
@@ -194,7 +194,7 @@ private:
      * @param costFunc
      * @return final node :)
      */
-    std::shared_ptr<Node> createFinalNode(std::shared_ptr<Node> currNode, double (*costFunc)(const Way &));
+    std::shared_ptr<Node> createFinalNode(std::shared_ptr<Node> currNode, double (*costFunc)(const AbstractWay &));
 
 
 };

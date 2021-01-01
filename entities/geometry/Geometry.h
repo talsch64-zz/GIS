@@ -6,7 +6,7 @@
 #include <vector>
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
-#include "../../GISNamedTypes.h"
+#include "../../Common/GISNamedTypes.h"
 #include <memory>
 
 class TopologicalSearch;

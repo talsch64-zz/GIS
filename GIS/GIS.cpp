@@ -7,8 +7,9 @@
 #include <iostream>
 #include <stack>
 #include <set>
-#include "entities/JsonHandlers/parsers/EntityJsonParser.h"
-#include "CoordinatesMath.h"
+#include "../entities/JsonHandlers/parsers/EntityJsonParser.h"
+#include "../Common/CoordinatesMath.h"
+#include "../Utils.h"
 #include <climits>
 
 GIS::GIS() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
@@ -97,7 +98,7 @@ std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &entityId, 
 }
 
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord) const {
-    return getWayClosestPoint(coord, Restrictions());
+    return getWayClosestPoint(coord, Restrictions(""));
 }
 
 std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
@@ -167,7 +168,7 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
 }
 
 bool GIS::isWayRestricted(const Way &way, const Restrictions &res, const Meters &distanceFromCoord) const {
-    bool restricted = way.isRestricted(res);
+    bool restricted = Utils::isWayRestricted(way, res);
     if (!restricted) {
         restricted = way.isHighway() && distanceFromCoord > max_distance_from_highway;
     }
@@ -273,7 +274,7 @@ GIS::getWayClosestPointFallback(const Coordinates &coord, const Restrictions &re
     for (auto &entityPair : entities) {
         Entity &entity = *entityPair.second;
         if (entity.getType() == "Way") {
-            Way &way = (Way &) entity;
+            AbstractWay &way = (AbstractWay &) entity;
             Coordinates closestPoint = way.getGeometry()->getClosestPoint(coord);
             Meters distance = CoordinatesMath::calculateDistance(coord, closestPoint);
             if (!isWayRestricted(way, res, distance) && (!foundWay.has_value() || distance < shortestDistance)) {

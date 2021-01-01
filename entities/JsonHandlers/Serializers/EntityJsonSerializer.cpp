@@ -46,7 +46,7 @@ EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &al
     json.AddMember("speed_limit", speedLimit, allocator);
 
     rapidjson::Value tollRoad;
-    tollRoad.SetBool(entity->isTollRoad());
+    tollRoad.SetBool(entity->isToll());
     json.AddMember("toll_road", tollRoad, allocator);
 
 

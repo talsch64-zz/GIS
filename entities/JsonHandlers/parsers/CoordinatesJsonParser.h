@@ -4,7 +4,7 @@
 
 #include <rapidjson/fwd.h>
 #include <vector>
-#include "../../../GISNamedTypes.h"
+#include "../../../Common/GISNamedTypes.h"
 #include <rapidjson/document.h>
 
 /// CoordinatesJsonParser handles coordinates parsing from JSON files

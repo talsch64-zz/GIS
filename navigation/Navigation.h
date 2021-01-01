@@ -2,8 +2,8 @@
 #pragma once
 
 #include "Routes.h"
-#include "../Restrictions.h"
-#include "../NavigationGIS.h"
+#include "../Common/Restrictions.h"
+#include "../Common/NavigationGIS.h"
 
 /**
  * @brief Navigation class.

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
 #include "NamedType.h"
 #include "Double.h"
+#include <string>
 
 constexpr std::size_t coordinate_precision = 6;
 template<typename Type>

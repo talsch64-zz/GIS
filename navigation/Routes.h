@@ -3,7 +3,7 @@
 
 #include <string>
 #include "Route.h"
-#include "../GISNamedTypes.h"
+#include "../Common/GISNamedTypes.h"
 
 
     /** Routes class hold the two shortest routes - by distance and time.

@@ -2,7 +2,7 @@
 
 #include <utility>
 #include <queue>
-#include "../CoordinatesMath.h"
+#include "../Common/CoordinatesMath.h"
 
 std::vector<Coordinates>
 TopologicalSearch::searchCircleInGrid(const Grid &grid, const Coordinates &center, Meters radius) const {

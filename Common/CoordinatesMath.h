@@ -27,7 +27,7 @@ class CoordinatesMath {
      * @brief Epsilon definition to test equality of distance measured by double
      *
      */
-    static constexpr double distance_epsilon = 1/tenToThePowerOf<coordinate_precision+3>();
+    static constexpr double distance_epsilon = 1 / tenToThePowerOf<coordinate_precision + 3>();
 
     /**
      * @brief The function convert degrees into radians
@@ -91,8 +91,9 @@ class CoordinatesMath {
      * @param c2
      * @return auto - a pack of [c1.longitude(), c1.latitude(), c2.longitude(), c2.latitude()]
      */
-    static auto cooridnates2radians(const Coordinates& c1, const Coordinates& c2) {
-        return std::tuple{deg2rad(c1.longitude()), deg2rad(c1.latitude()), deg2rad(c2.longitude()), deg2rad(c2.latitude())};
+    static auto cooridnates2radians(const Coordinates &c1, const Coordinates &c2) {
+        return std::tuple{deg2rad(c1.longitude()), deg2rad(c1.latitude()), deg2rad(c2.longitude()),
+                          deg2rad(c2.latitude())};
     }
 
     /**
@@ -102,8 +103,8 @@ class CoordinatesMath {
      * @param c2
      * @return auto - a pack of [c1.longitude(), c1.latitude(), c2.longitude(), c2.latitude(), delta_longitude]
      */
-    static auto cooridnates2radiansAndDeltaLongitude(const Coordinates& c1, const Coordinates& c2) {
-        auto [longitude1, latitude1, longitude2, latitude2] = cooridnates2radians(c1, c2);
+    static auto cooridnates2radiansAndDeltaLongitude(const Coordinates &c1, const Coordinates &c2) {
+        auto[longitude1, latitude1, longitude2, latitude2] = cooridnates2radians(c1, c2);
         return std::tuple{longitude1, latitude1, longitude2, latitude2, longitude2 - longitude1};
     }
 
@@ -114,8 +115,9 @@ class CoordinatesMath {
      * @param c2
      * @return auto - a pack of [c1.longitude(), c1.latitude(), c2.longitude(), c2.latitude(), delta_longitude, delta_latitude]
      */
-    static auto cooridnates2radiansAndDeltas(const Coordinates& c1, const Coordinates& c2) {
-        auto [longitude1, latitude1, longitude2, latitude2, delta_longitude] = cooridnates2radiansAndDeltaLongitude(c1, c2);
+    static auto cooridnates2radiansAndDeltas(const Coordinates &c1, const Coordinates &c2) {
+        auto[longitude1, latitude1, longitude2, latitude2, delta_longitude] = cooridnates2radiansAndDeltaLongitude(c1,
+                                                                                                                   c2);
         return std::tuple{longitude1, latitude1, longitude2, latitude2, delta_longitude, latitude2 - latitude1};
     }
 
@@ -135,11 +137,13 @@ class CoordinatesMath {
      * @param c2
      * @return double
      */
-    static double calculateDistance1Sphere(const Coordinates& c1, const Coordinates& c2) {
+    static double calculateDistance1Sphere(const Coordinates &c1, const Coordinates &c2) {
         // convert to radians and compute delta_longitude
-        const auto [longitude1, latitude1, longitude2, latitude2, delta_longitude, delta_latitude] = cooridnates2radiansAndDeltas(c1, c2);
-        const double a = pow(sin(delta_latitude/2), 2) + cos(latitude1) * cos(latitude2) * pow(sin(delta_longitude/2), 2);
-        const double distance = 2 * atan2(sqrt(a), sqrt(1-a));
+        const auto[longitude1, latitude1, longitude2, latitude2, delta_longitude, delta_latitude] = cooridnates2radiansAndDeltas(
+                c1, c2);
+        const double a =
+                pow(sin(delta_latitude / 2), 2) + cos(latitude1) * cos(latitude2) * pow(sin(delta_longitude / 2), 2);
+        const double distance = 2 * atan2(sqrt(a), sqrt(1 - a));
         return distance;
     }
 
@@ -152,32 +156,42 @@ class CoordinatesMath {
      * @param brng2
      * @return std::optional<Coordinates>
      */
-    static std::optional<Coordinates> intersection(const Coordinates& c1, double brng1, const Coordinates& c2, double brng2) {
+    static std::optional<Coordinates>
+    intersection(const Coordinates &c1, double brng1, const Coordinates &c2, double brng2) {
         // see www.edwilliams.org/avform.htm#Intersection
 
         // convert to radians and compute delta_longitude
-        const auto [longitude1, latitude1, longitude2, latitude2, delta_longitude, delta_latitude] = cooridnates2radiansAndDeltas(c1, c2);
+        const auto[longitude1, latitude1, longitude2, latitude2, delta_longitude, delta_latitude] = cooridnates2radiansAndDeltas(
+                c1, c2);
         const double theta_13 = deg2rad(brng1);
         const double theta_23 = deg2rad(brng2);
-        const double angular_distance_12 = 2 * asin(sqrt(sin(delta_latitude/2) * sin(delta_latitude/2) + cos(latitude1) * cos(latitude2) * sin(delta_longitude/2) * sin(delta_longitude/2)));
+        const double angular_distance_12 = 2 * asin(sqrt(sin(delta_latitude / 2) * sin(delta_latitude / 2) +
+                                                         cos(latitude1) * cos(latitude2) * sin(delta_longitude / 2) *
+                                                         sin(delta_longitude / 2)));
         if (angular_distance_12 < distance_epsilon) return {c1}; // coincident points
 
         // initial/final bearings between points
-        const double cos_theta_a = (sin(latitude2) - sin(latitude1)*cos(angular_distance_12)) / (sin(angular_distance_12)*cos(latitude1));
-        const double cos_theta_b = (sin(latitude1) - sin(latitude2)*cos(angular_distance_12)) / (sin(angular_distance_12)*cos(latitude2));
+        const double cos_theta_a = (sin(latitude2) - sin(latitude1) * cos(angular_distance_12)) /
+                                   (sin(angular_distance_12) * cos(latitude1));
+        const double cos_theta_b = (sin(latitude1) - sin(latitude2) * cos(angular_distance_12)) /
+                                   (sin(angular_distance_12) * cos(latitude2));
         const double theta_a = acos(fmin(fmax(cos_theta_a, -1), 1)); // protect against rounding errors
         const double theta_b = acos(fmin(fmax(cos_theta_b, -1), 1)); // protect against rounding errors
-        const double theta_12 = sin(delta_longitude)>0 ? theta_a : 2*std::numbers::pi - theta_a;
-        const double theta_21 = sin(delta_longitude)>0 ? 2*std::numbers::pi - theta_b : theta_b;
+        const double theta_12 = sin(delta_longitude) > 0 ? theta_a : 2 * std::numbers::pi - theta_a;
+        const double theta_21 = sin(delta_longitude) > 0 ? 2 * std::numbers::pi - theta_b : theta_b;
         const double alpha1 = theta_13 - theta_12; // angle 2-1-3
         const double alpha2 = theta_21 - theta_23; // angle 1-2-3
         if (sin(alpha1) == 0 && sin(alpha2) == 0) return {}; // infinite intersections
         if (sin(alpha1) * sin(alpha2) < 0) return {};        // ambiguous intersection (antipodal?)
 
-        const double cos_alpha3 = -cos(alpha1)*cos(alpha2) + sin(alpha1)*sin(alpha2)*cos(angular_distance_12);
-        const double angular_distance_13 = atan2(sin(angular_distance_12)*sin(alpha1)*sin(alpha2), cos(alpha2) + cos(alpha1)*cos_alpha3);
-        const double latitude3 = asin(fmin(fmax(sin(latitude1)*cos(angular_distance_13) + cos(latitude1)*sin(angular_distance_13)*cos(theta_13), -1), 1));
-        const double delta_longitude_13 = atan2(sin(theta_13)*sin(angular_distance_13)*cos(latitude1), cos(angular_distance_13) - sin(latitude1)*sin(latitude3));
+        const double cos_alpha3 = -cos(alpha1) * cos(alpha2) + sin(alpha1) * sin(alpha2) * cos(angular_distance_12);
+        const double angular_distance_13 = atan2(sin(angular_distance_12) * sin(alpha1) * sin(alpha2),
+                                                 cos(alpha2) + cos(alpha1) * cos_alpha3);
+        const double latitude3 = asin(fmin(fmax(
+                sin(latitude1) * cos(angular_distance_13) + cos(latitude1) * sin(angular_distance_13) * cos(theta_13),
+                -1), 1));
+        const double delta_longitude_13 = atan2(sin(theta_13) * sin(angular_distance_13) * cos(latitude1),
+                                                cos(angular_distance_13) - sin(latitude1) * sin(latitude3));
         const double longitude3 = longitude1 + delta_longitude_13;
         return {rads2Coordinates(longitude3, latitude3)};
     }
@@ -190,7 +204,8 @@ class CoordinatesMath {
      * @param hint
      * @return Meters
      */
-    static Meters returnDistance(const Coordinates& reference_point, const Coordinates& closest_point, Meters hint = Meters{-1}) {
+    static Meters
+    returnDistance(const Coordinates &reference_point, const Coordinates &closest_point, Meters hint = Meters{-1}) {
         if (hint >= Meters{0}) return hint;
         return calculateDistance(reference_point, closest_point);
     }
@@ -203,7 +218,8 @@ class CoordinatesMath {
      * @param hint
      * @return auto
      */
-    static auto returnClosestPointAndDistance(const Coordinates& reference_point, const Coordinates& closest_point, Meters hint = Meters{-1}) {
+    static auto returnClosestPointAndDistance(const Coordinates &reference_point, const Coordinates &closest_point,
+                                              Meters hint = Meters{-1}) {
         return std::pair{closest_point, returnDistance(reference_point, closest_point, hint)};
     }
 
@@ -215,9 +231,10 @@ class CoordinatesMath {
      * @param hint
      * @return Coordinates
      */
-    static Coordinates returnClosestPoint(const Coordinates& reference_point, const Coordinates& closest_point, Meters hint = Meters{-1}) {
-        (void)reference_point; //ignore parameter
-        (void)hint; //ignore parameter
+    static Coordinates
+    returnClosestPoint(const Coordinates &reference_point, const Coordinates &closest_point, Meters hint = Meters{-1}) {
+        (void) reference_point; //ignore parameter
+        (void) hint; //ignore parameter
         return closest_point;
     }
 
@@ -242,7 +259,9 @@ class CoordinatesMath {
      * @param set_return
      * @return auto
      */
-    static auto closestPointOnSegmentAndDistanceApplier(const Coordinates& c, const Coordinates& cA1, const Coordinates& cA2, auto set_return) {
+    static auto
+    closestPointOnSegmentAndDistanceApplier(const Coordinates &c, const Coordinates &cA1, const Coordinates &cA2,
+                                            auto set_return) {
         // see www.edwilliams.org/avform.htm#Intersection
         // Here, the great-circle path is identified by a start point cA1 and an end point, cA2
         if (c == cA1) return set_return(c, cA1, Meters{0});
@@ -252,9 +271,11 @@ class CoordinatesMath {
         const double relative_bearing_from_cA1 = relativeBearing(bearing_cA1_cA2, bearing_cA1_c);
         if (relative_bearing_from_cA1 > 90) return set_return(c, cA1, Meters{-1}); // Is angle acute?
         const double distance_1sphere_cA1_c = calculateDistance1Sphere(cA1, c);
-        const double d_xt = asin(sin(distance_1sphere_cA1_c) * sin(deg2rad(bearing_cA1_c-bearing_cA1_cA2))); // Sign of d_xt tells us about the side on great circle of c
+        const double d_xt = asin(sin(distance_1sphere_cA1_c) * sin(deg2rad(
+                bearing_cA1_c - bearing_cA1_cA2))); // Sign of d_xt tells us about the side on great circle of c
         const double distance_1sphere_A = calculateDistance1Sphere(cA1, cA2);
-        const double d_at = acos(cos(distance_1sphere_cA1_c) / cos(d_xt)); // The along-track distance from cA1 to closest point on path to the third point
+        const double d_at = acos(cos(distance_1sphere_cA1_c) /
+                                 cos(d_xt)); // The along-track distance from cA1 to closest point on path to the third point
         if (d_at >= distance_1sphere_A) return set_return(c, cA2, Meters{-1});
         // 2 Options to estimate the imagery point along cA1 - CA2 segment - Option [2] Seems to produce better results:
         // [1] by Bearing and distance
@@ -269,11 +290,11 @@ public:
      * @brief Mathematical constans used for calculations on Earth
      *
      */
-    static constexpr Meters earth_radius { 6'371'000 };
-    static constexpr Meters half_earth_hemisphere { earth_radius * std::numbers::pi / 2 };
-    static constexpr Latitude n_pole_lat { 90 };
-    static constexpr Latitude s_pole_lat { -90 };
-    static constexpr Latitude equator_lat { 0 };
+    static constexpr Meters earth_radius{6'371'000};
+    static constexpr Meters half_earth_hemisphere{earth_radius * std::numbers::pi / 2};
+    static constexpr Latitude n_pole_lat{90};
+    static constexpr Latitude s_pole_lat{-90};
+    static constexpr Latitude equator_lat{0};
 
     /**
      * @brief Constrain degrees to range 0..+360 (e.g. for bearing)
@@ -317,16 +338,16 @@ public:
      * @param fraction
      * @return Coordinates
      */
-    static Coordinates intermediatePoint(const Coordinates& c1, const Coordinates& c2, double fraction) {
-        const auto [longitude1, latitude1, longitude2, latitude2] = cooridnates2radians(c1, c2);
+    static Coordinates intermediatePoint(const Coordinates &c1, const Coordinates &c2, double fraction) {
+        const auto[longitude1, latitude1, longitude2, latitude2] = cooridnates2radians(c1, c2);
         const double angular_distance = calculateDistance1Sphere(c1, c2);
         const double a = sin((1 - fraction) * angular_distance) / sin(angular_distance);
         const double b = sin(fraction * angular_distance) / sin(angular_distance);
         const double x = a * cos(latitude1) * cos(longitude1) + b * cos(latitude2) * cos(longitude2);
-        const double y = a * cos(latitude1) * sin (longitude1) + b * cos(latitude2) * sin(longitude2);
+        const double y = a * cos(latitude1) * sin(longitude1) + b * cos(latitude2) * sin(longitude2);
         const double z = a * sin(latitude1) + b * sin(latitude2);
         const double i_longitude = atan2(y, x);
-        const double i_latitude = atan2(z, sqrt(x*x + y*y));
+        const double i_latitude = atan2(z, sqrt(x * x + y * y));
         return rads2Coordinates(i_longitude, i_latitude); // convert back to valid {Longitude, Latitude}
     }
 
@@ -340,7 +361,7 @@ public:
      * @param c2
      * @return Meters
      */
-    static Meters calculateDistance(const Coordinates& c1, const Coordinates& c2) {
+    static Meters calculateDistance(const Coordinates &c1, const Coordinates &c2) {
         return Meters{calculateDistance1Sphere(c1, c2) * earth_radius};
     }
 
@@ -351,13 +372,15 @@ public:
      * @param c2
      * @return Coordinates
      */
-    static Coordinates midpoint(const Coordinates& c1, const Coordinates& c2) {
+    static Coordinates midpoint(const Coordinates &c1, const Coordinates &c2) {
         // convert to radians and compute delta_longitude
-        const auto [longitude1, latitude1, longitude2, latitude2, delta_longitude] = cooridnates2radiansAndDeltaLongitude(c1, c2);
+        const auto[longitude1, latitude1, longitude2, latitude2, delta_longitude] = cooridnates2radiansAndDeltaLongitude(
+                c1, c2);
         const double b_x = cos(latitude2) * cos(delta_longitude);
         const double b_y = cos(latitude2) * sin(delta_longitude);
         const double midpoint_longitude = longitude1 + atan2(b_y, cos(latitude1) + b_x);
-        const double midpoint_latitude = atan2( sin(latitude1) + sin(latitude2) , sqrt( pow(cos(latitude1) + b_x, 2) + pow(b_y, 2) ) );
+        const double midpoint_latitude = atan2(sin(latitude1) + sin(latitude2),
+                                               sqrt(pow(cos(latitude1) + b_x, 2) + pow(b_y, 2)));
         return rads2Coordinates(midpoint_longitude, midpoint_latitude); // convert back to valid {Longitude, Latitude}
     }
 
@@ -368,11 +391,13 @@ public:
      * @param end
      * @return double - bearing is normalised to: 0° - 360°
      */
-    static double initialBearing(const Coordinates& start, const Coordinates& end) {
+    static double initialBearing(const Coordinates &start, const Coordinates &end) {
         // convert to radians and compute delta_longitude
-        const auto [start_longitude, start_latitude, end_longitude, end_latitude, delta_longitude] = cooridnates2radiansAndDeltaLongitude(start, end);
+        const auto[start_longitude, start_latitude, end_longitude, end_latitude, delta_longitude] = cooridnates2radiansAndDeltaLongitude(
+                start, end);
         const double y = sin(delta_longitude) * cos(end_latitude);
-        const double x = cos(start_latitude) * sin(end_latitude) - sin(start_latitude) * cos(end_latitude) * cos(delta_longitude);
+        const double x = cos(start_latitude) * sin(end_latitude) -
+                         sin(start_latitude) * cos(end_latitude) * cos(delta_longitude);
         const double bearing = atan2(y, x);
         return wrap360(rad2deg(bearing)); // Normalised bearing in the range of 0° ... 360°
     }
@@ -385,7 +410,7 @@ public:
      * @param cA2 - Segment end point
      * @return Coordinates - A point along segement cA1-cA2
      */
-    static Coordinates closestPointOnSegment(const Coordinates& c, const Coordinates& cA1, const Coordinates& cA2) {
+    static Coordinates closestPointOnSegment(const Coordinates &c, const Coordinates &cA1, const Coordinates &cA2) {
         return closestPointOnSegmentAndDistanceApplier(c, cA1, cA2, returnClosestPoint);
     }
 
@@ -397,7 +422,8 @@ public:
      * @param cA2 - Segment end point
      * @return std::pair<Coordinates, Meters> - A point along segement cA1-cA2 and distance in Meters
      */
-    static std::pair<Coordinates, Meters> closestPointOnSegmentAndDistance(const Coordinates& c, const Coordinates& cA1, const Coordinates& cA2) {
+    static std::pair<Coordinates, Meters>
+    closestPointOnSegmentAndDistance(const Coordinates &c, const Coordinates &cA1, const Coordinates &cA2) {
         return closestPointOnSegmentAndDistanceApplier(c, cA1, cA2, returnClosestPointAndDistance);
     }
 
@@ -409,7 +435,7 @@ public:
      * @param cA2 - Segment end point
      * @return Meters - Distance in Meters of c from segment cA1-cA2
      */
-    static Meters distanceFromSegment(const Coordinates& c, const Coordinates& cA1, const Coordinates& cA2) {
+    static Meters distanceFromSegment(const Coordinates &c, const Coordinates &cA1, const Coordinates &cA2) {
         return closestPointOnSegmentAndDistanceApplier(c, cA1, cA2, returnDistance);
     }
 
@@ -421,7 +447,8 @@ public:
      * @param circle_radius
      * @return Coordinates - The closest point to c on the provided circle perimeter
      */
-    static Coordinates closestPointOnCircle(const Coordinates& c, const Coordinates& circle_center, Meters circle_radius) {
+    static Coordinates
+    closestPointOnCircle(const Coordinates &c, const Coordinates &circle_center, Meters circle_radius) {
         const auto distance = CoordinatesMath::calculateDistance1Sphere(circle_center, c) * earth_radius;
         if (distance <= circle_radius) return c;
         if (distance > half_earth_hemisphere) {
@@ -441,7 +468,8 @@ public:
      * @param cB2 - Segment B end point
      * @return std::optional<Coordinates>
      */
-    static std::optional<Coordinates> intersection(const Coordinates& cA1, const Coordinates& cA2, const Coordinates& cB1, const Coordinates& cB2) {
+    static std::optional<Coordinates>
+    intersection(const Coordinates &cA1, const Coordinates &cA2, const Coordinates &cB1, const Coordinates &cB2) {
         return intersection(cA1, initialBearing(cA1, cA2), cB1, initialBearing(cB1, cB2));
     }
 
@@ -453,8 +481,9 @@ public:
      * @param lng - longitude of meridian
      * @return Latitude
      */
-    static Latitude intersectionOnMeridian(const Coordinates& cA1, const Coordinates& cA2, Longitude lng) {
-        return intersection(cA1, cA2, Coordinates{lng, Latitude{n_pole_lat}}, Coordinates{lng, Latitude{s_pole_lat}})->latitude();
+    static Latitude intersectionOnMeridian(const Coordinates &cA1, const Coordinates &cA2, Longitude lng) {
+        return intersection(cA1, cA2, Coordinates{lng, Latitude{n_pole_lat}},
+                            Coordinates{lng, Latitude{s_pole_lat}})->latitude();
     }
 
     /**
@@ -465,12 +494,14 @@ public:
      * @param distance - in Meters
      * @return Coordinates
      */
-    static Coordinates coordinatesByBearingAndDistance(const Coordinates& initial, double absolute_bearing, Meters distance) {
+    static Coordinates
+    coordinatesByBearingAndDistance(const Coordinates &initial, double absolute_bearing, Meters distance) {
         const double rad_angular_distance = distance / earth_radius;
         const double rad_bearing = deg2rad(absolute_bearing);
         const double initial_latitude = deg2rad(initial.latitude());
         const double initial_longitude = deg2rad(initial.longitude());
-        const double sin_destination_latitude = sin(initial_latitude) * cos(rad_angular_distance) + cos(initial_latitude) * sin(rad_angular_distance) * cos(rad_bearing);
+        const double sin_destination_latitude = sin(initial_latitude) * cos(rad_angular_distance) +
+                                                cos(initial_latitude) * sin(rad_angular_distance) * cos(rad_bearing);
         const double destination_latitude = std::asin(sin_destination_latitude);
         const double y = sin(rad_bearing) * sin(rad_angular_distance) * cos(destination_latitude);
         const double x = cos(rad_angular_distance) - sin(destination_latitude) * sin_destination_latitude;

@@ -5,7 +5,7 @@
 #include <iostream>
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
 #include "../../search/Grid.h"
-#include "../../CoordinatesMath.h"
+#include "../../Common/CoordinatesMath.h"
 
 PointList::PointList(std::vector<Coordinates> &points) : Geometry(), points(std::move(points)) {}
 

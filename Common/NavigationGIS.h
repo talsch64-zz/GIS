@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GIS.h"
+#include "AbstractGIS.h"
 
 /**
  * @brief NavigationGIS class
@@ -11,7 +11,8 @@
  *
  */
 class NavigationGIS {
-    const GIS& gis;
+    const AbstractGIS &gis;
+    mutable std::size_t usage_counter;
 
 public:
     /**
@@ -19,7 +20,7 @@ public:
      *
      * @param gis
      */
-    NavigationGIS(const GIS& gis): gis(gis) {}
+    NavigationGIS(const AbstractGIS &gis) : gis(gis), usage_counter(0) {}
 
     /**
      * @brief Get the Ways By Junction object
@@ -27,7 +28,8 @@ public:
      * @param junctionId
      * @return std::vector<EntityId>
      */
-    std::vector<EntityId> getWaysByJunction(const EntityId& junctionId) const {
+    std::vector<EntityId> getWaysByJunction(const EntityId &junctionId) const {
+        ++usage_counter;
         return gis.getWaysByJunction(junctionId);
     }
 
@@ -35,9 +37,10 @@ public:
      * @brief Get the Way Closest Point object
      *
      * @param coords
-     * @return std::pair<Coordinates, EntityId>
+     * @return std::tuple<Coordinates, EntityId, std::size_t>
      */
-    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates& coords) const {
+    std::tuple<Coordinates, EntityId, std::size_t> getWayClosestPoint(const Coordinates &coords) const {
+        ++usage_counter;
         return gis.getWayClosestPoint(coords);
     }
 
@@ -46,9 +49,11 @@ public:
      *
      * @param coords
      * @param res
-     * @return std::pair<Coordinates, EntityId>
+     * @return std::tuple<Coordinates, EntityId, std::size_t>
      */
-    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates& coords, const Restrictions& res) const {
+    std::tuple<Coordinates, EntityId, std::size_t>
+    getWayClosestPoint(const Coordinates &coords, const Restrictions &res) const {
+        ++usage_counter;
         return gis.getWayClosestPoint(coords, res);
     }
 
@@ -58,7 +63,17 @@ public:
      * @param wayId
      * @return const Way&
      */
-    const Way& getWay(const EntityId& wayId) const {
+    const AbstractWay &getWay(const EntityId &wayId) const {
+        ++usage_counter;
         return gis.getWay(wayId);
+    }
+
+    /**
+     * @brief Get the usage counter
+     *
+     * @return std::size_t
+     */
+    std::size_t getUsageCounter() const {
+        return usage_counter;
     }
 };

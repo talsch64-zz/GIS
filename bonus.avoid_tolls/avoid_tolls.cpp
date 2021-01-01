@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../GISNamedTypes.h"
+#include "../Common/GISNamedTypes.h"
 #include "../GISProvider.h"
 #include "../navigation/Navigation.h"
 #include "../tests/NavigationValidator.h"

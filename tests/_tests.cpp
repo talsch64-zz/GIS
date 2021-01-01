@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
-#include "../GISNamedTypes.h"
+#include "../Common/GISNamedTypes.h"
 #include "../GISProvider.h"
-#include "../CoordinatesMath.h"
+#include "../Common/CoordinatesMath.h"
 
 //// Actual naming of test suites and test is up to you
 //// However, they should not contain any underscoress (_). See: https://github.com/google/googletest/blob/master/googletest/docs/primer.md

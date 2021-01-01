@@ -26,7 +26,8 @@ class Double {
         static constexpr std::size_t actual_precision_factor = std::max(lhs.precision_factor, rhs.precision_factor);
         double val1 = lhs.roundToPrecision();
         double val2 = rhs.roundToPrecision();
-        return std::pair{static_cast<long>(val1 * actual_precision_factor), static_cast<long>(val2 * actual_precision_factor)};
+        return std::pair{static_cast<long>(val1 * actual_precision_factor),
+                         static_cast<long>(val2 * actual_precision_factor)};
     }
 
 public:
@@ -44,13 +45,13 @@ public:
 
     template<std::size_t Precision2>
     friend constexpr auto operator<=>(Double<Precision> lhs, Double<Precision2> rhs) {
-        auto [val1, val2] = comparisonArgs(lhs, rhs);
+        auto[val1, val2] = comparisonArgs(lhs, rhs);
         return val1 <=> val2;
     }
 
     template<std::size_t Precision2>
     friend constexpr bool operator==(Double<Precision> lhs, Double<Precision2> rhs) {
-        auto [val1, val2] = comparisonArgs(lhs, rhs);
+        auto[val1, val2] = comparisonArgs(lhs, rhs);
         return val1 == val2;
     }
 
@@ -72,25 +73,25 @@ struct NamedTypeDouble : NamedType<Double<Precision>> {
     // an implicit casting!
     //---------------------------------------------
     constexpr explicit operator double() const {
-        return static_cast<const Double<Precision>&>(*this);
+        return static_cast<const Double<Precision> &>(*this);
     };
 
-    friend constexpr Type& operator+=(Type& d1, Type d2) {
+    friend constexpr Type &operator+=(Type &d1, Type d2) {
         d1 = d1 + d2;
         return d1;
     }
 
-    friend constexpr Type& operator-=(Type& d1, Type d2) {
+    friend constexpr Type &operator-=(Type &d1, Type d2) {
         d1 = d1 - d2;
         return d1;
     }
 
     friend constexpr Type operator+(Type d1, Type d2) {
-        return Type { d1.val + d2.val };
+        return Type{d1.val + d2.val};
     }
 
     friend constexpr Type operator-(Type d1, Type d2) {
-        return Type { d1.val - d2.val };
+        return Type{d1.val - d2.val};
     }
 
     friend constexpr bool operator==(Type d1, Type d2) {
@@ -102,15 +103,15 @@ struct NamedTypeDouble : NamedType<Double<Precision>> {
     }
 
     friend constexpr Type operator*(Type d1, Number auto d2) {
-        return Type { d1.val * d2 };
+        return Type{d1.val * d2};
     }
 
     friend constexpr Type operator*(Number auto d1, Type d2) {
-        return Type { d1 * d2.val };
+        return Type{d1 * d2.val};
     }
 
     friend constexpr Type operator/(Type d1, Number auto d2) {
-        return Type { d1.val / d2 };
+        return Type{d1.val / d2};
     }
 
     friend constexpr double operator/(Type d1, Type d2) {
@@ -121,7 +122,10 @@ struct NamedTypeDouble : NamedType<Double<Precision>> {
     // the actual type may allow it (e.g. Meters * Meters => SquareMeters)
 
     friend constexpr bool operator==(Type lhs, auto rhs) = delete;
+
     friend constexpr bool operator==(auto lhs, Type rhs) = delete;
+
     friend constexpr bool operator<=>(Type lhs, auto rhs) = delete;
+
     friend constexpr bool operator<=>(auto lhs, Type rhs) = delete;
 };

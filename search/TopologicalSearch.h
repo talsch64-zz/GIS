@@ -4,7 +4,7 @@
 
 #include <vector>
 #include <memory>
-#include "../GISNamedTypes.h"
+#include "../Common/GISNamedTypes.h"
 #include "Grid.h"
 #include "../entities/geometry/Circle.h"
 #include "../entities/geometry/PointList.h"

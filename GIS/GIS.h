@@ -8,14 +8,14 @@
 #include <optional>
 #include <unordered_map>
 #include <memory>
-#include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
-#include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
-#include "search/Grid.h"
-#include "search/TopologicalSearch.h"
-#include "IdGenerator.h"
-#include "GISNamedTypes.h"
-#include "Logger.h"
-#include "Restrictions.h"
+#include "../entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
+#include "../entities/JsonHandlers/Serializers/JsonFileWriter.h"
+#include "../search/Grid.h"
+#include "../search/TopologicalSearch.h"
+#include "../IdGenerator.h"
+#include "../Common/GISNamedTypes.h"
+#include "../Logger.h"
+#include "../Common/Restrictions.h"
 
 class EntityJsonParser;
 

@@ -2,7 +2,7 @@
 #pragma once
 
 #include <vector>
-#include "../GISNamedTypes.h"
+#include "../Common/GISNamedTypes.h"
 
 /**
  * @brief Route class

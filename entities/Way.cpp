@@ -22,14 +22,6 @@ rapidjson::Value Way::toJson(rapidjson::MemoryPoolAllocator<rapidjson::CrtAlloca
     return entityJsonSerializer->toJson(this, allocator);
 }
 
-const EntityId &Way::getFromJunctionId() const {
-    return from;
-}
-
-const EntityId &Way::getToJunctionId() const {
-    return to;
-}
-
 TrafficDirection Way::getDirection() const {
     return direction;
 }
@@ -38,12 +30,16 @@ int Way::getSpeedLimit() const {
     return speedLimit;
 }
 
-bool Way::isTollRoad() const {
+bool Way::isToll() const {
     return tollRoad;
 }
 
 const std::vector<std::string> &Way::getRestricted() const {
     return restricted;
+}
+
+std::pair<Meters, Meters> Way::getSegmentPartsOnWay(std::size_t segment, const Coordinates &c) const {
+    throw std::runtime_error("not implemented");
 }
 
 std::pair<EntityId, EntityId> Way::getJunctions() const {
@@ -57,15 +53,6 @@ Meters Way::getLength() const {
     return length.value();
 }
 
-bool Way::isRestricted(const Restrictions &restrictions) const {
-    for (std::string restriction : restrictions.getRestrictions()) {
-        if ((restriction == "highway" && isHighway()) || (restriction == "toll" && isTollRoad())) {
-            return true;
-        }
-    }
-    return false;
-}
-
 bool Way::isBidirectional() const {
     return direction == TrafficDirection::bidirectional;
 }
@@ -74,16 +61,11 @@ bool Way::isHighway() const {
     return highway;
 }
 
-const Coordinates Way::getFromJunctionCoordinates() const {
+const Coordinates &Way::getFromJunctionCoordinates() const {
     return geometry->getPoints().front();
 }
 
-const Coordinates Way::getToJunctionCoordinates() const {
+const Coordinates &Way::getToJunctionCoordinates() const {
     return geometry->getPoints().back();
 }
-
-Minutes Way::getTime() const {
-    return Minutes((double) getLength() / Utils::kmh_to_mm(speedLimit));
-}
-
 

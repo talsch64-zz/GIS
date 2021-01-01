@@ -1,8 +1,8 @@
 
 #include "gtest/gtest.h"
-#include "../GISNamedTypes.h"
+#include "../Common/GISNamedTypes.h"
 #include "../GISProvider.h"
-#include "../CoordinatesMath.h"
+#include "../Common/CoordinatesMath.h"
 #include "../navigation/Navigation.h"
 #include "NavigationValidator.h"
 #include "../entities/Way.h"
