@@ -6,10 +6,9 @@
 TEST(RestrictionsTest, basicRestrictions) {
     Restrictions r("aa, bb cc ,");
     auto restrictions = r.getRestrictions();
-    EXPECT_EQ(restrictions.size(), (size_t)3);
+    EXPECT_EQ(restrictions.size(), (size_t)2);
     EXPECT_NE(std::find(restrictions.begin(), restrictions.end(), "aa"), restrictions.end());
-    EXPECT_NE(std::find(restrictions.begin(), restrictions.end(), "bb"), restrictions.end());
-    EXPECT_NE(std::find(restrictions.begin(), restrictions.end(), "cc"), restrictions.end());
+    EXPECT_NE(std::find(restrictions.begin(), restrictions.end(), "bb cc"), restrictions.end());
 }
 
 TEST(RestrictionsTest, emptyRestrictions) {
