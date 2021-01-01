@@ -8,7 +8,7 @@
 #include "../GIS/entities/POI.h"
 #include "../GIS/entities/Way.h"
 #include "GISMock.h"
-#include "../navigation/Routes.h"
+#include "../Navigation/Routes.h"
 #include "RouteMock.h"
 #include "../Common/NavigationGIS.h"
 

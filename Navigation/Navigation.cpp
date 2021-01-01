@@ -1,22 +1,34 @@
+
 #include "Navigation.h"
-#include <memory>
-#include <iostream>
+#include "AStar.h"
 
-Navigation_098765432::Navigation_098765432(const NavigationGIS& gis) { (void)gis; }
+Navigation::Navigation(const NavigationGIS &navigationGis) : navigationGIS(navigationGis) {}
 
-/**
- * @brief Get the Routes object
- * 
- * @param start 
- * @param end 
- * @return Routes 
- */
-std::unique_ptr<AbstractRoutes> Navigation_098765432::getRoutes(const Coordinates& start, const Coordinates& end) const {
-    // A stub
-    std::cout << "Navigation_098765432 is Getting routes from...\n";
-    (void)start;
-    (void)end;
-    return std::make_unique<Routes>();
+std::unique_ptr<AbstractRoutes> Navigation::getRoutes(const Coordinates &start, const Coordinates &end) const {
+    return getRoutes(start, end, Restrictions(""));
 }
 
+std::unique_ptr<AbstractRoutes>
+Navigation::getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const {
+    auto startPair = navigationGIS.getWayClosestPoint(start, restrictions);
+    if (std::get<1>(startPair) == EntityId("")) {
+        return std::make_unique<Routes>(nullptr, nullptr, false, "No ways on earth!");
+    }
+    auto endPair = navigationGIS.getWayClosestPoint(end, restrictions);
+    const AbstractWay &startWay = navigationGIS.getWay(std::get<1>(startPair));
+    const Coordinates &startPoint = std::get<0>(startPair);
+    const AbstractWay &endWay = navigationGIS.getWay(std::get<1>(endPair));
+    const Coordinates &destinationPoint = std::get<0>(endPair);
+    if (startWay.getId() == endWay.getId()) {
+        return std::make_unique<Routes>(nullptr, nullptr, false, "Routes contain only one way!");
+    }
+    AStar star(navigationGIS, startPoint, destinationPoint, startWay, endWay, restrictions);
+    auto shortestByDistance = star.shortestByDistance();
+    if (shortestByDistance == nullptr) {
+//        initialize invalid Routes
+        return std::make_unique<Routes>(nullptr, nullptr, false, "Routes not found!");
+    }
+    auto shortestByTime = star.shortestByTime();
+    return std::make_unique<Routes>(std::move(shortestByDistance), std::move(shortestByTime), true);
+}
 

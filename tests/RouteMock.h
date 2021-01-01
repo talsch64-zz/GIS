@@ -2,7 +2,7 @@
 #define GIS_CPP_ROUTEMOCK_H
 
 
-#include "../navigation/Route.h"
+#include "../Navigation/Route.h"
 
 class RouteMock: public Route {
     bool valid;

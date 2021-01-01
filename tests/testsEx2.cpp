@@ -12,9 +12,9 @@
 // Ex2
 #include "../Common/NavigationGIS.h"
 #include "../Common/GISNamedTypes.h"
-#include "../navigation/Navigation.h"
-#include "../navigation/Routes.h"
-#include "../navigation/Route.h"
+#include "../Navigation/Navigation.h"
+#include "../Navigation/Routes.h"
+#include "../Navigation/Route.h"
 #include "NavigationValidator.h"
 
 /**

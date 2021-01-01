@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 #include "GISMock.h"
-#include "../navigation/Route.h"
+#include "../Navigation/Route.h"
 #include "../Common/NavigationGIS.h"
-#include "../navigation/Navigation.h"
+#include "../Navigation/Navigation.h"
 #include "RandTestUtils.h"
 #include "NavigationValidator.h"
 
