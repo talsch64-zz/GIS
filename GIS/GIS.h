@@ -16,6 +16,7 @@
 #include "../Common/GISNamedTypes.h"
 #include "../Logger.h"
 #include "../Common/Restrictions.h"
+#include "../Common/AbstractGIS.h"
 
 class EntityJsonParser;
 
@@ -30,7 +31,7 @@ class EntityJsonParser;
 /// * Search closest way (and the closest Coordinates on the way) from a given Coordinates
 
 
-class GIS {
+class GIS: public AbstractGIS {
 protected:
     /**
      * Max distance to be from a highway for it to be a valid start of a route
@@ -58,7 +59,7 @@ public:
 
     std::size_t clear();
 
-    std::vector<EntityId> loadMapFile(const std::string &filename);
+    std::vector<EntityId> loadMapFile(const std::string &filename) override;
 
     Entity *getEntityById(const EntityId &id) const;
 
@@ -77,7 +78,7 @@ public:
     /* BFS-like algorithms which spreads to all direction in an even way level-by-level and searches for the closest way.
     * Once a way found, the spreading is stopped and the function returns the closest point on all
     * the ways on the current level */
-    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coord) const;
+    std::tuple<Coordinates, EntityId, std::size_t> getWayClosestPoint(const Coordinates &coord) const override;
 
     /**
      * Find the closest way to a given coordinate, with restrictions
@@ -85,7 +86,7 @@ public:
      * @param res Restrictions for the ways
      * @return A pair of the closest point on the way and the entity id of the way
      */
-    std::pair<Coordinates, EntityId> getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const;
+    std::tuple<Coordinates, EntityId, std::size_t> getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const override;
 
     /**
  * @brief Get the Way object et EntityId of a Way and return the Way itself.
@@ -94,7 +95,7 @@ public:
  * @param wayId - ID of Way
  * @return const Way&
  */
-    const Way &getWay(const EntityId &wayId) const;
+    const AbstractWay &getWay(const EntityId &wayId) const override;
 
     /**
 	 * @brief The function shall get EntityId of a Junction and return a vector of Ids of all the ways that start at this junction and those which end at this junction and are bidirectional.
@@ -103,7 +104,7 @@ public:
 	 * @param junctionId
 	 * @return std::vector<EntityId> - A vector of Ids of all the Ways that start at given junction (also bidirectional Ways which end at this junction).
 	 */
-    std::vector<EntityId> getWaysByJunction(const EntityId &junctionId) const;
+    std::vector<EntityId> getWaysByJunction(const EntityId &junctionId) const override;
 
 protected:
     /* loads all the entities inside rapidjson::Document */
@@ -132,7 +133,7 @@ protected:
      * @param res Restrictions on the ways search
      * @return A pair of the closest point on the way and the way's id. If no way was found, an empty optional is returned.
      */
-    std::optional<std::pair<Coordinates, EntityId>> getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const;
+    std::optional<std::tuple<Coordinates, EntityId, std::size_t>> getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const;
 };
 
 #endif //EX1_GIS_H

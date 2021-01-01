@@ -97,11 +97,11 @@ std::optional<Coordinates> GIS::getEntityClosestPoint(const EntityId &entityId, 
     return entities.find(entityId)->second->getGeometry()->getClosestPoint(coordinates);
 }
 
-std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord) const {
+std::tuple<Coordinates, EntityId, std::size_t> GIS::getWayClosestPoint(const Coordinates &coord) const {
     return getWayClosestPoint(coord, Restrictions(""));
 }
 
-std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
+std::tuple<Coordinates, EntityId, std::size_t> GIS::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
     bool wayFound = false;
     int level = 0;
     std::stack<Grid::GridCell> stack;
@@ -150,14 +150,16 @@ std::pair<Coordinates, EntityId> GIS::getWayClosestPoint(const Coordinates &coor
                     }
                 }
             } else if (stack.empty()) {
-                return {closest, closestEntityId};
+                //TODO: segment index
+                return {closest, closestEntityId, 0};
             }
         }
         std::swap(stack, nextStack);
         level++;
     }
 
-    std::pair<Coordinates, EntityId> result = std::make_pair(closest, closestEntityId);
+    //TODO: get index of segment`
+    std::tuple<Coordinates, EntityId, std::size_t> result = std::make_tuple(closest, closestEntityId, 0);
     if (!wayFound) {
         auto fallback = getWayClosestPointFallback(coord, res);
         if (fallback.has_value()) {
@@ -240,7 +242,7 @@ bool GIS::addEntity(std::unique_ptr<Entity> entity) {
     return success;
 }
 
-const Way &GIS::getWay(const EntityId &id) const {
+const AbstractWay &GIS::getWay(const EntityId &id) const {
     if (entities.find(id) == entities.end()) {
         throw std::runtime_error("Id not found");
     }
@@ -267,9 +269,9 @@ const Meters &GIS::getMaxDistanceFromHighway() const {
     return max_distance_from_highway;
 }
 
-std::optional<std::pair<Coordinates, EntityId>>
+std::optional<std::tuple<Coordinates, EntityId, std::size_t>>
 GIS::getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const {
-    std::optional<std::pair<Coordinates, EntityId>> foundWay;
+    std::optional<std::tuple<Coordinates, EntityId, std::size_t>> foundWay;
     Meters shortestDistance(0);
     for (auto &entityPair : entities) {
         Entity &entity = *entityPair.second;
@@ -278,7 +280,8 @@ GIS::getWayClosestPointFallback(const Coordinates &coord, const Restrictions &re
             Coordinates closestPoint = way.getGeometry()->getClosestPoint(coord);
             Meters distance = CoordinatesMath::calculateDistance(coord, closestPoint);
             if (!isWayRestricted(way, res, distance) && (!foundWay.has_value() || distance < shortestDistance)) {
-                foundWay = std::make_pair(closestPoint, way.getId());
+                //TODO: get segment index
+                foundWay = std::make_tuple(closestPoint, way.getId(), 0);
                 shortestDistance = distance;
             }
         }

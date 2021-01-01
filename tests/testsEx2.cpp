@@ -22,21 +22,29 @@
  *
  * @return std::vector<EntityId>
  */
-const std::vector<EntityId>& getInputFileEntities(const std::string& filename) {
+const std::vector<EntityId> &getInputFileEntities(const std::string &filename) {
     if (filename == "nyc.json") {
-        static std::vector<EntityId> nyc_entities({EntityId("P1001"), EntityId("P1002"), EntityId("J1001"), EntityId("J1002"), EntityId("J1010"), EntityId("P1010"), EntityId("W2001"), EntityId("W2002")});
+        static std::vector<EntityId> nyc_entities(
+                {EntityId("P1001"), EntityId("P1002"), EntityId("J1001"), EntityId("J1002"), EntityId("J1010"),
+                 EntityId("P1010"), EntityId("W2001"), EntityId("W2002")});
         return nyc_entities;
     }
     if (filename == "ex1_map1.json") {
-        static std::vector<EntityId> ex1_map1_entites({EntityId("Pnt1"), EntityId("Ju01"), EntityId("Ju02"), EntityId("Ju04"), EntityId("Ju03"), EntityId("West1"), EntityId("East1")});
+        static std::vector<EntityId> ex1_map1_entites(
+                {EntityId("Pnt1"), EntityId("Ju01"), EntityId("Ju02"), EntityId("Ju04"), EntityId("Ju03"),
+                 EntityId("West1"), EntityId("East1")});
         return ex1_map1_entites;
     }
     if (filename == "ex1_map2.json") {
-        static std::vector<EntityId> ex1_map2_entites({EntityId("P1"), EntityId("J1"), EntityId("J2"), EntityId("J3"), EntityId("J4"), EntityId("W1"), EntityId("W2")});
+        static std::vector<EntityId> ex1_map2_entites(
+                {EntityId("P1"), EntityId("J1"), EntityId("J2"), EntityId("J3"), EntityId("J4"), EntityId("W1"),
+                 EntityId("W2")});
         return ex1_map2_entites;
     }
     if (filename == "ex2_map1.json") {
-        static std::vector<EntityId> ex2_map1_entites({EntityId("P1"), EntityId("J1"), EntityId("J2"), EntityId("J3"), EntityId("J4"), EntityId("J5"), EntityId("P2"), EntityId("W1"), EntityId("W2"), EntityId("W3"), EntityId("W4"), EntityId("W5")});
+        static std::vector<EntityId> ex2_map1_entites(
+                {EntityId("P1"), EntityId("J1"), EntityId("J2"), EntityId("J3"), EntityId("J4"), EntityId("J5"),
+                 EntityId("P2"), EntityId("W1"), EntityId("W2"), EntityId("W3"), EntityId("W4"), EntityId("W5")});
         return ex2_map1_entites;
     }
     //Empty file
@@ -51,7 +59,7 @@ const std::vector<EntityId>& getInputFileEntities(const std::string& filename) {
  * @param filename1
  * @return std::vector<EntityId>
  */
-std::vector<EntityId> getCombinedFilesEntities(const std::string& filename1, const std::string& filename2) {
+std::vector<EntityId> getCombinedFilesEntities(const std::string &filename1, const std::string &filename2) {
     auto map1_entities = getInputFileEntities(filename1);
     auto map2_entities = getInputFileEntities(filename2);
     std::vector<EntityId> merged_entities;
@@ -92,7 +100,7 @@ TEST(GISPRe, clearReturnValue) {
 TEST(GISPre, saveMapFileReturnValue) {
     GIS gis = GISProvider::getGIS();
     std::string input_file{"nyc.json"};
-    std::string output_file{"out1."+input_file};
+    std::string output_file{"out1." + input_file};
     gis.loadMapFile(input_file);
     std::size_t number_of_saved_entities = gis.saveMapFile(output_file);
     EXPECT_EQ(number_of_saved_entities, getInputFileEntities(input_file).size());
@@ -103,7 +111,7 @@ TEST(GISEx1, saveMapFileLoadSavedMap) {
     GIS gis = GISProvider::getGIS();
     std::string input_file{"nyc.json"};
     gis.loadMapFile(input_file);
-    std::string output_file{"out2."+input_file};
+    std::string output_file{"out2." + input_file};
     std::size_t number_of_saved_entities = gis.saveMapFile(output_file);
     EXPECT_EQ(number_of_saved_entities, getInputFileEntities(input_file).size());
     gis.clear();
@@ -186,12 +194,14 @@ TEST(GISEx1, twoLoadsMap1Map2AndGetEntities) {
 }
 
 constexpr double ex1_epsilon = 1;
-template <typename LL> //TODO: Use LatLong in ex2
+
+template<typename LL>
+//TODO: Use LatLong in ex2
 bool testLatLongEqualityInEx1(LL tested, LL golden) {
     return std::fabs(static_cast<double>(tested) - static_cast<double>(golden)) < ex1_epsilon;
 }
 
-bool testCoordinatsEqualityInEx1(const Coordinates tested, const Coordinates& golden) {
+bool testCoordinatsEqualityInEx1(const Coordinates tested, const Coordinates &golden) {
     return testLatLongEqualityInEx1(tested.longitude(), golden.longitude()) &&
            testLatLongEqualityInEx1(tested.latitude(), golden.latitude());
 }
@@ -259,29 +269,29 @@ TEST(GISEx1, getWayClosestPoint) {
     GIS gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map1.json");
     Coordinates east_point{Longitude{15}, Latitude{-50}};
-    std::pair<Coordinates, EntityId> closest = gis.getWayClosestPoint(east_point);
-    EXPECT_EQ(closest.second, EntityId{"East1"});
+    auto closest = gis.getWayClosestPoint(east_point);
+    EXPECT_EQ(std::get<1>(closest), EntityId{"East1"});
     Coordinates ju_04{Longitude{20}, Latitude{-20.0}};
-    EXPECT_EQ(closest.first, ju_04);
+    EXPECT_EQ(std::get<0>(closest), ju_04);
 }
 
 TEST(GISEx1, getWayClosestPointNorth) {
     GIS gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map2.json");
     Coordinates northern_point{Longitude{-1}, Latitude{60}};
-    std::pair<Coordinates, EntityId> closest_from_gis = gis.getWayClosestPoint(northern_point);
-    EXPECT_EQ(closest_from_gis.second, EntityId{"W1"});
+    auto closest_from_gis = gis.getWayClosestPoint(northern_point);
+    EXPECT_EQ(std::get<1>(closest_from_gis), EntityId{"W1"});
     Coordinates closest_to_northern_way{Longitude{-3.55086}, Latitude{81.3014}};
-    EXPECT_TRUE(testCoordinatsEqualityInEx1(closest_from_gis.first, closest_to_northern_way));
+    EXPECT_TRUE(testCoordinatsEqualityInEx1(std::get<0>(closest_from_gis), closest_to_northern_way));
 }
 
 TEST(GISEx1, getWayClosestPointSouth) {
     GIS gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map2.json");
     Coordinates southern_point{Longitude{21}, Latitude{-1}};
-    std::pair<Coordinates, EntityId> closest_from_gis = gis.getWayClosestPoint(southern_point);
+    auto closest_from_gis = gis.getWayClosestPoint(southern_point);
     Coordinates closest_to_southern_way{Longitude{21.7155}, Latitude{-10.7113}};
-    EXPECT_TRUE(testCoordinatsEqualityInEx1(closest_from_gis.first, closest_to_southern_way));
+    EXPECT_TRUE(testCoordinatsEqualityInEx1(std::get<0>(closest_from_gis), closest_to_southern_way));
 }
 
 TEST(GISEx1, getEntities) {
@@ -300,7 +310,8 @@ namespace gis_testing {
     };
 }
 
-gis_testing::Way ex1_map2_W2{{Longitude{-30}, Latitude{-10}}, {Longitude{30}, Latitude{-10}}};
+gis_testing::Way ex1_map2_W2{{Longitude{-30}, Latitude{-10}},
+                             {Longitude{30},  Latitude{-10}}};
 
 TEST(GISEx1, getEntitiesRadius) {
     GIS gis = GISProvider::getGIS();
@@ -319,7 +330,7 @@ TEST(GISEx1, loadMap1SaveClearAndLoad) {
     std::string input_file{"ex1_map1.json"};
     auto loaded_input = gis.loadMapFile(input_file);
     std::sort(loaded_input.begin(), loaded_input.end());
-    std::string output_file{"out."+input_file};
+    std::string output_file{"out." + input_file};
     std::size_t saved = gis.saveMapFile(output_file);
     std::size_t number_of_cleared_entities = gis.clear();
     EXPECT_TRUE(number_of_cleared_entities == saved && saved == getInputFileEntities(input_file).size());
@@ -334,7 +345,7 @@ TEST(GISEx1, loadMap2SaveClearAndLoad) {
     std::string input_file{"ex1_map2.json"};
     auto loaded_input = gis.loadMapFile(input_file);
     std::sort(loaded_input.begin(), loaded_input.end());
-    std::string output_file{"out."+input_file};
+    std::string output_file{"out." + input_file};
     std::size_t saved = gis.saveMapFile(output_file);
     std::size_t number_of_cleared_entities = gis.clear();
     EXPECT_TRUE(number_of_cleared_entities == saved && saved == getInputFileEntities(input_file).size());
@@ -353,7 +364,8 @@ TEST(GISEx1, twoLoadsMap1Map2ClearSaveAndLoad) {
     std::string output_file{"out_ex1_map1map2.json"};
     std::size_t number_of_saved_entities = gis.saveMapFile(output_file);
     std::size_t number_of_cleared_entities = gis.clear();
-    EXPECT_TRUE(getInputFileEntities(input_file1).size() + getInputFileEntities(input_file2).size() == number_of_saved_entities
+    EXPECT_TRUE(getInputFileEntities(input_file1).size() + getInputFileEntities(input_file2).size() ==
+                number_of_saved_entities
                 && number_of_saved_entities == number_of_cleared_entities);
     std::vector<EntityId> loaded_entities = gis.loadMapFile(output_file);
     std::vector<EntityId> combined_entities = getCombinedFilesEntities(input_file1, input_file2);
@@ -388,7 +400,9 @@ gis_testing::Way ex2_map1_W3{ex2_map1_J2, ex2_map1_J4};
 gis_testing::Way ex2_map1_W4{ex2_map1_J3, ex2_map1_J4};
 gis_testing::Way ex2_map1_W5{ex2_map1_J4, ex2_map1_J5};
 
-std::vector<std::pair<EntityId, Direction>> ex2_map1_best_route_ways{std::make_pair(EntityId{"W1"}, Direction::A_to_B), std::make_pair(EntityId{"W3"}, Direction::A_to_B), std::make_pair(EntityId{"W5"}, Direction::A_to_B)};
+std::vector<std::pair<EntityId, Direction>> ex2_map1_best_route_ways{std::make_pair(EntityId{"W1"}, Direction::A_to_B),
+                                                                     std::make_pair(EntityId{"W3"}, Direction::A_to_B),
+                                                                     std::make_pair(EntityId{"W5"}, Direction::A_to_B)};
 
 TEST(GISEx2, NavigationTest) {
     GIS gis = GISProvider::getGIS();
@@ -404,14 +418,16 @@ TEST(GISEx2, NavigationTest) {
     Routes routes = navigation.getRoutes(start, end);
     EXPECT_TRUE(routes.isValid());
 
-    const Route& shortest_distance_route = routes.shortestDistance();
-    const Route& shortest_time_route = routes.shortestTime();
+    const Route &shortest_distance_route = routes.shortestDistance();
+    const Route &shortest_time_route = routes.shortestTime();
 
     EXPECT_EQ(shortest_distance_route.getWays(), ex2_map1_best_route_ways);
     EXPECT_EQ(shortest_time_route.getWays(), ex2_map1_best_route_ways);
 
-    Coordinates expected_route_start_point = CoordinatesMath::closestPointOnSegment(start, ex2_map1_W1.from, ex2_map1_W1.to);
-    Coordinates expected_route_end_point = CoordinatesMath::closestPointOnSegment(end, ex2_map1_W5.from, ex2_map1_W5.to);
+    Coordinates expected_route_start_point = CoordinatesMath::closestPointOnSegment(start, ex2_map1_W1.from,
+                                                                                    ex2_map1_W1.to);
+    Coordinates expected_route_end_point = CoordinatesMath::closestPointOnSegment(end, ex2_map1_W5.from,
+                                                                                  ex2_map1_W5.to);
 
     // Note: route start point is on W1 - different from start
     // A start point of Route is always on a way!

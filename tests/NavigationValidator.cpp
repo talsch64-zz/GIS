@@ -17,21 +17,21 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     if (!routes.isValid()) {
         return false;
     }
-    std::pair<Coordinates, EntityId> startPair = gis.getWayClosestPoint(start, restrictions);
-    std::pair<Coordinates, EntityId> endPair = gis.getWayClosestPoint(end, restrictions);
+    auto startTuple = gis.getWayClosestPoint(start, restrictions);
+    auto endTuple = gis.getWayClosestPoint(end, restrictions);
 
-    Coordinates origin = startPair.first;
-    Coordinates destination = endPair.first;
+    Coordinates origin = std::get<0>(startTuple);
+    Coordinates destination = std::get<0>(endTuple);
 
-    EntityId startWayId = startPair.second;
-    EntityId finalWayId = endPair.second;
+    EntityId startWayId = std::get<1>(startTuple);
+    EntityId finalWayId = std::get<1>(endTuple);
 
     if (startWayId == finalWayId) { // illegal!
         return false;
     }
 
-    const Way &startWay = gis.getWay(startWayId);
-    const Way &finalWay = gis.getWay(endPair.second);
+    const AbstractWay &startWay = gis.getWay(startWayId);
+    const AbstractWay &finalWay = gis.getWay(std::get<1>(endTuple));
 
     if (origin != routes.getWayStartPoint() || destination != routes.getWayEndPoint()) {
         return false;
@@ -77,10 +77,10 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     for (size_t i = 0; i < ways.size() - 1; i++) {
         EntityId currWayId = ways[i].first;
         Direction currWayDirection = ways[i].second;
-        const Way &currWay = gis.getWay(ways[i].first);
+        const AbstractWay &currWay = gis.getWay(ways[i].first);
         EntityId nextWayId = ways[i + 1].first;
         Direction nextWayDirection = ways[i + 1].second;
-        const Way &nextWay = gis.getWay(nextWayId);
+        const AbstractWay &nextWay = gis.getWay(nextWayId);
 
         auto currWayIdPair = currWay.getJunctions();
         auto nextWayIdPair = nextWay.getJunctions();

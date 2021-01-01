@@ -79,7 +79,7 @@ TEST(GISBasic, MygetWayClosestPointTest1) {
     gis.loadMapFile("nyc2.json");
     Coordinates coord(Longitude(40.731437), Latitude(-73.996967));
     Coordinates expected(Longitude(40.73248), Latitude(-73.99693));
-    auto closest = gis.getWayClosestPoint(coord).first;
+    auto closest = std::get<0>(gis.getWayClosestPoint(coord));
     EXPECT_LT(CoordinatesMath::calculateDistance(expected, closest), METERS_PRECISION);
 }
 
@@ -87,7 +87,7 @@ TEST(GISBasic, MygetWayClosestPointTest2) {
     GIS gis;
     gis.loadMapFile("russia.json");
     Coordinates coord(Longitude(90.28674), Latitude(65.77863));
-    Coordinates closest = gis.getWayClosestPoint(coord).first;
+    Coordinates closest =  std::get<0>(gis.getWayClosestPoint(coord));
     Coordinates to(Longitude(90.28177), Latitude(65.89199));
     EXPECT_TRUE(CoordinatesMath::calculateDistance(to, closest) < METERS_PRECISION);
 }
@@ -96,7 +96,7 @@ TEST(GISBasic, MygetWayClosestPointTest3) {
     GIS gis;
     gis.loadMapFile("russia.json");
     Coordinates coord(Longitude(91.68265), Latitude(65.92547));
-    Coordinates closest = gis.getWayClosestPoint(coord).first;
+    Coordinates closest =  std::get<0>(gis.getWayClosestPoint(coord));
     Coordinates curve(Longitude(90.69101), Latitude(65.98046));
     EXPECT_TRUE(CoordinatesMath::calculateDistance(curve, closest) < METERS_PRECISION);
 }
@@ -140,8 +140,8 @@ TEST(ClosestWay, ClosestWayWithRestrictions) {
     auto closestWay3 = navigationGis.getWayClosestPoint(coord, restrictions3);
     auto closestWay4 = navigationGis.getWayClosestPoint(coord, restrictions4);
 
-    ASSERT_EQ(closestWay1.second, EntityId("way1"));
-    ASSERT_EQ(closestWay2.second, EntityId("way8"));
-    ASSERT_EQ(closestWay3.second, EntityId("way1"));
-    ASSERT_EQ(closestWay4.second, EntityId("way8"));
+    ASSERT_EQ( std::get<1>(closestWay1), EntityId("way1"));
+    ASSERT_EQ(std::get<1>(closestWay2), EntityId("way8"));
+    ASSERT_EQ(std::get<1>(closestWay3), EntityId("way1"));
+    ASSERT_EQ(std::get<1>(closestWay4), EntityId("way8"));
 }

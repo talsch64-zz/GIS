@@ -48,7 +48,8 @@ public:
             std::cout << "ID: " << static_cast<std::string>(way.first) << " Direction: "
                       << ((way.second == Direction::A_to_B) ? "A_B" : "B_A") << std::endl;
             std::cout << "length: " << (double) gis.getWay(way.first).getLength() << ", time: "
-                      << (double) gis.getWay(way.first).getTime() << std::endl;
+                      << (double) Utils::getWayDuration(gis.getWay(way.first).getLength(),
+                                                        gis.getWay(way.first).getSpeedLimit()) << std::endl;
             std::cout << "==================================" << std::endl;
         }
 
@@ -58,7 +59,8 @@ public:
             std::cout << "ID: " << static_cast<std::string>(way.first) << " Direction: "
                       << ((way.second == Direction::A_to_B) ? "A_B" : "B_A") << std::endl;
             std::cout << "length: " << (double) gis.getWay(way.first).getLength() << ", time: "
-                      << (double) gis.getWay(way.first).getTime() << std::endl;
+                      << (double) Utils::getWayDuration(gis.getWay(way.first).getLength(),
+                                                        gis.getWay(way.first).getSpeedLimit()) << std::endl;
             std::cout << "==================================" << std::endl;
         }
         std::cout << "ShortestDistanceRoute - distance: " << (double) routes.shortestDistance().totalLength()
@@ -91,8 +93,8 @@ TEST_F(IsraelMapTest, oppositeRoutesByDistance) {
     auto from_to_ways = routes.shortestDistance().getWays();
     auto to_from_ways = reverseRoutes.shortestDistance().getWays();
     for (int i = 0; i < (int) size1; i++) {
-        EXPECT_EQ(from_to_ways[i].first, to_from_ways[(int)size1 - 1 - i].first);
-        EXPECT_NE(from_to_ways[i].second, to_from_ways[(int)size1 - 1 - i].second);
+        EXPECT_EQ(from_to_ways[i].first, to_from_ways[(int) size1 - 1 - i].first);
+        EXPECT_NE(from_to_ways[i].second, to_from_ways[(int) size1 - 1 - i].second);
     }
 }
 
@@ -120,8 +122,8 @@ TEST_F(IsraelMapTest, oppositeRoutesByTime) {
     auto from_to_ways = routes.shortestTime().getWays();
     auto to_from_ways = reverseRoutes.shortestTime().getWays();
     for (int i = 0; i < (int) size1; i++) {
-        EXPECT_EQ(from_to_ways[i].first, to_from_ways[(int)size1 - 1 - i].first);
-        EXPECT_NE(from_to_ways[i].second, to_from_ways[(int)size1 - 1 - i].second);
+        EXPECT_EQ(from_to_ways[i].first, to_from_ways[(int) size1 - 1 - i].first);
+        EXPECT_NE(from_to_ways[i].second, to_from_ways[(int) size1 - 1 - i].second);
     }
 }
 
@@ -326,9 +328,9 @@ TEST_F(IsraelMapTest, parallelRoutes) {
     auto routes = navigation.getRoutes(origin, destination);
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestDistance()));
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes.shortestTime()));
-    const Way &W2054 = gis.getWay(EntityId("W2054"));
-    const Way &W2055 = gis.getWay(EntityId("W2055"));
-    const Way &W2056 = gis.getWay(EntityId("W2056"));
+    const AbstractWay &W2054 = gis.getWay(EntityId("W2054"));
+    const AbstractWay &W2055 = gis.getWay(EntityId("W2055"));
+    const AbstractWay &W2056 = gis.getWay(EntityId("W2056"));
     Minutes expectedTime = Utils::calculateTime(W2054.getLength(), W2054.getSpeedLimit()) +
                            Utils::calculateTime(W2056.getLength(), W2056.getSpeedLimit());
     EXPECT_EQ(expectedTime, routes.shortestDistance().estimatedDuration());
