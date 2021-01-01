@@ -5,7 +5,7 @@
 #include "../Common/CoordinatesMath.h"
 #include "../navigation/Navigation.h"
 #include "NavigationValidator.h"
-#include "../entities/Way.h"
+#include "../GIS/entities/Way.h"
 #include "../Utils.h"
 
 class IsraelMapTest : public ::testing::Test {
@@ -79,10 +79,10 @@ TEST_F(IsraelMapTest, oppositeRoutesByDistance) {
     Coordinates from(Longitude(32.113357), Latitude(34.801290)); // J1001
     Coordinates to(Longitude(32.11265), Latitude(34.79254)); // J1014
     auto routes = navigation.getRoutes(from, to);
-    EXPECT_TRUE(routes.isValid());
+    EXPECT_TRUE(routes->isValid());
 
-    EXPECT_TRUE(validator.validateRoute(from, to, routes.shortestDistance()));
-    EXPECT_TRUE(validator.validateRoute(from, to, routes.shortestTime()));
+    EXPECT_TRUE(validator.validateRoute(from, to, *(routes->shortestDistance())));
+    EXPECT_TRUE(validator.validateRoute(from, to, *(routes->shortestTime())));
 
 
     auto size1 = routes.shortestDistance().getWays().size();

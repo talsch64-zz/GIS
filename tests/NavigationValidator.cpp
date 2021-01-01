@@ -4,17 +4,17 @@
 #include "../Common/CoordinatesMath.h"
 #include "../Utils.h"
 
-NavigationValidator::NavigationValidator(const GIS_315524694 &gis) : gis(gis) {
+NavigationValidator::NavigationValidator(const AbstractGIS &gis) : gis(gis) {
 }
 
-bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Route &routes) const {
+bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const AbstractRoute &routes) const {
     return validateRoute(start, end, Restrictions(""), routes);
 }
 
 bool
 NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
-                                   const Route &routes) const {
-    if (!routes.isValid()) {
+                                   const AbstractRoute &r) const {
+    if (!r.isValid()) {
         return false;
     }
     auto startTuple = gis.getWayClosestPoint(start, restrictions);
@@ -33,7 +33,7 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     const AbstractWay &startWay = gis.getWay(startWayId);
     const AbstractWay &finalWay = gis.getWay(std::get<1>(endTuple));
 
-    if (origin != routes.getWayStartPoint() || destination != routes.getWayEndPoint()) {
+    if (origin != r.getWayStartPoint() || destination != r.getWayEndPoint()) {
         return false;
     }
 
@@ -51,7 +51,7 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
         return false;
     }
 
-    std::vector<std::pair<EntityId, Direction>> ways = routes.getWays();
+    std::vector<std::pair<EntityId, Direction>> ways = r.getWays();
     if (ways.size() <= 1 || ways.front().first != startWayId || ways.back().first != finalWayId) {
         return false;
     }
@@ -118,7 +118,7 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     length -= redundantLengthFromEnd;
     time -= Utils::calculateTime(redundantLengthFromEnd, finalWay.getSpeedLimit());
 
-    if (routes.totalLength() != length || routes.estimatedDuration() != time) {
+    if (r.totalLength() != length || r.estimatedDuration() != time) {
         return false;
     }
     return true; // finally!!!

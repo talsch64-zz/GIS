@@ -8,7 +8,7 @@
  *
  */
 class NavigationValidator {
-    const GIS_315524694 &gis;
+    const AbstractGIS &gis;
 
 
 public:
@@ -17,7 +17,7 @@ public:
      *
      * @param gis - the referenced GIS object - Note that you get a const ref
      */
-    NavigationValidator(const GIS_315524694& gis);
+    NavigationValidator(const AbstractGIS& gis);
 
     /**
      * @brief Validates the given Route from Start Point to End Point on referenced GIS
@@ -28,7 +28,7 @@ public:
      * @return true - Route is valid
      * @return false - Route is not valid
      */
-    bool validateRoute(const Coordinates& start, const Coordinates& end, const Route& routes) const;
+    bool validateRoute(const Coordinates& start, const Coordinates& end, const AbstractRoute& routes) const;
 
     /**
      * @brief Validates the given Route with Restricitons from Start Point to End Point on referenced GIS
@@ -37,10 +37,10 @@ public:
      * @param start - Start Point
      * @param end - End Point
      * @param restrictions - Restricions for Route
-     * @param routes - Route to be verified
+     * @param r - Route to be verified
      * @return true - Route is valid
      * @return false - Route is not valid
      */
-    bool validateRoute(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions, const Route& routes) const;
+    bool validateRoute(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions, const AbstractRoute& r) const;
 };
 
