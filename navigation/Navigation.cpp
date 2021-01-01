@@ -8,7 +8,8 @@ std::unique_ptr<AbstractRoutes> Navigation::getRoutes(const Coordinates &start, 
     return getRoutes(start, end, Restrictions(""));
 }
 
-std::unique_ptr<AbstractRoutes> Navigation::getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const {
+std::unique_ptr<AbstractRoutes>
+Navigation::getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const {
     auto startPair = navigationGIS.getWayClosestPoint(start, restrictions);
     if (std::get<1>(startPair) == EntityId("")) {
         return std::make_unique<Routes>(Route::invalidRoute(), Route::invalidRoute(), false, "No ways on earth!");
@@ -20,16 +21,16 @@ std::unique_ptr<AbstractRoutes> Navigation::getRoutes(const Coordinates &start, 
     const Coordinates &destinationPoint = std::get<0>(endPair);
     if (startWay.getId() == endWay.getId()) {
         return std::make_unique<Routes>(Route::invalidRoute(), Route::invalidRoute(), false,
-                      "Routes contain only one way!");
+                                        "Routes contain only one way!");
     }
     AStar star(navigationGIS, startPoint, destinationPoint, startWay, endWay, restrictions);
-    Route shortestByDistance = star.shortestByDistance();
-    if (!shortestByDistance.isValid()) {
+    auto shortestByDistance = star.shortestByDistance();
+    if (!shortestByDistance->isValid()) {
 //        initialize invalid Routes
         return std::make_unique<Routes>(Route::invalidRoute(startPoint, destinationPoint),
-                      Route::invalidRoute(startPoint, destinationPoint), false, "Routes not found!");
+                                        Route::invalidRoute(startPoint, destinationPoint), false, "Routes not found!");
     }
-    Route shortestByTime = star.shortestByTime();
-    return std::make_unique<Routes>(shortestByDistance, shortestByTime, true);
+    auto shortestByTime = star.shortestByTime();
+    return std::make_unique<Routes>(std::move(shortestByDistance), std::move(shortestByTime), true);
 }
 

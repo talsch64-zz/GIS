@@ -59,9 +59,9 @@ public:
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
           const AbstractWay &startWay, const AbstractWay &finalWay, const Restrictions &restrictions);
 
-    Route shortestByDistance();
+    std::unique_ptr<Route> shortestByDistance();
 
-    Route shortestByTime();
+    std::unique_ptr<Route> shortestByTime();
 
 private:
     using Edge = std::optional<std::pair<EntityId, Direction>>;
@@ -154,7 +154,7 @@ private:
      */
     static bool compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2);
 
-    Route searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, const Coordinates &target),
+    std::unique_ptr<Route> searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, const Coordinates &target),
                               double (*costFunc)(const AbstractWay &way),
                               bool (*comparator)(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2));
 

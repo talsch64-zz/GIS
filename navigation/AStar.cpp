@@ -22,17 +22,17 @@ AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, cons
           finalWay(finalWay),
           restrictions(restrictions) {}
 
-Route
+std::unique_ptr<Route>
 AStar::shortestByDistance() {
     return searchShortestRoute(distanceHeuristic, costByDistance, compareByDistance);
 }
 
-Route
+std::unique_ptr<Route>
 AStar::shortestByTime() {
     return searchShortestRoute(timeHeuristic, costByTime, compareByTime);
 }
 
-Route
+std::unique_ptr<Route>
 AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
                            double (*costFunc)(const AbstractWay &),
                            bool (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
@@ -110,7 +110,7 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
     }
 
     std::vector<std::pair<EntityId, Direction>> ways = restoreShortestRoute(currNode);
-    return std::move(Route(origin, destination, currNode->getDistanceSoFar(), currNode->getTimeSoFar(), ways, true));
+    return std::make_unique<Route>(origin, destination, currNode->getDistanceSoFar(), currNode->getTimeSoFar(), ways, true);
 }
 
 std::vector<std::pair<EntityId, Direction>> AStar::restoreShortestRoute(std::shared_ptr<Node> node) {
