@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "../Common/GISNamedTypes.h"
 #include "../GISProvider.h"
-#include "../Navigation/Navigation.h"
+#include "../Navigation/Navigation_315524694.h"
 #include "../tests/NavigationValidator.h"
 #include "../GIS/entities/Way.h"
 #include "../Utils.h"
@@ -10,7 +10,7 @@ class IsraelMapTest : public ::testing::Test {
 protected:
     GIS_315524694 gis;
     NavigationGIS navGis;
-    Navigation navigation;
+    Navigation_315524694 navigation;
     NavigationValidator validator;
 
 public:

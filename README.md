@@ -70,7 +70,7 @@ Handles geographical searches including searching for grid cells in a given circ
 ## Logger
 Handles errors which arise during the JSON parsing and logs them in a logger file.
 
-## Navigation
+## Navigation_315524694
 Handles navigation queries - manages the search for the shortest route and the fastest route.
 Supports also queries with custom restrictions such as avoid highway or toll roads.
 

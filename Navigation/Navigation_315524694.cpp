@@ -1,15 +1,15 @@
 
-#include "Navigation.h"
+#include "Navigation_315524694.h"
 #include "AStar.h"
 
-Navigation::Navigation(const NavigationGIS &navigationGis) : navigationGIS(navigationGis) {}
+Navigation_315524694::Navigation_315524694(const NavigationGIS &navigationGis) : navigationGIS(navigationGis) {}
 
-std::unique_ptr<AbstractRoutes> Navigation::getRoutes(const Coordinates &start, const Coordinates &end) const {
+std::unique_ptr<AbstractRoutes> Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end) const {
     return getRoutes(start, end, Restrictions(""));
 }
 
 std::unique_ptr<AbstractRoutes>
-Navigation::getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const {
+Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const {
     auto startPair = navigationGIS.getWayClosestPoint(start, restrictions);
     if (std::get<1>(startPair) == EntityId("")) {
         return std::make_unique<Routes>(nullptr, nullptr, false, "No ways on earth!");

@@ -13,7 +13,7 @@
  * Get the shortest routes by distance and time.
  *
  */
-class Navigation: public AbstractNavigation {
+class Navigation_315524694: public AbstractNavigation {
     NavigationGIS navigationGIS;
 
 public:
@@ -22,7 +22,7 @@ public:
      *
      * @param navigationGis - Note: you get a const ref of NavigationGIS
      */
-    Navigation(const NavigationGIS& navigationGis);
+    Navigation_315524694(const NavigationGIS& navigationGis);
 
     /**
      * @brief Get the Routes object

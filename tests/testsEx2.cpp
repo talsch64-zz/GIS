@@ -12,7 +12,7 @@
 // Ex2
 #include "../Common/NavigationGIS.h"
 #include "../Common/GISNamedTypes.h"
-#include "../Navigation/Navigation.h"
+#include "../Navigation/Navigation_315524694.h"
 #include "../Navigation/Routes.h"
 #include "../Navigation/Route.h"
 #include "NavigationValidator.h"
@@ -411,7 +411,7 @@ TEST(GISEx2, NavigationTest) {
     EXPECT_EQ(loaded_entities, getInputFileEntities(input_file));
 
     NavigationGIS navigation_gis{gis};
-    Navigation navigation{navigation_gis};
+    Navigation_315524694 navigation{navigation_gis};
 
     Coordinates start{ex2_map1_P1}; // Note: this point is not on a way (could be on way in other cases)
     Coordinates end{ex2_map1_P2}; // Note: this point is not on a way (could be on way in other cases)

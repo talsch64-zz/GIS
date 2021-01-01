@@ -30,7 +30,7 @@ $(BIN_DIR)/Route.o: Route.cpp Route.h ../Common/*.h
 $(BIN_DIR)/Routes.o: Routes.cpp Routes.h Route.h ../Common/*.h
 	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
 
-$(BIN_DIR)/Navigation.o: Navigation.cpp Navigation.h ../Common/*.h
+$(BIN_DIR)/Navigation_315524694.o: Navigation_315524694.cpp Navigation_315524694.h ../Common/*.h
 	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
 
 clean:

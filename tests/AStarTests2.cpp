@@ -2,7 +2,7 @@
 #include "GISMock.h"
 #include "../Navigation/Route.h"
 #include "../Common/NavigationGIS.h"
-#include "../Navigation/Navigation.h"
+#include "../Navigation/Navigation_315524694.h"
 #include "RandTestUtils.h"
 #include "NavigationValidator.h"
 
@@ -41,7 +41,7 @@ TEST(AStar, BasicPathTest) {
     GISMock gis;
     gis.loadMapFile("astar.json");
     NavigationGIS navigationGis(gis);
-    Navigation navigation(navigationGis);
+    Navigation_315524694 navigation(navigationGis);
     NavigationValidator navigationValidator(gis);
     std::vector<std::pair<EntityId, Direction>> expectedDistanceRoute = {
             std::make_pair(EntityId("way1"), Direction::A_to_B),
@@ -67,7 +67,7 @@ TEST(AStar, WrongPathsAppearCloserToTarget) {
     GIS_315524694 gis;
     gis.loadMapFile("astar2.json");
     NavigationGIS navigationGis(gis);
-    Navigation navigation(navigationGis);
+    Navigation_315524694 navigation(navigationGis);
     NavigationValidator navigationValidator(gis);
     std::vector<std::pair<EntityId, Direction>> expectedDistanceRoute = {
             std::make_pair(EntityId("way4"), Direction::B_to_A),
@@ -94,7 +94,7 @@ TEST(AStar, InvalidRouteLastWayHighway) {
     GIS_315524694 gis;
     gis.loadMapFile("astar3.json");
     NavigationGIS navigationGis(gis);
-    Navigation navigation(navigationGis);
+    Navigation_315524694 navigation(navigationGis);
     Coordinates startCoord(Longitude(20.86616914522187),
                            Latitude(43.99225503398053));
     Coordinates endCoord(Longitude(20.88795928805733),
@@ -108,7 +108,7 @@ TEST(AStar, HighwayTooFar) {
     GIS_315524694 gis;
     gis.loadMapFile("astar3b.json");
     NavigationGIS navigationGis(gis);
-    Navigation navigation(navigationGis);
+    Navigation_315524694 navigation(navigationGis);
     NavigationValidator navigationValidator(gis);
     std::vector<std::pair<EntityId, Direction>> expectedDistanceRoute = {
             std::make_pair(EntityId("way3"), Direction::B_to_A),
@@ -132,7 +132,7 @@ TEST(AStar, HighwayWithinThreeMeters) {
     GIS_315524694 gis;
     gis.loadMapFile("astar3b.json");
     NavigationGIS navigationGis(gis);
-    Navigation navigation(navigationGis);
+    Navigation_315524694 navigation(navigationGis);
     NavigationValidator navigationValidator(gis);
     std::vector<std::pair<EntityId, Direction>> expectedDistanceRoute = {
             std::make_pair(EntityId("way1"), Direction::A_to_B),
@@ -170,7 +170,7 @@ TEST(AStar, HeartOfGold) {
         Coordinates startCoord = RandTestUtils::randCoord(bound);
         Coordinates endCoord = RandTestUtils::randCoord(bound);
         NavigationGIS navigationGis(*gis);
-        Navigation navigation(navigationGis);
+        Navigation_315524694 navigation(navigationGis);
 
         auto routes = navigation.getRoutes(startCoord, endCoord);
         auto routesExpected = RandTestUtils::getBestRoutes(*gis, idGenerator, startCoord, endCoord);
