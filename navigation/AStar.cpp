@@ -1,7 +1,7 @@
 #include <iostream>
 #include "AStar.h"
 #include "Route.h"
-#include "../entities/Way.h"
+#include "../GIS/entities/Way.h"
 #include "../Common/NavigationGIS.h"
 #include "../Utils.h"
 

@@ -4,7 +4,7 @@
 
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
-#include "../../../Common/GISNamedTypes.h"
+#include "../../../../Common/GISNamedTypes.h"
 
 /// CoordinatesJsonSerializer handles coordinates serialization into JSON format
 class CoordinatesJsonSerializer {

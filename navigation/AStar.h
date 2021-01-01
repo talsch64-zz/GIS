@@ -8,7 +8,7 @@
 #include <functional>
 #include <memory>
 #include "../Common/GISNamedTypes.h"
-#include "../entities/Way.h"
+#include "../GIS/entities/Way.h"
 #include "../Common/NavigationGIS.h"
 #include "../Common/CoordinatesMath.h"
 #include "Route.h"

@@ -3,10 +3,10 @@
 #define EX1_WAY_H
 
 #include "Entity.h"
-#include "../Common/GISNamedTypes.h"
+#include "../../Common/GISNamedTypes.h"
 #include "geometry/PointList.h"
-#include "../Common/Restrictions.h"
-#include "../Common/AbstractWay.h"
+#include "../../Common/Restrictions.h"
+#include "../../Common/AbstractWay.h"
 
 /// Entity derived class which represents a Way in the GIS application
 /// Way's geometry is a Circle that is represented by a radius and center coordinates

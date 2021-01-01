@@ -1,10 +1,10 @@
 #include <memory>
 #include "EntityJsonParser.h"
 #include "../../Way.h"
-#include "../../../GIS/GIS.h"
+#include "../../../GIS_315524694.h"
 #include "../../geometry/PointList.h"
 
-std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc, GIS &gis) {
+std::unique_ptr<Entity> EntityJsonParser::parse(rapidjson::Value &doc, GIS_315524694 &gis) {
     std::string type = doc["type"].GetString();
     if (type == "POI") {
         return parsePoi(doc);
@@ -24,7 +24,7 @@ bool EntityJsonParser::isWay(rapidjson::Value &jsonEntity) {
     return (type == "Way");
 }
 
-std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS &gis) {
+std::unique_ptr<Way> EntityJsonParser::parseWay(rapidjson::Value &doc, const GIS_315524694 &gis) {
     std::string name = parseName(doc);
     std::string description = parseDescription(doc);
     std::vector<std::string> categoryTags = parseCategoryTags(doc);

@@ -1,10 +1,10 @@
 #include "NavigationValidator.h"
 #include "../navigation/Route.h"
-#include "../entities/Way.h"
+#include "../GIS/entities/Way.h"
 #include "../Common/CoordinatesMath.h"
 #include "../Utils.h"
 
-NavigationValidator::NavigationValidator(const GIS &gis) : gis(gis) {
+NavigationValidator::NavigationValidator(const GIS_315524694 &gis) : gis(gis) {
 }
 
 bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Route &routes) const {

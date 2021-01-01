@@ -1,7 +1,7 @@
 #ifndef GIS_CPP_BOUND_H
 #define GIS_CPP_BOUND_H
 
-#include "../GIS/GIS.h"
+#include "../GIS/GIS_315524694.h"
 
 class Bound {
 public:

@@ -8,7 +8,7 @@
 
 class IsraelMapTest : public ::testing::Test {
 protected:
-    GIS gis;
+    GIS_315524694 gis;
     NavigationGIS navGis;
     Navigation navigation;
     NavigationValidator validator;

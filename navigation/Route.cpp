@@ -32,12 +32,12 @@ Route::Route(Coordinates startPoint, Coordinates endPoint, Meters length, Minute
                                                                              duration(duration),
                                                                              ways(std::move(ways)), valid(valid) {}
 
-Route Route::invalidRoute(const Coordinates &start, const Coordinates &end) {
-    return Route(start, end, Meters(MAXFLOAT), Minutes(MAXFLOAT), std::vector<std::pair<EntityId, Direction>>(), false);
+std::unique_ptr<Route> Route::invalidRoute(const Coordinates &start, const Coordinates &end) {
+    return  std::make_unique<Route>(start, end, Meters(MAXFLOAT), Minutes(MAXFLOAT), std::vector<std::pair<EntityId, Direction>>(), false);
 }
 
-Route Route::invalidRoute() {
-    return Route(Coordinates(Longitude(0), Latitude(0)), Coordinates(Longitude(0), Latitude(0)), Meters(MAXFLOAT),
+std::unique_ptr<Route> Route::invalidRoute() {
+    return std::make_unique<Route>(Coordinates(Longitude(0), Latitude(0)), Coordinates(Longitude(0), Latitude(0)), Meters(MAXFLOAT),
                  Minutes(MAXFLOAT), std::vector<std::pair<EntityId, Direction>>(), false);
 }
 

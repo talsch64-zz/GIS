@@ -8,10 +8,10 @@
 #include <optional>
 #include <unordered_map>
 #include <memory>
-#include "../entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
-#include "../entities/JsonHandlers/Serializers/JsonFileWriter.h"
-#include "../search/Grid.h"
-#include "../search/TopologicalSearch.h"
+#include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
+#include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
+#include "search/Grid.h"
+#include "search/TopologicalSearch.h"
 #include "../IdGenerator.h"
 #include "../Common/GISNamedTypes.h"
 #include "../Logger.h"
@@ -31,7 +31,7 @@ class EntityJsonParser;
 /// * Search closest way (and the closest Coordinates on the way) from a given Coordinates
 
 
-class GIS: public AbstractGIS {
+class GIS_315524694: public AbstractGIS {
 protected:
     /**
      * Max distance to be from a highway for it to be a valid start of a route
@@ -55,7 +55,7 @@ protected:
     std::vector<EntityId> ids;
 
 public:
-    GIS();
+    GIS_315524694();
 
     std::size_t clear();
 

@@ -4,6 +4,7 @@
 #include "Routes.h"
 #include "../Common/Restrictions.h"
 #include "../Common/NavigationGIS.h"
+#include "../Common/AbstractNavigation.h"
 
 /**
  * @brief Navigation class.
@@ -12,7 +13,7 @@
  * Get the shortest routes by distance and time.
  *
  */
-class Navigation {
+class Navigation: public AbstractNavigation {
     NavigationGIS navigationGIS;
 
 public:
@@ -30,7 +31,7 @@ public:
      * @param end
      * @return Routes
      */
-    Routes getRoutes(const Coordinates& start, const Coordinates& end) const;
+    std::unique_ptr<AbstractRoutes> getRoutes(const Coordinates& start, const Coordinates& end) const;
 
     /**
      * @brief Get the Routes object
@@ -41,5 +42,5 @@ public:
      * @param restrictions - Restricted Ways
      * @return Routes
      */
-    Routes getRoutes(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions) const;
+    std::unique_ptr<AbstractRoutes> getRoutes(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions) const;
 };

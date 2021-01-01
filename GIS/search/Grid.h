@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Common/GISNamedTypes.h"
+#include "../../Common/GISNamedTypes.h"
 #include "../entities/Entity.h"
 #include "TopologicalSearch.h"
 #include <vector>

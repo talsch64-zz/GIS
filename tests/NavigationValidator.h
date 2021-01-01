@@ -1,14 +1,14 @@
 #pragma once
 
 #include "../navigation/Route.h"
-#include "../GIS/GIS.h"
+#include "../GIS/GIS_315524694.h"
 
 /**
  * @brief NavigationValidator class to test validity or Route
  *
  */
 class NavigationValidator {
-    const GIS &gis;
+    const GIS_315524694 &gis;
 
 
 public:
@@ -17,7 +17,7 @@ public:
      *
      * @param gis - the referenced GIS object - Note that you get a const ref
      */
-    NavigationValidator(const GIS& gis);
+    NavigationValidator(const GIS_315524694& gis);
 
     /**
      * @brief Validates the given Route from Start Point to End Point on referenced GIS

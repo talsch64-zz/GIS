@@ -73,14 +73,14 @@ std::vector<EntityId> getCombinedFilesEntities(const std::string &filename1, con
 }
 
 TEST(GISPre, loadMapFile) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"nyc.json"};
     std::vector<EntityId> loaded_entities = gis.loadMapFile(input_file);
     EXPECT_EQ(loaded_entities, getInputFileEntities(input_file));
 }
 
 TEST(GISPre, getEntities) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"nyc.json"};
     gis.loadMapFile(input_file);
     std::vector<EntityId> entities = gis.getEntities("Washington Square Park");
@@ -90,7 +90,7 @@ TEST(GISPre, getEntities) {
 }
 
 TEST(GISPRe, clearReturnValue) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"nyc.json"};
     gis.loadMapFile(input_file);
     std::size_t number_of_cleared_entities = gis.clear();
@@ -98,7 +98,7 @@ TEST(GISPRe, clearReturnValue) {
 }
 
 TEST(GISPre, saveMapFileReturnValue) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"nyc.json"};
     std::string output_file{"out1." + input_file};
     gis.loadMapFile(input_file);
@@ -108,7 +108,7 @@ TEST(GISPre, saveMapFileReturnValue) {
 }
 
 TEST(GISEx1, saveMapFileLoadSavedMap) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"nyc.json"};
     gis.loadMapFile(input_file);
     std::string output_file{"out2." + input_file};
@@ -124,7 +124,7 @@ TEST(GISEx1, saveMapFileLoadSavedMap) {
 }
 
 TEST(GISEx1, clearLoad) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"nyc.json"};
     gis.loadMapFile(input_file);
     gis.clear();
@@ -133,21 +133,21 @@ TEST(GISEx1, clearLoad) {
 }
 
 TEST(GISEx1, loadMapFileMap1) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"ex1_map1.json"};
     std::vector<EntityId> loaded_entities = gis.loadMapFile(input_file);
     EXPECT_EQ(loaded_entities, getInputFileEntities(input_file));
 }
 
 TEST(GISEx1, loadMapFileMap2) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"ex1_map2.json"};
     std::vector<EntityId> loaded_entities = gis.loadMapFile(input_file);
     EXPECT_EQ(loaded_entities, getInputFileEntities(input_file));
 }
 
 TEST(GISEx1, loadMapFileMap1NoIds) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::vector<EntityId> loaded_entities = gis.loadMapFile("ex1_map1.no_ids.json");
     std::size_t number_of_loaded_entities = loaded_entities.size();
     std::size_t expected_number_of_loaded_entities = 5;
@@ -155,7 +155,7 @@ TEST(GISEx1, loadMapFileMap1NoIds) {
 }
 
 TEST(GISEx1, loadMapFileMap1MixedIds) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::vector<EntityId> loaded_entities = gis.loadMapFile("ex1_map1.mixed_ids_file.json");
     std::size_t number_of_loaded_entities = loaded_entities.size();
     std::set<std::size_t> expected_number_of_loaded_entities({1, 6, 7});
@@ -163,7 +163,7 @@ TEST(GISEx1, loadMapFileMap1MixedIds) {
 }
 
 TEST(GISEx1, twoLoadsSameFile) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map1.json");
     gis.loadMapFile("ex1_map1.json");
     std::vector<EntityId> entities = gis.getEntities("LWS");
@@ -172,7 +172,7 @@ TEST(GISEx1, twoLoadsSameFile) {
 }
 
 TEST(GISEx1, twoLoadsMap1Map2) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file1{"ex1_map1.json"};
     std::vector<EntityId> loaded_entities1 = gis.loadMapFile(input_file1);
     EXPECT_EQ(loaded_entities1, getInputFileEntities(input_file1));
@@ -182,7 +182,7 @@ TEST(GISEx1, twoLoadsMap1Map2) {
 }
 
 TEST(GISEx1, twoLoadsMap1Map2AndGetEntities) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file1{"ex1_map1.json"};
     gis.loadMapFile(input_file1);
     std::string input_file2{"ex1_map2.json"};
@@ -208,7 +208,7 @@ bool testCoordinatsEqualityInEx1(const Coordinates tested, const Coordinates &go
 
 TEST(GISEx1, getEntityClosestPointNotKnown) {
     // [1] If the Id is not known returns an empty optional
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map1.json");
     Coordinates point{Longitude{40.0}, Latitude{10.0}};
     Coordinates pnt_center{Longitude{20.0}, Latitude{70.0}};
@@ -218,7 +218,7 @@ TEST(GISEx1, getEntityClosestPointNotKnown) {
 }
 
 TEST(GISEx1, getEntityClosestPoint1) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map1.json");
     Coordinates point{Longitude{40.0}, Latitude{10.0}};
     Coordinates pnt_center{Longitude{20.0}, Latitude{70.0}};
@@ -230,7 +230,7 @@ TEST(GISEx1, getEntityClosestPoint1) {
 }
 
 TEST(GISEx1, getEntityClosestPoint2) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map2.json");
     Coordinates point{Longitude{-1}, Latitude{-1}};
     Coordinates pnt_center{Longitude{20.730811}, Latitude{10.997455}};
@@ -242,7 +242,7 @@ TEST(GISEx1, getEntityClosestPoint2) {
 }
 
 TEST(GISEx2, getEntityClosestPoint1) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map1.json");
     Coordinates point{Longitude{40.0}, Latitude{10.0}};
     Coordinates pnt_center{Longitude{20.0}, Latitude{70.0}};
@@ -254,7 +254,7 @@ TEST(GISEx2, getEntityClosestPoint1) {
 }
 
 TEST(GISEx2, getEntityClosestPoint2) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map2.json");
     Coordinates point{Longitude{-1}, Latitude{-1}};
     Coordinates pnt_center{Longitude{20.730811}, Latitude{10.997455}};
@@ -266,7 +266,7 @@ TEST(GISEx2, getEntityClosestPoint2) {
 }
 
 TEST(GISEx1, getWayClosestPoint) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map1.json");
     Coordinates east_point{Longitude{15}, Latitude{-50}};
     auto closest = gis.getWayClosestPoint(east_point);
@@ -276,7 +276,7 @@ TEST(GISEx1, getWayClosestPoint) {
 }
 
 TEST(GISEx1, getWayClosestPointNorth) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map2.json");
     Coordinates northern_point{Longitude{-1}, Latitude{60}};
     auto closest_from_gis = gis.getWayClosestPoint(northern_point);
@@ -286,7 +286,7 @@ TEST(GISEx1, getWayClosestPointNorth) {
 }
 
 TEST(GISEx1, getWayClosestPointSouth) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map2.json");
     Coordinates southern_point{Longitude{21}, Latitude{-1}};
     auto closest_from_gis = gis.getWayClosestPoint(southern_point);
@@ -295,7 +295,7 @@ TEST(GISEx1, getWayClosestPointSouth) {
 }
 
 TEST(GISEx1, getEntities) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map2.json");
     std::vector<EntityId> entities = gis.getEntities("A_way");
     std::vector<EntityId> expected_entities({EntityId("W1"), EntityId("W2")});
@@ -314,7 +314,7 @@ gis_testing::Way ex1_map2_W2{{Longitude{-30}, Latitude{-10}},
                              {Longitude{30},  Latitude{-10}}};
 
 TEST(GISEx1, getEntitiesRadius) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     gis.loadMapFile("ex1_map2.json");
     Coordinates point{Longitude{-20}, Latitude{-9.94}};
     Meters circle_radius{100'000};
@@ -326,7 +326,7 @@ TEST(GISEx1, getEntitiesRadius) {
 }
 
 TEST(GISEx1, loadMap1SaveClearAndLoad) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"ex1_map1.json"};
     auto loaded_input = gis.loadMapFile(input_file);
     std::sort(loaded_input.begin(), loaded_input.end());
@@ -341,7 +341,7 @@ TEST(GISEx1, loadMap1SaveClearAndLoad) {
 }
 
 TEST(GISEx1, loadMap2SaveClearAndLoad) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"ex1_map2.json"};
     auto loaded_input = gis.loadMapFile(input_file);
     std::sort(loaded_input.begin(), loaded_input.end());
@@ -356,7 +356,7 @@ TEST(GISEx1, loadMap2SaveClearAndLoad) {
 }
 
 TEST(GISEx1, twoLoadsMap1Map2ClearSaveAndLoad) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file1{"ex1_map1.json"};
     std::vector<EntityId> loaded_entities1 = gis.loadMapFile(input_file1);
     std::string input_file2{"ex1_map2.json"};
@@ -376,7 +376,7 @@ TEST(GISEx1, twoLoadsMap1Map2ClearSaveAndLoad) {
 }
 
 TEST(GISEx1, loadNonExistantFile) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"___non_existant_file___"};
     std::vector<EntityId> loaded_entities = gis.loadMapFile(input_file);
     std::size_t expected_number_of_loaded_entities = 0;
@@ -405,7 +405,7 @@ std::vector<std::pair<EntityId, Direction>> ex2_map1_best_route_ways{std::make_p
                                                                      std::make_pair(EntityId{"W5"}, Direction::A_to_B)};
 
 TEST(GISEx2, NavigationTest) {
-    GIS gis = GISProvider::getGIS();
+    GIS_315524694 gis = GISProvider::getGIS();
     std::string input_file{"ex2_map1.json"};
     auto loaded_entities = gis.loadMapFile(input_file);
     EXPECT_EQ(loaded_entities, getInputFileEntities(input_file));

@@ -2,7 +2,7 @@
 #include "JsonHandlers/Serializers/EntityJsonSerializer.h"
 
 #include "Way.h"
-#include "../Utils.h"
+#include "../../Utils.h"
 #include <utility>
 
 Way::Way(const EntityId &id, const std::string &name, const std::string &description,

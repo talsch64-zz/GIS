@@ -2,7 +2,9 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "../Common/GISNamedTypes.h"
+#include "../Common/AbstractRoute.h"
 
 /**
  * @brief Route class
@@ -15,7 +17,7 @@
  * Is the route valid.
  */
 
- class Route {
+ class Route: public AbstractRoute {
  protected:
      Coordinates startPoint;
      Coordinates endPoint;
@@ -35,35 +37,35 @@
      *
      * @return const std::vector<std::pair<EntityId, Direction>>&
      */
-    const std::vector<std::pair<EntityId, Direction>>& getWays() const;
+    const std::vector<std::pair<EntityId, Direction>>& getWays() const override;
 
     /**
      * @brief Get the Way's Start Point
      *
      * @return const Coordinates&
      */
-    const Coordinates& getWayStartPoint() const;
+    const Coordinates& getWayStartPoint() const override;
 
     /**
      * @brief Get the Way's End Point
      *
      * @return const Coordinates&
      */
-    const Coordinates& getWayEndPoint() const;
+    const Coordinates& getWayEndPoint() const override;
 
     /**
      * @brief Get Way's total length
      *
      * @return Meters
      */
-    Meters totalLength() const;
+    Meters totalLength() const override;
 
     /**
      * @brief Get Way's estimated duration
      *
      * @return Minutes
      */
-    Minutes estimatedDuration() const;
+    Minutes estimatedDuration() const override;
 
      /**
       * @brief Check if route is valid
@@ -79,14 +81,12 @@
       * @param end
       * @return invalid route
       */
-     static Route invalidRoute(const Coordinates &start, const Coordinates &end);
+     static std::unique_ptr<Route> invalidRoute(const Coordinates &start, const Coordinates &end);
      /**
       * @brief initializing invalid Route
       * @return invalid route
       */
-     static Route invalidRoute();
-
-
+     static std::unique_ptr<Route> invalidRoute();
  };
 
 

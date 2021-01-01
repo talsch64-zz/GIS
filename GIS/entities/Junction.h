@@ -6,7 +6,7 @@
 #define EX1_JUNCTION_H
 
 #include "Entity.h"
-#include "../Common/GISNamedTypes.h"
+#include "../../Common/GISNamedTypes.h"
 #include "geometry/Point.h"
 
 

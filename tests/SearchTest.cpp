@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../GIS/GIS.h"
+#include "../GIS/GIS_315524694.h"
 #include "GISMock.h"
 #include "../entities/Junction.h"
 #include "../entities/POI.h"
@@ -15,7 +15,7 @@
 #include<time.h>
 
 TEST(Search, MySearchCircleTest) {
-    GIS gis;
+    GIS_315524694 gis;
     gis.loadMapFile("gearth.json");
 
     std::vector<EntityId> foundEntityIds = gis.getEntities("aaa",
@@ -30,7 +30,7 @@ TEST(Search, MySearchCircleTest) {
 }
 
 TEST(Search, MySearchWaysTest) {
-    GIS gis;
+    GIS_315524694 gis;
     auto loadedIds = gis.loadMapFile("ways-search.json");
 
     std::vector<EntityId> foundEntityIds = gis.getEntities("way",

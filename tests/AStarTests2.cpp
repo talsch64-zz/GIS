@@ -67,7 +67,7 @@ TEST(AStar, BasicPathTest) {
 }
 
 TEST(AStar, WrongPathsAppearCloserToTarget) {
-    GIS gis;
+    GIS_315524694 gis;
     gis.loadMapFile("astar2.json");
     NavigationGIS navigationGis(gis);
     Navigation navigation(navigationGis);
@@ -94,7 +94,7 @@ TEST(AStar, WrongPathsAppearCloserToTarget) {
 }
 
 TEST(AStar, InvalidRouteLastWayHighway) {
-    GIS gis;
+    GIS_315524694 gis;
     gis.loadMapFile("astar3.json");
     NavigationGIS navigationGis(gis);
     Navigation navigation(navigationGis);
@@ -108,7 +108,7 @@ TEST(AStar, InvalidRouteLastWayHighway) {
 }
 
 TEST(AStar, HighwayTooFar) {
-    GIS gis;
+    GIS_315524694 gis;
     gis.loadMapFile("astar3b.json");
     NavigationGIS navigationGis(gis);
     Navigation navigation(navigationGis);
@@ -132,7 +132,7 @@ TEST(AStar, HighwayTooFar) {
 }
 
 TEST(AStar, HighwayWithinThreeMeters) {
-    GIS gis;
+    GIS_315524694 gis;
     gis.loadMapFile("astar3b.json");
     NavigationGIS navigationGis(gis);
     Navigation navigation(navigationGis);

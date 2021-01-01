@@ -5,7 +5,7 @@ OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))
 SHARED_OBJ := GIS_098765432.so
-OUTPUT_DIR := ../../OUTPUT/GIS
+OUTPUT_DIR := ../../OUTPUT/GIS_315524694
 OUTPUT_SHARED_OBJ := $(OUTPUT_DIR)/$(SHARED_OBJ)
 
 CPP_COMP_FLAG := -std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
@@ -24,7 +24,7 @@ $(OUTPUT_SHARED_OBJ): $(OBJS)
 
 # Make sure to have all your dependencies for each .o file creation rule
 
-$(BIN_DIR)/GIS.o: GIS.cpp GIS.h ../Common/*.h
+$(BIN_DIR)/GIS_315524694.o: GIS_315524694.cpp GIS_315524694.h ../Common/*.h
 	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
 
 $(BIN_DIR)/Way.o: Way.cpp Way.h ../Common/*.h
