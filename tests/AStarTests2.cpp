@@ -6,7 +6,7 @@
 #include "RandTestUtils.h"
 #include "NavigationValidator.h"
 
-void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, const Route &actual) {
+void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, const AbstractRoute &actual) {
     auto routeIterator = actual.getWays().begin();
     EXPECT_EQ(actual.getWays().size(), expected.size());
     for (auto &wayPair : expected) {
@@ -16,20 +16,17 @@ void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, co
     }
 }
 
-void compareRoutes(const Route &actualRoute, const Route &expectedRoute, bool distance) {
-    EXPECT_EQ(actualRoute.isValid(), expectedRoute.isValid());
-    if (actualRoute.isValid()) {
+void compareRoutes(const AbstractRoute &actualRoute, const AbstractRoute &expectedRoute, bool distance) {
 //        assertRoute(expectedRoute.getWays(), actualRoute);
-        if (distance) {
-            EXPECT_DOUBLE_EQ((double) actualRoute.totalLength(), (double) expectedRoute.totalLength());
-            EXPECT_LE(actualRoute.estimatedDuration(), expectedRoute.estimatedDuration());
-        } else {
-            EXPECT_LE(actualRoute.totalLength(), expectedRoute.totalLength());
-            EXPECT_DOUBLE_EQ((double) actualRoute.estimatedDuration(), (double) expectedRoute.estimatedDuration());
-        }
-        EXPECT_EQ(actualRoute.getWayStartPoint(), expectedRoute.getWayStartPoint());
-        EXPECT_EQ(actualRoute.getWayEndPoint(), expectedRoute.getWayEndPoint());
+    if (distance) {
+        EXPECT_DOUBLE_EQ((double) actualRoute.totalLength(), (double) expectedRoute.totalLength());
+        EXPECT_LE(actualRoute.estimatedDuration(), expectedRoute.estimatedDuration());
+    } else {
+        EXPECT_LE(actualRoute.totalLength(), expectedRoute.totalLength());
+        EXPECT_DOUBLE_EQ((double) actualRoute.estimatedDuration(), (double) expectedRoute.estimatedDuration());
     }
+    EXPECT_EQ(actualRoute.getWayStartPoint(), expectedRoute.getWayStartPoint());
+    EXPECT_EQ(actualRoute.getWayEndPoint(), expectedRoute.getWayEndPoint());
 }
 
 void compareRoutes(const Routes &actualRoute, const Routes &expectedRoute) {
@@ -57,9 +54,9 @@ TEST(AStar, BasicPathTest) {
     Coordinates endCoord(Longitude(22.273619),
                          Latitude(-30.497604));
 
-    Routes routes = navigation.getRoutes(startCoord, endCoord);
-    const Route &shortestDistance = routes.shortestDistance();
-    const Route &shortestTime = routes.shortestTime();
+    auto routes = navigation.getRoutes(startCoord, endCoord);
+    const AbstractRoute &shortestDistance = routes->shortestDistance();
+    const AbstractRoute &shortestTime = routes->shortestTime();
     assertRoute(expectedDistanceRoute, shortestDistance);
     assertRoute(expectedDistanceRoute, shortestTime);
     EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestDistance));

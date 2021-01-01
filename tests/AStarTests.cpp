@@ -27,10 +27,10 @@ public:
 
     }
 
-    std::vector<EntityId> getWaysIds(const Route &route) {
+    std::vector<EntityId> getWaysIds(const std::unique_ptr<Route> &route) {
         std::vector<EntityId> ids;
-        if (route.isValid()) {
-            for (auto pair: route.getWays()) {
+        if (route) {
+            for (auto pair: route->getWays()) {
                 ids.push_back(pair.first);
             }
         }

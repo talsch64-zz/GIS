@@ -265,7 +265,7 @@ std::vector<EntityId> GIS_315524694::getWaysByJunction(const EntityId &id) const
     return (dynamic_cast<Junction *>(entity))->getWays();
 }
 
-const Meters &GIS_315524694::getMaxDistanceFromHighway() const {
+const Meters &GIS_315524694::getMaxDistanceFromHighway() {
     return max_distance_from_highway;
 }
 

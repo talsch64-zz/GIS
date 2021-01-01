@@ -93,22 +93,20 @@ RandTestUtils::generateWays(GISMock &gis, IdGenerator &idGenerator, int n, Bound
 }
 
 void
-RandTestUtils::getBestRoutesDFS(NavigationGIS &navGis, RouteMock &bestTimeRoute, RouteMock &bestDistanceRoute,
+RandTestUtils::getBestRoutesDFS(NavigationGIS &navGis, RouteMock *bestTimeRoute, RouteMock *bestDistanceRoute,
                                 std::vector<std::pair<EntityId, Direction>> ways, const EntityId &start,
                                 const EntityId &end, const EntityId &current, Meters currentLength,
                                 Minutes currentTime) {
     if (current == end) {
-        if (!bestTimeRoute.isValid() || currentTime < bestTimeRoute.estimatedDuration()) {
-            bestTimeRoute.setDuration(currentTime);
-            bestTimeRoute.setLength(currentLength);
-            bestTimeRoute.setWays(ways);
-            bestTimeRoute.setValid(true);
+        if (!bestTimeRoute || currentTime < bestTimeRoute->estimatedDuration()) {
+            bestTimeRoute->setDuration(currentTime);
+            bestTimeRoute->setLength(currentLength);
+            bestTimeRoute->setWays(ways);
         }
-        if (!bestDistanceRoute.isValid() || currentLength < bestDistanceRoute.totalLength()) {
-            bestDistanceRoute.setDuration(currentTime);
-            bestDistanceRoute.setLength(currentLength);
-            bestDistanceRoute.setWays(ways);
-            bestDistanceRoute.setValid(true);
+        if (!bestDistanceRoute || currentLength < bestDistanceRoute->totalLength()) {
+            bestDistanceRoute->setDuration(currentTime);
+            bestDistanceRoute->setLength(currentLength);
+            bestDistanceRoute->setWays(ways);
         }
     } else {
         for (const EntityId &wayId : navGis.getWaysByJunction(current)) {
@@ -143,7 +141,7 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
     const AbstractWay &startWay = gis.getWay(std::get<1>(startWayTuple));
     const AbstractWay &endWay = gis.getWay(std::get<1>(endWayTuple));
     if (startWay.getId() == endWay.getId()) {
-        return Routes(Route::invalidRoute(), Route::invalidRoute(), false, "");
+        return Routes(nullptr, nullptr, false, "");
     }
 
     EntityId fakeStartJunctionId = idGenerator.generateId();
@@ -208,7 +206,7 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
                                                                                Minutes(0),
                                                                                std::vector<std::pair<EntityId, Direction>>(),
                                                                                false);
-    getBestRoutesDFS(navGis, *bestTimeRoute, *bestDistanceRoute, ways, fakeStartJunctionId, fakeEndJunctionId,
+    getBestRoutesDFS(navGis, bestTimeRoute.get(), bestDistanceRoute.get(), ways, fakeStartJunctionId, fakeEndJunctionId,
                      fakeStartJunctionId, Meters(0), Minutes(0));
     if (bestTimeRoute->isValid()) {
         auto timeWays = bestTimeRoute->getWays();
@@ -231,6 +229,6 @@ Routes RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
         bestDistanceRoute->setWays(distanceWays);
     }
 
-    Routes routes(*bestDistanceRoute, *bestTimeRoute, bestDistanceRoute->isValid(), "");
+    Routes routes(std::move(bestDistanceRoute), std::move(bestTimeRoute), bestDistanceRoute->isValid(), "");
     return routes;
 }

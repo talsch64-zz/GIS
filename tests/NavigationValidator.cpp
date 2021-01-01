@@ -7,16 +7,15 @@
 NavigationValidator::NavigationValidator(const AbstractGIS &gis) : gis(gis) {
 }
 
-bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const AbstractRoute &routes) const {
+bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end,
+                                        const AbstractRoute &routes) const {
     return validateRoute(start, end, Restrictions(""), routes);
 }
 
 bool
 NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
                                    const AbstractRoute &r) const {
-    if (!r.isValid()) {
-        return false;
-    }
+
     auto startTuple = gis.getWayClosestPoint(start, restrictions);
     auto endTuple = gis.getWayClosestPoint(end, restrictions);
 
@@ -38,12 +37,12 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     }
 
     if (startWay.isHighway() &&
-        CoordinatesMath::calculateDistance(start, origin) > gis.getMaxDistanceFromHighway()) {
+        CoordinatesMath::calculateDistance(start, origin) > GIS_315524694::getMaxDistanceFromHighway()) {
         return false;
     }
 
     if (finalWay.isHighway() &&
-        CoordinatesMath::calculateDistance(end, destination) > gis.getMaxDistanceFromHighway()) {
+        CoordinatesMath::calculateDistance(end, destination) > GIS_315524694::getMaxDistanceFromHighway()) {
         return false;
     }
 

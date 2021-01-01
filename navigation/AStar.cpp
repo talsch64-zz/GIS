@@ -106,11 +106,11 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
 /*-------------------------------- After search finished --------------------------------*/
     if (currNode->getJunctionId() != EntityId("")) {
         // no Route was found, return invalid route. Empty entityId means currNode is a final Node represents destination point
-        return Route::invalidRoute(origin, destination);
+        return nullptr;
     }
 
     std::vector<std::pair<EntityId, Direction>> ways = restoreShortestRoute(currNode);
-    return std::make_unique<Route>(origin, destination, currNode->getDistanceSoFar(), currNode->getTimeSoFar(), ways, true);
+    return std::make_unique<Route>(origin, destination, currNode->getDistanceSoFar(), currNode->getTimeSoFar(), ways);
 }
 
 std::vector<std::pair<EntityId, Direction>> AStar::restoreShortestRoute(std::shared_ptr<Node> node) {

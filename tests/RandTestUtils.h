@@ -50,7 +50,7 @@ public:
     static Routes
     getBestRoutes(GISMock &gis, IdGenerator &idGenerator, const Coordinates &start, const Coordinates &end);
 
-    static void getBestRoutesDFS(NavigationGIS &navGis, RouteMock &bestTimeRoute, RouteMock &bestDistanceRoute,
+    static void getBestRoutesDFS(NavigationGIS &navGis, RouteMock *bestTimeRoute, RouteMock *bestDistanceRoute,
                                  std::vector<std::pair<EntityId, Direction>> ways, const EntityId &start,
                                  const EntityId &end,
                                  const EntityId &current, Meters currentLength, Minutes currentTime);
