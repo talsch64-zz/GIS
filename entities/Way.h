@@ -83,6 +83,8 @@ public:
 
     const std::unique_ptr<Geometry> &getGeometry() const override;
 
+    const EntityId &getId() const override;
+
 private:
     std::pair<Meters, Meters> getSegmentPartsOnWay(std::size_t segment, const Coordinates &c) const override;
 };

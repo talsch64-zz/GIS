@@ -4,15 +4,16 @@
 #include "../Common/CoordinatesMath.h"
 #include "../Utils.h"
 
-NavigationValidator::NavigationValidator(const GIS &gis): gis(gis) {
+NavigationValidator::NavigationValidator(const GIS &gis) : gis(gis) {
 }
 
 bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Route &routes) const {
     return validateRoute(start, end, Restrictions(""), routes);
 }
 
-bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
-                                        const Route &routes) const {
+bool
+NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
+                                   const Route &routes) const {
     if (!routes.isValid()) {
         return false;
     }
@@ -46,7 +47,7 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
         return false;
     }
 
-    if (Utils::isWayRestricted(startWay, restrictions) {
+    if (Utils::isWayRestricted(startWay, restrictions)) {
         return false;
     }
 
@@ -62,8 +63,9 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
         return false; //startWay is unidirectional but the initial direction is B_to_A
     }
 
+    auto startWayIdPair = startWay.getJunctions();
     EntityId currJunction =
-            initialDirection == Direction::A_to_B ? startWay.getToJunctionId() : startWay.getFromJunctionId();
+            initialDirection == Direction::A_to_B ? startWayIdPair.second : startWayIdPair.first;
 
     Meters length = startWay.getLength();
     Minutes time = Utils::getWayDuration(startWay.getLength(), startWay.getSpeedLimit());
@@ -80,17 +82,19 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
         Direction nextWayDirection = ways[i + 1].second;
         const Way &nextWay = gis.getWay(nextWayId);
 
+        auto currWayIdPair = currWay.getJunctions();
+        auto nextWayIdPair = nextWay.getJunctions();
         EntityId currJunction =
-                currWayDirection == Direction::A_to_B ? currWay.getToJunctionId() : currWay.getFromJunctionId();
+                currWayDirection == Direction::A_to_B ? currWayIdPair.second : currWayIdPair.first;
         currJunctionValidator =
-                nextWayDirection == Direction::A_to_B ? nextWay.getFromJunctionId() : nextWay.getToJunctionId();
+                nextWayDirection == Direction::A_to_B ? nextWayIdPair.first : nextWayIdPair.second;
         if (currJunctionValidator != currJunction) {
             return false; // currWay and nextWay suppose to share a junction
         }
         if (!nextWay.isBidirectional() && nextWayDirection == Direction::B_to_A) {
             return false;  // next way is unidirectional but the direction is B_to_A
         }
-        if (nextWay.isRestricted(restrictions)) {
+        if (Utils::isWayRestricted(nextWay, restrictions)) {
             return false; // next way is restricted
         }
         length += nextWay.getLength();

@@ -52,12 +52,13 @@ EntityJsonSerializer::toJson(Way *entity, rapidjson::Document::AllocatorType &al
 
     rapidjson::Value fromEntity;
     fromEntity.SetObject();
-    fromEntity = setString(std::move(fromEntity), "entity_id", entity->getFromJunctionId(), allocator);
+    auto idPair = entity->getJunctions();
+    fromEntity = setString(std::move(fromEntity), "entity_id", idPair.first, allocator);
     json.AddMember("from", fromEntity, allocator);
 
     rapidjson::Value toEntity;
     toEntity.SetObject();;
-    toEntity = setString(std::move(toEntity), "entity_id", entity->getToJunctionId(), allocator);
+    toEntity = setString(std::move(toEntity), "entity_id", idPair.second, allocator);
     json.AddMember("to", toEntity, allocator);
 
     json = setStringVector(std::move(json), "restricted", entity->getRestricted(), allocator);

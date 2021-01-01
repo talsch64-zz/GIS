@@ -14,6 +14,10 @@ Way::Way(const EntityId &id, const std::string &name, const std::string &descrip
                                                 tollRoad(tollRoad), highway(highway),
                                                 restricted(std::move(restricted)) {}
 
+const EntityId &Way::getId() const {
+    return Entity::getId();
+}
+
 const std::unique_ptr<Geometry> &Way::getGeometry() const {
     return (const std::unique_ptr<Geometry> &) geometry;
 }

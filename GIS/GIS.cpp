@@ -274,7 +274,7 @@ GIS::getWayClosestPointFallback(const Coordinates &coord, const Restrictions &re
     for (auto &entityPair : entities) {
         Entity &entity = *entityPair.second;
         if (entity.getType() == "Way") {
-            AbstractWay &way = (AbstractWay &) entity;
+            Way &way = (Way &) entity;
             Coordinates closestPoint = way.getGeometry()->getClosestPoint(coord);
             Meters distance = CoordinatesMath::calculateDistance(coord, closestPoint);
             if (!isWayRestricted(way, res, distance) && (!foundWay.has_value() || distance < shortestDistance)) {
