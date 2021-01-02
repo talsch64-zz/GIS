@@ -1,16 +1,16 @@
 #include "gtest/gtest.h"
-#include "../GISNamedTypes.h"
-#include "../GIS.h"
+#include "../Common/GISNamedTypes.h"
+#include "../GIS/GIS_315524694.h"
 
 TEST(GISWays, getWayByJunctionUnidirectional) {
-    GIS gis;
+    GIS_315524694 gis;
     gis.loadMapFile("russia.json");
     EXPECT_EQ(gis.getWaysByJunction(EntityId("J1001")).size(), (size_t)1);
     EXPECT_EQ(gis.getWaysByJunction(EntityId("J1002")).size(), (size_t)0);
 }
 
 TEST(GISWays, getWayByJunctionBidirectional) {
-    GIS gis;
+    GIS_315524694 gis;
     gis.loadMapFile("russiaBi.json");
     EXPECT_EQ(gis.getWaysByJunction(EntityId("J1001")).size(), (size_t)1);
     EXPECT_EQ(gis.getWaysByJunction(EntityId("J1002")).size(), (size_t)1);

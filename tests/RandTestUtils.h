@@ -1,16 +1,16 @@
 #ifndef GIS_CPP_RANDTESTUTILS_H
 #define GIS_CPP_RANDTESTUTILS_H
 
-#include "../GIS.h"
+#include "../GIS/GIS_315524694.h"
 #include "Bound.h"
-#include "../entities/Entity.h"
-#include "../entities/Junction.h"
-#include "../entities/POI.h"
-#include "../entities/Way.h"
+#include "../GIS/entities/Entity.h"
+#include "../GIS/entities/Junction.h"
+#include "../GIS/entities/POI.h"
+#include "../GIS/entities/Way.h"
 #include "GISMock.h"
-#include "../navigation/Routes.h"
+#include "../Navigation/Routes.h"
 #include "RouteMock.h"
-#include "../NavigationGIS.h"
+#include "../Common/NavigationGIS.h"
 
 class RandTestUtils {
 public:
@@ -47,10 +47,10 @@ public:
      * @param end
      * @return
      */
-    static Routes
+    static std::unique_ptr<Routes>
     getBestRoutes(GISMock &gis, IdGenerator &idGenerator, const Coordinates &start, const Coordinates &end);
 
-    static void getBestRoutesDFS(NavigationGIS &navGis, RouteMock &bestTimeRoute, RouteMock &bestDistanceRoute,
+    static void getBestRoutesDFS(NavigationGIS &navGis, RouteMock *bestTimeRoute, RouteMock *bestDistanceRoute,
                                  std::vector<std::pair<EntityId, Direction>> ways, const EntityId &start,
                                  const EntityId &end,
                                  const EntityId &current, Meters currentLength, Minutes currentTime);

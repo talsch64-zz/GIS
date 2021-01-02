@@ -2,9 +2,11 @@
 #define GIS_CPP_ROUTEMOCK_H
 
 
-#include "../navigation/Route.h"
+#include "../Navigation/Route.h"
 
 class RouteMock: public Route {
+    bool valid;
+
 public:
     RouteMock(const Coordinates &startPoint, const Coordinates &endPoint, const Meters &length, const Minutes &duration,
               const std::vector<std::pair<EntityId, Direction>> &ways, bool valid);
@@ -12,6 +14,7 @@ public:
     void setLength(Meters length);
     void setDuration(Minutes duration);
     void setWays(std::vector<std::pair<EntityId, Direction>> ways);
+    bool isValid() const;
     void setValid(bool valid);
 };
 

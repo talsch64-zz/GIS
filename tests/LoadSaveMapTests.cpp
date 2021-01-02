@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
-#include "../GIS.h"
+#include "../GIS/GIS_315524694.h"
 
 TEST(LoadSaveMap, LoadSaveLoadTest) {
-    GIS gis, gis2;
+    GIS_315524694 gis, gis2;
     std::vector<EntityId> expectedEntities(
             {EntityId("P1001"), EntityId("P1002"), EntityId("J1001"), EntityId("J1002"), EntityId("J1010"),
              EntityId("P1010"), EntityId("W2001"), EntityId("W2002")});
