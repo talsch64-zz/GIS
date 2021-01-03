@@ -1,7 +1,6 @@
 
 #include "gtest/gtest.h"
 #include "../Common/GISNamedTypes.h"
-#include "../GISProvider.h"
 #include "../Common/CoordinatesMath.h"
 #include "../Navigation/Navigation_315524694.h"
 #include "NavigationValidator.h"
@@ -16,7 +15,7 @@ protected:
     NavigationValidator validator;
 
 public:
-    IsraelMapTest() : gis(GISProvider::getGIS()), navGis(gis), navigation(navGis), validator(gis) {
+    IsraelMapTest() : gis(GIS_315524694()), navGis(gis), navigation(navGis), validator(gis) {
     }
 
     void SetUp() override {
