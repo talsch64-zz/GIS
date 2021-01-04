@@ -3,7 +3,7 @@
 #include "GISNamedTypes.h"
 #include "AbstractRoutes.h"
 #include "AbstractNavigation.h"
-#include <memory> 
+#include <memory>
 
 class AbstractNavigation {
 public:
