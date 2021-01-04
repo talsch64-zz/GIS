@@ -1,56 +1,56 @@
 #include "NavigationValidator.h"
-#include "../navigation/Route.h"
-#include "../entities/Way.h"
-#include "../CoordinatesMath.h"
-#include "../Utils.h"
+#include "../Navigation/Route.h"
+#include "../GIS/entities/Way.h"
+#include "../Common/CoordinatesMath.h"
+#include "../UserCommon/Utils.h"
 
-NavigationValidator::NavigationValidator(const GIS &gis): gis(gis) {
+NavigationValidator::NavigationValidator(const AbstractGIS &gis) : gis(gis) {
 }
 
-bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Route &routes) const {
-    return validateRoute(start, end, Restrictions(), routes);
+bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end,
+                                        const AbstractRoute &routes) const {
+    return validateRoute(start, end, Restrictions(""), routes);
 }
 
-bool NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
-                                        const Route &routes) const {
-    if (!routes.isValid()) {
-        return false;
-    }
-    std::pair<Coordinates, EntityId> startPair = gis.getWayClosestPoint(start, restrictions);
-    std::pair<Coordinates, EntityId> endPair = gis.getWayClosestPoint(end, restrictions);
+bool
+NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
+                                   const AbstractRoute &r) const {
 
-    Coordinates origin = startPair.first;
-    Coordinates destination = endPair.first;
+    auto startTuple = gis.getWayClosestPoint(start, restrictions);
+    auto endTuple = gis.getWayClosestPoint(end, restrictions);
 
-    EntityId startWayId = startPair.second;
-    EntityId finalWayId = endPair.second;
+    Coordinates origin = std::get<0>(startTuple);
+    Coordinates destination = std::get<0>(endTuple);
+
+    EntityId startWayId = std::get<1>(startTuple);
+    EntityId finalWayId = std::get<1>(endTuple);
 
     if (startWayId == finalWayId) { // illegal!
         return false;
     }
 
-    const Way &startWay = gis.getWay(startWayId);
-    const Way &finalWay = gis.getWay(endPair.second);
+    const AbstractWay &startWay = gis.getWay(startWayId);
+    const AbstractWay &finalWay = gis.getWay(std::get<1>(endTuple));
 
-    if (origin != routes.getWayStartPoint() || destination != routes.getWayEndPoint()) {
+    if (origin != r.getWayStartPoint() || destination != r.getWayEndPoint()) {
         return false;
     }
 
     if (startWay.isHighway() &&
-        CoordinatesMath::calculateDistance(start, origin) > gis.getMaxDistanceFromHighway()) {
+        CoordinatesMath::calculateDistance(start, origin) > GIS_315524694::getMaxDistanceFromHighway()) {
         return false;
     }
 
     if (finalWay.isHighway() &&
-        CoordinatesMath::calculateDistance(end, destination) > gis.getMaxDistanceFromHighway()) {
+        CoordinatesMath::calculateDistance(end, destination) > GIS_315524694::getMaxDistanceFromHighway()) {
         return false;
     }
 
-    if (startWay.isRestricted(restrictions)) {
+    if (Utils::isWayRestricted(startWay, restrictions)) {
         return false;
     }
 
-    std::vector<std::pair<EntityId, Direction>> ways = routes.getWays();
+    std::vector<std::pair<EntityId, Direction>> ways = r.getWays();
     if (ways.size() <= 1 || ways.front().first != startWayId || ways.back().first != finalWayId) {
         return false;
     }
@@ -62,11 +62,12 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
         return false; //startWay is unidirectional but the initial direction is B_to_A
     }
 
+    auto startWayIdPair = startWay.getJunctions();
     EntityId currJunction =
-            initialDirection == Direction::A_to_B ? startWay.getToJunctionId() : startWay.getFromJunctionId();
+            initialDirection == Direction::A_to_B ? startWayIdPair.second : startWayIdPair.first;
 
     Meters length = startWay.getLength();
-    Minutes time = startWay.getTime();
+    Minutes time = Utils::getWayDuration(startWay.getLength(), startWay.getSpeedLimit());
 
 
     EntityId currJunctionValidator("");
@@ -75,26 +76,28 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
     for (size_t i = 0; i < ways.size() - 1; i++) {
         EntityId currWayId = ways[i].first;
         Direction currWayDirection = ways[i].second;
-        const Way &currWay = gis.getWay(ways[i].first);
+        const AbstractWay &currWay = gis.getWay(ways[i].first);
         EntityId nextWayId = ways[i + 1].first;
         Direction nextWayDirection = ways[i + 1].second;
-        const Way &nextWay = gis.getWay(nextWayId);
+        const AbstractWay &nextWay = gis.getWay(nextWayId);
 
+        auto currWayIdPair = currWay.getJunctions();
+        auto nextWayIdPair = nextWay.getJunctions();
         EntityId currJunction =
-                currWayDirection == Direction::A_to_B ? currWay.getToJunctionId() : currWay.getFromJunctionId();
+                currWayDirection == Direction::A_to_B ? currWayIdPair.second : currWayIdPair.first;
         currJunctionValidator =
-                nextWayDirection == Direction::A_to_B ? nextWay.getFromJunctionId() : nextWay.getToJunctionId();
+                nextWayDirection == Direction::A_to_B ? nextWayIdPair.first : nextWayIdPair.second;
         if (currJunctionValidator != currJunction) {
             return false; // currWay and nextWay suppose to share a junction
         }
         if (!nextWay.isBidirectional() && nextWayDirection == Direction::B_to_A) {
             return false;  // next way is unidirectional but the direction is B_to_A
         }
-        if (nextWay.isRestricted(restrictions)) {
+        if (Utils::isWayRestricted(nextWay, restrictions)) {
             return false; // next way is restricted
         }
         length += nextWay.getLength();
-        time += nextWay.getTime();
+        time += Utils::getWayDuration(nextWay.getLength(), nextWay.getSpeedLimit());
     }
 
     Meters redundantLengthFromStart =
@@ -114,7 +117,7 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
     length -= redundantLengthFromEnd;
     time -= Utils::calculateTime(redundantLengthFromEnd, finalWay.getSpeedLimit());
 
-    if (routes.totalLength() != length || routes.estimatedDuration() != time) {
+    if (r.totalLength() != length || r.estimatedDuration() != time) {
         return false;
     }
     return true; // finally!!!

@@ -2,7 +2,7 @@
 #define GIS_CPP_WAYMOCK_H
 
 
-#include "../entities/Way.h"
+#include "../GIS/entities/Way.h"
 
 class WayMock : public Way {
 public:

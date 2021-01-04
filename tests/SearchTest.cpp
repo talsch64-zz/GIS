@@ -1,21 +1,21 @@
 #include "gtest/gtest.h"
-#include "../GIS.h"
+#include "../GIS/GIS_315524694.h"
 #include "GISMock.h"
-#include "../entities/Junction.h"
-#include "../entities/POI.h"
-#include "../entities/Way.h"
-#include "../entities/Entity.h"
-#include "../CoordinatesMath.h"
-#include "../entities/geometry/Point.h"
-#include "../entities/geometry/Circle.h"
-#include "../entities/geometry/PointList.h"
-#include "../IdGenerator.h"
+#include "../GIS/entities/Junction.h"
+#include "../GIS/entities/POI.h"
+#include "../GIS/entities/Way.h"
+#include "../GIS/entities/Entity.h"
+#include "../Common/CoordinatesMath.h"
+#include "../GIS/entities/geometry/Point.h"
+#include "../GIS/entities/geometry/Circle.h"
+#include "../GIS/entities/geometry/PointList.h"
+#include "../UserCommon/IdGenerator.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include<time.h>
 
 TEST(Search, MySearchCircleTest) {
-    GIS gis;
+    GIS_315524694 gis;
     gis.loadMapFile("gearth.json");
 
     std::vector<EntityId> foundEntityIds = gis.getEntities("aaa",
@@ -30,7 +30,7 @@ TEST(Search, MySearchCircleTest) {
 }
 
 TEST(Search, MySearchWaysTest) {
-    GIS gis;
+    GIS_315524694 gis;
     auto loadedIds = gis.loadMapFile("ways-search.json");
 
     std::vector<EntityId> foundEntityIds = gis.getEntities("way",

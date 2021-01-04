@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../GIS.h"
+#include "../GIS/GIS_315524694.h"
 #include <fstream>
 
 bool logContainsError(std::string err);

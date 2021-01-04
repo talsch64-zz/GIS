@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "../GISNamedTypes.h"
-#include "../CoordinatesMath.h"
+#include "../Common/GISNamedTypes.h"
+#include "../Common/CoordinatesMath.h"
 
 TEST(Double, SimplePrecision) {
     Double<4> d1(1.12349487);
