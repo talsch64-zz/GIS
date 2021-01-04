@@ -41,12 +41,35 @@ Coordinates PointList::getClosestPoint(const Coordinates &coordinates) const {
 }
 
 Meters PointList::getLength() const {
-    Meters length(0);
-    for (size_t i = 1; i < points.size(); i++) {
-        length += CoordinatesMath::calculateDistance(points[i - 1], points[i]);
-    }
-    return length;
+    return getCumulativeSegmentsLength()[points.size() - 1];
 }
+
+
+const size_t PointList::getContainingSegment(Coordinates coordinates) const {
+    for (int i = 0; i < points.size() - 1; ++i) {
+        if (std::fabs(
+                static_cast<double>(getCumulativeSegmentsLength()[i + 1] - getCumulativeSegmentsLength()[i] -
+                                    CoordinatesMath::calculateDistance(points[i], coordinates) +
+                                    CoordinatesMath::calculateDistance(coordinates, points[i + 1]))) <=
+            DISTANCE_PRECISION) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+const std::vector<Meters> &PointList::getCumulativeSegmentsLength() const {
+    if (!cumulativeSegmentsLength.has_value()) {
+        std::vector<Meters> segments;
+        segments.push_back(Meters(0));
+        for (size_t i = 1; i < points.size(); i++) {
+            segments.push_back(segments[i - 1] + CoordinatesMath::calculateDistance(points[i - 1], points[i]));
+        }
+        cumulativeSegmentsLength = segments;
+    }
+    return cumulativeSegmentsLength.value();
+}
+
 
 
 

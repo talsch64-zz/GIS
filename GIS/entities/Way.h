@@ -26,12 +26,15 @@ protected:
     bool highway;
     std::vector<std::string> restricted;
     mutable std::optional<Meters> length;
+    mutable std::optional<std::vector<Meters>> lengthSegments;
 
 public:
 
     Way(const EntityId &id, const std::string &name, const std::string &description,
         const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from,
         EntityId to, TrafficDirection direction, int speedLimit, bool tollRoad, bool highway, std::vector<std::string> restricted);
+
+    const std::optional<std::vector<Meters>> &getLengthSegments() const;
 
     TrafficDirection getDirection() const;
 

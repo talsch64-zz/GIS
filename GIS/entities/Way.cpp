@@ -3,6 +3,8 @@
 
 #include "Way.h"
 #include "../../UserCommon/Utils.h"
+#include "../../Common/CoordinatesMath.h"
+
 #include <utility>
 
 Way::Way(const EntityId &id, const std::string &name, const std::string &description,
@@ -43,7 +45,15 @@ const std::vector<std::string> &Way::getRestricted() const {
 }
 
 std::pair<Meters, Meters> Way::getSegmentPartsOnWay(std::size_t segment, const Coordinates &c) const {
-    throw std::runtime_error("not implemented");
+    if (segment >= geometry->getPoints().size() || segment < 0) {
+        throw std::runtime_error("invalid segment number");
+    }
+    Coordinates segmentStart = geometry->getPoints()[segment];
+    Coordinates segmentEnd = geometry->getPoints()[segment + 1];
+    Meters distance_start_to_c =
+            geometry->getCumulativeSegmentsLength()[segment] + CoordinatesMath::calculateDistance(segmentStart, c);
+    Meters distance_c_to_end = geometry->getLength() - geometry->getCumulativeSegmentsLength()[segment + 1] + CoordinatesMath::calculateDistance(c, segmentEnd);
+    return std::make_pair(distance_start_to_c, distance_c_to_end);
 }
 
 std::pair<EntityId, EntityId> Way::getJunctions() const {
@@ -71,5 +81,9 @@ const Coordinates &Way::getFromJunctionCoordinates() const {
 
 const Coordinates &Way::getToJunctionCoordinates() const {
     return geometry->getPoints().back();
+}
+
+const std::optional<std::vector<Meters>> &Way::getLengthSegments() const {
+    return lengthSegments;
 }
 
