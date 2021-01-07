@@ -20,10 +20,10 @@ Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end
     const Coordinates &startPoint = std::get<AbstractGIS::ClosestPoint::Coord>(startTuple);
     const AbstractWay &endWay = gis.getWay(std::get<AbstractGIS::ClosestPoint::WayId>(endTuple));
     const Coordinates &destinationPoint = std::get<AbstractGIS::ClosestPoint::Coord>(endTuple);
-    //TODO change to vaild!!!
-    if (startWay.getId() == endWay.getId()) {
-        return std::make_unique<Routes>(nullptr, nullptr, false, "Routes contain only one way!");
-    }
+//    //TODO delete!!!
+//    if (startWay.getId() == endWay.getId()) {
+//        return std::make_unique<Routes>(nullptr, nullptr, false, "Routes contain only one way!");
+//    }
     size_t startWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(startTuple);
     size_t endWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(endTuple);
 

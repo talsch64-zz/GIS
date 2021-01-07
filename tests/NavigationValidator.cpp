@@ -16,6 +16,9 @@ bool
 NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
                                    const AbstractRoute &r) const {
 
+    if (&r == nullptr) {
+        return false;
+    }
     auto startTuple = gis.getWayClosestPoint(start, restrictions);
     auto endTuple = gis.getWayClosestPoint(end, restrictions);
 
@@ -25,10 +28,10 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     EntityId startWayId = std::get<AbstractGIS::ClosestPoint::WayId>(startTuple);
     EntityId finalWayId = std::get<AbstractGIS::ClosestPoint::WayId>(endTuple);
 
-    //TODO change!!
-    if (startWayId == finalWayId) { // illegal!
-        return false;
-    }
+    //TODO delete!!
+//    if (startWayId == finalWayId) { // illegal!
+//        return false;
+//    }
 
     const AbstractWay &startWay = gis.getWay(startWayId);
     const AbstractWay &finalWay = gis.getWay(finalWayId);
@@ -52,7 +55,7 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     }
 
     std::vector<std::pair<EntityId, Direction>> ways = r.getWays();
-    if (ways.size() <= 1 || ways.front().first != startWayId || ways.back().first != finalWayId) {
+    if (ways.size() < 1 || ways.front().first != startWayId || ways.back().first != finalWayId) {
         return false;
     }
 

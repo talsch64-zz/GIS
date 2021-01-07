@@ -301,31 +301,36 @@ TEST_F(IsraelMapTest, invalidRoutesUnreachable) {
 }
 
 /**
- * First and final way are the same way which is unidirectional - Expected to find invalid route
+ * First and final way are the same way which is unidirectional
  */
-TEST_F(IsraelMapTest, unidirectionalSingleWayInvalid) {
+TEST_F(IsraelMapTest, unidirectionalSingleWay) {
 //    W2047 is unidirectional
     Coordinates origin(Longitude(32.31719),
                        Latitude(35.18944)); // point on W2047 which is isolated
     Coordinates destination(Longitude(32.33931), Latitude(35.19085)); // J1033 which is on W2047
     auto routes = navigation.getRoutes(origin, destination);
+    // this direction suppose to be invalid
     EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestDistance()));
     EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestTime()));
-    EXPECT_EQ(routes->getErrorMessage(), "Routes contain only one way!");
+    EXPECT_EQ(routes->getErrorMessage(), "Routes not found!");
+
+    // the opposite direction should work
+    routes = navigation.getRoutes(destination, origin);
+    EXPECT_TRUE(validator.validateRoute(destination, origin, routes->shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(destination, origin ,routes->shortestTime()));
 }
 
 
 /**
- * First and final way are the same way which is bidirectional - Expected to find invalid route
+ * First and final way are the same way which is bidirectional - Expected to find valid route
  */
 TEST_F(IsraelMapTest, bidirectionalSingleWay) {
     Coordinates destination(Longitude(32.34981),
                             Latitude(35.22814)); // J1038
     Coordinates origin(Longitude(32.25985), Latitude(35.22334)); // J1039
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestDistance()));
-    EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestTime()));
-    EXPECT_FALSE(false);
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes->shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes->shortestTime()));
 }
 
 /**
@@ -404,4 +409,13 @@ TEST_F(IsraelMapTest, minimalWaysRoute) {
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes->shortestDistance()));
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes->shortestTime()));
     EXPECT_LT(routes->shortestDistance().getWays().size(), (size_t) 4);
+}
+
+
+TEST_F(IsraelMapTest, accurateDistancesTest) {
+    Coordinates origin(Longitude(32.494), Latitude(35.35336));
+    Coordinates destination(Longitude(32.44119), Latitude(35.30997));
+    auto routes = navigation.getRoutes(origin, destination);
+    printRoutes(routes);
+
 }
