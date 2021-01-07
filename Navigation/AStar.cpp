@@ -7,8 +7,8 @@
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-             const AbstractWay &startWay, const size_t startWaySegment, const AbstractWay &finalWay,
-             const size_t finalWaySegment) : navigationGIS(navigationGis), origin(origin),
+             const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
+             const std::size_t finalWaySegment) : navigationGIS(navigationGis), origin(origin),
                                              destination(destination), startWay(startWay),
                                              startWaySegment(startWaySegment),
                                              finalWay(finalWay), finalWaySegment(finalWaySegment),
@@ -16,8 +16,8 @@ AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, cons
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-             const AbstractWay &startWay, const size_t startWaySegment, const AbstractWay &finalWay,
-             const size_t finalWaySegment, const Restrictions &restrictions) :
+             const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
+             const std::size_t finalWaySegment, const Restrictions &restrictions) :
 
         navigationGIS(navigationGis),
         origin(origin),

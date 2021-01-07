@@ -281,7 +281,7 @@ GIS_315524694::getWayClosestPointFallback(const Coordinates &coord, const Restri
     Coordinates closestPoint(Longitude(0), Latitude(0));
     Meters shortestDistance(INT_MAX);
     EntityId closestEntityId("");
-    size_t segment;
+    std::size_t segment;
     for (auto &entityPair : entities) {
         Entity &entity = *entityPair.second;
         if (entity.getType() == "Way") {

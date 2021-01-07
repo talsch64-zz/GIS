@@ -62,7 +62,7 @@ const std::vector<Meters> &PointList::getCumulativeSegmentsLength() const {
     if (!cumulativeSegmentsLength.has_value()) {
         std::vector<Meters> segments;
         segments.push_back(Meters(0));
-        for (size_t i = 1; i < points.size(); i++) {
+        for (std::size_t i = 1; i < points.size(); i++) {
             segments.push_back(segments[i - 1] + CoordinatesMath::calculateDistance(points[i - 1], points[i]));
         }
         cumulativeSegmentsLength = std::move(segments);
