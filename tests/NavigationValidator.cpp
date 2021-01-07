@@ -100,21 +100,17 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
         length += nextWay.getLength();
         time += Utils::getWayDuration(nextWay.getLength(), nextWay.getSpeedLimit());
     }
-
+    size_t startWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(startTuple);
+    auto distanceFromStartWayEdges =  startWay.getSegmentPartsOnWay(startWaySegment, origin);
     Meters redundantLengthFromStart =
-            initialDirection == Direction::A_to_B ? CoordinatesMath::calculateDistance(origin,
-                                                                                       startWay.getFromJunctionCoordinates())
-                                                  : CoordinatesMath::calculateDistance(origin,
-                                                                                       startWay.getToJunctionCoordinates());
+            initialDirection == Direction::A_to_B ? distanceFromStartWayEdges.first : distanceFromStartWayEdges.second;
     length -= redundantLengthFromStart;
     time -= Utils::calculateTime(redundantLengthFromStart, startWay.getSpeedLimit());
 
-
+    size_t finalWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(endTuple);
+    auto distanceFromFinalWayEdges = finalWay.getSegmentPartsOnWay(finalWaySegment, destination);
     Meters redundantLengthFromEnd =
-            finalDirection == Direction::A_to_B ? CoordinatesMath::calculateDistance(destination,
-                                                                                     finalWay.getToJunctionCoordinates())
-                                                : CoordinatesMath::calculateDistance(destination,
-                                                                                     finalWay.getFromJunctionCoordinates());
+            finalDirection == Direction::A_to_B ? distanceFromFinalWayEdges.second : distanceFromFinalWayEdges.first;
     length -= redundantLengthFromEnd;
     time -= Utils::calculateTime(redundantLengthFromEnd, finalWay.getSpeedLimit());
 
@@ -123,3 +119,18 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     }
     return true; // finally!!!
 }
+
+
+//size_t startWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(startTuple);
+//auto distanceFromStartWayEdges =  startWay.getSegmentPartsOnWay(startWaySegment, start);
+//Meters redundantLengthFromStart =
+//        initialDirection == Direction::A_to_B ? distanceFromStartWayEdges.first : distanceFromStartWayEdges.second;
+//
+//length -= redundantLengthFromStart;
+//time -= Utils::calculateTime(redundantLengthFromStart, startWay.getSpeedLimit());
+//
+//
+//size_t finalWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(endTuple);
+//auto distanceFromFinalWayEdges =  finalWay.getSegmentPartsOnWay(finalWaySegment, end);
+//
+//Meters redundantLengthFromEnd = finalDirection == Direction::A_to_B ? distanceFromFinalWayEdges.second: distanceFromFinalWayEdges.first;
