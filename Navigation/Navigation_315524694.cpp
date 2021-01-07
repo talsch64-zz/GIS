@@ -1,6 +1,9 @@
 
 #include "Navigation_315524694.h"
 #include "AStar.h"
+#include "../Common/NavigationRegistration.h"
+
+REGISTER_NAVIGATION(Navigation_315524694) // Registering the Navigation
 
 Navigation_315524694::Navigation_315524694(const NavigationGIS &navigationGis) : navigationGIS(navigationGis) {}
 
