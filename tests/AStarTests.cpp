@@ -37,7 +37,7 @@ public:
         return ids;
     }
 
-    void printRoutes(const Routes &routes) {
+    void printRoutes(const AbstractRoutes &routes) {
         if (!routes.isValid()) {
             std::cout << "invalid routes!!" << std::endl;
             return;
@@ -317,7 +317,7 @@ TEST_F(IsraelMapTest, unidirectionalSingleWay) {
     // the opposite direction should work
     routes = navigation.getRoutes(destination, origin);
     EXPECT_TRUE(validator.validateRoute(destination, origin, routes->shortestDistance()));
-    EXPECT_TRUE(validator.validateRoute(destination, origin ,routes->shortestTime()));
+    EXPECT_TRUE(validator.validateRoute(destination, origin, routes->shortestTime()));
 }
 
 
@@ -412,10 +412,54 @@ TEST_F(IsraelMapTest, minimalWaysRoute) {
 }
 
 
-TEST_F(IsraelMapTest, accurateDistancesTest) {
+/**
+ * startWay is also the finalWay (W2122) but it is vary slow way and very long.
+ * The fastest and shortest route is not to take the long way and go through a faster way in between.
+ * The expected route should from origin to destination: W2122 -> W2123 -> W2122
+ * The expected route should from destination to origin: W2122
+ * W2122 is bidirectional
+ * W2123 is unidirectional
+ */
+
+TEST_F(IsraelMapTest, accurateDistancesTest1) {
     Coordinates origin(Longitude(32.494), Latitude(35.35336));
     Coordinates destination(Longitude(32.44119), Latitude(35.30997));
     auto routes = navigation.getRoutes(origin, destination);
-    printRoutes(routes);
+    EXPECT_EQ(routes->shortestDistance().getWays().size(), 3);
+    EXPECT_EQ(routes->shortestTime().getWays().size(), (size_t) 3);
 
+    // the opposite direction should include only one way because W2123 is unidirectional
+
+    routes = navigation.getRoutes(destination, origin);
+    EXPECT_EQ(routes->shortestDistance().getWays().size(), (size_t) 1);
+}
+
+
+/**
+ * startWay is also the finalWay (W2123) but it is vary slow way and very long
+ * The only route from origin to destination is W2123 -> W2122 -> W2123
+ * The expected route should from destination to origin: W2123
+ * W2122 is bidirectional
+ * W2123 is unidirectional
+ */
+TEST_F(IsraelMapTest, accurateDistancesTest2) {
+    Coordinates origin(Longitude(32.44504), Latitude(35.30994));
+    Coordinates destination(Longitude(32.44508), Latitude(35.30997));
+    auto routes = navigation.getRoutes(origin, destination);
+    EXPECT_EQ(routes->shortestDistance().getWays().size(), 3);
+    EXPECT_EQ(routes->shortestTime().getWays().size(), 3);
+
+    // the opposite direction should include only one way
+    routes = navigation.getRoutes(destination, origin);
+    EXPECT_EQ(routes->shortestDistance().getWays().size(), (size_t) 1);
+
+}
+
+TEST_F(IsraelMapTest, accurateDistancesTest3) {
+    Coordinates origin(Longitude(32.44121), Latitude(35.30718)); //J1072
+    Coordinates destination(Longitude(32.49779), Latitude(35.34791)); //J1071
+    auto routes = navigation.getRoutes(origin, destination);
+    printRoutes(*routes);
+//    EXPECT_EQ(routes->shortestDistance().getWays().size(), 3);
+//    EXPECT_EQ(routes->shortestTime().getWays().size(), 3);
 }
