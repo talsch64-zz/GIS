@@ -31,7 +31,9 @@ class AStar {
     const Coordinates origin;
     const Coordinates destination;
     const AbstractWay &startWay;
+    const size_t startWaySegment;
     const AbstractWay &finalWay;
+    const size_t finalWaySegment;
     Restrictions restrictions;
 
 public:
@@ -44,7 +46,7 @@ public:
      * @param finalWay the way which the destination point is located on.
      */
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-          const AbstractWay &startWay, const AbstractWay &finalWay);
+          const AbstractWay &startWay, const size_t startWaySegment, const AbstractWay &finalWay, const size_t finalWaySegment);
 
 
     /**
@@ -57,7 +59,7 @@ public:
      * @param restrictions
      */
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-          const AbstractWay &startWay, const AbstractWay &finalWay, const Restrictions &restrictions);
+          const AbstractWay &startWay, const size_t startWaySegment, const AbstractWay &finalWay, const size_t finalWaySegment, const Restrictions &restrictions);
 
     std::unique_ptr<Route> shortestByDistance();
 

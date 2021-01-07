@@ -7,20 +7,26 @@
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-             const AbstractWay &startWay, const AbstractWay &finalWay) : navigationGIS(navigationGis), origin(origin),
-                                                                         destination(destination), startWay(startWay),
-                                                                         finalWay(finalWay),
-                                                                         restrictions(Restrictions("")) {}
+             const AbstractWay &startWay, const size_t startWaySegment, const AbstractWay &finalWay,
+             const size_t finalWaySegment) : navigationGIS(navigationGis), origin(origin),
+                                             destination(destination), startWay(startWay),
+                                             startWaySegment(startWaySegment),
+                                             finalWay(finalWay), finalWaySegment(finalWaySegment),
+                                             restrictions(Restrictions("")) {}
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-             const AbstractWay &startWay, const AbstractWay &finalWay, const Restrictions &restrictions)
-        : navigationGIS(navigationGis),
-          origin(origin),
-          destination(destination),
-          startWay(startWay),
-          finalWay(finalWay),
-          restrictions(restrictions) {}
+             const AbstractWay &startWay, const size_t startWaySegment, const AbstractWay &finalWay,
+             const size_t finalWaySegment, const Restrictions &restrictions) :
+
+        navigationGIS(navigationGis),
+        origin(origin),
+        destination(destination),
+        startWay(startWay),
+        startWaySegment(startWaySegment),
+        finalWay(finalWay),
+        finalWaySegment(finalWaySegment),
+        restrictions(restrictions) {}
 
 std::unique_ptr<Route>
 AStar::shortestByDistance() {
@@ -192,9 +198,9 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
                                                                     : startWay.getFromJunctionCoordinates();
     Coordinates oppositeCoordinates = direction == Direction::A_to_B ? startWay.getFromJunctionCoordinates()
                                                                      : startWay.getToJunctionCoordinates();
+    auto distanceFromEdges = startWay.getSegmentPartsOnWay(startWaySegment, origin);
     //  the distance from origin point to the initial node
-    Meters initialDistance =
-            startWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, origin);
+    Meters initialDistance = direction == Direction::A_to_B ? distanceFromEdges.second : distanceFromEdges.first;
     //  the time from origin point to the initial node
     Minutes initialTime = Utils::calculateTime(initialDistance, startWay.getSpeedLimit());
     auto idPair = startWay.getJunctions();
@@ -203,7 +209,7 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
     EntityId initialJunctionId =
             direction == Direction::A_to_B ? toId : fromId;
 //    TODO find a better solution to update the initial cost
-    double initialCost = costFunc == costByTime ? double(initialTime) : double(initialDistance);
+    double initialCost = costFunc == costByTime ? static_cast<double>(initialTime) : static_cast<double>(initialDistance);
     double initialPriority = heuristicFunc(initialCoordinates, destination) + initialCost;
     std::shared_ptr<Node> initialNode = std::make_shared<Node>(initialCoordinates, initialJunctionId,
                                                                initialDistance, initialTime, initialCost,
@@ -213,6 +219,35 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
                                                                nullptr);
     return initialNode;
 }
+//std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(const Coordinates &, const Coordinates &),
+//                                                      double (*costFunc)(const AbstractWay &), Direction direction) {
+//    //  If direction is A_To_B then the Node start at "to" junction, else from "from" junction.
+//    //  We implemented the algorithm such that the initial Node already has a "kilometrage" of the startWay
+//    Coordinates initialCoordinates = direction == Direction::A_to_B ? startWay.getToJunctionCoordinates()
+//                                                                    : startWay.getFromJunctionCoordinates();
+//    Coordinates oppositeCoordinates = direction == Direction::A_to_B ? startWay.getFromJunctionCoordinates()
+//                                                                     : startWay.getToJunctionCoordinates();
+//    //  the distance from origin point to the initial node
+//    Meters initialDistance =
+//            startWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, origin);
+//    //  the time from origin point to the initial node
+//    Minutes initialTime = Utils::calculateTime(initialDistance, startWay.getSpeedLimit());
+//    auto idPair = startWay.getJunctions();
+//    auto fromId = idPair.first;
+//    auto toId = idPair.second;
+//    EntityId initialJunctionId =
+//            direction == Direction::A_to_B ? toId : fromId;
+////    TODO find a better solution to update the initial cost
+//    double initialCost = costFunc == costByTime ? double(initialTime) : double(initialDistance);
+//    double initialPriority = heuristicFunc(initialCoordinates, destination) + initialCost;
+//    std::shared_ptr<Node> initialNode = std::make_shared<Node>(initialCoordinates, initialJunctionId,
+//                                                               initialDistance, initialTime, initialCost,
+//                                                               initialPriority, 1,
+//                                                               Edge(std::make_pair(startWay.getId(),
+//                                                                                   direction)),
+//                                                               nullptr);
+//    return initialNode;
+//}
 
 std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNode,
                                                     double (*costFunc)(const AbstractWay &)) {
@@ -225,8 +260,9 @@ std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNo
     Coordinates oppositeCoordinates = direction == Direction::A_to_B ? finalWay.getToJunctionCoordinates()
                                                                      : finalWay.getFromJunctionCoordinates();
     // currNode represents the opposite junction of endCoordinates
-    Meters distanceFromCurrNode =
-            finalWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, destination);
+    auto distanceFromEdges = finalWay.getSegmentPartsOnWay(finalWaySegment, destination);
+
+    Meters distanceFromCurrNode = direction == Direction::A_to_B ? distanceFromEdges.first : distanceFromEdges.second;
     //  the total time to reach destination point
     Minutes finalTime = Utils::calculateTime(distanceFromCurrNode, finalWay.getSpeedLimit()) + currNode->getTimeSoFar();
     //  the total distance to reach destination point

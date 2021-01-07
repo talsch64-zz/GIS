@@ -24,7 +24,10 @@ Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end
     if (startWay.getId() == endWay.getId()) {
         return std::make_unique<Routes>(nullptr, nullptr, false, "Routes contain only one way!");
     }
-    AStar star(gis, startPoint, destinationPoint, startWay, endWay, restrictions);
+    size_t startWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(startTuple);
+    size_t endWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(endTuple);
+
+    AStar star(gis, startPoint, destinationPoint, startWay, startWaySegment, endWay, endWaySegment, restrictions);
     auto shortestByDistance = star.shortestByDistance();
     if (shortestByDistance == nullptr) {
 //        initialize invalid Routes

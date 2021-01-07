@@ -19,18 +19,19 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     auto startTuple = gis.getWayClosestPoint(start, restrictions);
     auto endTuple = gis.getWayClosestPoint(end, restrictions);
 
-    Coordinates origin = std::get<0>(startTuple);
-    Coordinates destination = std::get<0>(endTuple);
+    Coordinates origin = std::get<AbstractGIS::ClosestPoint::Coord>(startTuple);
+    Coordinates destination = std::get<AbstractGIS::ClosestPoint::Coord>(endTuple);
 
-    EntityId startWayId = std::get<1>(startTuple);
-    EntityId finalWayId = std::get<1>(endTuple);
+    EntityId startWayId = std::get<AbstractGIS::ClosestPoint::WayId>(startTuple);
+    EntityId finalWayId = std::get<AbstractGIS::ClosestPoint::WayId>(endTuple);
 
+    //TODO change!!
     if (startWayId == finalWayId) { // illegal!
         return false;
     }
 
     const AbstractWay &startWay = gis.getWay(startWayId);
-    const AbstractWay &finalWay = gis.getWay(std::get<1>(endTuple));
+    const AbstractWay &finalWay = gis.getWay(finalWayId);
 
     if (origin != r.getWayStartPoint() || destination != r.getWayEndPoint()) {
         return false;
