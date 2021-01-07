@@ -11,13 +11,17 @@
 #include "../entities/geometry/Point.h"
 
 
-/// TopologicalSearch handles Grid searches
-/// Operations supported:
-/// * Search for all the grid-cells inside the perimeter of a given circle
-/// * Check if a given geometry runs through or overlaps a given circle.
+
+
+/**
+ * TopologicalSearch handles Grid searches
+ * Operations supported:
+ *   * Search for all the grid-cells inside the perimeter of a given circle
+ *   * Check if a given geometry runs through or overlaps a given circle.
+ */
 
 class TopologicalSearch {
-    const Meters SAFETY_MARGIN = Meters(500);
+    static constexpr Meters SAFETY_MARGIN = Meters(500);
 public:
     std::vector<Coordinates> searchCircleInGrid(const Grid &grid, const Coordinates &center, Meters radius) const;
 

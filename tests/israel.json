@@ -2119,5 +2119,74 @@
         "direction": "bidirectional",
         "toll_road": false,
         "restricted": ["trucks"]
+    },
+    {
+        "type": "Junction",
+        "id": "J1071",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.49779, 35.34791]
+    },
+    {
+        "type": "Junction",
+        "id": "J1072",
+        "name": "a",
+        "description": ".*",
+        "category_tags": [],
+        "coordinates": [32.44121, 35.30718]
+    },
+    {
+        "type": "Way",
+        "id": "W2122",
+        "name": "b",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1071"
+        },
+        "to": {
+            "entity_id": "J1072"
+        },
+        "curves": [[32.47119, 35.38615], [32.44091, 35.35851]],
+        "speed_limit": 10,
+        "direction": "bidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2123",
+        "name": "b",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1071"
+        },
+        "to": {
+            "entity_id": "J1072"
+        },
+        "speed_limit": 90,
+        "direction": "unidirectional",
+        "toll_road": false,
+        "restricted": ["trucks"]
+    },
+    {
+        "type": "Way",
+        "id": "W2124",
+        "name": "b",
+        "description": ".*",
+        "category_tags": ["highway"],
+        "from": {
+            "entity_id": "J1072"
+        },
+        "to": {
+            "entity_id": "J1071"
+        },
+        "curves": [[32.47846, 35.30049]],
+        "speed_limit": 130,
+        "direction": "bidirectional",
+        "toll_road": true,
+        "restricted": ["trucks"]
     }
 ]

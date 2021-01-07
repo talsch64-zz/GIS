@@ -13,19 +13,23 @@ std::unique_ptr<AbstractRoutes> Navigation_315524694::getRoutes(const Coordinate
 
 std::unique_ptr<AbstractRoutes>
 Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const {
-    auto startPair = navigationGIS.getWayClosestPoint(start, restrictions);
-    if (std::get<1>(startPair) == EntityId("")) {
+    auto startTuple = gis.getWayClosestPoint(start, restrictions);
+    if (std::get<AbstractGIS::ClosestPoint::WayId>(startTuple) == EntityId("")) {
         return std::make_unique<Routes>(nullptr, nullptr, false, "No ways on earth!");
     }
-    auto endPair = navigationGIS.getWayClosestPoint(end, restrictions);
-    const AbstractWay &startWay = navigationGIS.getWay(std::get<1>(startPair));
-    const Coordinates &startPoint = std::get<0>(startPair);
-    const AbstractWay &endWay = navigationGIS.getWay(std::get<1>(endPair));
-    const Coordinates &destinationPoint = std::get<0>(endPair);
-    if (startWay.getId() == endWay.getId()) {
-        return std::make_unique<Routes>(nullptr, nullptr, false, "Routes contain only one way!");
-    }
-    AStar star(navigationGIS, startPoint, destinationPoint, startWay, endWay, restrictions);
+    auto endTuple = gis.getWayClosestPoint(end, restrictions);
+    const AbstractWay &startWay = gis.getWay(std::get<AbstractGIS::ClosestPoint::WayId>(startTuple));
+    const Coordinates &startPoint = std::get<AbstractGIS::ClosestPoint::Coord>(startTuple);
+    const AbstractWay &endWay = gis.getWay(std::get<AbstractGIS::ClosestPoint::WayId>(endTuple));
+    const Coordinates &destinationPoint = std::get<AbstractGIS::ClosestPoint::Coord>(endTuple);
+//    //TODO delete!!!
+//    if (startWay.getId() == endWay.getId()) {
+//        return std::make_unique<Routes>(nullptr, nullptr, false, "Routes contain only one way!");
+//    }
+    size_t startWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(startTuple);
+    size_t endWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(endTuple);
+
+    AStar star(gis, startPoint, destinationPoint, startWay, startWaySegment, endWay, endWaySegment, restrictions);
     auto shortestByDistance = star.shortestByDistance();
     if (shortestByDistance == nullptr) {
 //        initialize invalid Routes
