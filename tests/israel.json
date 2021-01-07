@@ -2185,7 +2185,7 @@
         },
         "curves": [[32.47846, 35.30049]],
         "speed_limit": 130,
-        "direction": "unidirectional",
+        "direction": "bidirectional",
         "toll_road": true,
         "restricted": ["trucks"]
     }

@@ -455,11 +455,15 @@ TEST_F(IsraelMapTest, accurateDistancesTest2) {
 
 }
 
+/**
+ * The route is from J1071 -> J1072
+ * Shortest distance route is basically W2123 which is slow but short
+ * Shortest time route is basically W2124 which is fast but long
+ */
 TEST_F(IsraelMapTest, accurateDistancesTest3) {
-    Coordinates origin(Longitude(32.44121), Latitude(35.30718)); //J1072
-    Coordinates destination(Longitude(32.49779), Latitude(35.34791)); //J1071
+    Coordinates destination(Longitude(32.44121), Latitude(35.30718)); //J1072
+    Coordinates origin(Longitude(32.49779), Latitude(35.34791)); //J1071
     auto routes = navigation.getRoutes(origin, destination);
-    printRoutes(*routes);
-//    EXPECT_EQ(routes->shortestDistance().getWays().size(), 3);
-//    EXPECT_EQ(routes->shortestTime().getWays().size(), 3);
+    EXPECT_LT(routes->shortestDistance().totalLength(), routes->shortestTime().totalLength());
+    EXPECT_LT(routes->shortestTime().estimatedDuration(), routes->shortestDistance().estimatedDuration());
 }
