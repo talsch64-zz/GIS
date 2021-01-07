@@ -5,7 +5,8 @@
 
 REGISTER_NAVIGATION(Navigation_315524694) // Registering the Navigation
 
-Navigation_315524694::Navigation_315524694(const NavigationGIS &navigationGis) : navigationGIS(navigationGis) {}
+Navigation_315524694::Navigation_315524694(const NavigationGIS &navigationGis) : AbstractNavigation(navigationGis) {
+}
 
 std::unique_ptr<AbstractRoutes> Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end) const {
     return getRoutes(start, end, Restrictions(""));
@@ -38,4 +39,3 @@ Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end
     auto shortestByTime = star.shortestByTime();
     return std::make_unique<Routes>(std::move(shortestByDistance), std::move(shortestByTime), true);
 }
-
