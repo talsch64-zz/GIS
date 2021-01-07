@@ -440,6 +440,7 @@ TEST_F(IsraelMapTest, accurateDistancesTest1) {
  * The expected route should from destination to origin: W2123
  * W2122 is bidirectional
  * W2123 is unidirectional
+ * W2124 is toll
  */
 TEST_F(IsraelMapTest, accurateDistancesTest2) {
     Coordinates origin(Longitude(32.44504), Latitude(35.30994));
