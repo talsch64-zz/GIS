@@ -22,3 +22,4 @@ TEST(GISWays, getWayByJunctionBidirectional) {
 //    EXPECT_EQ(gis.getWaysByJunction(EntityId("W1001")).size(), (size_t)0);
 //    EXPECT_EQ(gis.getWaysByJunction(EntityId("empty")).size(), (size_t)0);
 //}
+

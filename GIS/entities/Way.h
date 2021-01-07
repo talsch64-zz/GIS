@@ -85,8 +85,20 @@ public:
 
     const EntityId &getId() const override;
 
-private:
+    /**
+     *
+     * @param segment - the segment number of which Coordinates c is located on
+     * @param c - Coordiates located on segment
+     * @return the distance from c to both ends of the way.
+     */
     std::pair<Meters, Meters> getSegmentPartsOnWay(std::size_t segment, const Coordinates &c) const override;
+
+    /**
+     *
+     * @param coordinates
+     * @return the segment which the coordinates are located on
+     */
+    size_t getContainingSegment(Coordinates coordinates);
 };
 
 #endif //EX1_WAY_H

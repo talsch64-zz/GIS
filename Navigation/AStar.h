@@ -31,7 +31,9 @@ class AStar {
     const Coordinates origin;
     const Coordinates destination;
     const AbstractWay &startWay;
+    const std::size_t startWaySegment;
     const AbstractWay &finalWay;
+    const std::size_t finalWaySegment;
     Restrictions restrictions;
 
 public:
@@ -44,7 +46,8 @@ public:
      * @param finalWay the way which the destination point is located on.
      */
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-          const AbstractWay &startWay, const AbstractWay &finalWay);
+          const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
+          const std::size_t finalWaySegment);
 
 
     /**
@@ -57,7 +60,8 @@ public:
      * @param restrictions
      */
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
-          const AbstractWay &startWay, const AbstractWay &finalWay, const Restrictions &restrictions);
+          const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
+          const std::size_t finalWaySegment, const Restrictions &restrictions);
 
     std::unique_ptr<Route> shortestByDistance();
 
@@ -154,9 +158,10 @@ private:
      */
     static bool compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2);
 
-    std::unique_ptr<Route> searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, const Coordinates &target),
-                              double (*costFunc)(const AbstractWay &way),
-                              bool (*comparator)(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2));
+    std::unique_ptr<Route>
+    searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, const Coordinates &target),
+                        double (*costFunc)(const AbstractWay &way),
+                        bool (*comparator)(std::shared_ptr<Node> node1, std::shared_ptr<Node> node2));
 
     /**
      *
@@ -195,6 +200,14 @@ private:
      * @return final node :)
      */
     std::shared_ptr<Node> createFinalNode(std::shared_ptr<Node> currNode, double (*costFunc)(const AbstractWay &));
+
+    /**
+     * @brief returns the single way if one exits. This function called only when the start
+     * way is also the final way.
+     * If the way is unidirectional the route is the shortest and fastest.
+     * If the way is bidirectional the route is not necessarily the shortest or fastest.
+     */
+    std::optional<std::unique_ptr<Route>> getSingleWayRoute();
 
 
 };

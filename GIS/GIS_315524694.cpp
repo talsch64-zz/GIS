@@ -16,8 +16,9 @@
 REGISTER_GIS(GIS_315524694) // Registering the GIS
 
 GIS_315524694::GIS_315524694() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
-             topologicalSearch(std::make_unique<TopologicalSearch>()), logger(std::make_unique<Logger>()),
-             ids(std::vector<EntityId>()) {
+                                 topologicalSearch(std::make_unique<TopologicalSearch>()),
+                                 logger(std::make_unique<Logger>()),
+                                 ids(std::vector<EntityId>()) {
     logger->initialize();
 }
 
@@ -93,7 +94,8 @@ GIS_315524694::getEntities(const std::string &search_name, const Coordinates &co
     return ids;
 }
 
-std::optional<Coordinates> GIS_315524694::getEntityClosestPoint(const EntityId &entityId, const Coordinates &coordinates) {
+std::optional<Coordinates>
+GIS_315524694::getEntityClosestPoint(const EntityId &entityId, const Coordinates &coordinates) {
     if (entities.find(entityId) == entities.end()) {
         return {};
     }
@@ -104,7 +106,8 @@ std::tuple<Coordinates, EntityId, std::size_t> GIS_315524694::getWayClosestPoint
     return getWayClosestPoint(coord, Restrictions(""));
 }
 
-std::tuple<Coordinates, EntityId, std::size_t> GIS_315524694::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
+std::tuple<Coordinates, EntityId, std::size_t>
+GIS_315524694::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
     bool wayFound = false;
     int level = 0;
     std::stack<Grid::GridCell> stack;
@@ -113,6 +116,7 @@ std::tuple<Coordinates, EntityId, std::size_t> GIS_315524694::getWayClosestPoint
     Coordinates closest(Longitude(0), Latitude(0));
     Meters shortestDistance(INT_MAX);
     EntityId closestEntityId("");
+    size_t segment;
     std::stack<Grid::GridCell> nextStack;
     stack.push(grid->truncateCoordinates(coord));
     cellsVisited.insert(grid->truncateCoordinates(coord));
@@ -153,16 +157,15 @@ std::tuple<Coordinates, EntityId, std::size_t> GIS_315524694::getWayClosestPoint
                     }
                 }
             } else if (stack.empty()) {
-                //TODO: segment index
-                return {closest, closestEntityId, 0};
+                segment = (dynamic_cast<Way *>(getEntityById(closestEntityId)))->getContainingSegment(closest);
+                return {closest, closestEntityId, segment};
             }
         }
         std::swap(stack, nextStack);
         level++;
     }
 
-    //TODO: get index of segment`
-    std::tuple<Coordinates, EntityId, std::size_t> result = std::make_tuple(closest, closestEntityId, 0);
+    std::tuple<Coordinates, EntityId, std::size_t> result = std::make_tuple(closest, closestEntityId, -1);
     if (!wayFound) {
         auto fallback = getWayClosestPointFallback(coord, res);
         if (fallback.has_value()) {
@@ -275,19 +278,26 @@ const Meters &GIS_315524694::getMaxDistanceFromHighway() {
 std::optional<std::tuple<Coordinates, EntityId, std::size_t>>
 GIS_315524694::getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const {
     std::optional<std::tuple<Coordinates, EntityId, std::size_t>> foundWay;
-    Meters shortestDistance(0);
+    Coordinates closestPoint(Longitude(0), Latitude(0));
+    Meters shortestDistance(INT_MAX);
+    EntityId closestEntityId("");
+    std::size_t segment;
     for (auto &entityPair : entities) {
         Entity &entity = *entityPair.second;
         if (entity.getType() == "Way") {
             Way &way = (Way &) entity;
-            Coordinates closestPoint = way.getGeometry()->getClosestPoint(coord);
-            Meters distance = CoordinatesMath::calculateDistance(coord, closestPoint);
-            if (!isWayRestricted(way, res, distance) && (!foundWay.has_value() || distance < shortestDistance)) {
-                //TODO: get segment index
-                foundWay = std::make_tuple(closestPoint, way.getId(), 0);
+            Coordinates candidate = way.getGeometry()->getClosestPoint(coord);
+            Meters distance = CoordinatesMath::calculateDistance(coord, candidate);
+            if (!isWayRestricted(way, res, distance) && (distance < shortestDistance)) {
+                closestPoint = candidate;
+                closestEntityId = entityPair.first;
                 shortestDistance = distance;
             }
         }
+    }
+    if (closestEntityId != EntityId("")) {
+        segment = (dynamic_cast<Way *>(getEntityById(closestEntityId)))->getContainingSegment(closestPoint);
+        foundWay = std::make_tuple(closestPoint, closestEntityId, segment);
     }
     return foundWay;
 }

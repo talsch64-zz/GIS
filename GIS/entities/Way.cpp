@@ -3,6 +3,8 @@
 
 #include "Way.h"
 #include "../../UserCommon/Utils.h"
+#include "../../Common/CoordinatesMath.h"
+
 #include <utility>
 
 Way::Way(const EntityId &id, const std::string &name, const std::string &description,
@@ -43,7 +45,9 @@ const std::vector<std::string> &Way::getRestricted() const {
 }
 
 std::pair<Meters, Meters> Way::getSegmentPartsOnWay(std::size_t segment, const Coordinates &c) const {
-    throw std::runtime_error("not implemented");
+    Meters distanceFromStart = geometry->getDistanceFromStart(segment, c);
+    Meters distanceFromEnd = geometry->getDistanceFromEnd(segment, c);
+    return std::make_pair(distanceFromStart, distanceFromEnd);
 }
 
 std::pair<EntityId, EntityId> Way::getJunctions() const {
@@ -72,4 +76,9 @@ const Coordinates &Way::getFromJunctionCoordinates() const {
 const Coordinates &Way::getToJunctionCoordinates() const {
     return geometry->getPoints().back();
 }
+
+size_t Way::getContainingSegment(Coordinates coordinates) {
+    return geometry->getContainingSegment(coordinates);
+}
+
 

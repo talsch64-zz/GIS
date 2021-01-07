@@ -41,12 +41,59 @@ Coordinates PointList::getClosestPoint(const Coordinates &coordinates) const {
 }
 
 Meters PointList::getLength() const {
-    Meters length(0);
-    for (size_t i = 1; i < points.size(); i++) {
-        length += CoordinatesMath::calculateDistance(points[i - 1], points[i]);
-    }
-    return length;
+    return getCumulativeSegmentsLength()[points.size() - 1];
 }
+
+
+const size_t PointList::getContainingSegment(Coordinates coordinates) const {
+    for (int i = 0; i < points.size() - 1; ++i) {
+        if (std::fabs(
+                static_cast<double>(getCumulativeSegmentsLength()[i + 1] - getCumulativeSegmentsLength()[i] -
+                                    (CoordinatesMath::calculateDistance(points[i], coordinates) +
+                                     CoordinatesMath::calculateDistance(coordinates, points[i + 1])))) <=
+            DISTANCE_PRECISION) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+const std::vector<Meters> &PointList::getCumulativeSegmentsLength() const {
+    if (cumulativeSegmentsLength.size() == 0) {
+        std::vector<Meters> segments;
+        segments.push_back(Meters(0));
+        for (std::size_t i = 1; i < points.size(); i++) {
+            segments.push_back(segments[i - 1] + CoordinatesMath::calculateDistance(points[i - 1], points[i]));
+        }
+        cumulativeSegmentsLength = std::move(segments);
+    }
+    return cumulativeSegmentsLength;
+}
+
+
+const Meters PointList::getDistanceFromStart(std::size_t segment, const Coordinates &coordinates) const {
+    if (segment >= points.size() - 1 || segment < 0) {
+        //TODO find a better solution
+        throw std::runtime_error("invalid segment number");
+    }
+    Coordinates segmentStart = points[segment];
+    Meters distanceFromStart =
+            getCumulativeSegmentsLength()[segment] + CoordinatesMath::calculateDistance(segmentStart, coordinates);
+    return distanceFromStart;
+}
+
+
+const Meters PointList::getDistanceFromEnd(std::size_t segment, const Coordinates &coordinates) const {
+    if (segment >= points.size() - 1 || segment < 0) {
+        //TODO find a better solution
+        throw std::runtime_error("invalid segment number");
+    }
+    Coordinates segmentEnd = points[segment + 1];
+    Meters distanceFromEnd = getLength() - getCumulativeSegmentsLength()[segment + 1] +
+                             CoordinatesMath::calculateDistance(coordinates, segmentEnd);
+    return distanceFromEnd;
+}
+
 
 
 

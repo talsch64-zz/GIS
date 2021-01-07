@@ -14,7 +14,6 @@
  *
  */
 class Navigation_315524694: public AbstractNavigation {
-    NavigationGIS navigationGIS;
 
 public:
     /**
@@ -22,7 +21,8 @@ public:
      *
      * @param navigationGis - Note: you get a const ref of NavigationGIS
      */
-    Navigation_315524694(const NavigationGIS& navigationGis);
+
+    using AbstractNavigation::AbstractNavigation;
 
     /**
      * @brief Get the Routes object

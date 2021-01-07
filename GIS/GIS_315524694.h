@@ -20,18 +20,17 @@
 
 class EntityJsonParser;
 
-
-/// GIS application that allows the user to create interactive queries, store spatial data (Entities), and import the data into JSON files.
-/// Operations supported:
-/// * Load entities from JSON files
-/// * Save entities into JSON files
-/// * Clear all data currently stored
-/// * Search entities by ids, names and radius from a given Coordinates
-/// * Search closest point on entities perimeters from a given Coordinates
-/// * Search closest way (and the closest Coordinates on the way) from a given Coordinates
-
-
-class GIS_315524694: public AbstractGIS {
+/**
+ * GIS application that allows the user to create interactive queries, store spatial data (Entities), and import the data into JSON files.
+ * Operations supported:
+ *  Load entities from JSON files
+ *  Save entities into JSON files
+ *  Clear all data currently stored
+ *  Search entities by ids, names and radius from a given Coordinates
+ *  Search closest point on entities perimeters from a given Coordinates
+ *  Search closest way (and the closest Coordinates on the way) from a given Coordinates
+ */
+class GIS_315524694 : public AbstractGIS {
 protected:
     /**
      * Max distance to be from a highway for it to be a valid start of a route
@@ -39,8 +38,9 @@ protected:
     static constexpr Meters max_distance_from_highway = Meters(3);
     /**
      * Max depth of BFS to search the grid for closest way before resorting to a fallback (iterating over all the ways)
+     * Around 250 km radius
      */
-    const int max_closest_way_grid_levels = 250;
+    static constexpr int max_closest_way_grid_levels = 250;
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
 public:
     static const Meters &getMaxDistanceFromHighway();
@@ -86,7 +86,8 @@ public:
      * @param res Restrictions for the ways
      * @return A pair of the closest point on the way and the entity id of the way
      */
-    std::tuple<Coordinates, EntityId, std::size_t> getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const override;
+    std::tuple<Coordinates, EntityId, std::size_t>
+    getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const override;
 
     /**
  * @brief Get the Way object et EntityId of a Way and return the Way itself.
@@ -133,7 +134,8 @@ protected:
      * @param res Restrictions on the ways search
      * @return A pair of the closest point on the way and the way's id. If no way was found, an empty optional is returned.
      */
-    std::optional<std::tuple<Coordinates, EntityId, std::size_t>> getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const;
+    std::optional<std::tuple<Coordinates, EntityId, std::size_t>>
+    getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const;
 };
 
 #endif //EX1_GIS_H

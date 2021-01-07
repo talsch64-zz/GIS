@@ -8,6 +8,8 @@
 #include "../GIS/entities/Way.h"
 #include "../UserCommon/Utils.h"
 
+#define DISTANCE_PRECISION 5
+
 class IsraelMapTest : public ::testing::Test {
 protected:
     GIS_315524694 gis;
@@ -35,7 +37,7 @@ public:
         return ids;
     }
 
-    void printRoutes(const Routes &routes) {
+    void printRoutes(const AbstractRoutes &routes) {
         if (!routes.isValid()) {
             std::cout << "invalid routes!!" << std::endl;
             return;
@@ -68,6 +70,58 @@ public:
                   << (double) routes.shortestTime().estimatedDuration() << std::endl;
     }
 };
+
+
+TEST_F(IsraelMapTest, getSegmentPartsOnWayTest1) {
+    Coordinates coordinates(Longitude(31.99435), Latitude(35.49579));
+    auto tuple = gis.getWayClosestPoint(coordinates);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple), EntityId("W2060"));
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple), 0);
+    auto &way = gis.getWay(EntityId("W2060"));
+    auto distancePair = way.getSegmentPartsOnWay(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple), coordinates);
+    Meters distance = distancePair.first + distancePair.second;
+    Meters length = way.getLength();
+    EXPECT_LE(std::fabs(static_cast<double>(distance - length)), DISTANCE_PRECISION);
+
+    // check segment equals to -1 if the coordinates are not located on the way
+    auto way2 = dynamic_cast<Way *>(gis.getEntityById(EntityId("W2060")));
+    EXPECT_EQ(way2->getContainingSegment(Coordinates(Longitude(0), Latitude(0))), -1);
+}
+
+
+TEST_F(IsraelMapTest, getSegmentPartsOnWayTest2) {
+    Coordinates c0(Longitude(32.14238), Latitude(34.9836));
+    Coordinates c1(Longitude(32.11719), Latitude(34.89932));
+    Coordinates c2(Longitude(32.10992), Latitude(34.8734));
+    auto tuple0 = gis.getWayClosestPoint(c0);
+    auto tuple1 = gis.getWayClosestPoint(c1);
+    auto tuple2 = gis.getWayClosestPoint(c2);
+
+
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple0), EntityId("W2035"));
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple0), 0);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple1), EntityId("W2035"));
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple1), 1);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple2), EntityId("W2035"));
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple2), 2);
+
+
+    auto &way = gis.getWay(EntityId("W2035"));
+    auto distancePair0 = way.getSegmentPartsOnWay(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple0), c0);
+    auto distancePair1 = way.getSegmentPartsOnWay(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple1), c1);
+    auto distancePair2 = way.getSegmentPartsOnWay(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple2), c2);
+
+
+    Meters distance0 = distancePair0.first + distancePair0.second;
+    Meters distance1 = distancePair1.first + distancePair1.second;
+    Meters distance2 = distancePair2.first + distancePair2.second;
+
+
+    Meters length = way.getLength();
+    EXPECT_LE(std::fabs(static_cast<double>(distance0 - length)), DISTANCE_PRECISION);
+    EXPECT_LE(std::fabs(static_cast<double>(distance1 - length)), DISTANCE_PRECISION);
+    EXPECT_LE(std::fabs(static_cast<double>(distance2 - length)), DISTANCE_PRECISION);
+}
 
 
 /**
@@ -247,31 +301,36 @@ TEST_F(IsraelMapTest, invalidRoutesUnreachable) {
 }
 
 /**
- * First and final way are the same way which is unidirectional - Expected to find invalid route
+ * First and final way are the same way which is unidirectional
  */
-TEST_F(IsraelMapTest, unidirectionalSingleWayInvalid) {
+TEST_F(IsraelMapTest, unidirectionalSingleWay) {
 //    W2047 is unidirectional
     Coordinates origin(Longitude(32.31719),
                        Latitude(35.18944)); // point on W2047 which is isolated
     Coordinates destination(Longitude(32.33931), Latitude(35.19085)); // J1033 which is on W2047
     auto routes = navigation.getRoutes(origin, destination);
+    // this direction suppose to be invalid
     EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestDistance()));
     EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestTime()));
-    EXPECT_EQ(routes->getErrorMessage(), "Routes contain only one way!");
+    EXPECT_EQ(routes->getErrorMessage(), "Routes not found!");
+
+    // the opposite direction should work
+    routes = navigation.getRoutes(destination, origin);
+    EXPECT_TRUE(validator.validateRoute(destination, origin, routes->shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(destination, origin, routes->shortestTime()));
 }
 
 
 /**
- * First and final way are the same way which is bidirectional - Expected to find invalid route
+ * First and final way are the same way which is bidirectional - Expected to find valid route
  */
 TEST_F(IsraelMapTest, bidirectionalSingleWay) {
     Coordinates destination(Longitude(32.34981),
                             Latitude(35.22814)); // J1038
     Coordinates origin(Longitude(32.25985), Latitude(35.22334)); // J1039
     auto routes = navigation.getRoutes(origin, destination);
-    EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestDistance()));
-    EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestTime()));
-    EXPECT_FALSE(false);
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes->shortestDistance()));
+    EXPECT_TRUE(validator.validateRoute(origin, destination, routes->shortestTime()));
 }
 
 /**
@@ -350,4 +409,61 @@ TEST_F(IsraelMapTest, minimalWaysRoute) {
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes->shortestDistance()));
     EXPECT_TRUE(validator.validateRoute(origin, destination, routes->shortestTime()));
     EXPECT_LT(routes->shortestDistance().getWays().size(), (size_t) 4);
+}
+
+
+/**
+ * startWay is also the finalWay (W2122) but it is vary slow way and very long.
+ * The fastest and shortest route is not to take the long way and go through a faster way in between.
+ * The expected route should from origin to destination: W2122 -> W2123 -> W2122
+ * The expected route should from destination to origin: W2122
+ * W2122 is bidirectional
+ * W2123 is unidirectional
+ */
+
+TEST_F(IsraelMapTest, accurateDistancesTest1) {
+    Coordinates origin(Longitude(32.494), Latitude(35.35336));
+    Coordinates destination(Longitude(32.44119), Latitude(35.30997));
+    auto routes = navigation.getRoutes(origin, destination, Restrictions("toll"));
+    EXPECT_EQ(routes->shortestDistance().getWays().size(), 3);
+    EXPECT_EQ(routes->shortestTime().getWays().size(), (size_t) 3);
+
+    // the opposite direction should include only one way because W2123 is unidirectional
+    routes = navigation.getRoutes(destination, origin, Restrictions("toll"));
+    EXPECT_EQ(routes->shortestDistance().getWays().size(), (size_t) 1);
+}
+
+
+/**
+ * startWay is also the finalWay (W2123) but it is vary slow way and very long
+ * The only route from origin to destination is W2123 -> W2122 -> W2123
+ * The expected route should from destination to origin: W2123
+ * W2122 is bidirectional
+ * W2123 is unidirectional
+ * W2124 is toll
+ */
+TEST_F(IsraelMapTest, accurateDistancesTest2) {
+    Coordinates origin(Longitude(32.44504), Latitude(35.30994));
+    Coordinates destination(Longitude(32.44508), Latitude(35.30997));
+    auto routes = navigation.getRoutes(origin, destination);
+    EXPECT_EQ(routes->shortestDistance().getWays().size(), 3);
+    EXPECT_EQ(routes->shortestTime().getWays().size(), 3);
+
+    // the opposite direction should include only one way
+    routes = navigation.getRoutes(destination, origin);
+    EXPECT_EQ(routes->shortestDistance().getWays().size(), (size_t) 1);
+
+}
+
+/**
+ * The route is from J1071 -> J1072
+ * Shortest distance route is basically W2123 which is slow but short
+ * Shortest time route is basically W2124 which is fast but long
+ */
+TEST_F(IsraelMapTest, accurateDistancesTest3) {
+    Coordinates destination(Longitude(32.44121), Latitude(35.30718)); //J1072
+    Coordinates origin(Longitude(32.49779), Latitude(35.34791)); //J1071
+    auto routes = navigation.getRoutes(origin, destination);
+    EXPECT_LT(routes->shortestDistance().totalLength(), routes->shortestTime().totalLength());
+    EXPECT_LT(routes->shortestTime().estimatedDuration(), routes->shortestDistance().estimatedDuration());
 }
