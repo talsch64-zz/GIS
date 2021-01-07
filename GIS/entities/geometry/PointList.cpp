@@ -71,7 +71,7 @@ const std::vector<Meters> &PointList::getCumulativeSegmentsLength() const {
 }
 
 
-const Meters PointList::getDistanceFromStart(std::size_t segment, const Coordinates &coordinates) {
+const Meters PointList::getDistanceFromStart(std::size_t segment, const Coordinates &coordinates) const {
     if (segment >= points.size() - 1 || segment < 0) {
         //TODO find a better solution
         throw std::runtime_error("invalid segment number");
@@ -83,7 +83,7 @@ const Meters PointList::getDistanceFromStart(std::size_t segment, const Coordina
 }
 
 
-const Meters PointList::getDistanceFromEnd(std::size_t segment, const Coordinates &coordinates) {
+const Meters PointList::getDistanceFromEnd(std::size_t segment, const Coordinates &coordinates) const {
     if (segment >= points.size() - 1 || segment < 0) {
         //TODO find a better solution
         throw std::runtime_error("invalid segment number");

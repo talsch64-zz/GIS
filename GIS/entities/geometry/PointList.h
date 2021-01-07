@@ -47,7 +47,7 @@ public:
      * @param coordinates - Coordinates located on the segment
      * @return the distance from coordinates to points[0]
      */
-    const Meters getDistanceFromStart(std::size_t segment, const Coordinates &coordinates);
+    const Meters getDistanceFromStart(std::size_t segment, const Coordinates &coordinates) const;
 
     /**
  *
@@ -55,7 +55,7 @@ public:
  * @param coordinates - Coordinates located on the segment
  * @return the distance from coordinates to points[size(points)-1]
  */
-    const Meters getDistanceFromEnd(std::size_t segment, const Coordinates &coordinates);
+    const Meters getDistanceFromEnd(std::size_t segment, const Coordinates &coordinates) const;
 
 
 private:
