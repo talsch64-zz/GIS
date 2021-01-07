@@ -15,7 +15,7 @@
 /// The segments are represented as a vector of Coordinates where each segment is defined by two consecutive Coordinates inside the vector
 class PointList : public Geometry {
     std::vector<Coordinates> points;
-    mutable std::optional<std::vector<Meters>> cumulativeSegmentsLength; // vector that holds the cumulative length of all the segments
+    mutable std::vector<Meters> cumulativeSegmentsLength; // vector that holds the cumulative length of all the segments
 
 public:
 

@@ -59,7 +59,7 @@ const size_t PointList::getContainingSegment(Coordinates coordinates) const {
 }
 
 const std::vector<Meters> &PointList::getCumulativeSegmentsLength() const {
-    if (!cumulativeSegmentsLength.has_value()) {
+    if (cumulativeSegmentsLength.size() == 0) {
         std::vector<Meters> segments;
         segments.push_back(Meters(0));
         for (std::size_t i = 1; i < points.size(); i++) {
@@ -67,7 +67,7 @@ const std::vector<Meters> &PointList::getCumulativeSegmentsLength() const {
         }
         cumulativeSegmentsLength = std::move(segments);
     }
-    return cumulativeSegmentsLength.value();
+    return cumulativeSegmentsLength;
 }
 
 
