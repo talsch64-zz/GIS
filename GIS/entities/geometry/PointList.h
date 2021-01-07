@@ -15,7 +15,7 @@
 /// The segments are represented as a vector of Coordinates where each segment is defined by two consecutive Coordinates inside the vector
 class PointList : public Geometry {
     std::vector<Coordinates> points;
-    mutable std::optional<std::vector<Meters>> cumulativeSegmentsLength; // vector that holds the cumulative length of the segments
+    mutable std::optional<std::vector<Meters>> cumulativeSegmentsLength; // vector that holds the cumulative length of all the segments
 
 public:
 
@@ -41,7 +41,24 @@ public:
     */
     const size_t getContainingSegment(Coordinates coordinates) const;
 
+    /**
+     *
+     * @param segment
+     * @param coordinates - Coordinates located on the segment
+     * @return the distance from coordinates to points[0]
+     */
+    const Meters getDistanceFromStart(std::size_t segment, const Coordinates &coordinates);
 
+    /**
+ *
+ * @param segment
+ * @param coordinates - Coordinates located on the segment
+ * @return the distance from coordinates to points[size(points)-1]
+ */
+    const Meters getDistanceFromEnd(std::size_t segment, const Coordinates &coordinates);
+
+
+private:
     /**
      *
      * @return vector of cumulative length of all the segments.

@@ -8,6 +8,8 @@
 #include "../GIS/entities/Way.h"
 #include "../UserCommon/Utils.h"
 
+#define DISTANCE_PRECISION 5
+
 class IsraelMapTest : public ::testing::Test {
 protected:
     GIS_315524694 gis;
@@ -68,6 +70,58 @@ public:
                   << (double) routes.shortestTime().estimatedDuration() << std::endl;
     }
 };
+
+
+TEST_F(IsraelMapTest, getSegmentPartsOnWayTest1) {
+    Coordinates coordinates(Longitude(31.99435), Latitude(35.49579));
+    auto tuple = gis.getWayClosestPoint(coordinates);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple), EntityId("W2060"));
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple), 0);
+    auto &way = gis.getWay(EntityId("W2060"));
+    auto distancePair = way.getSegmentPartsOnWay(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple), coordinates);
+    Meters distance = distancePair.first + distancePair.second;
+    Meters length = way.getLength();
+    EXPECT_LE(std::fabs(static_cast<double>(distance - length)), DISTANCE_PRECISION);
+
+    // check segment equals to -1 if the coordinates are not located on the way
+    auto way2 = dynamic_cast<Way *>(gis.getEntityById(EntityId("W2060")));
+    EXPECT_EQ(way2->getContainingSegment(Coordinates(Longitude(0), Latitude(0))), -1);
+}
+
+
+TEST_F(IsraelMapTest, getSegmentPartsOnWayTest2) {
+    Coordinates c0(Longitude(32.14238), Latitude(34.9836));
+    Coordinates c1(Longitude(32.11719), Latitude(34.89932));
+    Coordinates c2(Longitude(32.10992), Latitude(34.8734));
+    auto tuple0 = gis.getWayClosestPoint(c0);
+    auto tuple1 = gis.getWayClosestPoint(c1);
+    auto tuple2 = gis.getWayClosestPoint(c2);
+
+
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple0), EntityId("W2035"));
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple0), 0);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple1), EntityId("W2035"));
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple1), 1);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple2), EntityId("W2035"));
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple2), 2);
+
+
+    auto &way = gis.getWay(EntityId("W2035"));
+    auto distancePair0 = way.getSegmentPartsOnWay(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple0), c0);
+    auto distancePair1 = way.getSegmentPartsOnWay(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple1), c1);
+    auto distancePair2 = way.getSegmentPartsOnWay(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple2), c2);
+
+
+    Meters distance0 = distancePair0.first + distancePair0.second;
+    Meters distance1 = distancePair1.first + distancePair1.second;
+    Meters distance2 = distancePair2.first + distancePair2.second;
+
+
+    Meters length = way.getLength();
+    EXPECT_LE(std::fabs(static_cast<double>(distance0 - length)), DISTANCE_PRECISION);
+    EXPECT_LE(std::fabs(static_cast<double>(distance1 - length)), DISTANCE_PRECISION);
+    EXPECT_LE(std::fabs(static_cast<double>(distance2 - length)), DISTANCE_PRECISION);
+}
 
 
 /**

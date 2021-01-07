@@ -26,15 +26,12 @@ protected:
     bool highway;
     std::vector<std::string> restricted;
     mutable std::optional<Meters> length;
-    mutable std::optional<std::vector<Meters>> lengthSegments;
 
 public:
 
     Way(const EntityId &id, const std::string &name, const std::string &description,
         const std::vector<std::string> &categoryTags, std::unique_ptr<PointList> geometry, EntityId from,
         EntityId to, TrafficDirection direction, int speedLimit, bool tollRoad, bool highway, std::vector<std::string> restricted);
-
-    const std::optional<std::vector<Meters>> &getLengthSegments() const;
 
     TrafficDirection getDirection() const;
 
@@ -88,8 +85,20 @@ public:
 
     const EntityId &getId() const override;
 
-private:
+    /**
+     *
+     * @param segment - the segment number of which Coordinates c is located on
+     * @param c - Coordiates located on segment
+     * @return the distance from c to both ends of the way.
+     */
     std::pair<Meters, Meters> getSegmentPartsOnWay(std::size_t segment, const Coordinates &c) const override;
+
+    /**
+     *
+     * @param coordinates
+     * @return the segment which the coordinates are located on
+     */
+    size_t getContainingSegment(Coordinates coordinates);
 };
 
 #endif //EX1_WAY_H
