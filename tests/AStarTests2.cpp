@@ -156,6 +156,7 @@ TEST(AStar, HighwayWithinThreeMeters) {
 /**
  * Beware! Infinite Improbability Drive may cause unexpected results!
  */
+ //TODO fix the engine
 //TEST(AStar, HeartOfGold) {
 //    std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
 //    int v = 8, e = 14, reps = 100;

@@ -38,9 +38,9 @@ protected:
     static constexpr Meters max_distance_from_highway = Meters(3);
     /**
      * Max depth of BFS to search the grid for closest way before resorting to a fallback (iterating over all the ways)
-     * Around 100 km radius
+     * Around 250 km radius
      */
-    static constexpr int max_closest_way_grid_levels = 100;
+    static constexpr int max_closest_way_grid_levels = 250;
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
 public:
     static const Meters &getMaxDistanceFromHighway();
