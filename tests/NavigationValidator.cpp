@@ -28,11 +28,6 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     EntityId startWayId = std::get<AbstractGIS::ClosestPoint::WayId>(startTuple);
     EntityId finalWayId = std::get<AbstractGIS::ClosestPoint::WayId>(endTuple);
 
-    //TODO delete!!
-//    if (startWayId == finalWayId) { // illegal!
-//        return false;
-//    }
-
     const AbstractWay &startWay = gis.getWay(startWayId);
     const AbstractWay &finalWay = gis.getWay(finalWayId);
 

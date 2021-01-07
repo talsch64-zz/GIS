@@ -2151,7 +2151,7 @@
         "curves": [[32.47119, 35.38615], [32.44091, 35.35851]],
         "speed_limit": 10,
         "direction": "bidirectional",
-        "toll_road": true,
+        "toll_road": false,
         "restricted": ["trucks"]
     },
     {
@@ -2166,9 +2166,9 @@
         "to": {
             "entity_id": "J1072"
         },
-        "speed_limit": 60,
+        "speed_limit": 90,
         "direction": "unidirectional",
-        "toll_road": true,
+        "toll_road": false,
         "restricted": ["trucks"]
     },
     {

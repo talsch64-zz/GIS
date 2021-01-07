@@ -424,13 +424,12 @@ TEST_F(IsraelMapTest, minimalWaysRoute) {
 TEST_F(IsraelMapTest, accurateDistancesTest1) {
     Coordinates origin(Longitude(32.494), Latitude(35.35336));
     Coordinates destination(Longitude(32.44119), Latitude(35.30997));
-    auto routes = navigation.getRoutes(origin, destination);
+    auto routes = navigation.getRoutes(origin, destination, Restrictions("toll"));
     EXPECT_EQ(routes->shortestDistance().getWays().size(), 3);
     EXPECT_EQ(routes->shortestTime().getWays().size(), (size_t) 3);
 
     // the opposite direction should include only one way because W2123 is unidirectional
-
-    routes = navigation.getRoutes(destination, origin);
+    routes = navigation.getRoutes(destination, origin, Restrictions("toll"));
     EXPECT_EQ(routes->shortestDistance().getWays().size(), (size_t) 1);
 }
 

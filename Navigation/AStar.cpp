@@ -90,6 +90,12 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
                            double (*costFunc)(const AbstractWay &),
                            bool (*comparator)(std::shared_ptr<Node>, std::shared_ptr<Node>)) {
 
+
+    auto idPair = finalWay.getJunctions();
+    auto finalWayFromId = idPair.first;
+    auto finalWayToId = idPair.second;
+
+
 /*-------------------------------- initialize initial Nodes --------------------------------*/
     std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, std::function<bool(
             std::shared_ptr<Node>, std::shared_ptr<Node>)>> queue(comparator);
@@ -114,8 +120,6 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
     std::unordered_set<EntityId> popedJunctions;
     std::shared_ptr<Node> currNode;
 
-
-
 /*-------------------------------- performing A* algorithm with the queue --------------------------------*/
     while (!queue.empty()) {
         currNode = queue.top();
@@ -132,9 +136,8 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
         popedJunctions.insert(currNode->getJunctionId());
 
         //  reached the final way and initializing the final Node
-        auto idPair = finalWay.getJunctions();
-        if (currNode->getJunctionId() == idPair.first ||
-            (finalWay.isBidirectional() && currNode->getJunctionId() == idPair.second)) {
+        if (currNode->getJunctionId() == finalWayFromId ||
+            (finalWay.isBidirectional() && currNode->getJunctionId() == finalWayToId)) {
             queue.push(createFinalNode(currNode, costFunc));
         }
 
@@ -267,35 +270,6 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
                                                                nullptr);
     return initialNode;
 }
-//std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(const Coordinates &, const Coordinates &),
-//                                                      double (*costFunc)(const AbstractWay &), Direction direction) {
-//    //  If direction is A_To_B then the Node start at "to" junction, else from "from" junction.
-//    //  We implemented the algorithm such that the initial Node already has a "kilometrage" of the startWay
-//    Coordinates initialCoordinates = direction == Direction::A_to_B ? startWay.getToJunctionCoordinates()
-//                                                                    : startWay.getFromJunctionCoordinates();
-//    Coordinates oppositeCoordinates = direction == Direction::A_to_B ? startWay.getFromJunctionCoordinates()
-//                                                                     : startWay.getToJunctionCoordinates();
-//    //  the distance from origin point to the initial node
-//    Meters initialDistance =
-//            startWay.getLength() - CoordinatesMath::calculateDistance(oppositeCoordinates, origin);
-//    //  the time from origin point to the initial node
-//    Minutes initialTime = Utils::calculateTime(initialDistance, startWay.getSpeedLimit());
-//    auto idPair = startWay.getJunctions();
-//    auto fromId = idPair.first;
-//    auto toId = idPair.second;
-//    EntityId initialJunctionId =
-//            direction == Direction::A_to_B ? toId : fromId;
-////    TODO find a better solution to update the initial cost
-//    double initialCost = costFunc == costByTime ? double(initialTime) : double(initialDistance);
-//    double initialPriority = heuristicFunc(initialCoordinates, destination) + initialCost;
-//    std::shared_ptr<Node> initialNode = std::make_shared<Node>(initialCoordinates, initialJunctionId,
-//                                                               initialDistance, initialTime, initialCost,
-//                                                               initialPriority, 1,
-//                                                               Edge(std::make_pair(startWay.getId(),
-//                                                                                   direction)),
-//                                                               nullptr);
-//    return initialNode;
-//}
 
 std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNode,
                                                     double (*costFunc)(const AbstractWay &)) {
