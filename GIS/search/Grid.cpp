@@ -1,10 +1,10 @@
 #include <unordered_set>
 #include "Grid.h"
-#include "../entities/geometry/Geometry.h"
+#include "../../UserCommon/entities/geometry/Geometry.h"
 #include "../../Common/CoordinatesMath.h"
-#include "../entities/geometry/PointList.h"
-#include "../entities/geometry/Point.h"
-#include "../entities/geometry/Circle.h"
+#include "../UserCommon/entities/geometry/PointList.h"
+#include "../UserCommon/entities/geometry/Point.h"
+#include "../UserCommon/entities/geometry/Circle.h"
 
 double Grid::truncateDecimalCoordinate(double coordinate) const {
     return std::floor(coordinate / precision) * precision;

@@ -23,12 +23,13 @@ int main() {
         return 1;
     }
 
-    fs::path navigation_so{run_dir / "Navigation/Navigation_098765432.so"};
+    fs::path navigation_so{run_dir / "Navigation/Navigation_315524694.so"};
     void *navigation_handle = dlopen(navigation_so.c_str(), RTLD_LAZY);
     if (navigation_handle) {
         std::cout << navigation_so << " loaded\n";
     } else {
-        std::cout << "Oy Vey!\n";
+        std::cout << dlerror() << std::endl;
+        return 1;
     }
 
     // Don't forget to close all handles!

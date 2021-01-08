@@ -112,3 +112,5 @@ build
 .idea/modules.xml
 GIS/bin
 GIS/UserCommon
+Navigation/bin
+Navigation/UserCommon

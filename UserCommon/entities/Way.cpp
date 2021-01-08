@@ -2,7 +2,7 @@
 #include "JsonHandlers/Serializers/EntityJsonSerializer.h"
 
 #include "Way.h"
-#include "../../UserCommon/Utils.h"
+#include "../Utils.h"
 #include "../../Common/CoordinatesMath.h"
 
 #include <utility>

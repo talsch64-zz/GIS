@@ -1,7 +1,7 @@
 COMP = g++-10
 
 INC:=-I../include
-SOURCE_FILES := $(wildcard GIS_315524694.cpp entities/*.cpp entities/geometry/*.cpp entities/JsonHandlers/Serializers/*.cpp entities/JsonHandlers/parsers/*.cpp search/*.cpp ../UserCommon/*.cpp)
+SOURCE_FILES := $(wildcard GIS_315524694.cpp ../UserCommon/entities/*.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/entities/JsonHandlers/Serializers/*.cpp ../UserCommon/entities/JsonHandlers/parsers/*.cpp search/*.cpp ../UserCommon/*.cpp)
 OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))
