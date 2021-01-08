@@ -110,3 +110,5 @@ build
 .vscode
 
 .idea/modules.xml
+GIS/bin
+GIS/UserCommon

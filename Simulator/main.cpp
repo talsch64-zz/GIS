@@ -17,9 +17,10 @@ int main() {
     fs::path gis_so{run_dir / "GIS/GIS_315524694.so"};
     void *gis_handle = dlopen(gis_so.c_str(), RTLD_LAZY);
     if (gis_handle) {
-        std::cout << gis_so << " loaded\n";
+        std::cout << gis_so << " loaded" << std::endl;
     } else {
-        std::cout << "Oy Vey!\n";
+        std::cout << dlerror() << std::endl;
+        return 1;
     }
 
     fs::path navigation_so{run_dir / "Navigation/Navigation_098765432.so"};

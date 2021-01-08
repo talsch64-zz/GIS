@@ -1,11 +1,13 @@
 COMP = g++-10
 
-SOURCE_FILES := $(wildcard GIS_315524694.cpp entities/*.cpp entities/geometry/*.cpp entities/JsonHandlers/Serializers/*.cpp entities/JsonHandlers/parsers/*.cpp search/*.cpp)
+INC:=-I../include
+SOURCE_FILES := $(wildcard GIS_315524694.cpp entities/*.cpp entities/geometry/*.cpp entities/JsonHandlers/Serializers/*.cpp entities/JsonHandlers/parsers/*.cpp search/*.cpp ../UserCommon/*.cpp)
 OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))
 SHARED_OBJ := GIS_315524694.so
-OUTPUT_DIR := ../../OUTPUT/GIS
+# OUTPUT_DIR := ../../OUTPUT/GIS
+OUTPUT_DIR := .
 OUTPUT_SHARED_OBJ := $(OUTPUT_DIR)/$(SHARED_OBJ)
 
 CPP_COMP_FLAG := -std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
@@ -25,7 +27,7 @@ $(OUTPUT_SHARED_OBJ): $(OBJS)
 # c++ source
 $(BIN_DIR)/%.o: %.cpp
 	mkdir -p $(dir $@)
-	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
+	$(COMP) $(CPP_COMP_FLAG) $(INC) -c $< -o $@
 
 clean:
 	rm -rf $(BIN_DIR) $(OUTPUT_SHARED_OBJ)
