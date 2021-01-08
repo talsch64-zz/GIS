@@ -24,7 +24,7 @@ void Registrar::parseCommandLineArguments(int argc, char **argv) {
             {0, 0,                                     0, 0}
     };
 
-    while ((opt = getopt_long_only(argc, argv, "t:n:g:m:r:o:",
+    while ((opt = getopt_long_only(argc, argv, "",
                                    long_options, &option_index)) != -1) {
         //TODO handle errors if arguments are wrong or not representing absolute path
         switch (opt) {
