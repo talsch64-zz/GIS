@@ -3,7 +3,10 @@ project(ex1)
 include_directories(include)
 
 #TODO: uncomment
-set(CMAKE_CXX_FLAGS "-std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG")
+#set(CMAKE_CXX_FLAGS "-std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG")
+#TODO delete
+set(CMAKE_CXX_FLAGS "-std=c++20 -DNDEBUG")
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_LIBRARIES -ldl)
 

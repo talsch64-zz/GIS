@@ -1,6 +1,4 @@
-//
-// Created by student on 08/01/2021.
-//
+
 
 #ifndef GIS_CPP_REGISTRAR_H
 #define GIS_CPP_REGISTRAR_H
@@ -11,8 +9,7 @@
 #include <filesystem>
 
 class Registrar {
-    std::vector<std::filesystem::path> gis_so_files;
-    std::vector<std::filesystem::path> navigation_so_files;
+    std::vector<void *> so_files;
     std::filesystem::path navigation_directory;
     std::filesystem::path gis_directory;
     std::filesystem::path map_file;
@@ -22,16 +19,20 @@ class Registrar {
 
 
 public:
-
     void parseCommandLineArguments(int argc, char **argv);
 
-    void registerSharedLibraries();
+    void loadSharedLibraries();
+
+    void unloadSharedLibraries();
+
+
 private:
 
-    void registerGISLibraries();
+    void loadGISLibraries();
 
-    void registerNavigationLibraries();
+    void loadNavigationLibraries();
 
-
+};
 
 #endif //GIS_CPP_REGISTRAR_H
+
