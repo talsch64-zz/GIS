@@ -39,7 +39,7 @@ public:
     * @param coordinates
     * @return the number of segment containing coordinates if exists, else -1
     */
-    const size_t getContainingSegment(Coordinates coordinates) const;
+    std::size_t getContainingSegment(Coordinates coordinates) const;
 
     /**
      *

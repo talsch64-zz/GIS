@@ -14,7 +14,7 @@ int main() {
     // dlopen usage example:
     fs::path run_dir = fs::current_path();
 
-    fs::path gis_so{run_dir / "GIS/GIS_098765432.so"};
+    fs::path gis_so{run_dir / "GIS/GIS_315524694.so"};
     void *gis_handle = dlopen(gis_so.c_str(), RTLD_LAZY);
     if (gis_handle) {
         std::cout << gis_so << " loaded\n";

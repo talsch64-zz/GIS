@@ -15,10 +15,6 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
 bool
 NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
                                    const AbstractRoute &r) const {
-
-    if (&r == nullptr) {
-        return false;
-    }
     auto startTuple = gis.getWayClosestPoint(start, restrictions);
     auto endTuple = gis.getWayClosestPoint(end, restrictions);
 

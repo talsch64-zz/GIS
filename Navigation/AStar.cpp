@@ -37,7 +37,7 @@ AStar::shortestByDistance() {
     }
     std::unique_ptr<Route> shortestRoute = searchShortestRoute(distanceHeuristic, costByDistance, compareByDistance);
     if (!singleWayRoute.has_value()) {
-        return std::move(shortestRoute);
+        return shortestRoute;
     }
     if (shortestRoute == nullptr) {
         // it is possible that A* didn't find a route if the route is single-way route
@@ -46,12 +46,12 @@ AStar::shortestByDistance() {
 
     if (shortestRoute->totalLength() < singleWayRoute.value()->totalLength()) {
         // The shortestRoute is indeed the shortest
-        return std::move(shortestRoute);
+        return shortestRoute;
     }
     if (shortestRoute->totalLength() == singleWayRoute.value()->totalLength() &&
         shortestRoute->estimatedDuration() < singleWayRoute.value()->estimatedDuration()) {
         // both route are the same length but shortestRoute is faster
-        return std::move(shortestRoute);
+        return shortestRoute;
     }
 
     return std::move(singleWayRoute.value());
@@ -65,7 +65,7 @@ AStar::shortestByTime() {
     }
     std::unique_ptr<Route> fastestRoute = searchShortestRoute(timeHeuristic, costByTime, compareByTime);
     if (!singleWayRoute.has_value()) {
-        return std::move(fastestRoute);
+        return fastestRoute;
     }
     if (fastestRoute == nullptr) {
         // it is possible that A* didn't find a route if the route is single-way route
@@ -74,12 +74,12 @@ AStar::shortestByTime() {
 
     if (fastestRoute->estimatedDuration() < singleWayRoute.value()->estimatedDuration()) {
         // fastestRoute is indeed the fastest
-        return std::move(fastestRoute);
+        return fastestRoute;
     }
     if (fastestRoute->estimatedDuration() == singleWayRoute.value()->estimatedDuration() &&
         fastestRoute->totalLength() < singleWayRoute.value()->totalLength()) {
         // both route are equal in duration but fastestRoute is shorter in length
-        return std::move(fastestRoute);
+        return fastestRoute;
     }
 
     return std::move(singleWayRoute.value());
@@ -246,8 +246,7 @@ std::shared_ptr<AStar::Node> AStar::createInitialNode(double (*heuristicFunc)(co
     //  We implemented the algorithm such that the initial Node already has a "kilometrage" of the startWay
     Coordinates initialCoordinates = direction == Direction::A_to_B ? startWay.getToJunctionCoordinates()
                                                                     : startWay.getFromJunctionCoordinates();
-    Coordinates oppositeCoordinates = direction == Direction::A_to_B ? startWay.getFromJunctionCoordinates()
-                                                                     : startWay.getToJunctionCoordinates();
+
     auto distanceFromEdges = startWay.getSegmentPartsOnWay(startWaySegment, origin);
     //  the distance from origin point to the initial node
     Meters initialDistance = direction == Direction::A_to_B ? distanceFromEdges.second : distanceFromEdges.first;
@@ -278,9 +277,7 @@ std::shared_ptr<AStar::Node> AStar::createFinalNode(std::shared_ptr<Node> currNo
     auto tiId = idPair.second;
     Direction direction =
             fromId == currNode->getJunctionId() ? Direction::A_to_B : Direction::B_to_A;
-    // if direction is A_to_B we want to trim the aerial distance from "to" Junction to destination point, else from "from" Junction
-    Coordinates oppositeCoordinates = direction == Direction::A_to_B ? finalWay.getToJunctionCoordinates()
-                                                                     : finalWay.getFromJunctionCoordinates();
+
     // currNode represents the opposite junction of endCoordinates
     auto distanceFromEdges = finalWay.getSegmentPartsOnWay(finalWaySegment, destination);
 

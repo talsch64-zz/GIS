@@ -3,7 +3,7 @@ project(ex1)
 include_directories(include)
 
 #TODO: uncomment
-#set(CMAKE_CXX_FLAGS "-std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG")
+set(CMAKE_CXX_FLAGS "-std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG")
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_LIBRARIES -ldl)
 
@@ -11,3 +11,5 @@ add_executable(ex1 Simulator/main.cpp GIS/GIS_315524694.cpp GIS/GIS_315524694.h 
         UserCommon/Utils.cpp Common/AbstractGIS.h Common/AbstractNavigation.h Common/AbstractRoute.h Common/AbstractRoutes.h Common/AbstractWay.h Common/NavigationRegistration.h Common/GISRegistration.h Simulator/GISRegistration.cpp Simulator/NavigationRegistration.cpp)
 
 add_subdirectory(tests)
+
+configure_file(GIS/GIS_315524694.so GIS/GIS_315524694.so COPYONLY)
