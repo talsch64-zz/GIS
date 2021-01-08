@@ -25,6 +25,9 @@ public:
 
     void parseCommandLineArguments(int argc, char **argv);
 
+    void registerSharedLibraries();
+private:
+
     void registerGISLibraries();
 
     void registerNavigationLibraries();

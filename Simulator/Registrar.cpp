@@ -56,6 +56,11 @@ void Registrar::parseCommandLineArguments(int argc, char **argv) {
 
 }
 
+void Registrar::registerSharedLibraries() {
+    registerGISLibraries();
+    registerNavigationLibraries();
+}
+
 void Registrar::registerGISLibraries() {
     Simulation &simulation = Simulation::getInstance();
     for(auto& gis_so: std::filesystem::directory_iterator(gis_directory)) {
@@ -91,6 +96,8 @@ void Registrar::registerNavigationLibraries() {
         }
     }
 }
+
+
 
 
 

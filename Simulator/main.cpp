@@ -9,10 +9,11 @@
 #include <cassert>
 #include <unistd.h>
 #include <getopt.h>
-
-namespace fs = std::filesystem;
+#include "Registrar.h"
 
 int main(int argc, char *argv[]) {
+    Registrar registrar;
+    registrar.parseCommandLineArguments(argc, argv);
     int opt = 0, option_index = 0, num_threads = 1;
     std::filesystem::path navigation_path, gis_path, map_path, requests_path, output_path;
 
