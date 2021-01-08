@@ -1,6 +1,7 @@
 #include "../Common/GISRegistration.h"
+#include "Simulation.h"
 
 GISRegistration::GISRegistration(std::function<std::unique_ptr<AbstractGIS>()> func) {
-
-	func()->loadMapFile("non existant file"); 
+    Simulation &sim = Simulation::getInstance();
+    sim.addGisFactory(func);
 }

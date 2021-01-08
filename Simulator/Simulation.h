@@ -4,11 +4,14 @@
 #include <vector>
 #include "../Common/AbstractGIS.h"
 #include "../Common/AbstractNavigation.h"
+#include "GISContainer.h"
+#include "NavigationContainer.h"
 
 class Simulation {
 private:
-    std::vector<std::unique_ptr<AbstractGIS>> gisVec;
-    std::vector<std::unique_ptr<AbstractNavigation>> navigationVec;
+    std::vector<std::unique_ptr<GISContainer>> gisContainers;
+    std::vector<std::unique_ptr<NavigationContainer>> navigationContainers;
+    std::string nextName;
 
     Simulation() = default;
 
@@ -23,9 +26,12 @@ public:
 
     void operator=(Simulation const &) = delete;
 
-    void addGis(std::unique_ptr<AbstractGIS> gis);
+    void addGisFactory(std::function<std::unique_ptr<AbstractGIS>()> gisFactory);
 
-    void addNavigation(std::unique_ptr<AbstractNavigation> navigation);
+    void
+    addNavigationFactory(std::function<std::unique_ptr<AbstractNavigation>(const NavigationGIS &)> navigationFactory);
+
+    void setNextName(std::string name);
 };
 
 

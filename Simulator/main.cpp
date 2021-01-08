@@ -1,4 +1,5 @@
 #include "../Common/Restrictions.h"
+#include "Simulation.h"
 #include <cstdlib>
 #include <dlfcn.h>
 #include <string>
@@ -14,7 +15,11 @@ int main() {
     // dlopen usage example:
     fs::path run_dir = fs::current_path();
 
-    fs::path gis_so{run_dir / "GIS/GIS_315524694.so"};
+    std::string gisName = "GIS_315524694";
+    std::string gisPath = "GIS/" + gisName + ".so";
+    fs::path gis_so{run_dir / gisPath};
+    Simulation &sim = Simulation::getInstance();
+    sim.setNextName(gisName);
     void *gis_handle = dlopen(gis_so.c_str(), RTLD_LAZY);
     if (gis_handle) {
         std::cout << gis_so << " loaded" << std::endl;
@@ -23,7 +28,10 @@ int main() {
         return 1;
     }
 
-    fs::path navigation_so{run_dir / "Navigation/Navigation_315524694.so"};
+    std::string navigationName = "Navigation_315524694";
+    std::string navigationPath = "Navigation/" + navigationName + ".so";
+    fs::path navigation_so{run_dir / navigationPath};
+    sim.setNextName(navigationName);
     void *navigation_handle = dlopen(navigation_so.c_str(), RTLD_LAZY);
     if (navigation_handle) {
         std::cout << navigation_so << " loaded\n";
