@@ -14,3 +14,4 @@ void Simulation::addNavigationFactory(
 void Simulation::setNextName(std::string name) {
     nextName = name;
 }
+

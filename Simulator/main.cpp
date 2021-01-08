@@ -7,10 +7,72 @@
 #include <iostream>
 #include <set>
 #include <cassert>
+#include <unistd.h>
+#include <getopt.h>
 
 namespace fs = std::filesystem;
 
-int main() {
+int main(int argc, char *argv[]) {
+    int opt = 0, option_index = 0, num_threads = 1;
+    std::filesystem::path navigation_path, gis_path, map_path, requests_path, output_path;
+
+
+    static struct option long_options[] = {
+            {"num_threads",         optional_argument, 0, 't'},
+            {"navigation",          required_argument, 0, 'n'},
+            {"gis",                 required_argument, 0, 'g'},
+            {"map_file",            required_argument, 0, 'm'},
+            {"navigation_requests", required_argument, 0, 'r'},
+            {"output",              optional_argument, 0, 'o'},
+            {0, 0,                                     0, 0}
+    };
+
+    while ((opt = getopt_long_only(argc, argv, "",
+                                   long_options, &option_index)) != -1) {
+        //TODO handle errors if arguments are wrong or not representing absolute path
+        switch (opt) {
+            case 't' :
+                num_threads = atoi(optarg);
+                break;
+            case 'n' :
+                navigation_path = optarg;
+                break;
+            case 'g' :
+                gis_path = optarg;
+                break;
+            case 'm' :
+                map_path = optarg;
+                break;
+            case 'r':
+                requests_path = optarg;
+                break;
+            case 'o':
+                output_path = optarg;
+                break;
+            default:
+                //TODO handle error (maybe print usage message)
+                exit(EXIT_FAILURE);
+        }
+
+    }
+
+    Simulation &simulation = Simulation::getInstance();
+
+    for(auto& navigation_so: std::filesystem::directory_iterator(navigation_path)) {
+        //TODO check that the file is not a directory and with .so extension
+        std::string nextName = navigation_so.path().stem();
+        simulation.setNextName(nextName);
+        void *navigation_handle = dlopen(navigation_so.path().c_str(), RTLD_LAZY);
+        if (navigation_handle) {
+            std::cout << navigation_so << " loaded" << std::endl;
+        } else {
+            std::cout << dlerror() << std::endl;
+        }
+    }
+
+
+
+
 
     // dlopen usage example:
     fs::path run_dir = fs::current_path();
