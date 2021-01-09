@@ -1,6 +1,6 @@
 #include "Point.h"
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
-#include "../../search/Grid.h"
+#include "../../../GIS/search/Grid.h"
 
 Point::Point(const Coordinates &coordinates) : Geometry(), coordinates(coordinates) {}
 

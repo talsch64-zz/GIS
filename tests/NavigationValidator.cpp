@@ -1,6 +1,6 @@
 #include "NavigationValidator.h"
 #include "../Navigation/Route.h"
-#include "../GIS/entities/Way.h"
+#include "../UserCommon/entities/Way.h"
 #include "../Common/CoordinatesMath.h"
 #include "../UserCommon/Utils.h"
 
@@ -15,10 +15,6 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
 bool
 NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
                                    const AbstractRoute &r) const {
-
-    if (&r == nullptr) {
-        return false;
-    }
     auto startTuple = gis.getWayClosestPoint(start, restrictions);
     auto endTuple = gis.getWayClosestPoint(end, restrictions);
 

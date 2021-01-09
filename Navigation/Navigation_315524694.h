@@ -13,7 +13,7 @@
  * Get the shortest routes by distance and time.
  *
  */
-class Navigation_315524694: public AbstractNavigation {
+class Navigation_315524694 : public AbstractNavigation {
 
 public:
     /**
@@ -21,8 +21,7 @@ public:
      *
      * @param navigationGis - Note: you get a const ref of NavigationGIS
      */
-
-    using AbstractNavigation::AbstractNavigation;
+    Navigation_315524694(const NavigationGIS &navigationGis);
 
     /**
      * @brief Get the Routes object
@@ -31,7 +30,7 @@ public:
      * @param end
      * @return Routes
      */
-    std::unique_ptr<AbstractRoutes> getRoutes(const Coordinates& start, const Coordinates& end) const;
+    std::unique_ptr<AbstractRoutes> getRoutes(const Coordinates &start, const Coordinates &end) const;
 
     /**
      * @brief Get the Routes object
@@ -42,5 +41,6 @@ public:
      * @param restrictions - Restricted Ways
      * @return Routes
      */
-    std::unique_ptr<AbstractRoutes> getRoutes(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions) const;
+    std::unique_ptr<AbstractRoutes>
+    getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const;
 };

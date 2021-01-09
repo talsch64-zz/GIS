@@ -1,15 +1,17 @@
 COMP = g++-10
 
-SOURCE_FILES := $(notdir $(shell find . -name '*.cpp'))
+INC:=-I../include
+SOURCE_FILES := $(wildcard *.cpp ../UserCommon/entities/*.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/entities/JsonHandlers/Serializers/*.cpp ../UserCommon/entities/JsonHandlers/parsers/*.cpp ../UserCommon/*.cpp)
 OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
-BIN_DIR = bin
+BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))
-SHARED_OBJ = Navigation_098765432.so
-OUTPUT_DIR := ../../OUTPUT/Navigation
+SHARED_OBJ := Navigation_315524694.so
+# OUTPUT_DIR := ../../OUTPUT/Navigation
+OUTPUT_DIR := .
 OUTPUT_SHARED_OBJ := $(OUTPUT_DIR)/$(SHARED_OBJ)
 
-CPP_COMP_FLAG = -std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
-CPP_LINK_FLAG = -shared 
+CPP_COMP_FLAG := -std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden
+CPP_LINK_FLAG := -shared
 
 all: $(BIN_DIR) $(OUTPUT_DIR) $(OUTPUT_SHARED_OBJ)
 
@@ -20,18 +22,12 @@ $(OUTPUT_DIR):
 	mkdir -p $(OUTPUT_DIR)
 
 $(OUTPUT_SHARED_OBJ): $(OBJS)
-	$(COMP) $(CPP_LINK_FLAG) -o $@ $^
+	$(COMP) $(CPP_LINK_FLAG) -o $@ $^ #$(addprefix $(BIN_DIR)/, $^)
 
-# Make sure to have all your dependencies for each .o file creation rule
-
-$(BIN_DIR)/Route.o: Route.cpp Route.h ../Common/*.h
-	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
-
-$(BIN_DIR)/Routes.o: Routes.cpp Routes.h Route.h ../Common/*.h
-	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
-
-$(BIN_DIR)/Navigation_315524694.o: Navigation_315524694.cpp Navigation_315524694.h ../Common/*.h
-	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
+# c++ source
+$(BIN_DIR)/%.o: %.cpp
+	mkdir -p $(dir $@)
+	$(COMP) $(CPP_COMP_FLAG) $(INC) -c $< -o $@
 
 clean:
 	rm -rf $(BIN_DIR) $(OUTPUT_SHARED_OBJ)

@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 #include "../Common/GISNamedTypes.h"
 #include "../Common/CoordinatesMath.h"
-#include "../GIS/entities/geometry/Circle.h"
-#include "../GIS/entities/Way.h"
-#include "../GIS/entities/geometry/PointList.h"
+#include "../UserCommon/entities/geometry/Circle.h"
+#include "../UserCommon/entities/Way.h"
+#include "../UserCommon/entities/geometry/PointList.h"
 #include "../GIS/GIS_315524694.h"
 #include "../Common/NavigationGIS.h"
 #include <numbers>

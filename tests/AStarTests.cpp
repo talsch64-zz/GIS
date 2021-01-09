@@ -1,11 +1,10 @@
 
 #include "gtest/gtest.h"
 #include "../Common/GISNamedTypes.h"
-#include "../GISProvider.h"
 #include "../Common/CoordinatesMath.h"
 #include "../Navigation/Navigation_315524694.h"
 #include "NavigationValidator.h"
-#include "../GIS/entities/Way.h"
+#include "../UserCommon/entities/Way.h"
 #include "../UserCommon/Utils.h"
 
 #define DISTANCE_PRECISION 5
@@ -18,7 +17,7 @@ protected:
     NavigationValidator validator;
 
 public:
-    IsraelMapTest() : gis(GISProvider::getGIS()), navGis(gis), navigation(navGis), validator(gis) {
+    IsraelMapTest() : gis(GIS_315524694()), navGis(gis), navigation(navGis), validator(gis) {
     }
 
     void SetUp() override {

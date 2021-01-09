@@ -1,8 +1,8 @@
 #include "Circle.h"
 #include "../../../Common/CoordinatesMath.h"
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
-#include "../../search/Grid.h"
-#include "../../search/TopologicalSearch.h"
+#include "../../../GIS/search/Grid.h"
+#include "../../../GIS/search/TopologicalSearch.h"
 
 
 Circle::Circle(const Coordinates &coordinates, const Meters &radius) : Geometry(), radius(radius),

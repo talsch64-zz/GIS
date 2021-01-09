@@ -7,7 +7,7 @@
 #include <iostream>
 #include <stack>
 #include <set>
-#include "entities/JsonHandlers/parsers/EntityJsonParser.h"
+#include "../UserCommon/entities/JsonHandlers/parsers/EntityJsonParser.h"
 #include "../Common/CoordinatesMath.h"
 #include "../UserCommon/Utils.h"
 #include "../Common/GISRegistration.h"

@@ -25,12 +25,13 @@ class Entity {
     std::string type;
 
 protected:
-    EntityJsonSerializer *entityJsonSerializer;
+    std::unique_ptr<EntityJsonSerializer> entityJsonSerializer;
 
 public:
     Entity(EntityId id, std::string name, const std::string &description,
            std::vector<std::string> category_tags, std::string type);
 
+    virtual ~Entity();
 
     const EntityId &getId() const;
 
@@ -41,10 +42,6 @@ public:
     const std::vector<std::string> &getCategoryTags() const;
 
     virtual rapidjson::Value toJson(rapidjson::Document::AllocatorType &allocator) = 0;
-
-    virtual ~Entity();
-
-    void setId(const EntityId &id);
 
     virtual const std::unique_ptr<Geometry> &getGeometry() const = 0;
 

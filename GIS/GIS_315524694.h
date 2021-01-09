@@ -8,8 +8,8 @@
 #include <optional>
 #include <unordered_map>
 #include <memory>
-#include "entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
-#include "entities/JsonHandlers/Serializers/JsonFileWriter.h"
+#include "../UserCommon/entities/JsonHandlers/Serializers/EntityJsonSerializer.h"
+#include "../UserCommon/entities/JsonHandlers/Serializers/JsonFileWriter.h"
 #include "search/Grid.h"
 #include "search/TopologicalSearch.h"
 #include "../UserCommon/IdGenerator.h"

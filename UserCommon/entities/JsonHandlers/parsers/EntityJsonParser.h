@@ -6,7 +6,7 @@
 #include "../../Junction.h"
 #include "GeometryJsonParser.h"
 #include "../../Way.h"
-#include "../../../../UserCommon/IdGenerator.h"
+#include "../../../IdGenerator.h"
 #include<memory>
 
 class GIS_315524694;

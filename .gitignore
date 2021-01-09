@@ -108,3 +108,9 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/clion
 build
 .vscode
+
+.idea/modules.xml
+GIS/bin
+GIS/UserCommon
+Navigation/bin
+Navigation/UserCommon

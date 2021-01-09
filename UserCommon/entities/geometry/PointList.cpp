@@ -4,7 +4,7 @@
 #include <utility>
 #include <iostream>
 #include "../JsonHandlers/Serializers/GeometryJsonSerializer.h"
-#include "../../search/Grid.h"
+#include "../../../GIS/search/Grid.h"
 #include "../../../Common/CoordinatesMath.h"
 
 PointList::PointList(std::vector<Coordinates> &points) : Geometry(), points(std::move(points)) {}
@@ -45,8 +45,8 @@ Meters PointList::getLength() const {
 }
 
 
-const size_t PointList::getContainingSegment(Coordinates coordinates) const {
-    for (int i = 0; i < points.size() - 1; ++i) {
+std::size_t PointList::getContainingSegment(Coordinates coordinates) const {
+    for (std::size_t i = 0; i < points.size() - 1; ++i) {
         if (std::fabs(
                 static_cast<double>(getCumulativeSegmentsLength()[i + 1] - getCumulativeSegmentsLength()[i] -
                                     (CoordinatesMath::calculateDistance(points[i], coordinates) +
@@ -72,7 +72,7 @@ const std::vector<Meters> &PointList::getCumulativeSegmentsLength() const {
 
 
 const Meters PointList::getDistanceFromStart(std::size_t segment, const Coordinates &coordinates) const {
-    if (segment >= points.size() - 1 || segment < 0) {
+    if (segment >= points.size() - 1) {
         //TODO find a better solution
         throw std::runtime_error("invalid segment number");
     }
@@ -84,7 +84,7 @@ const Meters PointList::getDistanceFromStart(std::size_t segment, const Coordina
 
 
 const Meters PointList::getDistanceFromEnd(std::size_t segment, const Coordinates &coordinates) const {
-    if (segment >= points.size() - 1 || segment < 0) {
+    if (segment >= points.size() - 1) {
         //TODO find a better solution
         throw std::runtime_error("invalid segment number");
     }

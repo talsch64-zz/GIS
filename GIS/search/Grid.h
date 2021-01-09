@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../Common/GISNamedTypes.h"
-#include "../entities/Entity.h"
+#include "../UserCommon/entities/Entity.h"
 #include "TopologicalSearch.h"
 #include <vector>
 #include <unordered_map>

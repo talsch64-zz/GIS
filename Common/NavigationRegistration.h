@@ -13,4 +13,3 @@ public:
 #define REGISTER_NAVIGATION(class_name) \
 NavigationRegistration register_me_##class_name \
 	([](const NavigationGIS& navigation_gis){return std::make_unique<class_name>(navigation_gis);} );
-
