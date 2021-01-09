@@ -18,11 +18,6 @@ int main(int argc, char *argv[]) {
     Simulation &simulation = Simulation::getInstance();
     simulation.loadNavigationRequests(registrar.getNavigationRequestsPath());
 
-
-
-
-
-
     registrar.unloadSharedLibraries();
     return EXIT_SUCCESS;
 }

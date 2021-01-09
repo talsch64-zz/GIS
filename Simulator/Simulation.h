@@ -55,8 +55,7 @@ public:
 
     void setNextName(std::string name);
 
-    //TODO implement
-    void loadNavigationRequests(std::filesystem::path requests_path);
+    void loadNavigationRequests(std::filesystem::path requestsPath) {};
 };
 
 
