@@ -7,3 +7,7 @@ NavigationContainer::NavigationContainer(
 std::unique_ptr<AbstractNavigation> NavigationContainer::getNavigation(const NavigationGIS &navigationGIS) {
     return factory(navigationGIS);
 }
+
+const std::string &NavigationContainer::getName() const {
+    return name;
+}

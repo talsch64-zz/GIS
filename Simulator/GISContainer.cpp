@@ -9,3 +9,7 @@ std::unique_ptr<AbstractGIS> &GISContainer::getGIS() {
     }
     return gis;
 }
+
+const std::string &GISContainer::getName() const {
+    return name;
+}

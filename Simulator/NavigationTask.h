@@ -15,11 +15,24 @@ class NavigationTask {
     std::unique_ptr<NavigationContainer> &navigationContainer;
     std::unique_ptr<AbstractNavigation> navigation = nullptr;
     const NavigationRequest &request;
+    int gisIndex;
+    int navigationIndex;
+    int requestIndex;
 
 public:
     NavigationTask(std::unique_ptr<GISContainer> &gisContainer,
-                   std::unique_ptr<NavigationContainer> &navigationContainer, const NavigationRequest &request);
+                   std::unique_ptr<NavigationContainer> &navigationContainer, const NavigationRequest &request,
+                   int gisIndex, int navigationIndex, int requestIndex);
 
+    const std::unique_ptr<AbstractNavigation> &getNavigation() const;
+
+    const NavigationRequest &getRequest() const;
+
+    int getGisIndex() const;
+
+    int getNavigationIndex() const;
+
+    int getRequestIndex() const;
 };
 
 

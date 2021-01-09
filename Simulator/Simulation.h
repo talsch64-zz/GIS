@@ -13,6 +13,7 @@
 #include "NavigationTask.h"
 #include "RequestsFileParser.h"
 #include "Registrar.h"
+#include "NavigationTasksManager.h"
 
 /**
  * @brief class Simulation simulates the various navigation and gis .so files on a given map file
@@ -28,6 +29,7 @@ class Simulation {
     std::unique_ptr<RequestsFileParser> requestsFileParser;
     std::mutex taskMutex;
     std::unique_ptr<std::thread[]> threads = nullptr;
+    std::unique_ptr<NavigationTasksManager> taskManager = nullptr;
 
     Simulation();
 

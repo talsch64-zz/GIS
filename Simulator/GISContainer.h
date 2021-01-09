@@ -14,6 +14,8 @@ public:
 
     std::unique_ptr<AbstractGIS> &getGIS();
 
+    const std::string &getName() const;
+
     //TODO: free gis when threads are done working on it
 };
 

@@ -13,6 +13,8 @@ public:
                         const std::string &name);
 
     std::unique_ptr<AbstractNavigation> getNavigation(const NavigationGIS &navigationGIS);
+
+    const std::string &getName() const;
 };
 
 

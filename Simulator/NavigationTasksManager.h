@@ -13,8 +13,12 @@ class NavigationTasksManager {
     int requestsAmount;
 public:
     NavigationTasksManager(int gisAmount, int navigationsAmount, int requestsAmount);
-    NavigationTask getNextTask();
+
+    std::unique_ptr<NavigationTask> getNextTask();
+
     bool hasTask() const;
+
+    int getTaskIndex(std::unique_ptr<NavigationTask> &task);
 };
 
 
