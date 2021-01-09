@@ -1,4 +1,5 @@
 #include "NavigationTask.h"
+#include "Simulation.h"
 
 NavigationTask::NavigationTask(std::unique_ptr<GISContainer> &gisContainer,
                                std::unique_ptr<NavigationContainer> &navigationContainer,

@@ -7,8 +7,9 @@
 #include <memory>
 #include "../Common/AbstractGIS.h"
 #include "../Common/AbstractNavigation.h"
-#include "Simulation.h"
 #include "NavigationRequest.h"
+#include "GISContainer.h"
+#include "NavigationContainer.h"
 
 class NavigationTask {
     std::unique_ptr<GISContainer> &gisContainer;

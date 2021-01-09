@@ -1,4 +1,5 @@
 #include "NavigationTasksManager.h"
+#include "Simulation.h"
 
 NavigationTasksManager::NavigationTasksManager(int gisAmount, int navigationsAmount, int requestsAmount) : gisAmount(
         gisAmount), navigationsAmount(navigationsAmount), requestsAmount(requestsAmount) {}
