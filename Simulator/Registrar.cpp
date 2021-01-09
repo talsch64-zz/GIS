@@ -33,19 +33,19 @@ void Registrar::parseCommandLineArguments(int argc, char **argv) {
         switch (opt) {
             case 't' :
                 //TODO check if number is valid string-number because atoi ignores non digit chars.
-                num_threads = atoi(optarg);
+                numThreads = atoi(optarg);
                 break;
             case 'n' :
-                navigation_directory = optarg;
+                navigationDirectory = optarg;
                 break;
             case 'g' :
-                gis_directory = optarg;
+                gisDirectory = optarg;
                 break;
             case 'm' :
-                map_file = optarg;
+                mapFile = optarg;
                 break;
             case 'r':
-                navigation_requests = optarg;
+                navigationRequests = optarg;
                 break;
             case 'o':
                 output = optarg;
@@ -65,17 +65,17 @@ void Registrar::loadSharedLibraries() {
 }
 
 void Registrar::unloadSharedLibraries() {
-    for (auto &so_file: gis_so_files) {
+    for (auto &so_file: gisSoFiles) {
         dlclose(so_file);
     }
-    for (auto &so_file: navigation_so_files) {
+    for (auto &so_file: navigationSoFiles) {
         dlclose(so_file);
     }
 }
 
 void Registrar::loadGISLibraries() {
     Simulation &simulation = Simulation::getInstance();
-    for (auto &gis_so: std::filesystem::directory_iterator(gis_directory)) {
+    for (auto &gis_so: std::filesystem::directory_iterator(gisDirectory)) {
         std::string nextName = gis_so.path().stem();
         simulation.setNextName(nextName);
         if (gis_so.is_directory() || gis_so.path().extension() != SO_EXTENSION) {
@@ -84,13 +84,13 @@ void Registrar::loadGISLibraries() {
         }
         void *gis_handle = dlopen(gis_so.path().c_str(), RTLD_LAZY);
         if (gis_handle) {
-            gis_so_files.push_back(gis_handle);
+            gisSoFiles.push_back(gis_handle);
         } else {
             std::cout << dlerror() << std::endl;
         }
     }
 
-    if (gis_so_files.empty()) {
+    if (gisSoFiles.empty()) {
         std::cout << "ERROR: Unable to load gis shared objects" << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -98,7 +98,7 @@ void Registrar::loadGISLibraries() {
 
 void Registrar::loadNavigationLibraries() {
     Simulation &simulation = Simulation::getInstance();
-    for (auto &navigation_so: std::filesystem::directory_iterator(navigation_directory)) {
+    for (auto &navigation_so: std::filesystem::directory_iterator(navigationDirectory)) {
         std::string nextName = navigation_so.path().stem();
         simulation.setNextName(nextName);
         if (navigation_so.is_directory() || navigation_so.path().extension() != SO_EXTENSION) {
@@ -107,12 +107,12 @@ void Registrar::loadNavigationLibraries() {
         }
         void *navigation_handle = dlopen(navigation_so.path().c_str(), RTLD_LAZY);
         if (navigation_handle) {
-            navigation_so_files.push_back(navigation_handle);
+            navigationSoFiles.push_back(navigation_handle);
         } else {
             std::cout << dlerror() << std::endl;
         }
     }
-    if (navigation_so_files.empty()) {
+    if (navigationSoFiles.empty()) {
         std::cout << "ERROR: Unable to load navigation shared objects" << std::endl;
         exit(EXIT_FAILURE);
     }
@@ -135,29 +135,29 @@ void Registrar::printUsage(char *progName) {
 
 bool Registrar::validateCommandLineArguments() {
     namespace fs = std::filesystem;
-    if (num_threads <= 0 || num_threads == 2) {
+    if (numThreads <= 0 || numThreads == 2) {
         std::cerr << "ERROR: Invalid num_theards" << std::endl;
         return FAILURE;
     }
 
-    if (!fs::exists(navigation_directory) || navigation_directory.is_relative() ||
-        !fs::is_directory(navigation_directory)) {
-        std::cerr << "ERROR: Invalid navigation directory: " << navigation_directory << std::endl;
+    if (!fs::exists(navigationDirectory) || navigationDirectory.is_relative() ||
+        !fs::is_directory(navigationDirectory)) {
+        std::cerr << "ERROR: Invalid navigation directory: " << navigationDirectory << std::endl;
         return FAILURE;
     }
-    if (!fs::exists(navigation_directory) || gis_directory.is_relative() || !fs::is_directory(gis_directory)) {
-        std::cerr << "ERROR: Invalid GIS directory: " << gis_directory << std::endl;
-        return FAILURE;
-    }
-
-    if (!fs::exists(map_file) || map_file.is_relative() || fs::is_directory(map_file)) {
-        std::cerr << "ERROR: Invalid map file: " << map_file << std::endl;
+    if (!fs::exists(navigationDirectory) || gisDirectory.is_relative() || !fs::is_directory(gisDirectory)) {
+        std::cerr << "ERROR: Invalid GIS directory: " << gisDirectory << std::endl;
         return FAILURE;
     }
 
-    if (!fs::exists(navigation_requests) || navigation_requests.is_relative() ||
-        fs::is_directory(navigation_requests)) {
-        std::cerr << "ERROR: Invalid navigation requests file: " << navigation_requests << std::endl;
+    if (!fs::exists(mapFile) || mapFile.is_relative() || fs::is_directory(mapFile)) {
+        std::cerr << "ERROR: Invalid map file: " << mapFile << std::endl;
+        return FAILURE;
+    }
+
+    if (!fs::exists(navigationRequests) || navigationRequests.is_relative() ||
+        fs::is_directory(navigationRequests)) {
+        std::cerr << "ERROR: Invalid navigation requests file: " << navigationRequests << std::endl;
         return FAILURE;
     }
 
@@ -170,15 +170,19 @@ bool Registrar::validateCommandLineArguments() {
 }
 
 const std::filesystem::path &Registrar::getMapFilePath() const {
-    return map_file;
+    return mapFile;
 }
 
 const std::filesystem::path &Registrar::getNavigationRequestsPath() const {
-    return navigation_requests;
+    return navigationRequests;
 }
 
 const std::filesystem::path &Registrar::getOutputPath() const {
     return output;
+}
+
+int Registrar::getNumThreads() const {
+    return numThreads;
 }
 
 

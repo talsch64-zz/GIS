@@ -12,12 +12,12 @@
 #include "Registrar.h"
 
 int main(int argc, char *argv[]) {
-    Registrar registrar;
-    registrar.parseCommandLineArguments(argc, argv);
-    registrar.loadSharedLibraries();
+    std::unique_ptr<Registrar> registrar = std::make_unique<Registrar>();
+    registrar->parseCommandLineArguments(argc, argv);
+    registrar->loadSharedLibraries();
     Simulation &simulation = Simulation::getInstance();
-    simulation.loadNavigationRequests(registrar.getNavigationRequestsPath());
+    simulation.startSimulation(registrar);
 
-    registrar.unloadSharedLibraries();
+    registrar->unloadSharedLibraries();
     return EXIT_SUCCESS;
 }

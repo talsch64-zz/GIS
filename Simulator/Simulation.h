@@ -3,12 +3,16 @@
 
 #include <vector>
 #include <filesystem>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 #include "../Common/AbstractGIS.h"
 #include "../Common/AbstractNavigation.h"
 #include "GISContainer.h"
 #include "NavigationContainer.h"
 #include "NavigationTask.h"
 #include "RequestsFileParser.h"
+#include "Registrar.h"
 
 /**
  * @brief class Simulation simulates the various navigation and gis .so files on a given map file
@@ -20,8 +24,10 @@ class Simulation {
     std::vector<std::unique_ptr<NavigationContainer>> navigationContainers;
     std::string nextName;
     std::vector<NavigationRequest> requests;
-    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<int>>> results;
+    std::unique_ptr<std::unique_ptr<AbstractRoutes>[]> results = nullptr;
     std::unique_ptr<RequestsFileParser> requestsFileParser;
+    std::mutex taskMutex;
+    std::unique_ptr<std::thread[]> threads = nullptr;
 
     Simulation();
 
@@ -36,6 +42,8 @@ public:
 
     void operator=(Simulation const &) = delete;
 
+    void startSimulation(std::unique_ptr<Registrar> &registrar);
+
     void addGisFactory(std::function<std::unique_ptr<AbstractGIS>()> gisFactory);
 
     void
@@ -43,13 +51,13 @@ public:
 
     void setNextName(std::string name);
 
-    void loadNavigationRequests(std::filesystem::path requestsPath);
-
     std::unique_ptr<GISContainer> &getGISContainer(int index);
 
     std::unique_ptr<NavigationContainer> &getNavigationContainer(int index);
 
     NavigationRequest getNavigationRequest(int index);
+
+    void navigationThread();
 };
 
 

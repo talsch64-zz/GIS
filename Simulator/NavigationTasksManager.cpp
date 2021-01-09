@@ -13,6 +13,7 @@ NavigationTask NavigationTasksManager::getNextTask() {
         nextRequestIndex = 0;
         if (nextNavigationIndex == navigationsAmount - 1) {
             nextNavigationIndex = 0;
+
             nextGisIndex++;
         } else {
             nextNavigationIndex++;
@@ -24,5 +25,5 @@ NavigationTask NavigationTasksManager::getNextTask() {
 }
 
 bool NavigationTasksManager::hasTask() const {
-    return nextGisIndex < gisAmount || nextNavigationIndex < navigationsAmount || nextRequestIndex < requestsAmount;
+    return nextGisIndex < gisAmount;
 }
