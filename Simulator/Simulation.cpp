@@ -7,7 +7,8 @@ void Simulation::addGisFactory(std::function<std::unique_ptr<AbstractGIS>()> gis
 
 void Simulation::addNavigationFactory(
         std::function<std::unique_ptr<AbstractNavigation>(const NavigationGIS &)> navigationFactory) {
-    std::unique_ptr<NavigationContainer> navigationContainer = std::make_unique<NavigationContainer>(navigationFactory, nextName);
+    std::unique_ptr<NavigationContainer> navigationContainer = std::make_unique<NavigationContainer>(navigationFactory,
+                                                                                                     nextName);
     navigationContainers.push_back(std::move(navigationContainer));
 }
 
@@ -15,3 +16,9 @@ void Simulation::setNextName(std::string name) {
     nextName = name;
 }
 
+//Simulation::NavigationTasksManager::NavigationTasksManager() {}
+
+//NavigationTask Simulation::NavigationTasksManager::createNextTask() {
+//
+////    return NavigationTask();
+//}

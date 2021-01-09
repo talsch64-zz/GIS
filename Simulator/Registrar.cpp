@@ -169,6 +169,18 @@ bool Registrar::validateCommandLineArguments() {
     return SUCCESS;
 }
 
+const std::filesystem::path &Registrar::getMapFilePath() const {
+    return map_file;
+}
+
+const std::filesystem::path &Registrar::getNavigationRequestsPath() const {
+    return navigation_requests;
+}
+
+const std::filesystem::path &Registrar::getOutputPath() const {
+    return output;
+}
+
 
 
 

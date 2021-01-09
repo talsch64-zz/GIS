@@ -15,8 +15,10 @@ int main(int argc, char *argv[]) {
     Registrar registrar;
     registrar.parseCommandLineArguments(argc, argv);
     registrar.loadSharedLibraries();
-
     Simulation &simulation = Simulation::getInstance();
+    simulation.loadNavigationRequests(registrar.getNavigationRequestsPath());
+
+
 
 
 

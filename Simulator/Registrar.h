@@ -8,6 +8,11 @@
 #include <string>
 #include <filesystem>
 
+
+/**
+ * class Registrar handles .so registration and command line arguments parsing.
+ *
+ */
 class Registrar {
     std::vector<void *> gis_so_files;
     std::vector<void *> navigation_so_files;
@@ -27,6 +32,12 @@ public:
     void unloadSharedLibraries();
 
     void printUsage(char *progName);
+
+    const std::filesystem::path &getMapFilePath() const;
+
+    const std::filesystem::path &getNavigationRequestsPath() const;
+
+    const std::filesystem::path &getOutputPath() const;
 
 
 private:
