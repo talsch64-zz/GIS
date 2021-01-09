@@ -9,12 +9,13 @@
 #include <filesystem>
 
 class Registrar {
-    std::vector<void *> so_files;
+    std::vector<void *> gis_so_files;
+    std::vector<void *> navigation_so_files;
     std::filesystem::path navigation_directory;
     std::filesystem::path gis_directory;
     std::filesystem::path map_file;
     std::filesystem::path navigation_requests;
-    std::filesystem::path output;
+    std::filesystem::path output; //TODO handle the case where no output is given
     int num_threads = 1;
 
 
@@ -25,12 +26,16 @@ public:
 
     void unloadSharedLibraries();
 
+    void printUsage(char *progName);
+
 
 private:
 
     void loadGISLibraries();
 
     void loadNavigationLibraries();
+
+    bool validateCommandLineArguments();
 
 };
 
