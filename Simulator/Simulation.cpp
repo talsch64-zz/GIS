@@ -16,6 +16,13 @@ void Simulation::setNextName(std::string name) {
     nextName = name;
 }
 
+Simulation::Simulation() : requestsFileParser(std::make_unique<RequestsFileParser>()) {
+}
+
+void Simulation::loadNavigationRequests(std::filesystem::path requestsPath) {
+    requests = requestsFileParser->parse(requestsPath);
+}
+
 //Simulation::NavigationTasksManager::NavigationTasksManager() {}
 
 //NavigationTask Simulation::NavigationTasksManager::createNextTask() {

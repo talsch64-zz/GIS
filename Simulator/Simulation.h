@@ -8,6 +8,7 @@
 #include "GISContainer.h"
 #include "NavigationContainer.h"
 #include "NavigationTask.h"
+#include "RequestsFileParser.h"
 
 /**
  * @brief class Simulation simulates the various navigation and gis .so files on a given map file
@@ -15,14 +16,12 @@
  * Implemented as a Singleton.
  */
 class Simulation {
-    using navigationRequest = std::pair<Coordinates, Coordinates>;
-
-private:
     std::vector<std::unique_ptr<GISContainer>> gisContainers;
     std::vector<std::unique_ptr<NavigationContainer>> navigationContainers;
     std::string nextName;
-    std::vector<navigationRequest> requests;
+    std::vector<NavigationRequest> requests;
     std::unordered_map<std::string, std::unordered_map<std::string, std::vector<int>>> results;
+    std::unique_ptr<RequestsFileParser> requestsFileParser;
 
     class NavigationTasksManager {
         static int nextGisIndex;
@@ -35,7 +34,7 @@ private:
     };
 
 
-    Simulation() = default;
+    Simulation();
 
 public:
     static Simulation &getInstance() {
@@ -55,7 +54,7 @@ public:
 
     void setNextName(std::string name);
 
-    void loadNavigationRequests(std::filesystem::path requestsPath) {};
+    void loadNavigationRequests(std::filesystem::path requestsPath);
 };
 
 

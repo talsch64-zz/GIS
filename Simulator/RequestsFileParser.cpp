@@ -9,8 +9,8 @@ std::vector<NavigationRequest> RequestsFileParser::parse(const std::string &file
     std::vector<NavigationRequest> requests;
     while (std::getline(reqStream, line)) {
         try {
-        NavigationRequest req = parseLine(line);
-        requests.push_back(req);
+            NavigationRequest req = parseLine(line);
+            requests.push_back(req);
         }
         catch (const std::exception &e) {
         }
