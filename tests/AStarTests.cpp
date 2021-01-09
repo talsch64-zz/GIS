@@ -4,7 +4,7 @@
 #include "../Common/CoordinatesMath.h"
 #include "../Navigation/Navigation_315524694.h"
 #include "NavigationValidator.h"
-#include "../GIS/entities/Way.h"
+#include "../UserCommon/entities/Way.h"
 #include "../UserCommon/Utils.h"
 
 #define DISTANCE_PRECISION 5

@@ -9,6 +9,10 @@ class NavigationRequest {
 
 public:
     NavigationRequest(const Coordinates &from, const Coordinates &to);
+
+    const Coordinates &getFrom() const;
+
+    const Coordinates &getTo() const;
 };
 
 
