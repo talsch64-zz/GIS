@@ -23,17 +23,6 @@ class Simulation {
     std::unordered_map<std::string, std::unordered_map<std::string, std::vector<int>>> results;
     std::unique_ptr<RequestsFileParser> requestsFileParser;
 
-    class NavigationTasksManager {
-        static int nextGisIndex;
-        static int nextNavigationIndex;
-        static int nextRequestIndex;
-
-//        NavigationTasksManager();
-//        NavigationTask createNextTask();
-
-    };
-
-
     Simulation();
 
 public:
@@ -55,6 +44,12 @@ public:
     void setNextName(std::string name);
 
     void loadNavigationRequests(std::filesystem::path requestsPath);
+
+    std::unique_ptr<GISContainer> &getGISContainer(int index);
+
+    std::unique_ptr<NavigationContainer> &getNavigationContainer(int index);
+
+    NavigationRequest getNavigationRequest(int index);
 };
 
 

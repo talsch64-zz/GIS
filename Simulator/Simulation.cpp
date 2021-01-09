@@ -23,6 +23,18 @@ void Simulation::loadNavigationRequests(std::filesystem::path requestsPath) {
     requests = requestsFileParser->parse(requestsPath);
 }
 
+std::unique_ptr<GISContainer> &Simulation::getGISContainer(int index) {
+    return gisContainers[index];
+}
+
+std::unique_ptr<NavigationContainer> &Simulation::getNavigationContainer(int index) {
+    return navigationContainers[index];
+}
+
+NavigationRequest Simulation::getNavigationRequest(int index) {
+    return requests[index];
+}
+
 //Simulation::NavigationTasksManager::NavigationTasksManager() {}
 
 //NavigationTask Simulation::NavigationTasksManager::createNextTask() {

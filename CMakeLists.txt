@@ -11,7 +11,7 @@ add_executable(ex1 GIS/GIS_315524694.cpp GIS/GIS_315524694.h UserCommon/entities
         UserCommon/Utils.cpp Common/AbstractGIS.h Common/AbstractNavigation.h Common/AbstractRoute.h Common/AbstractRoutes.h Common/AbstractWay.h Common/NavigationRegistration.h Common/GISRegistration.h Simulator/GISRegistration.cpp Simulator/NavigationRegistration.cpp Simulator/main.cpp)
 
 add_executable(simulator Simulator/main.cpp Simulator/GISRegistration.cpp Simulator/NavigationRegistration.cpp Common/GISRegistration.h Simulator/Simulation.cpp Simulator/Simulation.h Simulator/GISContainer.cpp Simulator/GISContainer.h Simulator/NavigationContainer.cpp Simulator/NavigationContainer.h Simulator/RequestsFileParser.cpp Simulator/RequestsFileParser.h Simulator/NavigationRequest.cpp Simulator/NavigationRequest.h
-        Simulator/Registrar.cpp Simulator/Registrar.h Simulator/NavigationTask.cpp Simulator/NavigationTask.h Common/AbstractGIS.h Common/AbstractNavigation.h Common/AbstractRoute.h Common/AbstractRoutes.h Common/AbstractWay.h Common/NavigationRegistration.h Common/GISRegistration.h)
+        Simulator/Registrar.cpp Simulator/Registrar.h Simulator/NavigationTask.cpp Simulator/NavigationTask.h Common/AbstractGIS.h Common/AbstractNavigation.h Common/AbstractRoute.h Common/AbstractRoutes.h Common/AbstractWay.h Common/NavigationRegistration.h Common/GISRegistration.h Simulator/NavigationTasksManager.cpp Simulator/NavigationTasksManager.h)
 set_target_properties(simulator PROPERTIES LINK_FLAGS "-rdynamic -pthread -ldl")
 
 add_subdirectory(tests)

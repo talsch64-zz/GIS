@@ -8,17 +8,17 @@
 #include "../Common/AbstractGIS.h"
 #include "../Common/AbstractNavigation.h"
 #include "Simulation.h"
+#include "NavigationRequest.h"
 
 class NavigationTask {
-    const AbstractGIS &gis;
-public:
-    NavigationTask(const AbstractGIS &gis, const AbstractNavigation &navigation,
-                   const std::pair<Coordinates, Coordinates> &request);
+    std::unique_ptr<GISContainer> &gisContainer;
+    std::unique_ptr<NavigationContainer> &navigationContainer;
+    std::unique_ptr<AbstractNavigation> navigation = nullptr;
+    const NavigationRequest &request;
 
-private:
-    const AbstractNavigation &navigation;
-    std::pair<Coordinates, Coordinates> request;
 public:
+    NavigationTask(std::unique_ptr<GISContainer> &gisContainer,
+                   std::unique_ptr<NavigationContainer> &navigationContainer, const NavigationRequest &request);
 
 };
 

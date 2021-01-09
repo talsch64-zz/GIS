@@ -7,10 +7,14 @@
 class GISContainer {
     std::function<std::unique_ptr<AbstractGIS>()> factory;
     std::unique_ptr<AbstractGIS> gis = nullptr;
-    std::string name;
+    const std::string name;
 
 public:
     GISContainer(const std::function<std::unique_ptr<AbstractGIS>()> &factory, const std::string &name);
+
+    std::unique_ptr<AbstractGIS> &getGIS();
+
+    //TODO: free gis when threads are done working on it
 };
 
 
