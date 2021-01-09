@@ -60,6 +60,16 @@ public:
     NavigationRequest getNavigationRequest(int index);
 
     void navigationThread();
+
+    /**
+     * Get a reference to the array element of the result,
+     * corresponding to a GIS, Navigation algorithm and request combination
+     * @param gisIndex
+     * @param navigationIndex
+     * @param requestIndex
+     * @return result
+     */
+    std::unique_ptr<AbstractRoutes> &getResult(int gisIndex, int navigationIndex, int requestIndex);
 };
 
 

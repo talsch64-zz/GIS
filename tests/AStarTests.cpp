@@ -3,7 +3,7 @@
 #include "../Common/GISNamedTypes.h"
 #include "../Common/CoordinatesMath.h"
 #include "../Navigation/Navigation_315524694.h"
-#include "NavigationValidator.h"
+#include "../Simulator/NavigationValidator.h"
 #include "../UserCommon/entities/Way.h"
 #include "../UserCommon/Utils.h"
 

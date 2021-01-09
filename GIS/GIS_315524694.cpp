@@ -178,7 +178,7 @@ GIS_315524694::getWayClosestPoint(const Coordinates &coord, const Restrictions &
 bool GIS_315524694::isWayRestricted(const Way &way, const Restrictions &res, const Meters &distanceFromCoord) const {
     bool restricted = Utils::isWayRestricted(way, res);
     if (!restricted) {
-        restricted = way.isHighway() && distanceFromCoord > max_distance_from_highway;
+        restricted = way.isHighway() && distanceFromCoord > Utils::max_distance_from_highway;
     }
     return restricted;
 }
@@ -269,10 +269,6 @@ std::vector<EntityId> GIS_315524694::getWaysByJunction(const EntityId &id) const
         return std::vector<EntityId>();
     }
     return (dynamic_cast<Junction *>(entity))->getWays();
-}
-
-const Meters &GIS_315524694::getMaxDistanceFromHighway() {
-    return max_distance_from_highway;
 }
 
 std::optional<std::tuple<Coordinates, EntityId, std::size_t>>

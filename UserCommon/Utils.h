@@ -9,6 +9,11 @@
 class Utils {
 public:
     /**
+     * Max distance to be from a highway for it to be a valid start of a route
+     */
+    static constexpr Meters max_distance_from_highway = Meters(3);
+
+    /**
      * @brief converd kilometers per hour to meters per minute
      * @param speed in kmh
      * @return speed in mm

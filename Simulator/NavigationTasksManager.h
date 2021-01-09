@@ -17,8 +17,6 @@ public:
     std::unique_ptr<NavigationTask> getNextTask();
 
     bool hasTask() const;
-
-    int getTaskIndex(std::unique_ptr<NavigationTask> &task);
 };
 
 

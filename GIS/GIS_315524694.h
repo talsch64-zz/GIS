@@ -33,17 +33,11 @@ class EntityJsonParser;
 class GIS_315524694 : public AbstractGIS {
 protected:
     /**
-     * Max distance to be from a highway for it to be a valid start of a route
-     */
-    static constexpr Meters max_distance_from_highway = Meters(3);
-    /**
      * Max depth of BFS to search the grid for closest way before resorting to a fallback (iterating over all the ways)
      * Around 250 km radius
      */
     static constexpr int max_closest_way_grid_levels = 250;
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
-public:
-    static const Meters &getMaxDistanceFromHighway();
 
 protected:
     std::shared_ptr<EntityJsonParser> entityJsonParser;

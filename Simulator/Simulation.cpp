@@ -39,6 +39,7 @@ void Simulation::startSimulation(std::unique_ptr<Registrar> &registrar) {
             gisContainers.size() * navigationContainers.size() * requests.size());
     threads = std::make_unique<std::thread[]>(registrar->getNumThreads());
 
+    //TODO: case of 1 thread
     for (int i = 0; i < registrar->getNumThreads(); i++) {
         threads[i] = std::thread(&Simulation::navigationThread, this);
     }
@@ -63,8 +64,15 @@ void Simulation::navigationThread() {
         if (con) {
             auto &navigation = task->getNavigation();
             auto req = task->getRequest();
-            int index = taskManager->getTaskIndex(task);
-            results[index] = navigation->getRoutes(req.getFrom(), req.getTo());
+            auto &result = getResult(task->getGisIndex(), task->getNavigationIndex(), task->getRequestIndex());
+            result = navigation->getRoutes(req.getFrom(), req.getTo());
         }
     }
+}
+
+std::unique_ptr<AbstractRoutes> &Simulation::getResult(int gisIndex, int navigationIndex, int requestIndex) {
+    int index = gisIndex * navigationContainers.size() * requests.size() +
+                navigationIndex * requests.size() +
+                requestIndex;
+    return results[index];
 }

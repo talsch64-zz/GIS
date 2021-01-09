@@ -32,12 +32,12 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     }
 
     if (startWay.isHighway() &&
-        CoordinatesMath::calculateDistance(start, origin) > GIS_315524694::getMaxDistanceFromHighway()) {
+        CoordinatesMath::calculateDistance(start, origin) > Utils::max_distance_from_highway) {
         return false;
     }
 
     if (finalWay.isHighway() &&
-        CoordinatesMath::calculateDistance(end, destination) > GIS_315524694::getMaxDistanceFromHighway()) {
+        CoordinatesMath::calculateDistance(end, destination) > Utils::max_distance_from_highway) {
         return false;
     }
 
@@ -95,7 +95,7 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
         time += Utils::getWayDuration(nextWay.getLength(), nextWay.getSpeedLimit());
     }
     size_t startWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(startTuple);
-    auto distanceFromStartWayEdges =  startWay.getSegmentPartsOnWay(startWaySegment, origin);
+    auto distanceFromStartWayEdges = startWay.getSegmentPartsOnWay(startWaySegment, origin);
     Meters redundantLengthFromStart =
             initialDirection == Direction::A_to_B ? distanceFromStartWayEdges.first : distanceFromStartWayEdges.second;
     length -= redundantLengthFromStart;

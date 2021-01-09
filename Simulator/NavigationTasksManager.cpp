@@ -30,9 +30,3 @@ std::unique_ptr<NavigationTask> NavigationTasksManager::getNextTask() {
 bool NavigationTasksManager::hasTask() const {
     return nextGisIndex < gisAmount;
 }
-
-int NavigationTasksManager::getTaskIndex(std::unique_ptr<NavigationTask> &task) {
-    return task->getGisIndex() * navigationsAmount * requestsAmount +
-    task->getNavigationIndex() * requestsAmount +
-    task->getRequestIndex();
-}
