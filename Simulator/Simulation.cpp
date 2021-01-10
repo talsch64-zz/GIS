@@ -61,7 +61,7 @@ void Simulation::navigationThread() {
             task = taskManager->getNextTask();
         }
         lck.unlock();
-
+        //TODO wrap inside a function "executeTask"
         if (con) {
             auto &navigation = task->getNavigation();
             auto req = task->getRequest();
