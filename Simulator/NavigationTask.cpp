@@ -4,16 +4,14 @@
 NavigationTask::NavigationTask(std::unique_ptr<GISContainer> &gisContainer,
                                std::unique_ptr<NavigationContainer> &navigationContainer,
                                const NavigationRequest &request,
-                               int gisIndex, int navigationIndex, int requestIndex) : gisContainer(gisContainer),
-                                                                                      navigationContainer(
-                                                                                              navigationContainer),
-                                                                                      request(request),
+                               int gisIndex, int navigationIndex, int requestIndex) : request(request),
                                                                                       gisIndex(gisIndex),
                                                                                       navigationIndex(navigationIndex),
                                                                                       requestIndex(requestIndex) {
     auto &gis = gisContainer->getGIS();
     NavigationGIS navigationGis(*gis);
     navigation = navigationContainer->getNavigation(navigationGis);
+    validator = std::make_unique<NavigationValidator>(*gis);
 }
 
 const std::unique_ptr<AbstractNavigation> &NavigationTask::getNavigation() const {

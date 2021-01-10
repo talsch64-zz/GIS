@@ -7,9 +7,11 @@
 class GISContainer {
     std::function<std::unique_ptr<AbstractGIS>()> factory;
     std::unique_ptr<AbstractGIS> gis = nullptr;
+    static std::string mapFilepath;
     const std::string name;
-
 public:
+    static void setMapFilepath(const std::string &mapFilepath);
+
     GISContainer(const std::function<std::unique_ptr<AbstractGIS>()> &factory, const std::string &name);
 
     std::unique_ptr<AbstractGIS> &getGIS();

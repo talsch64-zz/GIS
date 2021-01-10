@@ -33,6 +33,7 @@ NavigationRequest Simulation::getNavigationRequest(int index) {
 
 void Simulation::startSimulation(std::unique_ptr<Registrar> &registrar) {
     requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
+    GISContainer::setMapFilepath(registrar->getMapFilePath());
     taskManager = std::make_unique<NavigationTasksManager>(gisContainers.size(), navigationContainers.size(),
                                                            requests.size());
     results = std::make_unique<std::unique_ptr<AbstractRoutes>[]>(

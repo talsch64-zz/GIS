@@ -16,7 +16,6 @@ std::unique_ptr<NavigationTask> NavigationTasksManager::getNextTask() {
         nextRequestIndex = 0;
         if (nextNavigationIndex == navigationsAmount - 1) {
             nextNavigationIndex = 0;
-
             nextGisIndex++;
         } else {
             nextNavigationIndex++;
