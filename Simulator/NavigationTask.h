@@ -13,6 +13,7 @@
 #include "NavigationValidator.h"
 
 class NavigationTask {
+    std::unique_ptr<GISContainer> &gisContainer;
     std::unique_ptr<AbstractNavigation> navigation = nullptr;
     std::unique_ptr<NavigationValidator> validator = nullptr;
     const NavigationRequest &request;
