@@ -14,6 +14,7 @@
 #include "RequestsFileParser.h"
 #include "Registrar.h"
 #include "NavigationTasksManager.h"
+#include "TaskResult.h"
 
 /**
  * @brief class Simulation simulates the various navigation and gis .so files on a given map file
@@ -25,7 +26,7 @@ class Simulation {
     std::vector<std::unique_ptr<NavigationContainer>> navigationContainers;
     std::string nextName;
     std::vector<NavigationRequest> requests;
-    std::unique_ptr<std::unique_ptr<AbstractRoutes>[]> results = nullptr;
+    std::unique_ptr<std::unique_ptr<TaskResult>[]> results = nullptr;
     std::unique_ptr<RequestsFileParser> requestsFileParser;
     std::mutex taskMutex;
     std::unique_ptr<std::thread[]> threads = nullptr;
@@ -69,7 +70,7 @@ public:
      * @param requestIndex
      * @return result
      */
-    std::unique_ptr<AbstractRoutes> &getResult(int gisIndex, int navigationIndex, int requestIndex);
+    std::unique_ptr<TaskResult> &getResult(int gisIndex, int navigationIndex, int requestIndex);
 };
 
 

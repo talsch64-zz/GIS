@@ -16,6 +16,7 @@ class NavigationTask {
     std::unique_ptr<GISContainer> &gisContainer;
     std::unique_ptr<AbstractNavigation> navigation = nullptr;
     std::unique_ptr<NavigationValidator> validator = nullptr;
+    std::unique_ptr<NavigationGIS> navigationGIS = nullptr;
     const NavigationRequest &request;
     int gisIndex;
     int navigationIndex;
@@ -28,6 +29,11 @@ public:
 
     const std::unique_ptr<AbstractNavigation> &getNavigation() const;
 
+    const std::unique_ptr<NavigationValidator> &getValidator() const;
+
+    const std::unique_ptr<NavigationGIS> &getNavigationGis() const;
+
+
     const NavigationRequest &getRequest() const;
 
     int getGisIndex() const;
@@ -35,6 +41,8 @@ public:
     int getNavigationIndex() const;
 
     int getRequestIndex() const;
+
+
 };
 
 

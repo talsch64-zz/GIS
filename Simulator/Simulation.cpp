@@ -36,7 +36,7 @@ void Simulation::startSimulation(std::unique_ptr<Registrar> &registrar) {
     GISContainer::setMapFilepath(registrar->getMapFilePath());
     taskManager = std::make_unique<NavigationTasksManager>(gisContainers.size(), navigationContainers.size(),
                                                            requests.size());
-    results = std::make_unique<std::unique_ptr<AbstractRoutes>[]>(
+    results = std::make_unique<std::unique_ptr<TaskResult>[]>(
             gisContainers.size() * navigationContainers.size() * requests.size());
     threads = std::make_unique<std::thread[]>(registrar->getNumThreads());
 
@@ -66,12 +66,23 @@ void Simulation::navigationThread() {
             auto &navigation = task->getNavigation();
             auto req = task->getRequest();
             auto &result = getResult(task->getGisIndex(), task->getNavigationIndex(), task->getRequestIndex());
-            result = navigation->getRoutes(req.getFrom(), req.getTo());
+            result->setRoutes(navigation->getRoutes(req.getFrom(), req.getTo()));
+            auto &routes = result->getRoutes();
+            bool validRoutes = routes->isValid();
+            if (validRoutes) {
+                auto &shortestDistanceRoute = routes->shortestDistance();
+                auto &shortestTimeRoute = routes->shortestTime();
+                auto &start = shortestTimeRoute.getWayStartPoint();
+                auto &end = shortestTimeRoute.getWayEndPoint();
+                result->setShortestDistanceValid(task->getValidator()->validateRoute(start, end, shortestDistanceRoute));
+                result->setShortestTimeValid(task->getValidator()->validateRoute(start, end, shortestTimeRoute));
+            }
+            result->setGisUsageCount(task->getNavigationGis()->getUsageCounter());
         }
     }
 }
 
-std::unique_ptr<AbstractRoutes> &Simulation::getResult(int gisIndex, int navigationIndex, int requestIndex) {
+std::unique_ptr<TaskResult> &Simulation::getResult(int gisIndex, int navigationIndex, int requestIndex) {
     int index = gisIndex * navigationContainers.size() * requests.size() +
                 navigationIndex * requests.size() +
                 requestIndex;

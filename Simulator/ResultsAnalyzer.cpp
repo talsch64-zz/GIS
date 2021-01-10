@@ -26,27 +26,29 @@ void ResultsAnalyzer::analyze() {
             for (int k = 0; k < gisAmount; k++) {
                 std::unique_ptr<NavigationValidator> &validator = validators[k];
                 auto &result = sim.getResult(k, j, i);
-                bool isValid = true;
+//                bool isValid = true;
                 //Check if result is valid
-                if (result->isValid()) {
-                    if (!validator->validateRoute(req.getFrom(), req.getTo(), result->shortestDistance())) {
-                        isValid = false;
-                        foundInvalidDistance = true;
-                    }
-                    if (!validator->validateRoute(req.getFrom(), req.getTo(), result->shortestTime())) {
-                        isValid = false;
-                        foundInvalidTime = true;
-                    }
-                } else {
-                    isValid = false;
-                }
+//                if (result->isValid()) {
+//                    if (!validator->validateRoute(req.getFrom(), req.getTo(), result->shortestDistance())) {
+//                        isValid = false;
+//                        foundInvalidDistance = true;
+//                    }
+//                    if (!validator->validateRoute(req.getFrom(), req.getTo(), result->shortestTime())) {
+//                        isValid = false;
+//                        foundInvalidTime = true;
+//                    }
+//                } else {
+//                    isValid = false;
+//                }
+                auto &routes = result->getRoutes();
+                bool isValid = routes->isValid() && result->isShortestDistanceValid() && result->isShortestTimeValid();
 
                 if (isValid) {
                     if (!shortestDistance.has_value() ||
-                        result->shortestDistance().totalLength() < shortestDistance.value()) {
-                        shortestDistance = result->shortestDistance().totalLength();
+                        routes->shortestDistance().totalLength() < shortestDistance.value()) {
+                        shortestDistance = routes->shortestDistance().totalLength();
                         agreeOnDistance = 1;
-                    } else if (result->shortestDistance().totalLength() == shortestDistance.value()) {
+                    } else if (routes->shortestDistance().totalLength() == shortestDistance.value()) {
                         agreeOnDistance++;
                     }
                 } else {
