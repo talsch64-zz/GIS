@@ -34,9 +34,9 @@ class GIS_315524694 : public AbstractGIS {
 protected:
     /**
      * Max depth of BFS to search the grid for closest way before resorting to a fallback (iterating over all the ways)
-     * Around 250 km radius
+     * Around 100 km radius
      */
-    static constexpr int max_closest_way_grid_levels = 250;
+    static constexpr int max_closest_way_grid_levels = 100;
     std::unordered_map<EntityId, std::unique_ptr<Entity>> entities;
 
 protected:

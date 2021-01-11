@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Simulation.h"
 
 Simulation::Simulation() : requestsFileParser(std::make_unique<RequestsFileParser>()) {
@@ -51,33 +52,18 @@ void Simulation::startSimulation(std::unique_ptr<Registrar> &registrar) {
 }
 
 void Simulation::navigationThread() {
-    std::unique_lock<std::mutex> lck(taskMutex);
-    bool con = true;
-    while (con) {
+    bool cond = true;
+    while (cond) {
         std::unique_ptr<NavigationTask> task;
-        lck.lock();
-        con = taskManager->hasTask();
-        if (con) {
+        taskMutex.lock();
+        cond = taskManager->hasTask();
+        if (cond) {
             task = taskManager->getNextTask();
         }
-        lck.unlock();
-        //TODO wrap inside a function "executeTask"
-        if (con) {
-            auto &navigation = task->getNavigation();
-            auto req = task->getRequest();
-            auto &result = getResult(task->getGisIndex(), task->getNavigationIndex(), task->getRequestIndex());
-            result->setRoutes(navigation->getRoutes(req.getFrom(), req.getTo()));
-            auto &routes = result->getRoutes();
-            bool validRoutes = routes->isValid();
-            if (validRoutes) {
-                auto &shortestDistanceRoute = routes->shortestDistance();
-                auto &shortestTimeRoute = routes->shortestTime();
-                auto &start = shortestTimeRoute.getWayStartPoint();
-                auto &end = shortestTimeRoute.getWayEndPoint();
-                result->setShortestDistanceValid(task->getValidator()->validateRoute(start, end, shortestDistanceRoute));
-                result->setShortestTimeValid(task->getValidator()->validateRoute(start, end, shortestTimeRoute));
-            }
-            result->setGisUsageCount(task->getNavigationGis()->getUsageCounter());
+        taskMutex.unlock();
+        if (cond) {
+            std::unique_ptr<TaskResult> result = executeTask(*task);
+            setResult(task->getGisIndex(), task->getNavigationIndex(), task->getRequestIndex(), std::move(result));
         }
     }
 }
@@ -88,3 +74,29 @@ std::unique_ptr<TaskResult> &Simulation::getResult(int gisIndex, int navigationI
                 requestIndex;
     return results[index];
 }
+
+void Simulation::setResult(int gisIndex, int navigationIndex, int requestIndex, std::unique_ptr<TaskResult> result) {
+    getResult(gisIndex, navigationIndex, requestIndex) = std::move(result);
+}
+
+std::unique_ptr<TaskResult> Simulation::executeTask(const NavigationTask &task) {
+    auto &navigation = task.getNavigation();
+    auto req = task.getRequest();
+    std::unique_ptr<TaskResult> result;
+    result->setRoutes(navigation->getRoutes(req.getFrom(), req.getTo()));
+    std::cout << "ok!" << std::endl;
+    auto &routes = result->getRoutes();
+    bool validRoutes = routes->isValid();
+    if (validRoutes) {
+        auto &shortestDistanceRoute = routes->shortestDistance();
+        auto &shortestTimeRoute = routes->shortestTime();
+        auto &start = shortestTimeRoute.getWayStartPoint();
+        auto &end = shortestTimeRoute.getWayEndPoint();
+        result->setShortestDistanceValid(task.getValidator()->validateRoute(start, end, shortestDistanceRoute));
+        result->setShortestTimeValid(task.getValidator()->validateRoute(start, end, shortestTimeRoute));
+    }
+    result->setGisUsageCount(task.getNavigationGis()->getUsageCounter());
+    return std::move(result);
+}
+
+

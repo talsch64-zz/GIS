@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include "Navigation_315524694.h"
 #include "AStar.h"
 #include "../Common/NavigationRegistration.h"
@@ -14,7 +15,10 @@ std::unique_ptr<AbstractRoutes> Navigation_315524694::getRoutes(const Coordinate
 
 std::unique_ptr<AbstractRoutes>
 Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const {
+    std::cout<< "before getWayClosestPoint" << std::endl; // TODO remove
     auto startTuple = gis.getWayClosestPoint(start, restrictions);
+    std::cout<< "after getWayClosestPoint" << std::endl; //TODO remove
+
     if (std::get<AbstractGIS::ClosestPoint::WayId>(startTuple) == EntityId("")) {
         return std::make_unique<Routes>(nullptr, nullptr, false, "No ways on earth!");
     }
@@ -23,14 +27,11 @@ Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end
     const Coordinates &startPoint = std::get<AbstractGIS::ClosestPoint::Coord>(startTuple);
     const AbstractWay &endWay = gis.getWay(std::get<AbstractGIS::ClosestPoint::WayId>(endTuple));
     const Coordinates &destinationPoint = std::get<AbstractGIS::ClosestPoint::Coord>(endTuple);
-//    //TODO delete!!!
-//    if (startWay.getId() == endWay.getId()) {
-//        return std::make_unique<Routes>(nullptr, nullptr, false, "Routes contain only one way!");
-//    }
     size_t startWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(startTuple);
     size_t endWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(endTuple);
 
     AStar star(gis, startPoint, destinationPoint, startWay, startWaySegment, endWay, endWaySegment, restrictions);
+
     auto shortestByDistance = star.shortestByDistance();
     if (shortestByDistance == nullptr) {
 //        initialize invalid Routes

@@ -60,8 +60,6 @@ public:
 
     NavigationRequest getNavigationRequest(int index);
 
-    void navigationThread();
-
     /**
      * Get a reference to the array element of the result,
      * corresponding to a GIS, Navigation algorithm and request combination
@@ -71,6 +69,22 @@ public:
      * @return result
      */
     std::unique_ptr<TaskResult> &getResult(int gisIndex, int navigationIndex, int requestIndex);
+
+    void setResult(int gisIndex, int navigationIndex, int requestIndex, std::unique_ptr<TaskResult> result);
+private:
+
+    /**
+     * @brief the function where threads exec;ute navigation tasks
+     */
+    void navigationThread();
+
+
+    /**
+     * @brief execute a task (task = Navigation x GIS x request)
+     * @param task the task to execute
+     * @return std::unique_ptr<TaskResult>
+     */
+    std::unique_ptr<TaskResult> executeTask(const NavigationTask &task);
 };
 
 
