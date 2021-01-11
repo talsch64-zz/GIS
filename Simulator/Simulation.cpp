@@ -64,8 +64,8 @@ void Simulation::navigationThread() {
         if (cond) {
             std::unique_ptr<TaskResult> result = executeTask(*task);
             setResult(task->getGisIndex(), task->getNavigationIndex(), task->getRequestIndex(), std::move(result));
+            taskManager->discardTask(*task);
         }
-
 
     }
 }
