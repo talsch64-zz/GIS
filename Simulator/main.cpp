@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
     registrar->loadSharedLibraries();
     Simulation &simulation = Simulation::getInstance();
     simulation.startSimulation(registrar);
+    simulation.printResults();
 
     simulation.clear(); // clear all objects from the shared libraries
     registrar->unloadSharedLibraries();

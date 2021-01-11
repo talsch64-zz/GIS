@@ -4,7 +4,6 @@
 #include "rapidjson/filereadstream.h"
 #include "GIS_315524694.h"
 #include <stdexcept>
-#include <iostream>
 #include <stack>
 #include <set>
 #include "../UserCommon/entities/JsonHandlers/parsers/EntityJsonParser.h"

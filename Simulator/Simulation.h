@@ -15,6 +15,8 @@
 #include "Registrar.h"
 #include "NavigationTasksManager.h"
 #include "TaskResult.h"
+#include <iostream>
+
 
 /**
  * @brief class Simulation simulates the various navigation and gis .so files on a given map file
@@ -67,9 +69,6 @@ public:
 
     const NavigationRequest &getNavigationRequest(int index);
 
-
-
-
     /**
      * Get a reference to the array element of the result,
      * corresponding to a GIS, Navigation algorithm and request combination
@@ -81,6 +80,32 @@ public:
     std::unique_ptr<TaskResult> &getResult(int gisIndex, int navigationIndex, int requestIndex);
 
     void setResult(int gisIndex, int navigationIndex, int requestIndex, std::unique_ptr<TaskResult> result);
+
+
+    //TODO delete!!!!
+    void printResults() {
+        std::cout << std::endl;
+        for (int i = 0; i < requests.size(); i++) {
+            for (int j = 0; j < navigationContainers.size(); j++) {
+                for (int k = 0; k < gisContainers.size(); k++) {
+                    auto &result = getResult(k, j, i);
+                    std::cout << "=== shortestDistance route ===" << std::endl << "Length: "
+                              << static_cast<double>(result->getRoutes()->shortestDistance().totalLength())
+                              << ", Time: "
+                              << static_cast<double> (result->getRoutes()->shortestDistance().estimatedDuration())
+                              << ", Usage:" << result->getGisUsageCount()
+                              << std::endl << std::endl;
+
+                    std::cout << "=== shortestTime route ===" << std::endl << "Length: "
+                              << static_cast<double>(result->getRoutes()->shortestTime().totalLength())
+                              << ", Time: "
+                              << static_cast<double>(result->getRoutes()->shortestTime().estimatedDuration())
+                              << ", Usage:" << result->getGisUsageCount()
+                              << std::endl << std::endl;
+                }
+            }
+        }
+    }
 
 private:
 
