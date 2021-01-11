@@ -12,10 +12,12 @@ std::unique_ptr<NavigationTask> NavigationTasksManager::getNextTask() {
     std::unique_ptr<NavigationTask> task = std::make_unique<NavigationTask>(gisContainer, navigationContainer,
                                                                             navigationReq, nextGisIndex,
                                                                             nextNavigationIndex, nextRequestIndex);
+    gisContainer->incrementUsageCount();
     if (nextRequestIndex == requestsAmount - 1) {
         nextRequestIndex = 0;
         if (nextNavigationIndex == navigationsAmount - 1) {
             nextNavigationIndex = 0;
+            gisContainer->enableCloseMap();
             nextGisIndex++;
         } else {
             nextNavigationIndex++;
@@ -28,4 +30,9 @@ std::unique_ptr<NavigationTask> NavigationTasksManager::getNextTask() {
 
 bool NavigationTasksManager::hasTask() const {
     return nextGisIndex < gisAmount;
+}
+
+void NavigationTasksManager::discardTask(NavigationTask &task) {
+    auto &gisContainer = task.getGisContainer();
+    gisContainer.decrementUsageCount();
 }

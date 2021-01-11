@@ -33,6 +33,7 @@ public:
 
     const std::unique_ptr<NavigationGIS> &getNavigationGis() const;
 
+    GISContainer &getGisContainer() const;
 
     const NavigationRequest &getRequest() const;
 

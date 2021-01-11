@@ -68,6 +68,8 @@ public:
     const NavigationRequest &getNavigationRequest(int index);
 
 
+
+
     /**
      * Get a reference to the array element of the result,
      * corresponding to a GIS, Navigation algorithm and request combination
@@ -79,6 +81,7 @@ public:
     std::unique_ptr<TaskResult> &getResult(int gisIndex, int navigationIndex, int requestIndex);
 
     void setResult(int gisIndex, int navigationIndex, int requestIndex, std::unique_ptr<TaskResult> result);
+
 private:
 
     /**

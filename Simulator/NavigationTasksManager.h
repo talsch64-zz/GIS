@@ -17,6 +17,12 @@ public:
     std::unique_ptr<NavigationTask> getNextTask();
 
     bool hasTask() const;
+
+    /**
+     * @brief decrements usageCount of the gisContainer of the given task;
+     * @param task
+     */
+    void discardTask(NavigationTask &task);
 };
 
 

@@ -42,3 +42,7 @@ const std::unique_ptr<NavigationValidator> &NavigationTask::getValidator() const
 const std::unique_ptr<NavigationGIS> &NavigationTask::getNavigationGis() const {
     return navigationGIS;
 }
+
+GISContainer &NavigationTask::getGisContainer() const {
+    return *gisContainer;
+}
