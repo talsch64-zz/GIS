@@ -43,6 +43,11 @@ public:
         return instance;
     }
 
+    /**
+     * @brief clear all data members that holds symbols related to Navigation.so or GIS.so (called before dlclose)
+     */
+    void clear();
+
     Simulation(Simulation const &) = delete;
 
     void operator=(Simulation const &) = delete;

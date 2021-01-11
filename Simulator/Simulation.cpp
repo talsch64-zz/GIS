@@ -98,4 +98,10 @@ std::unique_ptr<TaskResult> Simulation::executeTask(const NavigationTask &task) 
     return std::move(result);
 }
 
+void Simulation::clear() {
+    gisContainers.clear();
+    navigationContainers.clear();
+    results.reset();
+}
+
 

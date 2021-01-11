@@ -71,6 +71,8 @@ void Registrar::unloadSharedLibraries() {
     for (auto &so_file: navigationSoFiles) {
         dlclose(so_file);
     }
+
+
 }
 
 void Registrar::loadGISLibraries() {
