@@ -8,7 +8,7 @@ std::unique_ptr<NavigationTask> NavigationTasksManager::getNextTask() {
     Simulation &sim = Simulation::getInstance();
     auto &gisContainer = sim.getGISContainer(nextGisIndex);
     auto &navigationContainer = sim.getNavigationContainer(nextNavigationIndex);
-    auto navigationReq = sim.getNavigationRequest(nextRequestIndex);
+    auto &navigationReq = sim.getNavigationRequest(nextRequestIndex);
     std::unique_ptr<NavigationTask> task = std::make_unique<NavigationTask>(gisContainer, navigationContainer,
                                                                             navigationReq, nextGisIndex,
                                                                             nextNavigationIndex, nextRequestIndex);
@@ -23,7 +23,7 @@ std::unique_ptr<NavigationTask> NavigationTasksManager::getNextTask() {
     } else {
         nextRequestIndex++;
     }
-    return task;
+    return std::move(task);
 }
 
 bool NavigationTasksManager::hasTask() const {

@@ -6,7 +6,6 @@
 #include "TaskResult.h"
 
 void TaskResult::setRoutes(std::unique_ptr<AbstractRoutes> routes) {
-    std::cout<< "inside setRoute" << std::endl;
     TaskResult::routes = std::move(routes);
 }
 

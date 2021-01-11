@@ -122,7 +122,6 @@ GIS_315524694::getWayClosestPoint(const Coordinates &coord, const Restrictions &
     cellsVisited.insert(grid->truncateCoordinates(coord));
 
     while (!stack.empty() && level < max_closest_way_grid_levels) {
-        std::cout << "level: " << level << std::endl; //TODO remove
         while (!stack.empty()) {
             Grid::GridCell cell = stack.top();
             stack.pop();

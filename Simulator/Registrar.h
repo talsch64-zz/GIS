@@ -24,6 +24,7 @@ class Registrar {
     int numThreads = 1;
 
 public:
+
     void parseCommandLineArguments(int argc, char **argv);
 
     void loadSharedLibraries();

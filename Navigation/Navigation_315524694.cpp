@@ -15,10 +15,7 @@ std::unique_ptr<AbstractRoutes> Navigation_315524694::getRoutes(const Coordinate
 
 std::unique_ptr<AbstractRoutes>
 Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const {
-    std::cout<< "before getWayClosestPoint" << std::endl; // TODO remove
     auto startTuple = gis.getWayClosestPoint(start, restrictions);
-    std::cout<< "after getWayClosestPoint" << std::endl; //TODO remove
-
     if (std::get<AbstractGIS::ClosestPoint::WayId>(startTuple) == EntityId("")) {
         return std::make_unique<Routes>(nullptr, nullptr, false, "No ways on earth!");
     }

@@ -34,7 +34,9 @@ class Simulation {
 
     Simulation();
 
+
 public:
+
     static Simulation &getInstance() {
         static Simulation instance; // Guaranteed to be destroyed.
         // Instantiated on first use.
@@ -58,7 +60,8 @@ public:
 
     std::unique_ptr<NavigationContainer> &getNavigationContainer(int index);
 
-    NavigationRequest getNavigationRequest(int index);
+    const NavigationRequest &getNavigationRequest(int index);
+
 
     /**
      * Get a reference to the array element of the result,
@@ -74,7 +77,7 @@ public:
 private:
 
     /**
-     * @brief the function where threads exec;ute navigation tasks
+     * @brief the function where threads execute navigation tasks
      */
     void navigationThread();
 

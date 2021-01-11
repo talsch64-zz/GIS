@@ -28,7 +28,7 @@ std::unique_ptr<NavigationContainer> &Simulation::getNavigationContainer(int ind
     return navigationContainers[index];
 }
 
-NavigationRequest Simulation::getNavigationRequest(int index) {
+const NavigationRequest &Simulation::getNavigationRequest(int index) {
     return requests[index];
 }
 
@@ -82,9 +82,8 @@ void Simulation::setResult(int gisIndex, int navigationIndex, int requestIndex, 
 std::unique_ptr<TaskResult> Simulation::executeTask(const NavigationTask &task) {
     auto &navigation = task.getNavigation();
     auto req = task.getRequest();
-    std::unique_ptr<TaskResult> result;
+    std::unique_ptr<TaskResult> result = std::make_unique<TaskResult>();
     result->setRoutes(navigation->getRoutes(req.getFrom(), req.getTo()));
-    std::cout << "ok!" << std::endl;
     auto &routes = result->getRoutes();
     bool validRoutes = routes->isValid();
     if (validRoutes) {
