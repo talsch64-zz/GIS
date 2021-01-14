@@ -89,6 +89,7 @@ public:
             for (int j = 0; j < navigationContainers.size(); j++) {
                 for (int k = 0; k < gisContainers.size(); k++) {
                     auto &result = getResult(k, j, i);
+                    std::cout << "GIS: " << gisContainers[k]->getName() << ", Navigation: " << navigationContainers[j]->getName() << ", request: " << i << std::endl;
                     std::cout << "=== shortestDistance route ===" << std::endl << "Length: "
                               << static_cast<double>(result->getRoutes()->shortestDistance().totalLength())
                               << ", Time: "

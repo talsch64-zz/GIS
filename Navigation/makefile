@@ -1,7 +1,8 @@
 COMP = g++-10
 
 INC:=-I../include
-SOURCE_FILES := $(wildcard *.cpp ../UserCommon/entities/*.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/entities/JsonHandlers/Serializers/*.cpp ../UserCommon/entities/JsonHandlers/parsers/*.cpp ../UserCommon/*.cpp)
+SOURCE_FILES := $(wildcard *.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/*.cpp)
+
 OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))
