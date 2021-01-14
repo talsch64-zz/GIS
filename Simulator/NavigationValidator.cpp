@@ -60,7 +60,7 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
         Direction initialDirection = ways.front().second;
         Direction finalDirection = ways.back().second;
 
-        if (!startWay.isBidirectional() && initialDirection == Direction::B_to_A) {
+        if ((!startWay.isBidirectional()) && initialDirection == Direction::B_to_A) {
             return false; //startWay is unidirectional but the initial direction is B_to_A
         }
 
