@@ -42,5 +42,6 @@ public:
      * @return false - Route is not valid
      */
     bool validateRoute(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions, const AbstractRoute& r) const;
+
 };
 

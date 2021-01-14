@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "../Common/GISNamedTypes.h"
 #include "../Navigation/Navigation_315524694.h"
-#include "../tests/NavigationValidator.h"
+#include "../Simulator/NavigationValidator.h"
 #include "../UserCommon/entities/Way.h"
 #include "../UserCommon/Utils.h"
 

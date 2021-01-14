@@ -6,11 +6,15 @@
 
 class NavigationContainer {
     std::function<std::unique_ptr<AbstractNavigation>(const NavigationGIS &)> factory;
-    std::string name;
+    const std::string name;
 
 public:
     NavigationContainer(const std::function<std::unique_ptr<AbstractNavigation>(const NavigationGIS &)> &factory,
                         const std::string &name);
+
+    std::unique_ptr<AbstractNavigation> getNavigation(const NavigationGIS &navigationGIS);
+
+    const std::string &getName() const;
 };
 
 

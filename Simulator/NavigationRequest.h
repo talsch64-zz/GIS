@@ -13,6 +13,7 @@ public:
     const Coordinates &getFrom() const;
 
     const Coordinates &getTo() const;
+
 };
 
 
