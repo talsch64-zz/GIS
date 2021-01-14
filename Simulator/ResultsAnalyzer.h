@@ -5,6 +5,7 @@
 #include <memory>
 #include "../Common/AbstractRoutes.h"
 #include "RequestResult.h"
+#include "TaskResult.h"
 
 class ResultsAnalyzer {
     int gisAmount;
@@ -20,6 +21,10 @@ class ResultsAnalyzer {
 
     void assignResult(int requestIndex, int navigationIndex, std::unique_ptr<RequestResult> result);
 
+    void analyzeValidTaskResult(std::unique_ptr<TaskResult> result,
+                                std::vector<std::tuple<std::unique_ptr<TaskResult>, int, int>> &results);
+
+    std::unique_ptr<RequestResult> findValidConsensusResult(std::vector<std::tuple<std::unique_ptr<TaskResult>, int, int>> &results);
 
 public:
     ResultsAnalyzer(int gisAmount, int navigationsAmount, int requestsAmount);
