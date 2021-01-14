@@ -59,6 +59,15 @@
     },
 
     {
+        "type": "Junction",
+        "id": "J6",
+        "name": "intersection",
+        "description": "N/A",
+        "category_tags": [],
+        "coordinates": [-28.3, 47.1]
+    },
+
+    {
         "type": "POI",
         "id": "P2",
         "name": "target",
@@ -90,6 +99,40 @@
 
     {
         "type": "Way",
+        "id": "W6",
+        "name": "a way",
+        "description": "",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J3"
+        },
+        "to": {
+            "entity_id": "J6"
+        },
+        "direction": "bidirectional",
+        "speed_limit": 130,
+        "toll_road": false
+    },
+
+    {
+        "type": "Way",
+        "id": "W7",
+        "name": "a way",
+        "description": "",
+        "category_tags": [],
+        "from": {
+            "entity_id": "J6"
+        },
+        "to": {
+            "entity_id": "J4"
+        },
+        "direction": "unidirectional",
+        "speed_limit": 130,
+        "toll_road": false
+    },
+
+    {
+        "type": "Way",
         "id": "W2",
         "name": "a way",
         "description": "",
@@ -101,7 +144,7 @@
             "entity_id": "J3"
         },
         "direction": "bidirectional",
-        "speed_limit": 90,
+        "speed_limit": 100,
         "toll_road": false
     },
 
@@ -117,8 +160,9 @@
         "to": {
             "entity_id": "J4"
         },
-        "direction": "bidirectional",
-        "speed_limit": 90,
+        "curves": [[-29.02, 51]],
+	"direction": "bidirectional",
+        "speed_limit": 29,
         "toll_road": false
     },
 
@@ -134,8 +178,9 @@
         "to": {
             "entity_id": "J4"
         },
-        "direction": "bidirectional",
-        "speed_limit": 90,
+	"curves": [[-29.03,51.2], [-29.031, 51.21], [-29.035, 51.23], [-29.038, 51], [-27.36, 48.19]],
+        "direction": "unidirectional",
+        "speed_limit": 87,
         "toll_road": false
     },
 

@@ -83,7 +83,7 @@
         "to": {
             "entity_id": "J2"
         },
-        "direction": "bidirectional",
+        "direction": "unidirectional",
         "speed_limit": 90,
         "toll_road": false
     },
@@ -101,7 +101,7 @@
             "entity_id": "J3"
         },
         "direction": "bidirectional",
-        "speed_limit": 90,
+        "speed_limit": 100,
         "toll_road": false
     },
 
@@ -118,7 +118,7 @@
             "entity_id": "J4"
         },
         "direction": "bidirectional",
-        "speed_limit": 90,
+        "speed_limit": 41,
         "toll_road": false
     },
 
@@ -135,7 +135,7 @@
             "entity_id": "J4"
         },
         "direction": "bidirectional",
-        "speed_limit": 90,
+        "speed_limit": 120,
         "toll_road": false
     },
 
@@ -146,12 +146,12 @@
         "description": "",
         "category_tags": [],
         "from": {
-            "entity_id": "J4"
-        },
-        "to": {
             "entity_id": "J5"
         },
-        "direction": "bidirectional",
+        "to": {
+            "entity_id": "J4"
+        },
+        "direction": "unidirectional",
         "speed_limit": 90,
         "toll_road": false
     }
