@@ -1,11 +1,13 @@
 #include <iostream>
 #include "Simulation.h"
 
-Simulation::Simulation() : requestsFileParser(std::make_unique<RequestsFileParser>()) {
+Simulation::Simulation() : requestsFileParser(std::make_unique<RequestsFileParser>()),
+                           registrar(std::make_unique<Registrar>()) {
 }
 
 void Simulation::addGisFactory(std::function<std::unique_ptr<AbstractGIS>()> gisFactory) {
-    std::unique_ptr<GISContainer> gisContainer = std::make_unique<GISContainer>(gisFactory, nextName);
+    std::unique_ptr<GISContainer> gisContainer = std::make_unique<GISContainer>(gisFactory, nextName,
+                                                                                registrar->getMapFilePath());
     gisContainers.push_back(std::move(gisContainer));
 }
 
@@ -32,9 +34,8 @@ const NavigationRequest &Simulation::getNavigationRequest(int index) {
     return requests[index];
 }
 
-void Simulation::startSimulation(std::unique_ptr<Registrar> &registrar) {
+void Simulation::startSimulation() {
     requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
-    GISContainer::setMapFilepath(registrar->getMapFilePath());
     taskManager = std::make_unique<NavigationTasksManager>(gisContainers.size(), navigationContainers.size(),
                                                            requests.size());
     results = std::make_unique<std::unique_ptr<TaskResult>[]>(
@@ -97,13 +98,17 @@ std::unique_ptr<TaskResult> Simulation::executeTask(const NavigationTask &task) 
         result->setShortestTimeValid(task.getValidator()->validateRoute(start, end, shortestTimeRoute));
     }
     result->setGisUsageCount(task.getNavigationGis()->getUsageCounter());
-    return std::move(result);
+    return result;
 }
 
 void Simulation::clear() {
     gisContainers.clear();
     navigationContainers.clear();
     results.reset();
+}
+
+const std::unique_ptr<Registrar> &Simulation::getRegistrar() const {
+    return registrar;
 }
 
 
