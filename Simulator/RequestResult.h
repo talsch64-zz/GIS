@@ -10,17 +10,10 @@
  */
 class RequestResult {
     const bool consensus;
-    const bool invalidRoutes;
+    const bool valid;
     int score = 0;
     Meters consensusShortestDistance = Meters(0);
     Minutes consensusShortestTime = Minutes(0);
-
-private:
-    /**
-     * A request without consensus,
-     * or a request that resulted in an invalid route for at least one of the GIS
-     */
-    RequestResult(bool consensus);
 
 public:
     /**
@@ -28,13 +21,12 @@ public:
      * @param consensusShortestDistance
      * @param consensusShortestTime
      */
-    RequestResult(const Meters &consensusShortestDistance, const Minutes &consensusShortestTime);
-
-    static RequestResult createInvalidResult();
-
-    static RequestResult createResultWithoutConsensus();
+    RequestResult(const Meters &consensusShortestDistance, const Minutes &consensusShortestTime, bool valid,
+                  bool consensus);
 
     void updateScore(int diff);
+
+    bool isValid() const;
 };
 
 

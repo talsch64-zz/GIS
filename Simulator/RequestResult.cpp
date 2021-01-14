@@ -1,20 +1,14 @@
 #include "RequestResult.h"
 
-RequestResult::RequestResult(bool consensus) : consensus(consensus), invalidRoutes(!consensus) {
-}
-
-RequestResult::RequestResult(const Meters &consensusShortestDistance, const Minutes &consensusShortestTime)
-        : invalidRoutes(false), consensus(true), consensusShortestDistance(consensusShortestDistance),
+RequestResult::RequestResult(const Meters &consensusShortestDistance, const Minutes &consensusShortestTime, bool valid,
+                             bool consensus)
+        : valid(valid), consensus(consensus), consensusShortestDistance(consensusShortestDistance),
           consensusShortestTime(consensusShortestTime) {}
 
 void RequestResult::updateScore(int diff) {
     score += diff;
 }
 
-RequestResult RequestResult::createInvalidResult() {
-    return RequestResult(true);
-}
-
-RequestResult RequestResult::createResultWithoutConsensus() {
-    return RequestResult(false);
+bool RequestResult::isValid() const {
+    return valid;
 }
