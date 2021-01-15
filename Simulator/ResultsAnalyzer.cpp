@@ -15,7 +15,6 @@ void ResultsAnalyzer::analyze() {
     Simulation &sim = Simulation::getInstance();
 
     for (int i = 0; i < requestsAmount; i++) {
-        NavigationRequest navigationRequest = sim.getNavigationRequest(i);
         for (int j = 0; j < navigationsAmount; j++) {
             //a vector of Meters, Minutes result of Route, and the amount of GISs who agree on them (one vector for distance, one for time)
             auto distanceResults = std::make_unique<std::vector<std::pair<std::pair<Meters, Minutes>, int>>>();
@@ -67,45 +66,7 @@ void ResultsAnalyzer::analyze() {
                     finalResult->updateScore(-1);
                 }
             }
-
-            std::string navigationName = sim.getNavigationContainer(j)->getName();
-            std::optional<int> minGisRequests;
-            for (int k = 0; k < gisAmount; k++) {
-                std::string gisName = sim.getGISContainer(k)->getName();
-                auto &result = sim.getResult(k, j, i);
-                auto &routes = result->getRoutes();
-
-                if (finalResult != nullptr && finalResult->isValid()) {
-                    //valid and consensus
-                    if (routes->shortestDistance().totalLength() != finalResult->getConsensusShortestDistance().first ||
-                        routes->shortestDistance().estimatedDuration() !=
-                        finalResult->getConsensusShortestDistance().second) {
-                        //GIS doesn't agree with consensus on shortest distance
-                        resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
-                                                                 true);
-                    } else if (!minGisRequests.has_value() || result->getGisUsageCount() < minGisRequests.value()) {
-                        //GIS agrees with consensus and has minimal requests
-                        minGisRequests = result->getGisUsageCount();
-                    }
-
-                    if (routes->shortestTime().totalLength() != finalResult->getConsensusShortestTime().first ||
-                        routes->shortestTime().estimatedDuration() !=
-                        finalResult->getConsensusShortestTime().second) {
-                        //GIS doesn't agree with consensus on shortest time
-                        resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
-                                                                 false);
-                    } else if (!minGisRequests.has_value() || result->getGisUsageCount() < minGisRequests.value()) {
-                        //GIS agrees with consensus and has minimal requests
-                        minGisRequests = result->getGisUsageCount();
-                    }
-                } else {
-                    //invalid or no consensus - all results should be written to log
-                    resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
-                                                             true);
-                    resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
-                                                             false);
-                }
-            }
+            auto minGisRequests = compareGisResultsToConsensus(i, j, finalResult.get());
             if (minGisRequests.has_value()) {
                 finalResult->setGisRequests(minGisRequests.value());
             }
@@ -149,4 +110,51 @@ ResultsAnalyzer::findValidConsensusResult(std::vector<std::pair<std::pair<Meters
     }
 
     return consensusResult;
+}
+
+std::optional<int>
+ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIndex, RequestResult *requestResult) {
+    Simulation &sim = Simulation::getInstance();
+    NavigationRequest navigationRequest = sim.getNavigationRequest(navigationIndex);
+
+    std::string navigationName = sim.getNavigationContainer(navigationIndex)->getName();
+    std::optional<int> minGisRequests;
+    for (int k = 0; k < gisAmount; k++) {
+        std::string gisName = sim.getGISContainer(k)->getName();
+        auto &result = sim.getResult(k, navigationIndex, requestIndex);
+        auto &routes = result->getRoutes();
+
+        if (requestResult != nullptr && requestResult->isValid()) {
+            //valid and consensus
+            if (routes->shortestDistance().totalLength() != requestResult->getConsensusShortestDistance().first ||
+                routes->shortestDistance().estimatedDuration() !=
+                requestResult->getConsensusShortestDistance().second) {
+                //GIS doesn't agree with consensus on shortest distance
+                resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                                                         true);
+            } else if (!minGisRequests.has_value() || result->getGisUsageCount() < minGisRequests.value()) {
+                //GIS agrees with consensus and has minimal requests
+                minGisRequests = result->getGisUsageCount();
+            }
+
+            if (routes->shortestTime().totalLength() != requestResult->getConsensusShortestTime().first ||
+                routes->shortestTime().estimatedDuration() !=
+                requestResult->getConsensusShortestTime().second) {
+                //GIS doesn't agree with consensus on shortest time
+                resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                                                         false);
+            } else if (!minGisRequests.has_value() || result->getGisUsageCount() < minGisRequests.value()) {
+                //GIS agrees with consensus and has minimal requests
+                minGisRequests = result->getGisUsageCount();
+            }
+        } else {
+            //invalid or no consensus - all results should be written to log
+            resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                                                     true);
+            resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                                                     false);
+        }
+    }
+
+    return minGisRequests;
 }

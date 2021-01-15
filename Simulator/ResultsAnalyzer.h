@@ -24,6 +24,15 @@ class ResultsAnalyzer {
     std::optional<std::pair<Meters, Minutes>>
     findValidConsensusResult(std::vector<std::pair<std::pair<Meters, Minutes>, int>> &results);
 
+    /**
+     * Write strange Gis results to log
+     * @param requestIndex
+     * @param navigationIndex
+     * @param requestResult
+     * @return minimal Gis requests, out of Gis which got best distance/time (if a consensus was reached)
+     */
+    std::optional<int> compareGisResultsToConsensus(int requestIndex, int navigationIndex, RequestResult *requestResult);
+
 public:
     ResultsAnalyzer(int gisAmount, int navigationsAmount, int requestsAmount);
 
