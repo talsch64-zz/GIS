@@ -1,13 +1,16 @@
 #include <fstream>
 #include "ResultsFileWriter.h"
 
-ResultsFileWriter::ResultsFileWriter(const std::string &filePath) : filePath(filePath) {}
+ResultsFileWriter::ResultsFileWriter(const std::string &logFilePath, const std::string &resultsFilePath) : logFilePath(
+        logFilePath),
+                                                                                                           resultsFilePath(
+                                                                                                                   resultsFilePath) {}
 
 void ResultsFileWriter::writeStrangeGisResult(const std::string &navigationName, const std::string &gisName,
                                               const NavigationRequest &request, const TaskResult &result,
                                               bool shortestDistance) const {
     std::ofstream log;
-    log.open(filePath, std::ios_base::app);
+    log.open(logFilePath, std::ios_base::app);
     std::string routeType = "shortest_" + (shortestDistance ? std::string("distance") : std::string("time"));
     const AbstractRoute &route = shortestDistance ? result.getRoutes()->shortestDistance()
                                                   : result.getRoutes()->shortestTime();
@@ -20,4 +23,8 @@ void ResultsFileWriter::writeStrangeGisResult(const std::string &navigationName,
             sep + valid;
     log << msg;
     log.close();
+}
+
+void ResultsFileWriter::writeScoresTable(std::vector<std::unique_ptr<NavigationScores>> scores) {
+
 }

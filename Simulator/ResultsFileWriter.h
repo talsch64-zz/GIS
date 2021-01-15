@@ -4,15 +4,19 @@
 
 #include "TaskResult.h"
 #include "NavigationRequest.h"
+#include "NavigationScores.h"
 
 class ResultsFileWriter {
-    const std::string filePath;
+    const std::string logFilePath;
+    const std::string resultsFilePath;
 
 public:
-    ResultsFileWriter(const std::string &filePath);
+    ResultsFileWriter(const std::string &logFilePath, const std::string &resultsFilePath);
 
     void writeStrangeGisResult(const std::string &navigationName, const std::string &gisName,
                                const NavigationRequest &request, const TaskResult &result, bool shortestDistance) const;
+
+    void writeScoresTable(std::vector<std::unique_ptr<NavigationScores>> scores);
 };
 
 

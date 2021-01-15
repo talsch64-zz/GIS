@@ -13,7 +13,10 @@ class ResultsAnalyzer {
     int navigationsAmount;
     int requestsAmount;
     std::unique_ptr<std::unique_ptr<RequestResult>[]> resultsTable;
+    //vector of request indices that achieved consensus for all algorithms
+    std::vector<int> consensusRequests;
     const std::string strangeGisResultsFilePath = "strange_GIS_results.log";
+    const std::string resultsFilePath = "simulation.results";
     std::unique_ptr<ResultsFileWriter> resultsFileWriter;
 
     std::unique_ptr<RequestResult> &getResult(int requestIndex, int navigationIndex);
@@ -63,6 +66,8 @@ public:
     ResultsAnalyzer(int gisAmount, int navigationsAmount, int requestsAmount);
 
     void analyze();
+
+    void writeResultsToFile();
 };
 
 

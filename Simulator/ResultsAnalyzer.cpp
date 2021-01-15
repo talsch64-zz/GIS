@@ -7,14 +7,17 @@ ResultsAnalyzer::ResultsAnalyzer(int gisAmount, int navigationsAmount, int reque
                                                                                                      navigationsAmount),
                                                                                              requestsAmount(
                                                                                                      requestsAmount),
+                                                                                             resultsTable(
+                                                                                                     std::make_unique<std::unique_ptr<RequestResult>[]>(
+                                                                                                             navigationsAmount *
+                                                                                                             requestsAmount)),
                                                                                              resultsFileWriter(
                                                                                                      std::make_unique<ResultsFileWriter>(
-                                                                                                             strangeGisResultsFilePath)) {}
+                                                                                                             strangeGisResultsFilePath,
+                                                                                                             resultsFilePath)) {}
 
 void ResultsAnalyzer::analyze() {
     Simulation &sim = Simulation::getInstance();
-    //vector of requests that achieved consensus for all algorithms
-    std::vector<int> consensusRequests;
 
     for (int i = 0; i < requestsAmount; i++) {
         //do all navigation algorithms reach consensus for this request
@@ -244,4 +247,22 @@ void ResultsAnalyzer::updateBestRouteScores(int requestIndex, std::pair<Meters, 
             }
         }
     }
+}
+
+void ResultsAnalyzer::writeResultsToFile() {
+    Simulation &sim = Simulation::getInstance();
+    std::vector<std::unique_ptr<NavigationScores>> scores;
+    for (int i = 0; i < navigationsAmount; i++) {
+        std::string name = sim.getNavigationContainer(i)->getName();
+        scores.emplace_back(std::make_unique<NavigationScores>(name));
+    }
+
+    for (int i : consensusRequests) {
+        for (int j = 0; j < navigationsAmount; j++) {
+            auto &result = getResult(i, j);
+            scores[j]->addScore(result->getScore());
+        }
+    }
+
+    resultsFileWriter->writeScoresTable(std::move(scores));
 }
