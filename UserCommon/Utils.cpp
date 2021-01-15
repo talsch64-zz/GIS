@@ -3,11 +3,11 @@
 #include "Utils.h"
 
 double Utils::kmh_to_mm(int speed) {
-    return (double) speed * 1000 / 60;
+    return static_cast<double>(speed) * 1000 / 60;
 }
 
 Minutes Utils::calculateTime(Meters distance, int speed) {
-    return Minutes((double) distance / Utils::kmh_to_mm(speed));
+    return Minutes(static_cast<double>(distance / Utils::kmh_to_mm(speed)));
 }
 
 std::vector<std::string> Utils::split(const char *array, const char *delimiters) {
@@ -32,6 +32,6 @@ bool Utils::isWayRestricted(const AbstractWay &way, const Restrictions &restrict
 }
 
 Minutes Utils::getWayDuration(Meters length, int speed) {
-    return Minutes((double) length / kmh_to_mm(speed));
+    return Minutes(static_cast<double>(length) / kmh_to_mm(speed));
 }
 
