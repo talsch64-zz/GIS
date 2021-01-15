@@ -6,17 +6,21 @@ ResultsAnalyzer::ResultsAnalyzer(int gisAmount, int navigationsAmount, int reque
                                                                                              navigationsAmount(
                                                                                                      navigationsAmount),
                                                                                              requestsAmount(
-                                                                                                     requestsAmount) {}
+                                                                                                     requestsAmount),
+                                                                                             resultsFileWriter(
+                                                                                                     std::make_unique<ResultsFileWriter>(
+                                                                                                             strangeGisResultsFilePath)) {}
 
 void ResultsAnalyzer::analyze() {
     Simulation &sim = Simulation::getInstance();
 
     for (int i = 0; i < requestsAmount; i++) {
+        NavigationRequest navigationRequest = sim.getNavigationRequest(i);
         for (int j = 0; j < navigationsAmount; j++) {
             //a vector of Meters, Minutes result of Route, and the amount of GISs who agree on them (one vector for distance, one for time)
             auto distanceResults = std::make_unique<std::vector<std::pair<std::pair<Meters, Minutes>, int>>>();
             auto timeResults = std::make_unique<std::vector<std::pair<std::pair<Meters, Minutes>, int>>>();
-            bool invalidResult = false, invalidDistanceResult = false, invalidTimeResult = false;
+            bool invalidDistanceResult = false, invalidTimeResult = false;
             for (int k = 0; k < gisAmount; k++) {
                 auto &result = sim.getResult(k, j, i);
                 auto &routes = result->getRoutes();
@@ -33,38 +37,79 @@ void ResultsAnalyzer::analyze() {
                                            *timeResults);
                 } else {
                     //invalid route
-                    if (!result->getRoutes()->isValid()) {
-                        //no routes were found
-                        invalidResult = true;
-                    }
-                    if (!result->isShortestDistanceValid()) {
-                        //shortest distance route is invalid
+                    if (!result->getRoutes()->isValid() || !result->isShortestDistanceValid()) {
                         invalidDistanceResult = true;
                     }
-                    if (!result->isShortestTimeValid()) {
-                        //shortest time route is invalid
+                    if (!result->getRoutes()->isValid() || !result->isShortestTimeValid()) {
                         invalidTimeResult = true;
                     }
                 }
+            }
 
-                std::unique_ptr<RequestResult> finalResult;
-                if (!invalidResult && !invalidDistanceResult && !invalidTimeResult) {
-                    //valid result
-                    auto distanceConsensus = findValidConsensusResult(*distanceResults);
-                    auto timeConsensus = findValidConsensusResult(*timeResults);
-                    if (distanceConsensus.has_value() && timeConsensus.has_value()) {
-                        //has consensus
-                        finalResult = std::make_unique<RequestResult>(distanceConsensus.value(), timeConsensus.value());
-                    } else {
-                        //no consensus
-                        finalResult = nullptr;
+            std::unique_ptr<RequestResult> finalResult;
+            if (!invalidDistanceResult && !invalidTimeResult) {
+                //valid result
+                auto distanceConsensus = findValidConsensusResult(*distanceResults);
+                auto timeConsensus = findValidConsensusResult(*timeResults);
+                if (distanceConsensus.has_value() && timeConsensus.has_value()) {
+                    //has consensus
+                    finalResult = std::make_unique<RequestResult>(distanceConsensus.value(), timeConsensus.value());
+                } else {
+                    //no consensus
+                    finalResult = nullptr;
+                }
+            } else {
+                //invalid result cell
+                finalResult = std::make_unique<RequestResult>();
+                if (invalidDistanceResult && invalidTimeResult) {
+                    finalResult->updateScore(-2);
+                } else {
+                    finalResult->updateScore(-1);
+                }
+            }
+
+            std::string navigationName = sim.getNavigationContainer(j)->getName();
+            std::optional<int> minGisRequests;
+            for (int k = 0; k < gisAmount; k++) {
+                std::string gisName = sim.getGISContainer(k)->getName();
+                auto &result = sim.getResult(k, j, i);
+                auto &routes = result->getRoutes();
+
+                if (finalResult != nullptr && finalResult->isValid()) {
+                    //valid and consensus
+                    if (routes->shortestDistance().totalLength() != finalResult->getConsensusShortestDistance().first ||
+                        routes->shortestDistance().estimatedDuration() !=
+                        finalResult->getConsensusShortestDistance().second) {
+                        //GIS doesn't agree with consensus on shortest distance
+                        resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                                                                 true);
+                    } else if (!minGisRequests.has_value() || result->getGisUsageCount() < minGisRequests.value()) {
+                        //GIS agrees with consensus and has minimal requests
+                        minGisRequests = result->getGisUsageCount();
+                    }
+
+                    if (routes->shortestTime().totalLength() != finalResult->getConsensusShortestTime().first ||
+                        routes->shortestTime().estimatedDuration() !=
+                        finalResult->getConsensusShortestTime().second) {
+                        //GIS doesn't agree with consensus on shortest time
+                        resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                                                                 false);
+                    } else if (!minGisRequests.has_value() || result->getGisUsageCount() < minGisRequests.value()) {
+                        //GIS agrees with consensus and has minimal requests
+                        minGisRequests = result->getGisUsageCount();
                     }
                 } else {
-                    //invalid result cell
-                    finalResult = std::make_unique<RequestResult>();
+                    //invalid or no consensus - all results should be written to log
+                    resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                                                             true);
+                    resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                                                             false);
                 }
-                assignResult(i, j, std::move(finalResult));
             }
+            if (minGisRequests.has_value()) {
+                finalResult->setGisRequests(minGisRequests.value());
+            }
+            assignResult(i, j, std::move(finalResult));
         }
     }
 }

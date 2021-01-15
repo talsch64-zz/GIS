@@ -6,12 +6,15 @@
 #include "../Common/AbstractRoutes.h"
 #include "RequestResult.h"
 #include "TaskResult.h"
+#include "ResultsFileWriter.h"
 
 class ResultsAnalyzer {
     int gisAmount;
     int navigationsAmount;
     int requestsAmount;
     std::unique_ptr<std::unique_ptr<RequestResult>[]> resultsTable;
+    const std::string strangeGisResultsFilePath = "strange_GIS_results.log";
+    std::unique_ptr<ResultsFileWriter> resultsFileWriter;
 
     void assignResult(int requestIndex, int navigationIndex, std::unique_ptr<RequestResult> result);
 

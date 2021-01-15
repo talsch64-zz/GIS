@@ -17,3 +17,23 @@ void RequestResult::updateScore(int diff) {
 bool RequestResult::isValid() const {
     return valid;
 }
+
+int RequestResult::getScore() const {
+    return score;
+}
+
+const std::pair<Meters, Minutes> &RequestResult::getConsensusShortestDistance() const {
+    return consensusShortestDistance;
+}
+
+const std::pair<Meters, Minutes> &RequestResult::getConsensusShortestTime() const {
+    return consensusShortestTime;
+}
+
+int RequestResult::getGisRequests() const {
+    return gisRequests;
+}
+
+void RequestResult::setGisRequests(int gisRequests) {
+    RequestResult::gisRequests = gisRequests;
+}

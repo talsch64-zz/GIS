@@ -32,6 +32,16 @@ public:
     void updateScore(int diff);
 
     bool isValid() const;
+
+    int getScore() const;
+
+    const std::pair<Meters, Minutes> &getConsensusShortestDistance() const;
+
+    const std::pair<Meters, Minutes> &getConsensusShortestTime() const;
+
+    int getGisRequests() const;
+
+    void setGisRequests(int gisRequests);
 };
 
 

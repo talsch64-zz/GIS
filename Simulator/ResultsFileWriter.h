@@ -2,8 +2,17 @@
 #define GIS_CPP_RESULTSFILEWRITER_H
 
 
+#include "TaskResult.h"
+#include "NavigationRequest.h"
+
 class ResultsFileWriter {
-    void writeStrangeGisResult();
+    const std::string filePath;
+
+public:
+    ResultsFileWriter(const std::string &filePath);
+
+    void writeStrangeGisResult(const std::string &navigationName, const std::string &gisName,
+                               const NavigationRequest &request, const TaskResult &result, bool shortestDistance) const;
 };
 
 
