@@ -177,7 +177,7 @@ private:
      * @param costFunc
      * @return
      */
-    std::shared_ptr<Node> createNeighbor(std::shared_ptr<Node> currNode, EntityId wayId,
+    std::shared_ptr<Node> createNeighbor(std::shared_ptr<Node> currNode, const AbstractWay &way,
                                          double (*heuristicFunc)(const Coordinates &start, const Coordinates &end),
                                          double (*costFunc)(const AbstractWay &));
 
