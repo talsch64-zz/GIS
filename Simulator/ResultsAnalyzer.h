@@ -16,6 +16,8 @@ class ResultsAnalyzer {
     const std::string strangeGisResultsFilePath = "strange_GIS_results.log";
     std::unique_ptr<ResultsFileWriter> resultsFileWriter;
 
+    std::unique_ptr<RequestResult> &getResult(int requestIndex, int navigationIndex);
+
     void assignResult(int requestIndex, int navigationIndex, std::unique_ptr<RequestResult> result);
 
     void analyzeValidTaskResult(std::pair<Meters, Minutes> result,
@@ -31,7 +33,31 @@ class ResultsAnalyzer {
      * @param requestResult
      * @return minimal Gis requests, out of Gis which got best distance/time (if a consensus was reached)
      */
-    std::optional<int> compareGisResultsToConsensus(int requestIndex, int navigationIndex, RequestResult *requestResult);
+    std::optional<int>
+    compareGisResultsToConsensus(int requestIndex, int navigationIndex, RequestResult *requestResult);
+
+    /**
+     * Compare shortest distance routes
+     * @param routeA
+     * @param routeB
+     * @return 1 if routeA is better, 0 if equal, -1 if routeB is better
+     */
+    int compareDistanceRoutes(std::pair<Meters, Minutes> routeA, std::pair<Meters, Minutes> routeB);
+
+    /**
+     * Compare shortest time routes
+     * @param routeA
+     * @param routeB
+     * @return 1 if routeA is better, 0 if equal, -1 if routeB is better
+     */
+    int compareTimeRoutes(std::pair<Meters, Minutes> routeA, std::pair<Meters, Minutes> routeB);
+
+    /**
+     * Update the score of navigation algorithms which found minimal distance/time route
+     * @param requestIndex
+     */
+    void updateBestRouteScores(int requestIndex, std::pair<Meters, Minutes> bestDistanceRoute,
+                               std::pair<Meters, Minutes> bestTimeRoute);
 
 public:
     ResultsAnalyzer(int gisAmount, int navigationsAmount, int requestsAmount);

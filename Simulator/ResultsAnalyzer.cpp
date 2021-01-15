@@ -13,8 +13,15 @@ ResultsAnalyzer::ResultsAnalyzer(int gisAmount, int navigationsAmount, int reque
 
 void ResultsAnalyzer::analyze() {
     Simulation &sim = Simulation::getInstance();
+    //vector of requests that achieved consensus for all algorithms
+    std::vector<int> consensusRequests;
 
     for (int i = 0; i < requestsAmount; i++) {
+        //do all navigation algorithms reach consensus for this request
+        bool columnConsensus = true;
+        std::optional<std::pair<Meters, Minutes>> bestDistanceRoute;
+        std::optional<std::pair<Meters, Minutes>> bestTimeRoute;
+
         for (int j = 0; j < navigationsAmount; j++) {
             //a vector of Meters, Minutes result of Route, and the amount of GISs who agree on them (one vector for distance, one for time)
             auto distanceResults = std::make_unique<std::vector<std::pair<std::pair<Meters, Minutes>, int>>>();
@@ -53,9 +60,18 @@ void ResultsAnalyzer::analyze() {
                 if (distanceConsensus.has_value() && timeConsensus.has_value()) {
                     //has consensus
                     finalResult = std::make_unique<RequestResult>(distanceConsensus.value(), timeConsensus.value());
+                    if (!bestDistanceRoute.has_value() ||
+                        compareTimeRoutes(distanceConsensus.value(), bestDistanceRoute.value()) == 1) {
+                        bestDistanceRoute = distanceConsensus;
+                    }
+                    if (!bestTimeRoute.has_value() ||
+                        compareTimeRoutes(timeConsensus.value(), bestTimeRoute.value()) == 1) {
+                        bestTimeRoute = timeConsensus;
+                    }
                 } else {
                     //no consensus
                     finalResult = nullptr;
+                    columnConsensus = false;
                 }
             } else {
                 //invalid result cell
@@ -72,7 +88,19 @@ void ResultsAnalyzer::analyze() {
             }
             assignResult(i, j, std::move(finalResult));
         }
+        if (columnConsensus) {
+            consensusRequests.push_back(i);
+            if (bestDistanceRoute.has_value() && bestTimeRoute.has_value()) {
+                //some navigation algorithms returned valid routes
+                updateBestRouteScores(i, bestDistanceRoute.value(), bestTimeRoute.value());
+            }
+        }
     }
+}
+
+std::unique_ptr<RequestResult> &ResultsAnalyzer::getResult(int requestIndex, int navigationIndex) {
+    int index = navigationIndex * requestsAmount + requestIndex;
+    return resultsTable[index];
 }
 
 void ResultsAnalyzer::assignResult(int requestIndex, int navigationIndex, std::unique_ptr<RequestResult> result) {
@@ -157,4 +185,63 @@ ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIn
     }
 
     return minGisRequests;
+}
+
+int ResultsAnalyzer::compareDistanceRoutes(std::pair<Meters, Minutes> routeA, std::pair<Meters, Minutes> routeB) {
+    int ret = -1;
+    if (routeA.first == routeB.first && routeA.second == routeB.second) {
+        ret = 0;
+    } else if (routeA.first < routeB.first ||
+               (routeA.first == routeB.first && routeA.second < routeB.second)) {
+        ret = 1;
+    }
+    return ret;
+}
+
+int ResultsAnalyzer::compareTimeRoutes(std::pair<Meters, Minutes> routeA, std::pair<Meters, Minutes> routeB) {
+    int ret = -1;
+    if (routeA.first == routeB.first && routeA.second == routeB.second) {
+        ret = 0;
+    } else if (routeA.second < routeB.second ||
+               (routeA.second == routeB.second && routeA.first < routeB.first)) {
+        ret = 1;
+    }
+    return ret;
+}
+
+void ResultsAnalyzer::updateBestRouteScores(int requestIndex, std::pair<Meters, Minutes> bestDistanceRoute,
+                                            std::pair<Meters, Minutes> bestTimeRoute) {
+    //find minimal Gis requests out of algorithms which found best distance/time route
+    //update score of algorithms which found the best distance/time route
+    std::optional<int> minGisRequests;
+    for (int j = 0; j < navigationsAmount; j++) {
+        auto &result = getResult(requestIndex, j);
+        if (result->isValid()) {
+            bool bestRoute = false;
+            if (compareDistanceRoutes(result->getConsensusShortestDistance(), bestDistanceRoute) == 0) {
+                result->updateScore(1);
+                bestRoute = true;
+            }
+            if (compareTimeRoutes(result->getConsensusShortestTime(), bestTimeRoute) == 0) {
+                result->updateScore(1);
+                bestRoute = true;
+            }
+            if (bestRoute && (!minGisRequests.has_value() || result->getGisRequests() < minGisRequests.value())) {
+                minGisRequests = result->getGisRequests();
+            }
+        }
+    }
+
+    //update score of algorithms which found the best distance/time route and have minimal Gis requests
+    if (minGisRequests.has_value()) {
+        for (int j = 0; j < navigationsAmount; j++) {
+            auto &result = getResult(requestIndex, j);
+            if (result->isValid() &&
+                (compareDistanceRoutes(result->getConsensusShortestDistance(), bestDistanceRoute) == 0 ||
+                 compareTimeRoutes(result->getConsensusShortestTime(), bestTimeRoute) == 0) &&
+                result->getGisRequests() == minGisRequests.value()) {
+                result->updateScore(1);
+            }
+        }
+    }
 }
