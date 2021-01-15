@@ -52,7 +52,7 @@
     {
         "type": "Way",
         "id": "West1",
-        "name": "The_great_Highway",
+        "name": "Western Highway",
         "description": "The western hemisphere highway",
         "category_tags": ["highway"],
         "from": {
@@ -69,7 +69,7 @@
     {
         "type": "Way",
         "id": "East1",
-        "name": "The_great_Highway",
+        "name": "Eastern Highway",
         "description": "The Eastern hemisphere highway",
         "category_tags": [],
         "from": {
