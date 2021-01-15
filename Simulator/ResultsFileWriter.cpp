@@ -1,5 +1,6 @@
 #include <fstream>
 #include "ResultsFileWriter.h"
+#include "Simulation.h"
 
 ResultsFileWriter::ResultsFileWriter(const std::string &logFilePath, const std::string &resultsFilePath) : logFilePath(
         logFilePath),
@@ -20,11 +21,38 @@ void ResultsFileWriter::writeStrangeGisResult(const std::string &navigationName,
     std::string sep = ", ";
     std::string msg =
             navigationName + sep + routeType + sep + gisName + sep + request.toString() + sep + distance + sep + time +
-            sep + valid;
+            sep + valid + "\n";
     log << msg;
     log.close();
 }
 
-void ResultsFileWriter::writeScoresTable(std::vector<std::unique_ptr<NavigationScores>> scores) {
+void ResultsFileWriter::writeScoresTable(const std::vector<std::unique_ptr<NavigationScores>> &scores,
+                                         const std::vector<int> &consensusRequests) {
+    Simulation &sim = Simulation::getInstance();
+    std::ofstream resultsFile;
+    resultsFile.open(resultsFilePath, std::ios_base::app);
+    std::string sep = ", ";
+    std::string titleLine = "Navigation Algorithm, ";
+    for (int i: consensusRequests) {
+        std::string requestStr = sim.getNavigationRequest(i).toString();
+        titleLine += requestStr + sep;
+    }
+    titleLine += "Total Score\n";
+    resultsFile << titleLine;
+    for (auto &navigationScores : scores) {
+        std::string navLine = navigationScores->getNavigationName() + sep;
 
+        for (int i = 0; i < consensusRequests.size(); i++) {
+            navLine += std::to_string(navigationScores->getScore(i)) + sep;
+        }
+        navLine += std::to_string(navigationScores->getTotalScore()) + "\n";
+        resultsFile << navLine;
+    }
+    resultsFile.close();
+}
+
+void ResultsFileWriter::initialize() {
+    //clear existing files from before this simulation
+    std::remove(logFilePath.c_str());
+    std::remove(resultsFilePath.c_str());
 }

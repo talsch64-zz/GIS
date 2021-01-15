@@ -13,10 +13,13 @@ class ResultsFileWriter {
 public:
     ResultsFileWriter(const std::string &logFilePath, const std::string &resultsFilePath);
 
+    void initialize();
+
     void writeStrangeGisResult(const std::string &navigationName, const std::string &gisName,
                                const NavigationRequest &request, const TaskResult &result, bool shortestDistance) const;
 
-    void writeScoresTable(std::vector<std::unique_ptr<NavigationScores>> scores);
+    void writeScoresTable(const std::vector<std::unique_ptr<NavigationScores>> &scores,
+                          const std::vector<int> &consensusRequests);
 };
 
 

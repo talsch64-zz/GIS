@@ -16,6 +16,12 @@ public:
     NavigationScores(const std::string &navigationName);
 
     void addScore(int score);
+
+    int getScore(int index) const;
+
+    int getTotalScore() const;
+
+    const std::string &getNavigationName() const;
 };
 
 

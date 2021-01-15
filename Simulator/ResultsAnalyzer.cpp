@@ -146,6 +146,7 @@ ResultsAnalyzer::findValidConsensusResult(std::vector<std::pair<std::pair<Meters
 std::optional<int>
 ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIndex, RequestResult *requestResult) {
     Simulation &sim = Simulation::getInstance();
+    resultsFileWriter->initialize();
     NavigationRequest navigationRequest = sim.getNavigationRequest(navigationIndex);
 
     std::string navigationName = sim.getNavigationContainer(navigationIndex)->getName();
@@ -264,5 +265,5 @@ void ResultsAnalyzer::writeResultsToFile() {
         }
     }
 
-    resultsFileWriter->writeScoresTable(std::move(scores));
+    resultsFileWriter->writeScoresTable(std::move(scores), std::move(consensusRequests));
 }
