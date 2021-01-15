@@ -13,18 +13,13 @@ class ResultsAnalyzer {
     int requestsAmount;
     std::unique_ptr<std::unique_ptr<RequestResult>[]> resultsTable;
 
-    bool routesEqual(AbstractRoutes *routesA, AbstractRoutes *routesB);
-
-    bool routesDistanceEqual(AbstractRoutes *routesA, AbstractRoutes *routesB);
-
-    bool routesTimeEqual(AbstractRoutes *routesA, AbstractRoutes *routesB);
-
     void assignResult(int requestIndex, int navigationIndex, std::unique_ptr<RequestResult> result);
 
-    void analyzeValidTaskResult(std::unique_ptr<TaskResult> result,
-                                std::vector<std::tuple<std::unique_ptr<TaskResult>, int, int>> &results);
+    void analyzeValidTaskResult(std::pair<Meters, Minutes> result,
+                                std::vector<std::pair<std::pair<Meters, Minutes>, int>> &results);
 
-    std::unique_ptr<RequestResult> findValidConsensusResult(std::vector<std::tuple<std::unique_ptr<TaskResult>, int, int>> &results);
+    std::optional<std::pair<Meters, Minutes>>
+    findValidConsensusResult(std::vector<std::pair<std::pair<Meters, Minutes>, int>> &results);
 
 public:
     ResultsAnalyzer(int gisAmount, int navigationsAmount, int requestsAmount);

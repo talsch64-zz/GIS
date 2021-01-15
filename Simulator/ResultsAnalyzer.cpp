@@ -13,61 +13,60 @@ void ResultsAnalyzer::analyze() {
 
     for (int i = 0; i < requestsAmount; i++) {
         for (int j = 0; j < navigationsAmount; j++) {
-            //a vector of results and the amount of GISs who agree on distance, time
-            auto results = std::make_unique<std::vector<std::tuple<std::unique_ptr<TaskResult>, int, int>>>();
-            std::unique_ptr<TaskResult> invalidResult = nullptr, invalidDistanceResult = nullptr, invalidTimeResult = nullptr;
+            //a vector of Meters, Minutes result of Route, and the amount of GISs who agree on them (one vector for distance, one for time)
+            auto distanceResults = std::make_unique<std::vector<std::pair<std::pair<Meters, Minutes>, int>>>();
+            auto timeResults = std::make_unique<std::vector<std::pair<std::pair<Meters, Minutes>, int>>>();
+            bool invalidResult = false, invalidDistanceResult = false, invalidTimeResult = false;
             for (int k = 0; k < gisAmount; k++) {
                 auto &result = sim.getResult(k, j, i);
+                auto &routes = result->getRoutes();
 
                 if (result->isValid()) {
-                    analyzeValidTaskResult(std::move(result), *results);
+                    //valid route
+                    //analyze for shortest distance
+                    analyzeValidTaskResult(std::make_pair(routes->shortestDistance().totalLength(),
+                                                          routes->shortestDistance().estimatedDuration()),
+                                           *distanceResults);
+                    //analyze for shortest time
+                    analyzeValidTaskResult(std::make_pair(routes->shortestTime().totalLength(),
+                                                          routes->shortestTime().estimatedDuration()),
+                                           *timeResults);
                 } else {
-                    if (!result->getRoutes()->isValid() ||
-                        (!result->isShortestDistanceValid() && !result->isShortestTimeValid())) {
-                        invalidResult = std::move(result);
-                    } else if (!result->isShortestDistanceValid()) {
-                        invalidDistanceResult = std::move(result);
-                    } else {
-                        invalidTimeResult = std::move(result);
+                    //invalid route
+                    if (!result->getRoutes()->isValid()) {
+                        //no routes were found
+                        invalidResult = true;
+                    }
+                    if (!result->isShortestDistanceValid()) {
+                        //shortest distance route is invalid
+                        invalidDistanceResult = true;
+                    }
+                    if (!result->isShortestTimeValid()) {
+                        //shortest time route is invalid
+                        invalidTimeResult = true;
                     }
                 }
-            }
 
-            std::unique_ptr<RequestResult> finalResult;
-            if (!invalidResult && !invalidDistanceResult && !invalidTimeResult) {
-                //valid result
-                finalResult = findValidConsensusResult(*results);
-            } else {
-                //invalid result cell
-                std::unique_ptr<TaskResult> res;
-                if (invalidResult) {
-                    res = std::move(invalidResult);
-                } else if (invalidDistanceResult) {
-                    res = std::move(invalidDistanceResult);
+                std::unique_ptr<RequestResult> finalResult;
+                if (!invalidResult && !invalidDistanceResult && !invalidTimeResult) {
+                    //valid result
+                    auto distanceConsensus = findValidConsensusResult(*distanceResults);
+                    auto timeConsensus = findValidConsensusResult(*timeResults);
+                    if (distanceConsensus.has_value() && timeConsensus.has_value()) {
+                        //has consensus
+                        finalResult = std::make_unique<RequestResult>(distanceConsensus.value(), timeConsensus.value());
+                    } else {
+                        //no consensus
+                        finalResult = nullptr;
+                    }
                 } else {
-                    res = std::move(invalidTimeResult);
+                    //invalid result cell
+                    finalResult = std::make_unique<RequestResult>();
                 }
-                finalResult = std::make_unique<RequestResult>(
-                        res->getRoutes()->shortestDistance().totalLength(),
-                        res->getRoutes()->shortestTime().estimatedDuration(), false, true);
+                assignResult(i, j, std::move(finalResult));
             }
-            assignResult(i, j, std::move(finalResult));
         }
     }
-}
-
-bool ResultsAnalyzer::routesEqual(AbstractRoutes *routesA, AbstractRoutes *routesB) {
-    return routesDistanceEqual(routesA, routesB) && routesTimeEqual(routesA, routesB);
-}
-
-bool ResultsAnalyzer::routesDistanceEqual(AbstractRoutes *routesA, AbstractRoutes *routesB) {
-    return routesA->shortestDistance().totalLength() == routesB->shortestDistance().totalLength() &&
-           routesA->shortestDistance().estimatedDuration() == routesB->shortestDistance().estimatedDuration();
-}
-
-bool ResultsAnalyzer::routesTimeEqual(AbstractRoutes *routesA, AbstractRoutes *routesB) {
-    return routesA->shortestTime().totalLength() == routesB->shortestTime().totalLength() &&
-           routesA->shortestTime().estimatedDuration() == routesB->shortestTime().estimatedDuration();
 }
 
 void ResultsAnalyzer::assignResult(int requestIndex, int navigationIndex, std::unique_ptr<RequestResult> result) {
@@ -75,54 +74,34 @@ void ResultsAnalyzer::assignResult(int requestIndex, int navigationIndex, std::u
     resultsTable[index] = std::move(result);
 }
 
-void ResultsAnalyzer::analyzeValidTaskResult(std::unique_ptr<TaskResult> result,
-                                             std::vector<std::tuple<std::unique_ptr<TaskResult>, int, int>> &results) {
-    auto &routes = result->getRoutes();
-    bool foundEqualRoutes = false;
-    for (int l = 0; l < results.size(); l++) {
-        auto &existingResultTuple = results[l];
-        auto &existingResult = std::get<0>(existingResultTuple);
-        if (routesEqual(existingResult->getRoutes().get(), routes.get())) {
-            //TODO: is it min?
-            existingResult->setGisUsageCount(std::min(existingResult->getGisUsageCount(),
-                                                      result->getGisUsageCount()));
-            foundEqualRoutes = true;
-        }
-        if (routesDistanceEqual(existingResult->getRoutes().get(), routes.get())) {
-            std::get<1>(existingResultTuple)++;
-        }
-        if (routesTimeEqual(existingResult->getRoutes().get(), routes.get())) {
-            std::get<2>(existingResultTuple)++;
+void ResultsAnalyzer::analyzeValidTaskResult(std::pair<Meters, Minutes> result,
+                                             std::vector<std::pair<std::pair<Meters, Minutes>, int>> &results) {
+    bool foundEqualDistanceRoute = false;
+    for (auto &existingResultPair : results) {
+        auto &existingResult = existingResultPair.first;
+        if (existingResult.first == result.first &&
+            existingResult.second == result.second) {
+            //increase count of GIS who agree on result
+            existingResultPair.second++;
+            foundEqualDistanceRoute = true;
         }
     }
-    if (!foundEqualRoutes) {
-        results.emplace_back(std::make_tuple(std::move(result), 1, 1));
+    if (!foundEqualDistanceRoute) {
+        //the result is a route different from all existing ones
+        results.emplace_back(result, 1);
     }
 }
 
-std::unique_ptr<RequestResult>
-ResultsAnalyzer::findValidConsensusResult(std::vector<std::tuple<std::unique_ptr<TaskResult>, int, int>> &results) {
-    std::unique_ptr<RequestResult> finalResult;
-    std::unique_ptr<TaskResult> consensusResult = nullptr;
+std::optional<std::pair<Meters, Minutes>>
+ResultsAnalyzer::findValidConsensusResult(std::vector<std::pair<std::pair<Meters, Minutes>, int>> &results) {
+    std::optional<std::pair<Meters, Minutes>> consensusResult;
     int agreeThreshold = gisAmount / 2;
-    for (int l = 0; l < results.size() && !consensusResult; l++) {
-        auto &resultTuple = results[l];
-        if (std::get<1>(resultTuple) > agreeThreshold && std::get<2>(resultTuple) > agreeThreshold) {
-            consensusResult = std::move(std::get<0>(resultTuple));
+    for (int i = 0; i < results.size() && !consensusResult.has_value(); i++) {
+        auto &resultPair = results[i];
+        if (resultPair.second > agreeThreshold) {
+            consensusResult = resultPair.first;
         }
     }
-    if (consensusResult) {
-        //consensus
-        finalResult = std::make_unique<RequestResult>(
-                consensusResult->getRoutes()->shortestDistance().totalLength(),
-                consensusResult->getRoutes()->shortestTime().estimatedDuration(), false, true);
-    } else {
-        //no consensus
-        finalResult = std::make_unique<RequestResult>(Meters(0), Minutes(0), true, false);
-    }
-    return finalResult;
+
+    return consensusResult;
 }
-
-
-
-
