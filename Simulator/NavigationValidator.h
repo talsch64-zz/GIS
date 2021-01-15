@@ -17,7 +17,7 @@ public:
      *
      * @param gis - the referenced GIS object - Note that you get a const ref
      */
-    NavigationValidator(const AbstractGIS& gis);
+    NavigationValidator(const AbstractGIS &gis);
 
     /**
      * @brief Validates the given Route from Start Point to End Point on referenced GIS
@@ -28,7 +28,7 @@ public:
      * @return true - Route is valid
      * @return false - Route is not valid
      */
-    bool validateRoute(const Coordinates& start, const Coordinates& end, const AbstractRoute& routes) const;
+    bool validateRoute(const Coordinates &start, const Coordinates &end, const AbstractRoute &routes) const;
 
     /**
      * @brief Validates the given Route with Restricitons from Start Point to End Point on referenced GIS
@@ -41,7 +41,18 @@ public:
      * @return true - Route is valid
      * @return false - Route is not valid
      */
-    bool validateRoute(const Coordinates& start, const Coordinates& end, const Restrictions& restrictions, const AbstractRoute& r) const;
+    bool validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
+                       const AbstractRoute &r) const;
+
+private:
+    /**
+     * @brief returns a non-restricted way that is not an highway (unless the distance from coord is less then 3 meters)
+     * @param coord
+     * @param restrictions
+     * @return tuple contains coordinates on the way, closest way's id itself and the initial segment number
+     */
+    std::tuple<Coordinates, EntityId, size_t>
+    getClosestValidWay(const Coordinates &coord, const Restrictions &restrictions) const;
 
 };
 

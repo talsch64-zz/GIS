@@ -1,6 +1,4 @@
 #include "NavigationValidator.h"
-#include "../Navigation/Route.h"
-#include "../UserCommon/entities/Way.h"
 #include "../Common/CoordinatesMath.h"
 #include "../UserCommon/Utils.h"
 
@@ -13,7 +11,6 @@ bool NavigationValidator::validateRoute(const Coordinates &start, const Coordina
 }
 
 
-
 //TODO split the function and add normal try catch blocks
 bool
 NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
@@ -22,8 +19,8 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
         if (&r == nullptr) {
             return false;
         }
-        auto startTuple = gis.getWayClosestPoint(start, restrictions);
-        auto endTuple = gis.getWayClosestPoint(end, restrictions);
+        auto startTuple = getClosestValidWay(start, restrictions);
+        auto endTuple = getClosestValidWay(end, restrictions);
 
         Coordinates origin = std::get<AbstractGIS::ClosestPoint::Coord>(startTuple);
         Coordinates destination = std::get<AbstractGIS::ClosestPoint::Coord>(endTuple);
@@ -103,14 +100,16 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
         size_t startWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(startTuple);
         auto distanceFromStartWayEdges = startWay.getSegmentPartsOnWay(startWaySegment, origin);
         Meters redundantLengthFromStart =
-                initialDirection == Direction::A_to_B ? distanceFromStartWayEdges.first : distanceFromStartWayEdges.second;
+                initialDirection == Direction::A_to_B ? distanceFromStartWayEdges.first
+                                                      : distanceFromStartWayEdges.second;
         length -= redundantLengthFromStart;
         time -= Utils::calculateTime(redundantLengthFromStart, startWay.getSpeedLimit());
 
         size_t finalWaySegment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(endTuple);
         auto distanceFromFinalWayEdges = finalWay.getSegmentPartsOnWay(finalWaySegment, destination);
         Meters redundantLengthFromEnd =
-                finalDirection == Direction::A_to_B ? distanceFromFinalWayEdges.second : distanceFromFinalWayEdges.first;
+                finalDirection == Direction::A_to_B ? distanceFromFinalWayEdges.second
+                                                    : distanceFromFinalWayEdges.first;
         length -= redundantLengthFromEnd;
         time -= Utils::calculateTime(redundantLengthFromEnd, finalWay.getSpeedLimit());
 
@@ -122,4 +121,24 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
     catch (std::runtime_error &error) {
         return false;
     }
+}
+
+std::tuple<Coordinates, EntityId, std::size_t>
+NavigationValidator::getClosestValidWay(const Coordinates &coord, const Restrictions &restrictions) const {
+    auto wayClosestPointTuple = gis.getWayClosestPoint(coord, restrictions);
+    auto wayId = std::get<AbstractGIS::ClosestPoint::WayId>(wayClosestPointTuple);
+    auto &way = gis.getWay(wayId);
+    Coordinates wayCoord = std::get<AbstractGIS::ClosestPoint::Coord>(wayClosestPointTuple);
+    std::size_t segment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(wayClosestPointTuple);
+    if (!way.isHighway() || CoordinatesMath::calculateDistance(coord, wayCoord) <= Utils::max_distance_from_highway) {
+        // valid way
+        return std::tuple<Coordinates, EntityId, std::size_t>(wayCoord, wayId, segment);
+    }
+    Restrictions newRestrictions = restrictions.contains("toll") ? Restrictions("toll, highway") : Restrictions(
+            "highway");
+    wayClosestPointTuple = gis.getWayClosestPoint(coord, newRestrictions);
+    wayId = std::get<AbstractGIS::ClosestPoint::WayId>(wayClosestPointTuple);
+    wayCoord = std::get<AbstractGIS::ClosestPoint::Coord>(wayClosestPointTuple);
+    segment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(wayClosestPointTuple);
+    return std::tuple<Coordinates, EntityId, std::size_t>(wayCoord, wayId, segment);
 }
