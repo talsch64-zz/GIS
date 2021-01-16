@@ -20,11 +20,11 @@ void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, co
 void compareRoutes(const AbstractRoute &actualRoute, const AbstractRoute &expectedRoute, bool distance) {
 //        assertRoute(expectedRoute.getWays(), actualRoute);
     if (distance) {
-        EXPECT_DOUBLE_EQ((double) actualRoute.totalLength(), (double) expectedRoute.totalLength());
+        EXPECT_EQ(actualRoute.totalLength(), expectedRoute.totalLength());
         EXPECT_LE(actualRoute.estimatedDuration(), expectedRoute.estimatedDuration());
     } else {
         EXPECT_LE(actualRoute.totalLength(), expectedRoute.totalLength());
-        EXPECT_DOUBLE_EQ((double) actualRoute.estimatedDuration(), (double) expectedRoute.estimatedDuration());
+        EXPECT_EQ(actualRoute.estimatedDuration(), expectedRoute.estimatedDuration());
     }
     EXPECT_EQ(actualRoute.getWayStartPoint(), expectedRoute.getWayStartPoint());
     EXPECT_EQ(actualRoute.getWayEndPoint(), expectedRoute.getWayEndPoint());
