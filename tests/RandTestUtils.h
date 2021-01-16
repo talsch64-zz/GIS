@@ -11,6 +11,7 @@
 #include "../Navigation/Routes.h"
 #include "RouteMock.h"
 #include "../Common/NavigationGIS.h"
+#include "NavigationMock.h"
 
 class RandTestUtils {
 public:
@@ -48,7 +49,8 @@ public:
      * @return
      */
     static std::unique_ptr<Routes>
-    getBestRoutes(GISMock &gis, IdGenerator &idGenerator, const Coordinates &start, const Coordinates &end);
+    getBestRoutes(NavigationMock &navigation, GISMock &gis, IdGenerator &idGenerator, const Coordinates &start,
+                  const Coordinates &end);
 
     static void getBestRoutesDFS(NavigationGIS &navGis, RouteMock *bestTimeRoute, RouteMock *bestDistanceRoute,
                                  std::vector<std::pair<EntityId, Direction>> ways, const EntityId &start,

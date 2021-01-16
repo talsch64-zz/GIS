@@ -5,6 +5,7 @@
 #include "../Navigation/Navigation_315524694.h"
 #include "RandTestUtils.h"
 #include "../Simulator/NavigationValidator.h"
+#include "NavigationMock.h"
 
 void assertRoute(const std::vector<std::pair<EntityId, Direction>> &expected, const AbstractRoute &actual) {
     auto routeIterator = actual.getWays().begin();
@@ -156,27 +157,26 @@ TEST(AStar, HighwayWithinThreeMeters) {
 /**
  * Beware! Infinite Improbability Drive may cause unexpected results!
  */
- //TODO fix the engine
-//TEST(AStar, HeartOfGold) {
-//    std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
-//    int v = 8, e = 14, reps = 100;
-//    for (int i = 0; i < reps; i++) {
-//        IdGenerator idGenerator;
-//        Bound bound = RandTestUtils::randBound();
-//        auto junctions = RandTestUtils::generateJunctions(*gis, idGenerator, v, bound);
-//        RandTestUtils::generateWays(*gis, idGenerator, e, bound, junctions);
-//        std::cout << "rep" << i << std::endl;
-////        gis->saveMapFile("HeartOfGoldTest_rep" + std::to_string(i) + ".json");
-//
-//        Coordinates startCoord = RandTestUtils::randCoord(bound);
-//        Coordinates endCoord = RandTestUtils::randCoord(bound);
-//        NavigationGIS navigationGis(*gis);
-//        Navigation_315524694 navigation(navigationGis);
-//
-//        auto routes = navigation.getRoutes(startCoord, endCoord);
-//        auto routesExpected = RandTestUtils::getBestRoutes(*gis, idGenerator, startCoord, endCoord);
-//
-//        compareRoutes(*routes, *routesExpected);
-//        gis->clear();
-//    }
-//}
+TEST(AStar, HeartOfGold) {
+    std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
+    int v = 8, e = 14, reps = 100;
+    for (int i = 0; i < reps; i++) {
+        IdGenerator idGenerator;
+        Bound bound = RandTestUtils::randBound();
+        auto junctions = RandTestUtils::generateJunctions(*gis, idGenerator, v, bound);
+        RandTestUtils::generateWays(*gis, idGenerator, e, bound, junctions);
+        std::cout << "rep" << i << std::endl;
+//        gis->saveMapFile("HeartOfGoldTest_rep" + std::to_string(i) + ".json");
+
+        Coordinates startCoord = RandTestUtils::randCoord(bound);
+        Coordinates endCoord = RandTestUtils::randCoord(bound);
+        NavigationGIS navigationGis(*gis);
+        std::unique_ptr<NavigationMock> navigation = std::make_unique<NavigationMock>(navigationGis);
+
+        auto routes = navigation->getRoutes(startCoord, endCoord);
+        auto routesExpected = RandTestUtils::getBestRoutes(*navigation, *gis, idGenerator, startCoord, endCoord);
+
+        compareRoutes(*routes, *routesExpected);
+        gis->clear();
+    }
+}

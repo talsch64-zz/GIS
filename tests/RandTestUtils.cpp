@@ -135,68 +135,90 @@ RandTestUtils::getBestRoutesDFS(NavigationGIS &navGis, RouteMock *bestTimeRoute,
     }
 }
 
-std::unique_ptr<Routes> RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &idGenerator,
+std::unique_ptr<Routes> RandTestUtils::getBestRoutes(NavigationMock& navigation, GISMock &gis, IdGenerator &idGenerator,
                                                      const Coordinates &start, const Coordinates &end) {
-    auto startWayTuple = gis.getWayClosestPoint(start);
-    auto endWayTuple = gis.getWayClosestPoint(end);
+    auto startWayTuple = navigation.getClosestValidWay(start, Restrictions(""));
+    auto endWayTuple = navigation.getClosestValidWay(end, Restrictions(""));
     std::vector<std::pair<EntityId, Direction>> ways;
-    const AbstractWay &startWay = gis.getWay(std::get<1>(startWayTuple));
-    const AbstractWay &endWay = gis.getWay(std::get<1>(endWayTuple));
-    if (startWay.getId() == endWay.getId()) {
-        return std::make_unique<Routes>(nullptr, nullptr, false, "");
-    }
+    const AbstractWay &startWay = std::get<1>(startWayTuple);
+    const AbstractWay &endWay = std::get<1>(endWayTuple);
 
     EntityId fakeStartJunctionId = idGenerator.generateId();
+    EntityId fakeEndJunctionId = idGenerator.generateId();
+    std::unique_ptr<Point> endPoint = std::make_unique<Point>(std::get<0>(endWayTuple));
+    std::unique_ptr<Junction> fakeEndJunction = std::make_unique<Junction>(fakeEndJunctionId, "junction", "junction",
+                                                                           std::vector<std::string>(),
+                                                                           std::move(endPoint));
+    auto &fakeEndJunctionRef = *fakeEndJunction;
+    gis.addEntity(std::move(fakeEndJunction));
+
     std::unique_ptr<Point> startPoint = std::make_unique<Point>(std::get<0>(startWayTuple));
     std::unique_ptr<Junction> fakeStartJunction = std::make_unique<Junction>(fakeStartJunctionId, "junction",
                                                                              "junction",
                                                                              std::vector<std::string>(),
                                                                              std::move(startPoint));
 
+    bool oneWayDirectRoute = false, oneWayDirectRouteAgainst = false;
+    auto startWaySegmentParts = startWay.getSegmentPartsOnWay(std::get<2>(startWayTuple), std::get<0>(startWayTuple));
     EntityId fakeStartWayId = idGenerator.generateId();
     std::vector<Coordinates> curves;
     auto startWayIdPair = startWay.getJunctions();
-    auto fakeStartTo = (Junction *) gis.getEntityById(startWayIdPair.second);
-    Meters fakeStartWayLength = startWay.getLength() - CoordinatesMath::calculateDistance(std::get<0>(startWayTuple),
-                                                                                          startWay.getFromJunctionCoordinates());
+    Junction *fakeStartTo;
+    Meters fakeStartWayLength(0);
+    std::optional<std::pair<Meters, Meters>> startWaySegmentPartsEnd;
+    if (startWay.getId() == endWay.getId()) {
+        startWaySegmentPartsEnd = startWay.getSegmentPartsOnWay(std::get<2>(endWayTuple),
+                                                                std::get<0>(endWayTuple));
+        if (startWay.isBidirectional() || startWaySegmentParts.first < startWaySegmentPartsEnd.value().first) {
+            oneWayDirectRoute = true;
+            oneWayDirectRouteAgainst = startWaySegmentParts.first >= startWaySegmentPartsEnd.value().first;
+        }
+    }
+
+    if (oneWayDirectRoute && !oneWayDirectRouteAgainst) {
+        fakeStartTo = (Junction *) gis.getEntityById(fakeEndJunctionId);
+        fakeStartWayLength = startWaySegmentParts.second - startWaySegmentPartsEnd.value().second;
+    } else {
+        fakeStartTo = (Junction *) gis.getEntityById(startWayIdPair.second);
+        fakeStartWayLength = startWaySegmentParts.second;
+    }
     generateWay(gis, fakeStartWayId, curves, *fakeStartJunction, *fakeStartTo,
                 TrafficDirection::unidirectional, startWay.getSpeedLimit(), fakeStartWayLength);
 
     EntityId fakeStartWayId2 = idGenerator.generateId();
-    auto fakeStartTo2 = (Junction *) gis.getEntityById(startWayIdPair.first);
-    Meters fakeStartWayLength2 = startWay.getLength() - CoordinatesMath::calculateDistance(std::get<0>(startWayTuple),
-                                                                                           startWay.getToJunctionCoordinates());
+    Junction *fakeStartTo2;
+    Meters fakeStartWayLength2(0);
+
+    if (oneWayDirectRoute && oneWayDirectRouteAgainst) {
+        fakeStartTo2 = (Junction *) gis.getEntityById(fakeEndJunctionId);
+        fakeStartWayLength2 = startWaySegmentParts.first - startWaySegmentPartsEnd.value().first;
+    } else {
+        fakeStartTo2 = (Junction *) gis.getEntityById(startWayIdPair.first);
+        fakeStartWayLength2 = startWaySegmentParts.first;
+    }
     if (startWay.isBidirectional()) {
         generateWay(gis, fakeStartWayId2, curves, *fakeStartJunction,
                     *fakeStartTo2, TrafficDirection::unidirectional, startWay.getSpeedLimit(), fakeStartWayLength2);
     }
     gis.addEntity(std::move(fakeStartJunction));
 
-    EntityId fakeEndJunctionId = idGenerator.generateId();
-    std::unique_ptr<Point> endPoint = std::make_unique<Point>(std::get<0>(endWayTuple));
-    std::unique_ptr<Junction> fakeEndJunction = std::make_unique<Junction>(fakeEndJunctionId, "junction", "junction",
-                                                                           std::vector<std::string>(),
-                                                                           std::move(endPoint));
-
+    auto endWaySegmentParts = endWay.getSegmentPartsOnWay(std::get<2>(endWayTuple), std::get<0>(endWayTuple));
     auto endWayIdPair = endWay.getJunctions();
     EntityId fakeEndWayId = idGenerator.generateId();
     auto fakeEndFrom = (Junction *) gis.getEntityById(endWayIdPair.first);
-    Meters fakeEndWayLength = endWay.getLength() - CoordinatesMath::calculateDistance(std::get<0>(endWayTuple),
-                                                                                      endWay.getToJunctionCoordinates());
+    Meters fakeEndWayLength = endWaySegmentParts.first;
     generateWay(gis, fakeEndWayId, curves, *fakeEndFrom,
-                *fakeEndJunction, TrafficDirection::unidirectional,
+                fakeEndJunctionRef, TrafficDirection::unidirectional,
                 endWay.getSpeedLimit(), fakeEndWayLength);
 
     EntityId fakeEndWayId2 = idGenerator.generateId();
     auto fakeEndFrom2 = (Junction *) gis.getEntityById(endWayIdPair.second);
-    Meters fakeEndWayLength2 = endWay.getLength() - CoordinatesMath::calculateDistance(std::get<0>(endWayTuple),
-                                                                                       endWay.getFromJunctionCoordinates());
+    Meters fakeEndWayLength2 = endWaySegmentParts.second;
     if (endWay.isBidirectional()) {
         generateWay(gis, fakeEndWayId2, curves, *fakeEndFrom2,
-                    *fakeEndJunction, TrafficDirection::unidirectional,
+                    fakeEndJunctionRef, TrafficDirection::unidirectional,
                     endWay.getSpeedLimit(), fakeEndWayLength2);
     }
-    gis.addEntity(std::move(fakeEndJunction));
 
     NavigationGIS navGis(gis);
     std::unique_ptr<RouteMock> bestTimeRoute = std::make_unique<RouteMock>(std::get<0>(startWayTuple),
@@ -228,8 +250,10 @@ std::unique_ptr<Routes> RandTestUtils::getBestRoutes(GISMock &gis, IdGenerator &
         Direction distanceEndWayDir = distanceWays.back().first == fakeEndWayId ? Direction::A_to_B : Direction::B_to_A;
         distanceWays.front().first = startWay.getId();
         distanceWays.front().second = distanceStartWayDir;
-        distanceWays.back().first = endWay.getId();
-        distanceWays.back().second = distanceEndWayDir;
+        if (!oneWayDirectRoute) {
+            distanceWays.back().first = endWay.getId();
+            distanceWays.back().second = distanceEndWayDir;
+        }
         bestDistanceRoute->setWays(distanceWays);
     }
 

@@ -44,7 +44,8 @@ public:
     std::unique_ptr<AbstractRoutes>
     getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const;
 
-private:
+    //must be protected instead of private because we have a mock class that exposes a method as public
+protected:
 
     /**
      * @brief returns a non-restricted way that is not an highway (unless the distance from coord is less then 3 meters)
