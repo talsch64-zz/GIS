@@ -15,6 +15,7 @@
 #include "Registrar.h"
 #include "NavigationTasksManager.h"
 #include "TaskResult.h"
+#include "ResultsAnalyzer.h"
 #include <iostream>
 
 
@@ -34,6 +35,7 @@ class Simulation {
     std::unique_ptr<std::thread[]> threads = nullptr;
     std::unique_ptr<NavigationTasksManager> taskManager = nullptr;
     std::unique_ptr<Registrar> registrar;
+    std::unique_ptr<ResultsAnalyzer> resultsAnalyzer = nullptr;
 
     Simulation();
 

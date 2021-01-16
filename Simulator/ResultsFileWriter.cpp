@@ -13,15 +13,23 @@ void ResultsFileWriter::writeStrangeGisResult(const std::string &navigationName,
     std::ofstream log;
     log.open(logFilePath, std::ios_base::app);
     std::string routeType = "shortest_" + (shortestDistance ? std::string("distance") : std::string("time"));
-    const AbstractRoute &route = shortestDistance ? result.getRoutes()->shortestDistance()
-                                                  : result.getRoutes()->shortestTime();
-    std::string distance = std::to_string((double) route.totalLength());
-    std::string time = std::to_string((double) route.estimatedDuration());
-    std::string valid = result.isValid() ? "1" : "0";
+    bool isValid = result.getRoutes()->isValid() && ((shortestDistance && result.isShortestDistanceValid()) ||
+                                                     (!shortestDistance && result.isShortestTimeValid()));
+
+    std::string distance = "0";
+    std::string time = "0";
+    if (result.getRoutes()->isValid()) {
+        const AbstractRoute &route = shortestDistance ? result.getRoutes()->shortestDistance()
+                                                      : result.getRoutes()->shortestTime();
+        distance = std::to_string((double) route.totalLength());
+        time = std::to_string((double) route.estimatedDuration());
+    }
+
+    std::string validStr = isValid ? "1" : "0";
     std::string sep = ", ";
     std::string msg =
             navigationName + sep + routeType + sep + gisName + sep + request.toString() + sep + distance + sep + time +
-            sep + valid + "\n";
+            sep + validStr + "\n";
     log << msg;
     log.close();
 }

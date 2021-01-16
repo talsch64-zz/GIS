@@ -38,6 +38,8 @@ void Simulation::startSimulation() {
     requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
     taskManager = std::make_unique<NavigationTasksManager>(gisContainers.size(), navigationContainers.size(),
                                                            requests.size());
+    resultsAnalyzer = std::make_unique<ResultsAnalyzer>(gisContainers.size(), navigationContainers.size(),
+                                                        requests.size());
     results = std::make_unique<std::unique_ptr<TaskResult>[]>(
             gisContainers.size() * navigationContainers.size() * requests.size());
     threads = std::make_unique<std::thread[]>(registrar->getNumThreads());
@@ -50,6 +52,9 @@ void Simulation::startSimulation() {
     for (int i = 0; i < registrar->getNumThreads(); i++) {
         threads[i].join();
     }
+
+    resultsAnalyzer->analyze();
+    resultsAnalyzer->writeResultsToFile();
 }
 
 void Simulation::navigationThread() {
