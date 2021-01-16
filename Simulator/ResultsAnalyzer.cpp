@@ -240,11 +240,13 @@ void ResultsAnalyzer::updateBestRouteScores(int requestIndex, std::pair<Meters, 
     if (minGisRequests.has_value()) {
         for (int j = 0; j < navigationsAmount; j++) {
             auto &result = getResult(requestIndex, j);
-            if (result->isValid() &&
-                (compareDistanceRoutes(result->getConsensusShortestDistance(), bestDistanceRoute) == 0 ||
-                 compareTimeRoutes(result->getConsensusShortestTime(), bestTimeRoute) == 0) &&
-                result->getGisRequests() == minGisRequests.value()) {
-                result->updateScore(1);
+            if (result->isValid() && result->getGisRequests() == minGisRequests.value()) {
+                if (compareDistanceRoutes(result->getConsensusShortestDistance(), bestDistanceRoute) == 0) {
+                    result->updateScore(1);
+                }
+                if (compareTimeRoutes(result->getConsensusShortestTime(), bestTimeRoute) == 0) {
+                    result->updateScore(1);
+                }
             }
         }
     }
