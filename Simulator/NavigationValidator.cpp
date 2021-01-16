@@ -16,9 +16,6 @@ bool
 NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions,
                                    const AbstractRoute &r) const {
     try {
-        if (&r == nullptr) {
-            return false;
-        }
         auto startTuple = getClosestValidWay(start, restrictions);
         auto endTuple = getClosestValidWay(end, restrictions);
 
