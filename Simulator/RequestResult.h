@@ -9,32 +9,39 @@
  * which corresponds to the score of a Navigation algorithm and request combination (across all GIS objects)
  */
 class RequestResult {
-    const bool consensus;
-    const bool invalidRoutes;
+    const bool valid;
     int score = 0;
-    Meters consensusShortestDistance = Meters(0);
-    Minutes consensusShortestTime = Minutes(0);
-
-private:
-    /**
-     * A request without consensus,
-     * or a request that resulted in an invalid route for at least one of the GIS
-     */
-    RequestResult(bool consensus);
+    std::pair<Meters, Minutes> consensusShortestDistance;
+    std::pair<Meters, Minutes> consensusShortestTime;
+    int gisRequests;
 
 public:
+    /**
+     * An invalid request
+     */
+    RequestResult();
+
     /**
      * A request with consensus and valid routes for all the GIS
      * @param consensusShortestDistance
      * @param consensusShortestTime
      */
-    RequestResult(const Meters &consensusShortestDistance, const Minutes &consensusShortestTime);
-
-    static RequestResult createInvalidResult();
-
-    static RequestResult createResultWithoutConsensus();
+    RequestResult(std::pair<Meters, Minutes> consensusShortestDistance,
+                  std::pair<Meters, Minutes> consensusShortestTime);
 
     void updateScore(int diff);
+
+    bool isValid() const;
+
+    int getScore() const;
+
+    const std::pair<Meters, Minutes> &getConsensusShortestDistance() const;
+
+    const std::pair<Meters, Minutes> &getConsensusShortestTime() const;
+
+    int getGisRequests() const;
+
+    void setGisRequests(int gisRequests);
 };
 
 

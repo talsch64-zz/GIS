@@ -25,7 +25,7 @@ std::unique_ptr<NavigationTask> NavigationTasksManager::getNextTask() {
     } else {
         nextRequestIndex++;
     }
-    return std::move(task);
+    return task;
 }
 
 bool NavigationTasksManager::hasTask() const {

@@ -1,7 +1,3 @@
-//
-// Created by student on 10/01/2021.
-//
-
 #include <iostream>
 #include "TaskResult.h"
 
@@ -18,7 +14,7 @@ const std::unique_ptr<AbstractRoutes> &TaskResult::getRoutes() const {
 }
 
 
-size_t TaskResult::getGisUsageCount() const {
+std::size_t TaskResult::getGisUsageCount() const {
     return gisUsageCount;
 }
 
@@ -36,4 +32,8 @@ bool TaskResult::isShortestTimeValid() const {
 
 void TaskResult::setShortestTimeValid(bool shortestTimeValid) {
     TaskResult::shortestTimeValid = shortestTimeValid;
+}
+
+bool TaskResult::isValid() const {
+    return routes->isValid() && isShortestDistanceValid() && isShortestTimeValid();
 }

@@ -15,6 +15,7 @@
 #include "Registrar.h"
 #include "NavigationTasksManager.h"
 #include "TaskResult.h"
+#include "ResultsAnalyzer.h"
 #include <iostream>
 
 
@@ -33,6 +34,8 @@ class Simulation {
     std::mutex taskMutex;
     std::unique_ptr<std::thread[]> threads = nullptr;
     std::unique_ptr<NavigationTasksManager> taskManager = nullptr;
+    std::unique_ptr<Registrar> registrar;
+    std::unique_ptr<ResultsAnalyzer> resultsAnalyzer = nullptr;
 
     Simulation();
 
@@ -54,7 +57,7 @@ public:
 
     void operator=(Simulation const &) = delete;
 
-    void startSimulation(std::unique_ptr<Registrar> &registrar);
+    void startSimulation();
 
     void addGisFactory(std::function<std::unique_ptr<AbstractGIS>()> gisFactory);
 
@@ -81,6 +84,7 @@ public:
 
     void setResult(int gisIndex, int navigationIndex, int requestIndex, std::unique_ptr<TaskResult> result);
 
+    const std::unique_ptr<Registrar> &getRegistrar() const;
 
     //TODO delete!!!!
     void printResults() {

@@ -20,7 +20,7 @@ class Registrar {
     std::filesystem::path gisDirectory;
     std::filesystem::path mapFile;
     std::filesystem::path navigationRequests;
-    std::filesystem::path output; //TODO handle the case where no output is given
+    std::filesystem::path output = std::filesystem::current_path();
     int numThreads = 1;
 
 public:

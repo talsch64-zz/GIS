@@ -1,5 +1,5 @@
-# GIS_315524694
-GIS_315524694 (Geographic Information System) Project for Tel Aviv University's Advanced topics in programming course.    
+# GIS
+GIS (Geographic Information System) Project for Tel Aviv University's Advanced topics in programming course.    
 
 
 ## Makefile
@@ -10,13 +10,13 @@ We have a dynamic makefile that searches the different folders for depenencies a
  * Optional fields are wrapped in a `std::optional` container both for readabilty and usabilty, if an optional does not exist it does not get serialized/deserialized.  
  * Required fields are never wrapped in an optional, and are checked using `ObjectChecker::checkRequiredField`, which throws and appropriate exception if it does not exist (more on exceptions and loggin later).
 
-## GIS_315524694
-members of GIS_315524694 are:
+## GIS
+members of GIS are:
   * std::unordered_map<EntityId, std::unique_ptr<Entity>> entities- unordered_map which maps entities ids to unique_ptrs of the entities themselves.
   * std::shared_ptr<Grid> grid - Grid which we store all the entities on.
   * EntityJsonSerializer entityJsonSerializer - serializes entities into the correct JSON format.
   * std::shared_ptr<EntityJsonParser> entityJsonParser- parses the JSON Entities.
-  * JsonFileWriter jsonFileWriter - writes the GIS_315524694 content into a JSON file.
+  * JsonFileWriter jsonFileWriter - writes the GIS content into a JSON file.
   * std::unique_ptr<TopologicalSearch> topologicalSearch - executes searches on the grid.
   * std::unique_ptr<Logger> logger - Error handling and and logging errors.
 
@@ -46,7 +46,7 @@ members of GIS_315524694 are:
 
 
 ## Grid	
- * Contains grid-cells that divide the GIS_315524694 map into areas by coordinates (grid-cell precision is 0.01)
+ * Contains grid-cells that divide the GIS map into areas by coordinates (grid-cell precision is 0.01)
  * Poles Handling: There is only one cell for each poll with Longitude of 0 - northern cell is (0, 90) and southern is (0, -90)
  
 ## Grid insertions:
@@ -70,7 +70,7 @@ Handles geographical searches including searching for grid cells in a given circ
 ## Logger
 Handles errors which arise during the JSON parsing and logs them in a logger file.
 
-## Navigation_315524694
+## Navigation
 Handles navigation queries - manages the search for the shortest route and the fastest route.
 Supports also queries with custom restrictions such as avoid highway or toll roads.
 
