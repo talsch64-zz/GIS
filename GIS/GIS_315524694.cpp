@@ -137,7 +137,7 @@ GIS_315524694::getWayClosestPoint(const Coordinates &coord, const Restrictions &
                 auto &way = (const std::unique_ptr<Way> &) entity;
                 Coordinates candidate = entity->getGeometry()->getClosestPoint(coord);
                 Meters distance = CoordinatesMath::calculateDistance(candidate, coord);
-                if (!isWayRestricted(*way, res, distance)) {
+                if (!Utils::isWayRestricted(*way, res)) {
                     wayFound = true;
                     if (distance < shortestDistance) {
                         closest = candidate;
@@ -172,15 +172,6 @@ GIS_315524694::getWayClosestPoint(const Coordinates &coord, const Restrictions &
         }
     }
     return result;
-}
-
-bool GIS_315524694::isWayRestricted(const Way &way, const Restrictions &res, const Meters &distanceFromCoord) const {
-    bool restricted = Utils::isWayRestricted(way, res);
-    if (!restricted) {
-        //TODO: this logic should be in navigation
-        restricted = way.isHighway() && distanceFromCoord > Utils::max_distance_from_highway;
-    }
-    return restricted;
 }
 
 std::vector<EntityId> GIS_315524694::loadEntities(rapidjson::Document &document) {
@@ -284,7 +275,7 @@ GIS_315524694::getWayClosestPointFallback(const Coordinates &coord, const Restri
             Way &way = (Way &) entity;
             Coordinates candidate = way.getGeometry()->getClosestPoint(coord);
             Meters distance = CoordinatesMath::calculateDistance(coord, candidate);
-            if (!isWayRestricted(way, res, distance) && (distance < shortestDistance)) {
+            if (!Utils::isWayRestricted(way, res) && (distance < shortestDistance)) {
                 closestPoint = candidate;
                 closestEntityId = entityPair.first;
                 shortestDistance = distance;

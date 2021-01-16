@@ -19,6 +19,3 @@ add_executable(simulator Common/AbstractGIS.h Common/AbstractNavigation.h Common
 set_target_properties(simulator PROPERTIES LINK_FLAGS "-rdynamic -pthread -ldl")
 
 add_subdirectory(tests)
-
-configure_file(GIS/GIS_315524694.so GIS/GIS_315524694.so COPYONLY)
-configure_file(Navigation/Navigation_315524694.so Navigation/Navigation_315524694.so COPYONLY)

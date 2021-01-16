@@ -93,18 +93,21 @@ public:
             for (int j = 0; j < navigationContainers.size(); j++) {
                 for (int k = 0; k < gisContainers.size(); k++) {
                     auto &result = getResult(k, j, i);
+                    std::cout << "GIS: " << gisContainers[k]->getName() << ", Navigation: "
+                              << navigationContainers[j]->getName() << ", request: " << i << std::endl;
                     std::cout << "=== shortestDistance route ===" << std::endl << "Length: "
                               << static_cast<double>(result->getRoutes()->shortestDistance().totalLength())
                               << ", Time: "
                               << static_cast<double> (result->getRoutes()->shortestDistance().estimatedDuration())
                               << ", Usage:" << result->getGisUsageCount()
-                              << std::endl << std::endl;
+                              << ", Valid: " << result->isShortestDistanceValid() << std::endl << std::endl;
 
                     std::cout << "=== shortestTime route ===" << std::endl << "Length: "
                               << static_cast<double>(result->getRoutes()->shortestTime().totalLength())
                               << ", Time: "
                               << static_cast<double>(result->getRoutes()->shortestTime().estimatedDuration())
-                              << ", Usage:" << result->getGisUsageCount()
+                              << ", Usage:" << result->getGisUsageCount() << ", Valid: "
+                              << result->isShortestDistanceValid()
                               << std::endl << std::endl;
                 }
             }

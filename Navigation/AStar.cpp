@@ -1,8 +1,5 @@
-#include <iostream>
 #include "AStar.h"
 #include "Route.h"
-#include "../UserCommon/entities/Way.h"
-#include "../Common/NavigationGIS.h"
 #include "../UserCommon/Utils.h"
 
 
@@ -143,10 +140,11 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
 
         std::vector<EntityId> wayEdgesIds = navigationGIS.getWaysByJunction(currNode->getJunctionId());
         for (auto wayId: wayEdgesIds) {  // visit all the neighbors and add them to the queue
-            if (Utils::isWayRestricted(navigationGIS.getWay(wayId), restrictions)) {
+            auto &way = navigationGIS.getWay(wayId);
+            if (Utils::isWayRestricted(way, restrictions)) {
                 continue;
             }
-            std::shared_ptr<Node> neighbor = createNeighbor(currNode, wayId, heuristicFunc, costFunc);
+            std::shared_ptr<Node> neighbor = createNeighbor(currNode, way, heuristicFunc, costFunc);
             EntityId neighborJunctionId = neighbor->getJunctionId();
             if (minNodes.find(neighborJunctionId) == minNodes.end() ||
                 neighbor->getPriority() <= minNodes.find(neighborJunctionId)->second) {
@@ -217,10 +215,9 @@ bool AStar::compareByTime(std::shared_ptr<Node> node1, std::shared_ptr<Node> nod
     return node1->getPriority() > node2->getPriority();
 }
 
-std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNode, EntityId wayId,
+std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNode, const AbstractWay &way,
                                                    double (*heuristicFunc)(const Coordinates &, const Coordinates &),
                                                    double (*costFunc)(const AbstractWay &)) {
-    const AbstractWay &way = navigationGIS.getWay(wayId);
     auto idPair = way.getJunctions();
     auto fromId = idPair.first, toId = idPair.second;
     Direction direction =
@@ -236,7 +233,7 @@ std::shared_ptr<AStar::Node> AStar::createNeighbor(std::shared_ptr<Node> currNod
     std::shared_ptr<Node> neighbor = std::make_shared<Node>(neighborCoordinates, neighborId, distanceSoFar,
                                                             timeSoFar, costSoFar, priority,
                                                             currNode->getWaysCount() + 1,
-                                                            std::make_pair(wayId, direction), currNode);
+                                                            std::make_pair(way.getId(), direction), currNode);
     return neighbor;
 }
 

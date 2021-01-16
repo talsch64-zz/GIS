@@ -43,4 +43,15 @@ public:
      */
     std::unique_ptr<AbstractRoutes>
     getRoutes(const Coordinates &start, const Coordinates &end, const Restrictions &restrictions) const;
+
+private:
+
+    /**
+     * @brief returns a non-restricted way that is not an highway (unless the distance from coord is less then 3 meters)
+     * @param coord
+     * @param restrictions
+     * @return tuple contains coordinates on the way, reference to the way itself and the initial segment number
+     */
+    std::tuple<Coordinates, const AbstractWay &, std::size_t>
+    getClosestValidWay(const Coordinates &coord, const Restrictions &restrictions) const;
 };

@@ -101,7 +101,7 @@
             "entity_id": "J3"
         },
         "direction": "bidirectional",
-        "speed_limit": 90,
+        "speed_limit": 100,
         "toll_road": false
     },
 
@@ -117,8 +117,9 @@
         "to": {
             "entity_id": "J4"
         },
-        "direction": "bidirectional",
-        "speed_limit": 90,
+        "curves": [[-29.02, 51]],
+	"direction": "bidirectional",
+        "speed_limit": 41,
         "toll_road": false
     },
 
@@ -135,7 +136,7 @@
             "entity_id": "J4"
         },
         "direction": "bidirectional",
-        "speed_limit": 90,
+        "speed_limit": 120,
         "toll_road": false
     },
 
