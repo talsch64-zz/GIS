@@ -3,19 +3,22 @@
 #include "Simulation.h"
 #include "NavigationValidator.h"
 
-ResultsAnalyzer::ResultsAnalyzer(int gisAmount, int navigationsAmount, int requestsAmount) : gisAmount(gisAmount),
-                                                                                             navigationsAmount(
-                                                                                                     navigationsAmount),
-                                                                                             requestsAmount(
-                                                                                                     requestsAmount),
-                                                                                             resultsTable(
-                                                                                                     std::make_unique<std::unique_ptr<RequestResult>[]>(
-                                                                                                             navigationsAmount *
-                                                                                                             requestsAmount)),
-                                                                                             resultsFileWriter(
-                                                                                                     std::make_unique<ResultsFileWriter>(
-                                                                                                             strangeGisResultsFilePath,
-                                                                                                             resultsFilePath)) {}
+ResultsAnalyzer::ResultsAnalyzer(int gisAmount, int navigationsAmount, int requestsAmount,
+                                 const std::string &outputDirectory) : gisAmount(gisAmount),
+                                                                       navigationsAmount(
+                                                                               navigationsAmount),
+                                                                       requestsAmount(
+                                                                               requestsAmount),
+                                                                       resultsTable(
+                                                                               std::make_unique<std::unique_ptr<RequestResult>[]>(
+                                                                                       navigationsAmount *
+                                                                                       requestsAmount)),
+                                                                       resultsFileWriter(
+                                                                               std::make_unique<ResultsFileWriter>(
+                                                                                       outputDirectory + "/" +
+                                                                                       strangeGisResultsFilePath,
+                                                                                       outputDirectory + "/" +
+                                                                                       resultsFilePath)) {}
 
 void ResultsAnalyzer::analyze() {
     Simulation &sim = Simulation::getInstance();

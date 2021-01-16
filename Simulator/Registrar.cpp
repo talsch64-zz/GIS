@@ -79,7 +79,7 @@ void Registrar::loadGISLibraries() {
         std::string nextName = gis_so.path().stem();
         simulation.setNextName(nextName);
         if (gis_so.is_directory() || gis_so.path().extension() != SO_EXTENSION) {
-            std::cout << "ERROR: invalid GIS shared library" << std::endl;
+            std::cout << "ERROR: found none SO file in GIS shared library directory" << std::endl;
             continue;
         }
         void *gis_handle = dlopen(gis_so.path().c_str(), RTLD_LAZY);
@@ -102,7 +102,7 @@ void Registrar::loadNavigationLibraries() {
         std::string nextName = navigation_so.path().stem();
         simulation.setNextName(nextName);
         if (navigation_so.is_directory() || navigation_so.path().extension() != SO_EXTENSION) {
-            std::cout << "ERROR: invalid GIS shared library" << std::endl;
+            std::cout << "ERROR: found none SO file in Navigation shared library directory" << std::endl;
             continue;
         }
         void *navigation_handle = dlopen(navigation_so.path().c_str(), RTLD_LAZY);
@@ -161,9 +161,9 @@ bool Registrar::validateCommandLineArguments() {
         return FAILURE;
     }
 
-    if (!output.empty() && (!fs::exists(output) || output.is_relative() || fs::is_directory(output))) {
+    if (!output.empty() && (!fs::exists(output) || output.is_relative() || !fs::is_directory(output))) {
         // if output was given as an argument and is not valid
-        std::cerr << "ERROR: Invalid output file: " << output << std::endl;
+        std::cerr << "ERROR: Invalid output directory: " << output << std::endl;
         return FAILURE;
     }
     return SUCCESS;

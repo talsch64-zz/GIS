@@ -19,6 +19,14 @@ class ResultsAnalyzer {
     const std::string resultsFilePath = "simulation.results";
     std::unique_ptr<ResultsFileWriter> resultsFileWriter;
 
+public:
+    ResultsAnalyzer(int gisAmount, int navigationsAmount, int requestsAmount, const std::string &outputDirectory);
+
+    void analyze();
+
+    void writeResultsToFile();
+
+private:
     std::unique_ptr<RequestResult> &getResult(int requestIndex, int navigationIndex);
 
     void assignResult(int requestIndex, int navigationIndex, std::unique_ptr<RequestResult> result);
@@ -61,13 +69,6 @@ class ResultsAnalyzer {
      */
     void updateBestRouteScores(int requestIndex, std::pair<Meters, Minutes> bestDistanceRoute,
                                std::pair<Meters, Minutes> bestTimeRoute);
-
-public:
-    ResultsAnalyzer(int gisAmount, int navigationsAmount, int requestsAmount);
-
-    void analyze();
-
-    void writeResultsToFile();
 };
 
 
