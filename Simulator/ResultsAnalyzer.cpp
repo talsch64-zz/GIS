@@ -1,3 +1,4 @@
+#include <random>
 #include "ResultsAnalyzer.h"
 #include "Simulation.h"
 #include "NavigationValidator.h"
@@ -260,12 +261,21 @@ void ResultsAnalyzer::writeResultsToFile() {
         scores.emplace_back(std::make_unique<NavigationScores>(name));
     }
 
+    //TODO: remove random
+//    std::default_random_engine generator;
+//    std::uniform_int_distribution<int> distribution(1,100);
     for (int i : consensusRequests) {
         for (int j = 0; j < navigationsAmount; j++) {
             auto &result = getResult(i, j);
             scores[j]->addScore(result->getScore());
         }
     }
+
+    //sort by total score
+    std::sort(scores.begin(), scores.end(),
+              [](std::unique_ptr<NavigationScores> &navScoreA, std::unique_ptr<NavigationScores> &navScoreB) {
+                  return navScoreA->getTotalScore() > navScoreB->getTotalScore();
+              });
 
     resultsFileWriter->writeScoresTable(std::move(scores), std::move(consensusRequests));
 }
