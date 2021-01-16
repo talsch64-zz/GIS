@@ -3,6 +3,7 @@
 
 
 #include <atomic>
+#include <mutex>
 #include "../Common/AbstractGIS.h"
 
 class GISContainer {
@@ -12,6 +13,7 @@ class GISContainer {
     const std::string name;
     std::atomic<int> usageCount = 0; // how many threads are currently working with the map
     std::atomic<bool> closeMapEnabled = false; // when the final task on this gis is created this flag is turned on
+    static std::mutex freeGisMutex;
 
 public:
     GISContainer(const std::function<std::unique_ptr<AbstractGIS>()> &factory, const std::string &name,
