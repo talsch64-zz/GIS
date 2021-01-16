@@ -10,7 +10,6 @@ ResultsFileWriter::ResultsFileWriter(const std::string &logFilePath, const std::
 void ResultsFileWriter::writeStrangeGisResult(const std::string &navigationName, const std::string &gisName,
                                               const NavigationRequest &request, const TaskResult &result,
                                               bool shortestDistance) const {
-    return;
     std::ofstream log;
     log.open(logFilePath, std::ios_base::app);
     std::string routeType = "shortest_" + (shortestDistance ? std::string("distance") : std::string("time"));
@@ -37,7 +36,6 @@ void ResultsFileWriter::writeStrangeGisResult(const std::string &navigationName,
 
 void ResultsFileWriter::writeScoresTable(const std::vector<std::unique_ptr<NavigationScores>> &scores,
                                          const std::vector<int> &consensusRequests) {
-    return;
     Simulation &sim = Simulation::getInstance();
     std::ofstream resultsFile;
     resultsFile.open(resultsFilePath, std::ios_base::app);
