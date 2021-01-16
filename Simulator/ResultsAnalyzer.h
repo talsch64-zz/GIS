@@ -64,7 +64,8 @@ private:
     int compareTimeRoutes(std::pair<Meters, Minutes> routeA, std::pair<Meters, Minutes> routeB);
 
     /**
-     * Update the score of navigation algorithms which found minimal distance/time route
+     * Update the score of navigation algorithms which found minimal distance/time route.
+     * this function is only called if all navigation algorithms reached a consensus for the request.
      * @param requestIndex
      */
     void updateBestRouteScores(int requestIndex, std::pair<Meters, Minutes> bestDistanceRoute,

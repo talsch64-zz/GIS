@@ -21,6 +21,7 @@ ResultsAnalyzer::ResultsAnalyzer(int gisAmount, int navigationsAmount, int reque
                                                                                        resultsFilePath)) {}
 
 void ResultsAnalyzer::analyze() {
+    resultsFileWriter->initialize();
     Simulation &sim = Simulation::getInstance();
 
     for (int i = 0; i < requestsAmount; i++) {
@@ -152,44 +153,46 @@ ResultsAnalyzer::findValidConsensusResult(std::vector<std::pair<std::pair<Meters
 std::optional<int>
 ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIndex, RequestResult *requestResult) {
     Simulation &sim = Simulation::getInstance();
-    resultsFileWriter->initialize();
     NavigationRequest navigationRequest = sim.getNavigationRequest(navigationIndex);
 
     std::string navigationName = sim.getNavigationContainer(navigationIndex)->getName();
     std::optional<int> minGisRequests;
     for (int k = 0; k < gisAmount; k++) {
         std::string gisName = sim.getGISContainer(k)->getName();
-        auto &result = sim.getResult(k, navigationIndex, requestIndex);
-        auto &routes = result->getRoutes();
+        auto &taskResult = sim.getResult(k, navigationIndex, requestIndex);
+        auto &routes = taskResult->getRoutes();
 
+        //null request result indicates a consensus wasn't reached
         if (requestResult != nullptr && requestResult->isValid()) {
             //valid and consensus
             if (routes->shortestDistance().totalLength() != requestResult->getConsensusShortestDistance().first ||
                 routes->shortestDistance().estimatedDuration() !=
                 requestResult->getConsensusShortestDistance().second) {
                 //GIS doesn't agree with consensus on shortest distance
-                resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *taskResult,
                                                          true);
-            } else if (!minGisRequests.has_value() || result->getGisUsageCount() < minGisRequests.value()) {
+            } else if (!minGisRequests.has_value() || taskResult->getGisUsageCount() < minGisRequests.value()) {
                 //GIS agrees with consensus and has minimal requests
-                minGisRequests = result->getGisUsageCount();
+                //each GIS which agrees with consensus on either shortest distance or time is eligible to affect minimal GIS requests
+                minGisRequests = taskResult->getGisUsageCount();
             }
 
             if (routes->shortestTime().totalLength() != requestResult->getConsensusShortestTime().first ||
                 routes->shortestTime().estimatedDuration() !=
                 requestResult->getConsensusShortestTime().second) {
                 //GIS doesn't agree with consensus on shortest time
-                resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+                resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *taskResult,
                                                          false);
-            } else if (!minGisRequests.has_value() || result->getGisUsageCount() < minGisRequests.value()) {
+            } else if (!minGisRequests.has_value() || taskResult->getGisUsageCount() < minGisRequests.value()) {
                 //GIS agrees with consensus and has minimal requests
-                minGisRequests = result->getGisUsageCount();
+                //each GIS which agrees with consensus on either shortest distance or time is eligible to affect minimal GIS requests
+                minGisRequests = taskResult->getGisUsageCount();
             }
         } else {
             //invalid or no consensus - all results should be written to log
-            resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+            resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *taskResult,
                                                      true);
-            resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *result,
+            resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *taskResult,
                                                      false);
         }
     }
