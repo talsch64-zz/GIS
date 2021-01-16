@@ -55,6 +55,7 @@ Navigation_315524694::getClosestValidWay(const Coordinates &coord, const Restric
         // valid way
         return std::tuple<Coordinates, const AbstractWay &, std::size_t>(wayCoord, way, segment);
     }
+    //TODO maybe change to better solution
     Restrictions newRestrictions = restrictions.contains("toll") ? Restrictions("toll, highway") : Restrictions(
             "highway");
     wayClosestPointTuple = gis.getWayClosestPoint(coord, newRestrictions);

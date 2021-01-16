@@ -107,7 +107,7 @@ public:
                               << ", Time: "
                               << static_cast<double>(result->getRoutes()->shortestTime().estimatedDuration())
                               << ", Usage:" << result->getGisUsageCount() << ", Valid: "
-                              << result->isShortestDistanceValid()
+                              << result->isShortestTimeValid()
                               << std::endl << std::endl;
                 }
             }
