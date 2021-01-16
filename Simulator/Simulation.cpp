@@ -42,15 +42,20 @@ void Simulation::startSimulation() {
                                                         requests.size(), registrar->getOutputPath());
     results = std::make_unique<std::unique_ptr<TaskResult>[]>(
             gisContainers.size() * navigationContainers.size() * requests.size());
-    threads = std::make_unique<std::thread[]>(registrar->getNumThreads());
 
-    //TODO: case of 1 thread
-    for (int i = 0; i < registrar->getNumThreads(); i++) {
-        threads[i] = std::thread(&Simulation::navigationThread, this);
+    if (registrar->getNumThreads() == 1) {
+        // default, only one working thread
+        navigationThread();
     }
+    else {
+        threads = std::make_unique<std::thread[]>(registrar->getNumThreads() - 1);
+        for (int i = 0; i < registrar->getNumThreads() - 1; i++) {
+            threads[i] = std::thread(&Simulation::navigationThread, this);
+        }
 
-    for (int i = 0; i < registrar->getNumThreads(); i++) {
-        threads[i].join();
+        for (int i = 0; i < registrar->getNumThreads() - 1; i++) {
+            threads[i].join();
+        }
     }
 
     resultsAnalyzer->analyze();

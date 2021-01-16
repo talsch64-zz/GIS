@@ -120,7 +120,7 @@ void Registrar::loadNavigationLibraries() {
 
 void Registrar::printUsage(char *progName) {
     std::cout << progName << "[options]" << std::endl << "Options:" << std::endl <<
-              "-num_threads             number of threads to run the simulation. The value must be at least 3. If flag is not specified only 1 thread is created."
+              "-num_threads             number of threads to run the simulation. The value must be at least 3. If flag is not specified default is 1."
               << std::endl <<
               "-navigation              Navigation shared objects directory path." << std::endl <<
               "-gis                     GIS shared libraries directory path." << std::endl <<
@@ -135,7 +135,7 @@ void Registrar::printUsage(char *progName) {
 
 bool Registrar::validateCommandLineArguments() {
     namespace fs = std::filesystem;
-    if (numThreads <= 0 || numThreads == 2) {
+    if (numThreads <=0 || numThreads == 2) {
         std::cerr << "ERROR: Invalid num_theards" << std::endl;
         return FAILURE;
     }
