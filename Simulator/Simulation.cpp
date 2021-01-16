@@ -61,18 +61,18 @@ void Simulation::navigationThread() {
     bool cond = true;
     while (cond) {
         std::unique_ptr<NavigationTask> task;
-        taskMutex.lock();
-        cond = taskManager->hasTask();
-        if (cond) {
-            task = taskManager->getNextTask();
+        {
+            std::unique_lock<std::mutex> lock(taskMutex);
+            cond = taskManager->hasTask();
+            if (cond) {
+                task = taskManager->getNextTask();
+            }
         }
-        taskMutex.unlock();
         if (cond) {
             std::unique_ptr<TaskResult> result = executeTask(*task);
             setResult(task->getGisIndex(), task->getNavigationIndex(), task->getRequestIndex(), std::move(result));
             taskManager->discardTask(*task);
         }
-
     }
 }
 

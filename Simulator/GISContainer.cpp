@@ -1,4 +1,5 @@
 #include "GISContainer.h"
+std::mutex GISContainer::freeGisMutex;
 
 GISContainer::GISContainer(const std::function<std::unique_ptr<AbstractGIS>()> &factory, const std::string &name,
                            const std::string &mapFilepath)
@@ -27,7 +28,11 @@ void GISContainer::incrementUsageCount() {
 void GISContainer::decrementUsageCount() {
     usageCount--;
     if (closeMapEnabled && usageCount == 0) {
-        gis.reset(); // No need for gis anymore. No need for locks either!
+        //it's ok for this line to be called multiple times by multiple threads (just not concurrently, that's what the lock is for)
+        {
+            std::unique_lock<std::mutex> lock(freeGisMutex);
+            gis.reset(); // No need for gis anymore.
+        }
     }
 }
 
