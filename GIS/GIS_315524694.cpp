@@ -177,6 +177,7 @@ GIS_315524694::getWayClosestPoint(const Coordinates &coord, const Restrictions &
 bool GIS_315524694::isWayRestricted(const Way &way, const Restrictions &res, const Meters &distanceFromCoord) const {
     bool restricted = Utils::isWayRestricted(way, res);
     if (!restricted) {
+        //TODO: this logic should be in navigation
         restricted = way.isHighway() && distanceFromCoord > Utils::max_distance_from_highway;
     }
     return restricted;

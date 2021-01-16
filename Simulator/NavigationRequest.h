@@ -14,6 +14,7 @@ public:
 
     const Coordinates &getTo() const;
 
+    std::string toString() const;
 };
 
 

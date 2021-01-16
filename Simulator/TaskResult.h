@@ -25,7 +25,9 @@ public:
 
     const std::unique_ptr<AbstractRoutes> &getRoutes() const;
 
-    size_t getGisUsageCount() const;
+    std::size_t getGisUsageCount() const;
+
+    bool isValid() const;
 
     bool isShortestDistanceValid() const;
 

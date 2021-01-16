@@ -309,8 +309,7 @@ TEST_F(IsraelMapTest, unidirectionalSingleWay) {
     Coordinates destination(Longitude(32.33931), Latitude(35.19085)); // J1033 which is on W2047
     auto routes = navigation.getRoutes(origin, destination);
     // this direction suppose to be invalid
-    EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestDistance()));
-    EXPECT_FALSE(validator.validateRoute(origin, destination, routes->shortestTime()));
+    EXPECT_FALSE(routes->isValid());
     EXPECT_EQ(routes->getErrorMessage(), "Routes not found!");
 
     // the opposite direction should work
