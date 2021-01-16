@@ -26,6 +26,7 @@ void ResultsAnalyzer::analyze() {
     for (int i = 0; i < requestsAmount; i++) {
         //do all navigation algorithms reach consensus for this request
         bool columnConsensus = true;
+        //best distance and time routes between all navigation algorithms for this request
         std::optional<std::pair<Meters, Minutes>> bestDistanceRoute;
         std::optional<std::pair<Meters, Minutes>> bestTimeRoute;
 
@@ -68,7 +69,7 @@ void ResultsAnalyzer::analyze() {
                     //has consensus
                     finalResult = std::make_unique<RequestResult>(distanceConsensus.value(), timeConsensus.value());
                     if (!bestDistanceRoute.has_value() ||
-                        compareTimeRoutes(distanceConsensus.value(), bestDistanceRoute.value()) == 1) {
+                        compareDistanceRoutes(distanceConsensus.value(), bestDistanceRoute.value()) == 1) {
                         bestDistanceRoute = distanceConsensus;
                     }
                     if (!bestTimeRoute.has_value() ||
@@ -117,17 +118,18 @@ void ResultsAnalyzer::assignResult(int requestIndex, int navigationIndex, std::u
 
 void ResultsAnalyzer::analyzeValidTaskResult(std::pair<Meters, Minutes> result,
                                              std::vector<std::pair<std::pair<Meters, Minutes>, int>> &results) {
-    bool foundEqualDistanceRoute = false;
+    bool foundEqualRoute = false;
     for (auto &existingResultPair : results) {
         auto &existingResult = existingResultPair.first;
         if (existingResult.first == result.first &&
             existingResult.second == result.second) {
             //increase count of GIS who agree on result
             existingResultPair.second++;
-            foundEqualDistanceRoute = true;
+            foundEqualRoute = true;
+            break;
         }
     }
-    if (!foundEqualDistanceRoute) {
+    if (!foundEqualRoute) {
         //the result is a route different from all existing ones
         results.emplace_back(result, 1);
     }
