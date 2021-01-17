@@ -50,8 +50,10 @@ private:
      * @brief returns a non-restricted way that is not an highway (unless the distance from coord is less then 3 meters)
      * @param coord
      * @param restrictions
-     * @return tuple contains coordinates on the way, reference to the way itself and the initial segment number
+     * @return tuple contains coordinates on the way, reference to the way itself and the initial segment number.
+     * In addition the tuple holds the way found in the first try to call getClosestPointOnWay for caching purposes.
+     * It should not be here but it is necessary in order to beat Gal.
      */
-    std::tuple<Coordinates, const AbstractWay &, std::size_t>
+    std::tuple<Coordinates, const AbstractWay &, std::size_t, const AbstractWay &>
     getClosestValidWay(const Coordinates &coord, const Restrictions &restrictions) const;
 };

@@ -1,21 +1,21 @@
 #include "AStar.h"
+
+#include <utility>
 #include "Route.h"
 #include "../UserCommon/Utils.h"
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
              const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
-             const std::size_t finalWaySegment) : navigationGIS(navigationGis), origin(origin),
-                                                  destination(destination), startWay(startWay),
-                                                  startWaySegment(startWaySegment),
-                                                  finalWay(finalWay), finalWaySegment(finalWaySegment),
-                                                  restrictions(Restrictions("")) {}
+             const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> waysMap) :
+        AStar(navigationGis, origin, destination, startWay, startWaySegment, finalWay, finalWaySegment, waysMap,
+              Restrictions("")) {}
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
              const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
-             const std::size_t finalWaySegment, const Restrictions &restrictions) :
-
+             const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> waysMap,
+             const Restrictions &restrictions) :
         navigationGIS(navigationGis),
         origin(origin),
         destination(destination),
@@ -23,10 +23,8 @@ AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, cons
         startWaySegment(startWaySegment),
         finalWay(finalWay),
         finalWaySegment(finalWaySegment),
+        waysMap(std::move(waysMap)),
         restrictions(restrictions) {
-    // for caching:
-    waysMap.insert(std::pair<EntityId, const AbstractWay &>(startWay.getId(), startWay));
-    waysMap.insert(std::pair<EntityId, const AbstractWay &>(finalWay.getId(), finalWay));
 }
 
 

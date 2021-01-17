@@ -67,7 +67,6 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
         Minutes time = Utils::getWayDuration(startWay.getLength(), startWay.getSpeedLimit());
 
         EntityId currJunctionValidator("");
-        std::cout << static_cast<std::string>(startWay.getId()) << std::endl;
 
         // -------------- validate all the ways found --------------
         for (size_t i = 0; i < ways.size() - 1; i++) {
@@ -76,9 +75,6 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
             const AbstractWay &currWay = gis.getWay(ways[i].first);
             EntityId nextWayId = ways[i + 1].first;
             Direction nextWayDirection = ways[i + 1].second;
-
-            std::cout << static_cast<std::string>(nextWayId) << std::endl;
-
             const AbstractWay &nextWay = gis.getWay(nextWayId);
 
             auto currWayIdPair = currWay.getJunctions();
@@ -118,7 +114,6 @@ NavigationValidator::validateRoute(const Coordinates &start, const Coordinates &
         if (r.totalLength() != length || r.estimatedDuration() != time) {
             return false;
         }
-        std::cout << "==================" << std::endl;
         return true; // finally!!!
     }
     catch (std::runtime_error &error) {
