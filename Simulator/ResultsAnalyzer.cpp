@@ -93,10 +93,10 @@ void ResultsAnalyzer::analyze() {
             }
             auto minGisRequests = compareGisResultsToConsensus(i, j, finalResult.get());
             if (minGisRequests.first.has_value()) {
-                finalResult->setGisDistanceRequests(minGisRequests.first.value());
+                finalResult->setGisDistanceUsageCount(minGisRequests.first.value());
             }
             if (minGisRequests.second.has_value()) {
-                finalResult->setGisTimeRequests(minGisRequests.second.value());
+                finalResult->setGisTimeUsageCount(minGisRequests.second.value());
             }
             assignResult(i, j, std::move(finalResult));
         }
@@ -159,7 +159,7 @@ ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIn
     NavigationRequest navigationRequest = sim.getNavigationRequest(navigationIndex);
 
     std::string navigationName = sim.getNavigationContainer(navigationIndex)->getName();
-    std::pair<std::optional<int>, std::optional<int>> minGisRequests;
+    std::pair<std::optional<int>, std::optional<int>> minGisUsagesCount; // first for distance, second for time
     for (int k = 0; k < gisAmount; k++) {
         std::string gisName = sim.getGISContainer(k)->getName();
         auto &taskResult = sim.getResult(k, navigationIndex, requestIndex);
@@ -174,11 +174,11 @@ ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIn
                 //GIS doesn't agree with consensus on shortest distance
                 resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *taskResult,
                                                          true);
-            } else if (!minGisRequests.first.has_value() ||
-                       taskResult->getGisUsageCount() < minGisRequests.first.value()) {
+            } else if (!minGisUsagesCount.first.has_value() ||
+                       taskResult->getGisUsageCount() < minGisUsagesCount.first.value()) {
                 //GIS agrees with consensus and has minimal requests
-                //each GIS which agrees with consensus on either shortest distance or time is eligible to affect minimal GIS requests
-                minGisRequests.first = taskResult->getGisUsageCount();
+                //each GIS which agrees with consensus on shortest distance is eligible to affect minimal GIS usage count
+                minGisUsagesCount.first = taskResult->getGisUsageCount();
             }
 
             if (routes->shortestTime().totalLength() != requestResult->getConsensusShortestTime().first ||
@@ -187,11 +187,11 @@ ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIn
                 //GIS doesn't agree with consensus on shortest time
                 resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *taskResult,
                                                          false);
-            } else if (!minGisRequests.second.has_value() ||
-                       taskResult->getGisUsageCount() < minGisRequests.second.value()) {
-                //GIS agrees with consensus and has minimal requests
-                //each GIS which agrees with consensus on either shortest distance or time is eligible to affect minimal GIS requests
-                minGisRequests.second = taskResult->getGisUsageCount();
+            } else if (!minGisUsagesCount.second.has_value() ||
+                       taskResult->getGisUsageCount() < minGisUsagesCount.second.value()) {
+                //GIS agrees with consensus and has minimal usage count
+                //each GIS which agrees with consensus on shortest time is eligible to affect minimal GIS usage count
+                minGisUsagesCount.second = taskResult->getGisUsageCount();
             }
         } else {
             //invalid or no consensus - all results should be written to log
@@ -202,7 +202,7 @@ ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIn
         }
     }
 
-    return minGisRequests;
+    return minGisUsagesCount;
 }
 
 int ResultsAnalyzer::compareDistanceRoutes(std::pair<Meters, Minutes> routeA, std::pair<Meters, Minutes> routeB) {
@@ -231,7 +231,7 @@ void ResultsAnalyzer::updateBestRouteScores(int requestIndex, std::pair<Meters, 
                                             std::pair<Meters, Minutes> bestTimeRoute) {
     //find minimal Gis requests out of algorithms which found best distance/time route
     //update score of algorithms which found the best distance/time route
-    std::pair<std::optional<int>, std::optional<int>> minGisRequests;
+    std::pair<std::optional<int>, std::optional<int>> minGisUsagesCount;
     for (int j = 0; j < navigationsAmount; j++) {
         auto &requestResult = getResult(requestIndex, j);
         if (requestResult->isValid()) {
@@ -244,28 +244,30 @@ void ResultsAnalyzer::updateBestRouteScores(int requestIndex, std::pair<Meters, 
                 requestResult->updateScore(1);
                 bestRoute = true;
             }
-            if (bestRoute && (!minGisRequests.first.has_value() ||
-                              requestResult->getGisDistanceRequests() < minGisRequests.first.value())) {
-                minGisRequests.first = requestResult->getGisDistanceRequests();
+            if (bestRoute && (!minGisUsagesCount.first.has_value() ||
+                              requestResult->getGisDistanceUsageCount() < minGisUsagesCount.first.value())) {
+                minGisUsagesCount.first = requestResult->getGisDistanceUsageCount();
             }
-            if (bestRoute && (!minGisRequests.second.has_value() ||
-                              requestResult->getGisTimeRequests() < minGisRequests.second.value())) {
-                minGisRequests.second = requestResult->getGisTimeRequests();
+            if (bestRoute && (!minGisUsagesCount.second.has_value() ||
+                              requestResult->getGisTimeUsageCount() < minGisUsagesCount.second.value())) {
+                minGisUsagesCount.second = requestResult->getGisTimeUsageCount();
             }
         }
     }
 
     //update score of algorithms which found the best distance/time route and have minimal Gis requests
-    if (minGisRequests.first.has_value() || minGisRequests.second.has_value()) {
+    if (minGisUsagesCount.first.has_value() || minGisUsagesCount.second.has_value()) {
         for (int j = 0; j < navigationsAmount; j++) {
             auto &requestResult = getResult(requestIndex, j);
             if (requestResult->isValid()) {
-                if (requestResult->getGisDistanceRequests() == minGisRequests.first.value() &&
+                if (requestResult->getGisDistanceUsageCount() == minGisUsagesCount.first.value() &&
                     compareDistanceRoutes(requestResult->getConsensusShortestDistance(), bestDistanceRoute) == 0) {
+                    // minimal usage and shortest route is under consensus
                     requestResult->updateScore(1);
                 }
-                if (requestResult->getGisTimeRequests() == minGisRequests.second.value() &&
+                if (requestResult->getGisTimeUsageCount() == minGisUsagesCount.second.value() &&
                     compareTimeRoutes(requestResult->getConsensusShortestTime(), bestTimeRoute) == 0) {
+                    // minimal usage and fastest route is under consensus
                     requestResult->updateScore(1);
                 }
             }
