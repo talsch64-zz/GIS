@@ -92,8 +92,11 @@ void ResultsAnalyzer::analyze() {
                 }
             }
             auto minGisRequests = compareGisResultsToConsensus(i, j, finalResult.get());
-            if (minGisRequests.has_value()) {
-                finalResult->setGisRequests(minGisRequests.value());
+            if (minGisRequests.first.has_value()) {
+                finalResult->setGisDistanceRequests(minGisRequests.first.value());
+            }
+            if (minGisRequests.second.has_value()) {
+                finalResult->setGisTimeRequests(minGisRequests.second.value());
             }
             assignResult(i, j, std::move(finalResult));
         }
@@ -150,13 +153,13 @@ ResultsAnalyzer::findValidConsensusResult(std::vector<std::pair<std::pair<Meters
     return consensusResult;
 }
 
-std::optional<int>
+std::pair<std::optional<int>, std::optional<int>>
 ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIndex, RequestResult *requestResult) {
     Simulation &sim = Simulation::getInstance();
     NavigationRequest navigationRequest = sim.getNavigationRequest(navigationIndex);
 
     std::string navigationName = sim.getNavigationContainer(navigationIndex)->getName();
-    std::optional<int> minGisRequests;
+    std::pair<std::optional<int>, std::optional<int>> minGisRequests;
     for (int k = 0; k < gisAmount; k++) {
         std::string gisName = sim.getGISContainer(k)->getName();
         auto &taskResult = sim.getResult(k, navigationIndex, requestIndex);
@@ -171,10 +174,11 @@ ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIn
                 //GIS doesn't agree with consensus on shortest distance
                 resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *taskResult,
                                                          true);
-            } else if (!minGisRequests.has_value() || taskResult->getGisUsageCount() < minGisRequests.value()) {
+            } else if (!minGisRequests.first.has_value() ||
+                       taskResult->getGisUsageCount() < minGisRequests.first.value()) {
                 //GIS agrees with consensus and has minimal requests
                 //each GIS which agrees with consensus on either shortest distance or time is eligible to affect minimal GIS requests
-                minGisRequests = taskResult->getGisUsageCount();
+                minGisRequests.first = taskResult->getGisUsageCount();
             }
 
             if (routes->shortestTime().totalLength() != requestResult->getConsensusShortestTime().first ||
@@ -183,10 +187,11 @@ ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIn
                 //GIS doesn't agree with consensus on shortest time
                 resultsFileWriter->writeStrangeGisResult(navigationName, gisName, navigationRequest, *taskResult,
                                                          false);
-            } else if (!minGisRequests.has_value() || taskResult->getGisUsageCount() < minGisRequests.value()) {
+            } else if (!minGisRequests.second.has_value() ||
+                       taskResult->getGisUsageCount() < minGisRequests.second.value()) {
                 //GIS agrees with consensus and has minimal requests
                 //each GIS which agrees with consensus on either shortest distance or time is eligible to affect minimal GIS requests
-                minGisRequests = taskResult->getGisUsageCount();
+                minGisRequests.second = taskResult->getGisUsageCount();
             }
         } else {
             //invalid or no consensus - all results should be written to log
@@ -226,35 +231,42 @@ void ResultsAnalyzer::updateBestRouteScores(int requestIndex, std::pair<Meters, 
                                             std::pair<Meters, Minutes> bestTimeRoute) {
     //find minimal Gis requests out of algorithms which found best distance/time route
     //update score of algorithms which found the best distance/time route
-    std::optional<int> minGisRequests;
+    std::pair<std::optional<int>, std::optional<int>> minGisRequests;
     for (int j = 0; j < navigationsAmount; j++) {
-        auto &result = getResult(requestIndex, j);
-        if (result->isValid()) {
+        auto &requestResult = getResult(requestIndex, j);
+        if (requestResult->isValid()) {
             bool bestRoute = false;
-            if (compareDistanceRoutes(result->getConsensusShortestDistance(), bestDistanceRoute) == 0) {
-                result->updateScore(1);
+            if (compareDistanceRoutes(requestResult->getConsensusShortestDistance(), bestDistanceRoute) == 0) {
+                requestResult->updateScore(1);
                 bestRoute = true;
             }
-            if (compareTimeRoutes(result->getConsensusShortestTime(), bestTimeRoute) == 0) {
-                result->updateScore(1);
+            if (compareTimeRoutes(requestResult->getConsensusShortestTime(), bestTimeRoute) == 0) {
+                requestResult->updateScore(1);
                 bestRoute = true;
             }
-            if (bestRoute && (!minGisRequests.has_value() || result->getGisRequests() < minGisRequests.value())) {
-                minGisRequests = result->getGisRequests();
+            if (bestRoute && (!minGisRequests.first.has_value() ||
+                              requestResult->getGisDistanceRequests() < minGisRequests.first.value())) {
+                minGisRequests.first = requestResult->getGisDistanceRequests();
+            }
+            if (bestRoute && (!minGisRequests.second.has_value() ||
+                              requestResult->getGisTimeRequests() < minGisRequests.second.value())) {
+                minGisRequests.second = requestResult->getGisTimeRequests();
             }
         }
     }
 
     //update score of algorithms which found the best distance/time route and have minimal Gis requests
-    if (minGisRequests.has_value()) {
+    if (minGisRequests.first.has_value() || minGisRequests.second.has_value()) {
         for (int j = 0; j < navigationsAmount; j++) {
-            auto &result = getResult(requestIndex, j);
-            if (result->isValid() && result->getGisRequests() == minGisRequests.value()) {
-                if (compareDistanceRoutes(result->getConsensusShortestDistance(), bestDistanceRoute) == 0) {
-                    result->updateScore(1);
+            auto &requestResult = getResult(requestIndex, j);
+            if (requestResult->isValid()) {
+                if (requestResult->getGisDistanceRequests() == minGisRequests.first.value() &&
+                    compareDistanceRoutes(requestResult->getConsensusShortestDistance(), bestDistanceRoute) == 0) {
+                    requestResult->updateScore(1);
                 }
-                if (compareTimeRoutes(result->getConsensusShortestTime(), bestTimeRoute) == 0) {
-                    result->updateScore(1);
+                if (requestResult->getGisTimeRequests() == minGisRequests.second.value() &&
+                    compareTimeRoutes(requestResult->getConsensusShortestTime(), bestTimeRoute) == 0) {
+                    requestResult->updateScore(1);
                 }
             }
         }

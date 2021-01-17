@@ -13,7 +13,9 @@ class RequestResult {
     int score = 0;
     std::pair<Meters, Minutes> consensusShortestDistance;
     std::pair<Meters, Minutes> consensusShortestTime;
-    int gisRequests;
+    int gisDistanceRequests;
+    int gisTimeRequests;
+
 
 public:
     /**
@@ -39,9 +41,13 @@ public:
 
     const std::pair<Meters, Minutes> &getConsensusShortestTime() const;
 
-    int getGisRequests() const;
+    int getGisDistanceRequests() const;
+    int getGisTimeRequests() const;
 
-    void setGisRequests(int gisRequests);
+
+    void setGisDistanceRequests(int gisRequests);
+    void setGisTimeRequests(int gisRequests);
+
 };
 
 
