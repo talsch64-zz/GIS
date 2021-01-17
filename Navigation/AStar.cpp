@@ -1,3 +1,4 @@
+#include <iostream>
 #include "AStar.h"
 #include "Route.h"
 #include "../UserCommon/Utils.h"
@@ -6,10 +7,10 @@
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
              const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
              const std::size_t finalWaySegment) : navigationGIS(navigationGis), origin(origin),
-                                             destination(destination), startWay(startWay),
-                                             startWaySegment(startWaySegment),
-                                             finalWay(finalWay), finalWaySegment(finalWaySegment),
-                                             restrictions(Restrictions("")) {}
+                                                  destination(destination), startWay(startWay),
+                                                  startWaySegment(startWaySegment),
+                                                  finalWay(finalWay), finalWaySegment(finalWaySegment),
+                                                  restrictions(Restrictions("")) {}
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
@@ -23,7 +24,11 @@ AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, cons
         startWaySegment(startWaySegment),
         finalWay(finalWay),
         finalWaySegment(finalWaySegment),
-        restrictions(restrictions) {}
+        restrictions(restrictions) {
+    // for caching:
+    waysMap.insert(std::pair<EntityId, const AbstractWay &>(startWay.getId(), startWay));
+    waysMap.insert(std::pair<EntityId, const AbstractWay &>(finalWay.getId(), finalWay));
+}
 
 
 std::unique_ptr<Route>
@@ -96,18 +101,13 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
     std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, std::function<bool(
             std::shared_ptr<Node>, std::shared_ptr<Node>)>> queue(comparator);
 
-// For lazy deletions efficiency - each node inserted to the queue only if its priority <= the curr priority of the node (represented by its junction id)
-// This map is not a mandatory, it just increases efficiency (redundant nodes are not added to the queue)
+    // For lazy deletions efficiency - each node inserted to the queue only if its priority <= the curr priority of the node (represented by its junction id)
+    // This map is not a mandatory, it just increases efficiency (redundant nodes are not added to the queue)
     std::unordered_map<EntityId, double> minNodes;
-    std::unordered_map<EntityId, const AbstractWay&> waysMap;
 
     std::shared_ptr<Node> initialNode = createInitialNode(heuristicFunc, costFunc, Direction::A_to_B);
     queue.push(initialNode);
     minNodes.insert(std::pair<EntityId, double>(initialNode->getJunctionId(), initialNode->getPriority()));
-    waysMap.insert(std::pair<EntityId, const AbstractWay&>(startWay.getId(), startWay)); // lowers gis usage
-    waysMap.insert(std::pair<EntityId, const AbstractWay&>(finalWay.getId(), finalWay)); // lowers gis usage
-
-
 
     // if start way is bidirectional add another Node to the queue:
     if (startWay.isBidirectional()) {
@@ -124,28 +124,30 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
     while (!queue.empty()) {
         currNode = queue.top();
         queue.pop();
-
         if (currNode->getJunctionId() == EntityId("")) {   // reached destination!!!
             break;
         }
-
         if (popedJunctions.find(currNode->getJunctionId()) != popedJunctions.end()) {
             //  if node was already poped from the queue we can skip its copy, lazy deletions
             continue;
         }
         popedJunctions.insert(currNode->getJunctionId());
-
         //  reached the final way and initializing the final Node
         if (currNode->getJunctionId() == finalWayFromId ||
             (finalWay.isBidirectional() && currNode->getJunctionId() == finalWayToId)) {
             queue.push(createFinalNode(currNode, costFunc));
         }
+        if (waysByJunctionMap.find(currNode->getJunctionId()) == waysByJunctionMap.end()) {
+            // for ways caching
+            waysByJunctionMap.insert(std::pair<EntityId, std::vector<EntityId>>(currNode->getJunctionId(),
+                                                                                navigationGIS.getWaysByJunction(
+                                                                                        currNode->getJunctionId())));
+        }
 
-        std::vector<EntityId> wayEdgesIds = navigationGIS.getWaysByJunction(currNode->getJunctionId());
+        std::vector<EntityId> wayEdgesIds = waysByJunctionMap.at(currNode->getJunctionId());
         for (auto wayId: wayEdgesIds) {  // visit all the neighbors and add them to the queue
-
-            auto &way = waysMap.contains(wayId) ? waysMap.at(wayId):navigationGIS.getWay(wayId);
-            waysMap.insert(std::pair<EntityId, const AbstractWay&>(wayId, way));
+            auto &way = waysMap.contains(wayId) ? waysMap.at(wayId) : navigationGIS.getWay(wayId);
+            waysMap.insert(std::pair<EntityId, const AbstractWay &>(wayId, way));
             if (Utils::isWayRestricted(way, restrictions)) {
                 continue;
             }
@@ -167,7 +169,6 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
         // no Route was found, return invalid route. Empty entityId means currNode is a final Node represents destination point
         return nullptr;
     }
-
     std::vector<std::pair<EntityId, Direction>> ways = restoreShortestRoute(currNode);
     return std::make_unique<Route>(origin, destination, currNode->getDistanceSoFar(), currNode->getTimeSoFar(), ways);
 }

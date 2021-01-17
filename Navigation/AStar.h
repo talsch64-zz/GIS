@@ -34,6 +34,10 @@ class AStar {
     const AbstractWay &finalWay;
     const std::size_t finalWaySegment;
     Restrictions restrictions;
+    std::unordered_map<EntityId, const AbstractWay &> waysMap;     // ways caching for lower gis usage
+    std::unordered_map<EntityId, std::vector<EntityId>> waysByJunctionMap;     // ways caching for lower gis usage
+
+
 
 public:
     /**
