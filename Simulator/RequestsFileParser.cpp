@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <regex>
+#include <iostream>
 #include "RequestsFileParser.h"
 
 std::vector<NavigationRequest> RequestsFileParser::parse(const std::string &filePath) const {
@@ -14,6 +15,10 @@ std::vector<NavigationRequest> RequestsFileParser::parse(const std::string &file
         }
         catch (const std::exception &e) {
         }
+    }
+    if (requests.size() == 0) {
+        std::cerr << "ERROR: zero requests given " << std::endl;
+        exit(EXIT_FAILURE);
     }
     return requests;
 }

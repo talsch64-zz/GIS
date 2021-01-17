@@ -36,6 +36,7 @@ const NavigationRequest &Simulation::getNavigationRequest(int index) {
 
 void Simulation::startSimulation() {
     requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
+
     taskManager = std::make_unique<NavigationTasksManager>(gisContainers.size(), navigationContainers.size(),
                                                            requests.size());
     resultsAnalyzer = std::make_unique<ResultsAnalyzer>(gisContainers.size(), navigationContainers.size(),
