@@ -14,6 +14,8 @@
  *
  */
 class Navigation_315524694 : public AbstractNavigation {
+    mutable std::unordered_map<EntityId, const AbstractWay &> waysMap;     // ways caching for lower gis usage
+    mutable std::unordered_map<EntityId, std::vector<EntityId>> waysByJunctionMap;     // ways caching for lower gis usage
 
 public:
     /**
@@ -51,9 +53,7 @@ private:
      * @param coord
      * @param restrictions
      * @return tuple contains coordinates on the way, reference to the way itself and the initial segment number.
-     * In addition the tuple holds the way found in the first try to call getClosestPointOnWay for caching purposes.
-     * It should not be here but it is necessary in order to beat Gal.
      */
-    std::tuple<Coordinates, const AbstractWay &, std::size_t, const AbstractWay &>
+    std::tuple<Coordinates, const AbstractWay &, std::size_t>
     getClosestValidWay(const Coordinates &coord, const Restrictions &restrictions) const;
 };

@@ -33,10 +33,9 @@ class AStar {
     const std::size_t startWaySegment;
     const AbstractWay &finalWay;
     const std::size_t finalWaySegment;
-    std::unordered_map<EntityId, const AbstractWay &> waysMap;     // ways caching for lower gis usage
-    std::unordered_map<EntityId, std::vector<EntityId>> waysByJunctionMap;     // ways caching for lower gis usage
+    std::unordered_map<EntityId, const AbstractWay &> &waysMap;     // ways caching for lower gis usage
+    std::unordered_map<EntityId, std::vector<EntityId>> &waysByJunctionMap;     // ways caching for lower gis usage
     Restrictions restrictions;
-
 
 
 public:
@@ -48,11 +47,14 @@ public:
      * @param startWay the way which the origin point is located on.
      * @param finalWay the way which the destination point is located on.
      * @param wayMap initial cache of the ways
+     * @param waysByJunctionMap initial cache of the ways by junction
+
 
      */
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
           const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
-          const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> waysMap);
+          const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> &waysMap,
+          std::unordered_map<EntityId, std::vector<EntityId>> &waysByJunctionMap);
 
 
     /**
@@ -63,12 +65,14 @@ public:
      * @param startWay the way which the origin point is located on.
      * @param finalWay the way which the destination point is located on.
      * @param wayMap initial cache of the ways
+     * @param waysByJunctionMap initial cache of the ways by junction
      * @param restrictions
      *
      */
     AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
           const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
-          const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> waysMap,
+          const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> &waysMap,
+          std::unordered_map<EntityId, std::vector<EntityId>> &waysByJunctionMap,
           const Restrictions &restrictions);
 
     std::unique_ptr<Route> shortestByDistance();

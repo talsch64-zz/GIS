@@ -7,14 +7,17 @@
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
              const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
-             const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> waysMap) :
+             const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> &waysMap,
+             std::unordered_map<EntityId, std::vector<EntityId>> &waysByJunctionMap) :
         AStar(navigationGis, origin, destination, startWay, startWaySegment, finalWay, finalWaySegment, waysMap,
+              waysByJunctionMap,
               Restrictions("")) {}
 
 
 AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, const Coordinates &destination,
              const AbstractWay &startWay, const std::size_t startWaySegment, const AbstractWay &finalWay,
-             const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> waysMap,
+             const std::size_t finalWaySegment, std::unordered_map<EntityId, const AbstractWay &> &waysMap,
+             std::unordered_map<EntityId, std::vector<EntityId>> &waysByJunctionMap,
              const Restrictions &restrictions) :
         navigationGIS(navigationGis),
         origin(origin),
@@ -23,7 +26,8 @@ AStar::AStar(const NavigationGIS &navigationGis, const Coordinates &origin, cons
         startWaySegment(startWaySegment),
         finalWay(finalWay),
         finalWaySegment(finalWaySegment),
-        waysMap(std::move(waysMap)),
+        waysMap(waysMap),
+        waysByJunctionMap(waysByJunctionMap),
         restrictions(restrictions) {
 }
 
