@@ -102,10 +102,8 @@ std::unique_ptr<TaskResult> Simulation::executeTask(const NavigationTask &task) 
     if (validRoutes) {
         auto &shortestDistanceRoute = routes->shortestDistance();
         auto &shortestTimeRoute = routes->shortestTime();
-        auto &start = shortestTimeRoute.getWayStartPoint();
-        auto &end = shortestTimeRoute.getWayEndPoint();
-        result->setShortestDistanceValid(task.getValidator()->validateRoute(start, end, shortestDistanceRoute));
-        result->setShortestTimeValid(task.getValidator()->validateRoute(start, end, shortestTimeRoute));
+        result->setShortestDistanceValid(task.getValidator()->validateRoute(req.getFrom(), req.getTo(), shortestDistanceRoute));
+        result->setShortestTimeValid(task.getValidator()->validateRoute(req.getFrom(), req.getTo(), shortestTimeRoute));
     }
     result->setGisUsageCount(task.getNavigationGis()->getUsageCounter());
     return result;
