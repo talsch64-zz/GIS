@@ -105,6 +105,8 @@ AStar::searchShortestRoute(double (*heuristicFunc)(const Coordinates &start, con
     queue.push(initialNode);
     minNodes.insert(std::pair<EntityId, double>(initialNode->getJunctionId(), initialNode->getPriority()));
     waysMap.insert(std::pair<EntityId, const AbstractWay&>(startWay.getId(), startWay)); // lowers gis usage
+    waysMap.insert(std::pair<EntityId, const AbstractWay&>(finalWay.getId(), finalWay)); // lowers gis usage
+
 
 
     // if start way is bidirectional add another Node to the queue:
