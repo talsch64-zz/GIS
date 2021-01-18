@@ -32,8 +32,7 @@ void Registrar::parseCommandLineArguments(int argc, char **argv) {
                                    long_options, &option_index)) != -1) {
         switch (opt) {
             case 't' :
-                //TODO check if number is valid string-number because atoi ignores non digit chars.
-                numThreads = atoi(optarg);
+                numThreads = parseNumber(optarg);
                 break;
             case 'n' :
                 navigationDirectory = optarg;
@@ -135,8 +134,8 @@ void Registrar::printUsage(char *progName) {
 
 bool Registrar::validateCommandLineArguments() {
     namespace fs = std::filesystem;
-    if (numThreads <=0 || numThreads == 2) {
-        std::cerr << "ERROR: Invalid num_theards" << std::endl;
+    if (numThreads <= 0 || numThreads == 2) {
+        std::cerr << "ERROR: Invalid num_theards argument" << std::endl;
         return FAILURE;
     }
 
@@ -183,6 +182,15 @@ const std::filesystem::path &Registrar::getOutputPath() const {
 
 int Registrar::getNumThreads() const {
     return numThreads;
+}
+
+int Registrar::parseNumber(char *str) {
+    for (int i = 0; i < strlen(str); i++) {
+        if (!isdigit(str[i])) {
+            return 0;
+        }
+    }
+    return std::stoi(str);
 }
 
 

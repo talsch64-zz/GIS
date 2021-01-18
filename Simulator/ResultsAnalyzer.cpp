@@ -283,9 +283,6 @@ void ResultsAnalyzer::writeResultsToFile() {
         scores.emplace_back(std::make_unique<NavigationScores>(name));
     }
 
-    //TODO: remove random
-//    std::default_random_engine generator;
-//    std::uniform_int_distribution<int> distribution(1,100);
     for (int i : consensusRequests) {
         for (int j = 0; j < navigationsAmount; j++) {
             auto &result = getResult(i, j);

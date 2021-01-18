@@ -49,6 +49,12 @@ private:
 
     bool validateCommandLineArguments();
 
+    /**
+     *
+     * @return  int with the of the number that str represents. If the is contains a non-digit char return 0
+     */
+    int parseNumber(char *str);
+;
 };
 
 #endif //GIS_CPP_REGISTRAR_H
