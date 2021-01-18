@@ -20,7 +20,7 @@
 
 
 /**
- * @brief class Simulation simulates the various navigation and gis .so files on a given map file
+ * class Simulation simulates the various navigation and gis .so files on a given map file
  * and navigation requests and analyzes the results.
  * Implemented as a Singleton.
  */

@@ -3,6 +3,9 @@
 
 #include "../Common/GISNamedTypes.h"
 
+/**
+ * class Navigation request
+ */
 class NavigationRequest {
     Coordinates from;
     Coordinates to;

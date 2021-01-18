@@ -11,8 +11,9 @@
 //TODO test
 #define DISTANCE_PRECISION 5
 
-/// Geometry derived class that represents continuous segments.
-/// The segments are represented as a vector of Coordinates where each segment is defined by two consecutive Coordinates inside the vector
+/** Geometry derived class that represents continuous segments.
+  * The segments are represented as a vector of Coordinates where each segment is defined by two consecutive Coordinates inside the vector
+  */
 class PointList : public Geometry {
     std::vector<Coordinates> points;
     mutable std::vector<Meters> cumulativeSegmentsLength; // vector that holds the cumulative length of all the segments

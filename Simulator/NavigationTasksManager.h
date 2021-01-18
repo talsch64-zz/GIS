@@ -4,6 +4,14 @@
 
 #include "NavigationTask.h"
 
+
+/**
+ * class NavigationTasksManager
+ * Responsible for providing NavigationTasks and emulates an iterator.
+ * TaskManager maximizes gis utilization: while there are Navigations and requests remaining, it creates tasks with
+ * the same gis. This feature helps reduce memory usage because because it minimizes the number of gises loaded
+ * concurrently.
+ */
 class NavigationTasksManager {
     int nextGisIndex = 0;
     int nextNavigationIndex = 0;
@@ -16,6 +24,9 @@ public:
 
     std::unique_ptr<NavigationTask> getNextTask();
 
+    /**
+     * @return True if there is a combination of GIS x Navigation x request that was not executed yet.
+     */
     bool hasTask() const;
 
     /**
