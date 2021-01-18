@@ -17,8 +17,6 @@ int main(int argc, char *argv[]) {
     registrar->parseCommandLineArguments(argc, argv);
     registrar->loadSharedLibraries();
     simulation.startSimulation();
-    simulation.printResults();
-
     simulation.clear(); // clear all objects from the shared libraries
     registrar->unloadSharedLibraries();
     return EXIT_SUCCESS;
