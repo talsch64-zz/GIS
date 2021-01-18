@@ -9,7 +9,7 @@
  * class NavigationTasksManager
  * Responsible for providing NavigationTasks and emulates an iterator.
  * TaskManager maximizes gis utilization: while there are Navigations and requests remaining, it creates tasks with
- * the same gis. This feature helps reduce memory usage because because it minimizes the number of gises loaded
+ * the same gis. This feature helps reduce memory usage because because it minimizes the number of gis'es loaded
  * concurrently.
  */
 class NavigationTasksManager {
