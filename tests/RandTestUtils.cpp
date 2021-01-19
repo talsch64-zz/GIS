@@ -80,7 +80,10 @@ RandTestUtils::generateWays(GISMock &gis, IdGenerator &idGenerator, int n, Bound
     for (int i = 0; i < n; i++) {
         EntityId id = idGenerator.generateId();
         Junction *from = junctions[randInt(0, junctions.size() - 1)];
-        Junction *to = junctions[randInt(0, junctions.size() - 1)];
+        Junction *to;
+        do {
+            to = junctions[randInt(0, junctions.size() - 1)];
+        } while (to == from);
         int curvesAmount = randInt(0, 3);
         std::vector<Coordinates> curves;
         for (int j = 0; j < curvesAmount; j++) {
@@ -135,7 +138,7 @@ RandTestUtils::getBestRoutesDFS(NavigationGIS &navGis, RouteMock *bestTimeRoute,
     }
 }
 
-std::unique_ptr<Routes> RandTestUtils::getBestRoutes(NavigationMock& navigation, GISMock &gis, IdGenerator &idGenerator,
+std::unique_ptr<Routes> RandTestUtils::getBestRoutes(NavigationMock &navigation, GISMock &gis, IdGenerator &idGenerator,
                                                      const Coordinates &start, const Coordinates &end) {
     auto startWayTuple = navigation.getClosestValidWay(start, Restrictions(""));
     auto endWayTuple = navigation.getClosestValidWay(end, Restrictions(""));
