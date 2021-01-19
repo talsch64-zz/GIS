@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "../GIS/GIS_315524694.h"
-#include "GISMock.h"
+#include "mocks/GISMock.h"
 #include "../UserCommon/entities/Junction.h"
 #include "../UserCommon/entities/POI.h"
 #include "../UserCommon/entities/Way.h"

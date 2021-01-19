@@ -1,5 +1,5 @@
 #include "RandTestUtils.h"
-#include "WayMock.h"
+#include "mocks/WayMock.h"
 #include "../Common/CoordinatesMath.h"
 
 int RandTestUtils::randInt(int min, int max) {

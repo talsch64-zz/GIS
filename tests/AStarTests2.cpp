@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "GISMock.h"
+#include "mocks/GISMock.h"
 #include "../Navigation/Route.h"
 #include "../Common/NavigationGIS.h"
 #include "../Navigation/Navigation_315524694.h"

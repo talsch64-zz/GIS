@@ -13,7 +13,6 @@
 #include "NavigationValidator.h"
 
 class NavigationTask {
-    std::unique_ptr<GISContainer> &gisContainer;
     std::unique_ptr<AbstractNavigation> navigation = nullptr;
     std::unique_ptr<NavigationValidator> validator = nullptr;
     std::unique_ptr<NavigationGIS> navigationGIS = nullptr;
@@ -22,6 +21,9 @@ class NavigationTask {
     int navigationIndex;
     int requestIndex;
 
+protected:
+    std::unique_ptr<GISContainer> &gisContainer;
+
 public:
     NavigationTask(std::unique_ptr<GISContainer> &gisContainer,
                    std::unique_ptr<NavigationContainer> &navigationContainer, const NavigationRequest &request,
@@ -29,7 +31,7 @@ public:
 
     const std::unique_ptr<AbstractNavigation> &getNavigation() const;
 
-    const std::unique_ptr<NavigationValidator> &getValidator() const;
+    virtual const std::unique_ptr<NavigationValidator> &getValidator() const;
 
     const std::unique_ptr<NavigationGIS> &getNavigationGis() const;
 

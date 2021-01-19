@@ -7,9 +7,9 @@
 #include "../UserCommon/entities/Junction.h"
 #include "../UserCommon/entities/POI.h"
 #include "../UserCommon/entities/Way.h"
-#include "GISMock.h"
+#include "mocks/GISMock.h"
 #include "../Navigation/Routes.h"
-#include "RouteMock.h"
+#include "mocks/RouteMock.h"
 #include "../Common/NavigationGIS.h"
 #include "NavigationMock.h"
 
