@@ -235,22 +235,19 @@ void ResultsAnalyzer::updateBestRouteScores(int requestIndex, std::pair<Meters, 
     for (int j = 0; j < navigationsAmount; j++) {
         auto &requestResult = getResult(requestIndex, j);
         if (requestResult->isValid()) {
-            bool bestRoute = false;
             if (compareDistanceRoutes(requestResult->getConsensusShortestDistance(), bestDistanceRoute) == 0) {
                 requestResult->updateScore(1);
-                bestRoute = true;
+                if (!minGisUsagesCount.first.has_value() ||
+                    requestResult->getGisDistanceUsageCount() < minGisUsagesCount.first.value()) {
+                    minGisUsagesCount.first = requestResult->getGisDistanceUsageCount();
+                }
             }
             if (compareTimeRoutes(requestResult->getConsensusShortestTime(), bestTimeRoute) == 0) {
                 requestResult->updateScore(1);
-                bestRoute = true;
-            }
-            if (bestRoute && (!minGisUsagesCount.first.has_value() ||
-                              requestResult->getGisDistanceUsageCount() < minGisUsagesCount.first.value())) {
-                minGisUsagesCount.first = requestResult->getGisDistanceUsageCount();
-            }
-            if (bestRoute && (!minGisUsagesCount.second.has_value() ||
-                              requestResult->getGisTimeUsageCount() < minGisUsagesCount.second.value())) {
-                minGisUsagesCount.second = requestResult->getGisTimeUsageCount();
+                if (!minGisUsagesCount.second.has_value() ||
+                    requestResult->getGisTimeUsageCount() < minGisUsagesCount.second.value()) {
+                    minGisUsagesCount.second = requestResult->getGisTimeUsageCount();
+                }
             }
         }
     }
