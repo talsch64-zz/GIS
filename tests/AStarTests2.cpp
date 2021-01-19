@@ -90,20 +90,20 @@ TEST(AStar, WrongPathsAppearCloserToTarget) {
     EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestDistance));
     EXPECT_TRUE(navigationValidator.validateRoute(startCoord, endCoord, shortestTime));
 }
-//TODO fix test
-//TEST(AStar, InvalidRouteLastWayHighway) {
-//    GIS_315524694 gis;
-//    gis.loadMapFile("astar3.json");
-//    NavigationGIS navigationGis(gis);
-//    Navigation_315524694 navigation(navigationGis);
-//    Coordinates startCoord(Longitude(20.86616914522187),
-//                           Latitude(43.99225503398053));
-//    Coordinates endCoord(Longitude(20.88795928805733),
-//                         Latitude(43.99705953606207));
-//
-//    auto routes = navigation.getRoutes(startCoord, endCoord);
-//    EXPECT_FALSE(routes->isValid());
-//}
+
+TEST(AStar, InvalidRouteLastWayHighway) {
+    GIS_315524694 gis;
+    gis.loadMapFile("astar3.json");
+    NavigationGIS navigationGis(gis);
+    Navigation_315524694 navigation(navigationGis);
+    Coordinates startCoord(Longitude( 20.867132),
+                           Latitude( 43.988861));
+    Coordinates endCoord(Longitude(20.881755),
+                         Latitude(43.996210));
+
+    auto routes = navigation.getRoutes(startCoord, endCoord);
+    EXPECT_FALSE(routes->isValid());
+}
 
 TEST(AStar, HighwayTooFar) {
     GIS_315524694 gis;
