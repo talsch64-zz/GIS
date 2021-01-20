@@ -84,7 +84,6 @@ public:
         while (std::getline(infile, line)) {
             lines.push_back(line);
         }
-        lines.pop_back();
         return lines;
     }
 
@@ -98,6 +97,7 @@ public:
         expectedTitle += ", Total Score";
         EXPECT_EQ(title, expectedTitle);
 
+        EXPECT_EQ(resultLines.size() - 1, expectedResults.size());
         for (int i = 1; i < resultLines.size(); i++) {
             EXPECT_EQ(resultLines[i], expectedResults[i - 1]);
         }
