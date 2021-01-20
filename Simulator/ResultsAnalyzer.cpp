@@ -156,7 +156,7 @@ ResultsAnalyzer::findValidConsensusResult(std::vector<std::pair<std::pair<Meters
 std::pair<std::optional<int>, std::optional<int>>
 ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIndex, RequestResult *requestResult) {
     Simulation &sim = Simulation::getInstance();
-    NavigationRequest navigationRequest = sim.getNavigationRequest(navigationIndex);
+    NavigationRequest navigationRequest = sim.getNavigationRequest(requestIndex);
 
     std::string navigationName = sim.getNavigationContainer(navigationIndex)->getName();
     std::pair<std::optional<int>, std::optional<int>> minGisUsagesCount; // first for distance, second for time

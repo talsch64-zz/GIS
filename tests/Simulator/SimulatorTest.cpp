@@ -73,7 +73,6 @@ public:
         while (std::getline(infile, line)) {
             lines.push_back(line);
         }
-        lines.pop_back();
         return lines;
     }
 
@@ -100,6 +99,30 @@ public:
         EXPECT_EQ(resultLines.size() - 1, expectedResults.size());
         for (int i = 1; i < resultLines.size(); i++) {
             EXPECT_EQ(resultLines[i], expectedResults[i - 1]);
+        }
+    }
+
+    std::string
+    getStrangeResultStr(int navIndex, int gisIndex, std::string shortestType, NavigationRequest req, Meters distance,
+                        Minutes time, std::string valid) {
+        Simulation &simulation = Simulation::getInstance();
+        std::string gisStr = simulation.getGISContainer(gisIndex)->getName();
+        std::string navStr = simulation.getNavigationContainer(navIndex)->getName();
+        std::string sep = ", ";
+        std::string str =
+                navStr + sep + shortestType + sep + gisStr + sep + req.toString() + sep +
+                std::to_string((double) distance) +
+                sep + std::to_string((double) time) + sep + valid;
+        return str;
+    }
+
+    void assertStrangeResults(std::vector<std::string> expectedStrangeResults) {
+        auto strangeResultLines = getStrangeResultsLines();
+        EXPECT_EQ(strangeResultLines.size(), expectedStrangeResults.size());
+        for (int i = 0; i < expectedStrangeResults.size(); i++) {
+            auto &expectedRes = expectedStrangeResults[i];
+            EXPECT_NE(std::find(strangeResultLines.begin(), strangeResultLines.end(), expectedRes),
+                      strangeResultLines.end()) << "Couldn't find strange result #" << i << ":\n" << expectedRes;
         }
     }
 
@@ -270,7 +293,38 @@ TEST_F(SimulatorTest, resultsTest) {
     expectedResults.push_back(simulation.getNavigationContainer(2)->getName() + ", 2, 2, 4");
     expectedResults.push_back(simulation.getNavigationContainer(0)->getName() + ", 0, -1, -1");
 
+    std::vector<std::string> expectedStrangeResults;
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 1, "shortest_distance", requests[0], Meters(503.5), Minutes(71.5), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 1, "shortest_time", requests[0], Meters(106.2), Minutes(44), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(1, 2, "shortest_distance", requests[0], Meters(1345.12), Minutes(89.12), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(1, 1, "shortest_time", requests[0], Meters(1125), Minutes(69.65), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 0, "shortest_distance", requests[0], Meters(1276.8), Minutes(73.5), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 2, "shortest_time", requests[0], Meters(1203.13), Minutes(60), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 0, "shortest_distance", requests[1], Meters(32745), Minutes(202.15), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 0, "shortest_time", requests[1], Meters(32745), Minutes(202.15), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 1, "shortest_distance", requests[1], Meters(12), Minutes(59), "0"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 1, "shortest_time", requests[1], Meters(134), Minutes(20), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 2, "shortest_distance", requests[1], Meters(32745), Minutes(202.15), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 2, "shortest_time", requests[1], Meters(32745), Minutes(202.15), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(1, 2, "shortest_distance", requests[1], Meters(19803.3), Minutes(208.3), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 1, "shortest_time", requests[1], Meters(49525.2), Minutes(259.11), "1"));
+
     simulation.startSimulation();
 
     assertResults(expectedResults, requests);
+    assertStrangeResults(expectedStrangeResults);
 }
