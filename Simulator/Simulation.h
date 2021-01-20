@@ -120,14 +120,6 @@ private:
      * @brief the function where threads execute navigation tasks
      */
     void navigationThread();
-
-
-    /**
-     * @brief execute a task (task = Navigation x GIS x request)
-     * @param task the task to execute
-     * @return std::unique_ptr<TaskResult>
-     */
-    std::unique_ptr<TaskResult> executeTask(const NavigationTask &task);
 };
 
 

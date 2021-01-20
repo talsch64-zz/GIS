@@ -69,7 +69,7 @@ void Simulation::navigationThread() {
             }
         }
         if (cond) {
-            std::unique_ptr<TaskResult> result = executeTask(*task);
+            std::unique_ptr<TaskResult> result = task->execute();
             setResult(task->getGisIndex(), task->getNavigationIndex(), task->getRequestIndex(), std::move(result));
             taskManager->discardTask(*task);
         }
@@ -85,25 +85,6 @@ std::unique_ptr<TaskResult> &Simulation::getResult(int gisIndex, int navigationI
 
 void Simulation::setResult(int gisIndex, int navigationIndex, int requestIndex, std::unique_ptr<TaskResult> result) {
     getResult(gisIndex, navigationIndex, requestIndex) = std::move(result);
-}
-
-std::unique_ptr<TaskResult> Simulation::executeTask(const NavigationTask &task) {
-    auto &navigation = task.getNavigation();
-    auto req = task.getRequest();
-    std::unique_ptr<TaskResult> result = std::make_unique<TaskResult>();
-    result->setRoutes(navigation->getRoutes(req.getFrom(), req.getTo()));
-    auto &routes = result->getRoutes();
-    bool validRoutes = routes->isValid();
-    if (validRoutes) {
-        auto &shortestDistanceRoute = routes->shortestDistance();
-        auto &shortestTimeRoute = routes->shortestTime();
-        auto &start = shortestTimeRoute.getWayStartPoint();
-        auto &end = shortestTimeRoute.getWayEndPoint();
-        result->setShortestDistanceValid(task.getValidator()->validateRoute(start, end, shortestDistanceRoute));
-        result->setShortestTimeValid(task.getValidator()->validateRoute(start, end, shortestTimeRoute));
-    }
-    result->setGisUsageCount(task.getNavigationGis()->getUsageCounter());
-    return result;
 }
 
 void Simulation::clear() {
