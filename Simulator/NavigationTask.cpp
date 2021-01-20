@@ -28,19 +28,19 @@ int NavigationTask::getRequestIndex() const {
 }
 
 std::unique_ptr<TaskResult> NavigationTask::execute() {
-    std::unique_ptr<TaskResult> result = std::make_unique<TaskResult>();
-    result->setRoutes(navigation->getRoutes(request.getFrom(), request.getTo()));
-    auto &routes = result->getRoutes();
+    auto routes = navigation->getRoutes(request.getFrom(), request.getTo()));
     bool validRoutes = routes->isValid();
+    bool distanceValid = false, timeValid = false;
     if (validRoutes) {
         auto &shortestDistanceRoute = routes->shortestDistance();
         auto &shortestTimeRoute = routes->shortestTime();
         auto &start = shortestTimeRoute.getWayStartPoint();
         auto &end = shortestTimeRoute.getWayEndPoint();
-        result->setShortestDistanceValid(validator->validateRoute(start, end, shortestDistanceRoute));
-        result->setShortestTimeValid(validator->validateRoute(start, end, shortestTimeRoute));
+        distanceValid = validator->validateRoute(start, end, shortestDistanceRoute);
+        timeValid = validator->validateRoute(start, end, shortestTimeRoute);
     }
-    result->setGisUsageCount(navigationGIS->getUsageCounter());
+    int gisUsages = navigationGIS->getUsageCounter();
+    auto result = std::make_unique<TaskResult>(std::move(routes), distanceValid, timeValid, gisUsages);
     return result;
 }
 

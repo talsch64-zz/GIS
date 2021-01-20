@@ -36,8 +36,10 @@ const NavigationRequest &Simulation::getNavigationRequest(int index) {
 
 void Simulation::startSimulation() {
     requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
-    taskManager = std::make_unique<NavigationTasksManager>(gisContainers.size(), navigationContainers.size(),
-                                                           requests.size());
+    if (taskManager == nullptr) {
+        setTaskManager(std::make_unique<NavigationTasksManager>(gisContainers.size(), navigationContainers.size(),
+                                                                requests.size()));
+    }
     resultsAnalyzer = std::make_unique<ResultsAnalyzer>(gisContainers.size(), navigationContainers.size(),
                                                         requests.size(), registrar->getOutputPath());
     results = std::make_unique<std::unique_ptr<TaskResult>[]>(
@@ -95,6 +97,10 @@ void Simulation::clear() {
 
 const std::unique_ptr<Registrar> &Simulation::getRegistrar() const {
     return registrar;
+}
+
+void Simulation::setTaskManager(std::unique_ptr<NavigationTasksManager> taskManager) {
+    this->taskManager = std::move(taskManager);
 }
 
 

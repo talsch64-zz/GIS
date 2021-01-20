@@ -72,6 +72,8 @@ public:
 
     const NavigationRequest &getNavigationRequest(int index);
 
+    void setTaskManager(std::unique_ptr<NavigationTasksManager> taskManager);
+
     /**
      * Get a reference to the array element of the result,
      * corresponding to a GIS, Navigation algorithm and request combination
