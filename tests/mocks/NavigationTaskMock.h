@@ -5,14 +5,14 @@
 #include "../../Simulator/NavigationTask.h"
 
 class NavigationTaskMock : public NavigationTask {
-    std::unique_ptr<NavigationValidator> mutable validatorMock = nullptr;
+    std::unique_ptr<TaskResult> fakeResult;
 
 public:
     NavigationTaskMock(std::unique_ptr<GISContainer> &gisContainer,
                        std::unique_ptr<NavigationContainer> &navigationContainer, const NavigationRequest &request,
-                       int gisIndex, int navigationIndex, int requestIndex);
+                       int gisIndex, int navigationIndex, int requestIndex, std::unique_ptr<TaskResult> fakeResult);
 
-    const std::unique_ptr<NavigationValidator> &getValidator() const override;
+    std::unique_ptr<TaskResult> execute() override;
 };
 
 

@@ -30,7 +30,7 @@ public:
                    std::unique_ptr<NavigationContainer> &navigationContainer, const NavigationRequest &request,
                    int gisIndex, int navigationIndex, int requestIndex);
 
-    std::unique_ptr<TaskResult> execute();
+    virtual std::unique_ptr<TaskResult> execute();
 
     int getGisIndex() const;
 

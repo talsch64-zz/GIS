@@ -5,13 +5,13 @@
 #include "NavigationTask.h"
 
 class NavigationTasksManager {
+protected:
     int nextGisIndex = 0;
     int nextNavigationIndex = 0;
     int nextRequestIndex = 0;
     int gisAmount;
     int navigationsAmount;
     int requestsAmount;
-protected:
     //allow mocking this method
     virtual std::unique_ptr<NavigationTask> createTask(std::unique_ptr<GISContainer> &gisContainer,
                                                        std::unique_ptr<NavigationContainer> &navigationContainer,
