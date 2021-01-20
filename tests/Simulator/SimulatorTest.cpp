@@ -22,7 +22,7 @@ public:
     void SetUp() override {
     }
 
-    void startSimulation(int numThreads, std::string mapFileName, std::string requestsFileName) {
+    void prepareSimulation(int numThreads, std::string mapFileName, std::string requestsFileName) {
         Simulation &simulation = Simulation::getInstance();
         char *mapPath = (char *) malloc(strlen(mapsDirectory) + mapFileName.size() + 1);
         strcpy(mapPath, mapsDirectory);
@@ -46,7 +46,6 @@ public:
         auto &registrar = simulation.getRegistrar();
         registrar->parseCommandLineArguments(argc, argv);
         registrar->loadSharedLibraries();
-        simulation.startSimulation();
 
         free(numThreadsChars);
         free(numThreadsTitle);
@@ -98,6 +97,7 @@ public:
 };
 
 TEST_F(SimulatorTest, resultsTest) {
+    prepareSimulation(5, "astar.json", "requests.txt");
     Simulation &simulation = Simulation::getInstance();
     auto &registrar = simulation.getRegistrar();
     auto requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
@@ -250,6 +250,6 @@ TEST_F(SimulatorTest, resultsTest) {
                            std::make_unique<TaskResult>(std::move(routes221), true, true, 908));
 
     simulation.setTaskManager(std::move(taskManager));
-    startSimulation(5, "astar.json", "requests.txt");
 
+    simulation.startSimulation();
 }
