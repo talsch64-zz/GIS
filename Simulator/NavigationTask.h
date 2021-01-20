@@ -13,6 +13,12 @@
 #include "NavigationValidator.h"
 #include "TaskResult.h"
 
+
+/**
+ * class NavigationTask
+ * Represents a Navigation x GIS x request combination.
+ * The task is indexed by the three indices of the gisIndex, navigationIndex and requestIndex.
+ */
 class NavigationTask {
     std::unique_ptr<AbstractNavigation> navigation = nullptr;
     std::unique_ptr<NavigationValidator> validator = nullptr;

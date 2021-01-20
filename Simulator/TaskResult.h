@@ -9,8 +9,8 @@
 
 
 /**
- * class TaskResult represent the result of a task (Navigation x GIS x request)
- * Stores the output Routes of the task, a flag that indicates whether the routes is valid abd the gis usage count.
+ * class TaskResult represent the result of a task (GIS x Navigation x request combination)
+ * Stores the output Routes of the task, a flag that indicates whether the routes is valid and the gis usage count.
  */
 class TaskResult {
     std::unique_ptr<AbstractRoutes> routes = nullptr;

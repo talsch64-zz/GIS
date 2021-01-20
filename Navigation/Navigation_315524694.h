@@ -14,6 +14,8 @@
  *
  */
 class Navigation_315524694 : public AbstractNavigation {
+    mutable std::unordered_map<EntityId, const AbstractWay &> waysMap;     // ways caching for lower gis usage
+    mutable std::unordered_map<EntityId, std::vector<EntityId>> waysByJunctionMap;     // ways caching for lower gis usage
 
 public:
     /**
@@ -51,7 +53,7 @@ protected:
      * @brief returns a non-restricted way that is not an highway (unless the distance from coord is less then 3 meters)
      * @param coord
      * @param restrictions
-     * @return tuple contains coordinates on the way, reference to the way itself and the initial segment number
+     * @return tuple contains coordinates on the way, reference to the way itself and the initial segment number.
      */
     std::tuple<Coordinates, const AbstractWay &, std::size_t>
     getClosestValidWay(const Coordinates &coord, const Restrictions &restrictions) const;

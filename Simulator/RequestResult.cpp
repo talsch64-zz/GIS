@@ -30,10 +30,18 @@ const std::pair<Meters, Minutes> &RequestResult::getConsensusShortestTime() cons
     return consensusShortestTime;
 }
 
-int RequestResult::getGisRequests() const {
-    return gisRequests;
+int RequestResult::getGisDistanceUsageCount() const {
+    return gisDistanceUsageCount;
 }
 
-void RequestResult::setGisRequests(int gisRequests) {
-    RequestResult::gisRequests = gisRequests;
+void RequestResult::setGisDistanceUsageCount(int gisUsageCount) {
+    RequestResult::gisDistanceUsageCount = gisUsageCount;
+}
+
+int RequestResult::getGisTimeUsageCount() const {
+    return gisTimeUsageCount;
+}
+
+void RequestResult::setGisTimeUsageCount(int gisUsageCount) {
+    RequestResult::gisTimeUsageCount = gisUsageCount;
 }

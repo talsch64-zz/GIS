@@ -29,7 +29,8 @@ Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end
         const AbstractWay &endWay = std::get<1>(endTuple);
         size_t endWaySegment = std::get<2>(endTuple);
 
-        AStar star(gis, startPoint, destinationPoint, startWay, startWaySegment, endWay, endWaySegment, restrictions);
+        AStar star(gis, startPoint, destinationPoint, startWay, startWaySegment, endWay, endWaySegment, waysMap,
+                   waysByJunctionMap, restrictions);
 
         auto shortestByDistance = star.shortestByDistance();
         if (shortestByDistance == nullptr) {
@@ -51,16 +52,19 @@ Navigation_315524694::getClosestValidWay(const Coordinates &coord, const Restric
     const AbstractWay &way = gis.getWay(std::get<AbstractGIS::ClosestPoint::WayId>(wayClosestPointTuple));
     Coordinates wayCoord = std::get<AbstractGIS::ClosestPoint::Coord>(wayClosestPointTuple);
     std::size_t segment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(wayClosestPointTuple);
+    waysMap.insert(std::pair<EntityId, const AbstractWay &>(way.getId(), way));
     if (!way.isHighway() || CoordinatesMath::calculateDistance(coord, wayCoord) <= Utils::max_distance_from_highway) {
         // valid way
         return std::tuple<Coordinates, const AbstractWay &, std::size_t>(wayCoord, way, segment);
     }
+    //TODO the correct solution would be to add the highway to the restriction but there is no API for it.
     Restrictions newRestrictions = restrictions.contains("toll") ? Restrictions("toll, highway") : Restrictions(
             "highway");
     wayClosestPointTuple = gis.getWayClosestPoint(coord, newRestrictions);
     const AbstractWay &newWay = gis.getWay(std::get<AbstractGIS::ClosestPoint::WayId>(wayClosestPointTuple));
     wayCoord = std::get<AbstractGIS::ClosestPoint::Coord>(wayClosestPointTuple);
     segment = std::get<AbstractGIS::ClosestPoint::SegmentIndex>(wayClosestPointTuple);
+    waysMap.insert(std::pair<EntityId, const AbstractWay &>(newWay.getId(), newWay));
     return std::tuple<Coordinates, const AbstractWay &, std::size_t>(wayCoord, newWay, segment);
 }
 

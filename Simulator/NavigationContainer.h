@@ -4,6 +4,9 @@
 
 #include "../Common/AbstractNavigation.h"
 
+/**
+ * class NavigationContainer holds Navigation factory and the class name;
+ */
 class NavigationContainer {
     std::function<std::unique_ptr<AbstractNavigation>(const NavigationGIS &)> factory;
     const std::string name;

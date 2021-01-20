@@ -44,7 +44,7 @@ private:
      * @param requestResult
      * @return minimal Gis requests, out of Gis which got best distance/time (if a consensus was reached)
      */
-    std::optional<int>
+    std::pair<std::optional<int>, std::optional<int>>
     compareGisResultsToConsensus(int requestIndex, int navigationIndex, RequestResult *requestResult);
 
     /**
