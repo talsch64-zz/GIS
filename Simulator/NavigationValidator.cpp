@@ -1,6 +1,7 @@
 #include "NavigationValidator.h"
 #include "../Common/CoordinatesMath.h"
 #include "../UserCommon/Utils.h"
+#include <iostream>
 
 NavigationValidator::NavigationValidator(const AbstractGIS &gis) : gis(gis) {
 }
