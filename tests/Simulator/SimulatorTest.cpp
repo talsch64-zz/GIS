@@ -5,6 +5,7 @@
 #include <fstream>
 #include <cstring>
 #include <string>
+#include <regex>
 
 
 class SimulatorTest : public ::testing::Test {
@@ -76,16 +77,30 @@ public:
         return lines;
     }
 
-    std::vector<std::string> splitLineToParts(std::string line) {
-        std::vector<std::string> arr;
-        char *cstr = const_cast<char *>(line.c_str());
-        std::string sep = ", ";
-        char *current = std::strtok(cstr, sep.c_str());
-        while (current != nullptr) {
-            arr.emplace_back(current);
-            current = std::strtok(nullptr, sep.c_str());
+    std::vector<std::string> getResultsLines() {
+        std::vector<std::string> lines;
+        std::ifstream infile("simulation.results");
+        std::string line;
+        while (std::getline(infile, line)) {
+            lines.push_back(line);
         }
-        return arr;
+        lines.pop_back();
+        return lines;
+    }
+
+    void assertResults(std::vector<std::string> expectedResults, std::vector<NavigationRequest> requests) {
+        auto resultLines = getResultsLines();
+        std::string title = resultLines[0];
+        std::string expectedTitle = "Navigation Algorithm";
+        for (auto req: requests) {
+            expectedTitle += ", " + req.toString();
+        }
+        expectedTitle += ", Total Score";
+        EXPECT_EQ(title, expectedTitle);
+
+        for (int i = 1; i < resultLines.size(); i++) {
+            EXPECT_EQ(resultLines[i], expectedResults[i - 1]);
+        }
     }
 
     virtual ~SimulatorTest() {
@@ -136,7 +151,6 @@ TEST_F(SimulatorTest, resultsTest) {
     taskManager->setResult(0, 1, 0,
                            std::make_unique<TaskResult>(std::move(routes010), true, true, 101));
 
-
     auto routes110 = std::make_unique<Routes>(
             std::make_unique<Route>(requests[0].getFrom(), requests[0].getTo(), Meters(1006.8), Minutes(71.5),
                                     mockWays),
@@ -167,7 +181,7 @@ TEST_F(SimulatorTest, resultsTest) {
             std::make_unique<Route>(requests[0].getFrom(), requests[0].getTo(), Meters(1200.93), Minutes(60),
                                     mockWays), true, "");
     taskManager->setResult(1, 2, 0,
-                           std::make_unique<TaskResult>(std::move(routes120), true, true, 97));
+                           std::make_unique<TaskResult>(std::move(routes120), true, true, 94));
 
     auto routes220 = std::make_unique<Routes>(
             std::make_unique<Route>(requests[0].getFrom(), requests[0].getTo(), Meters(1076.8), Minutes(71.5),
@@ -251,5 +265,12 @@ TEST_F(SimulatorTest, resultsTest) {
 
     simulation.setTaskManager(std::move(taskManager));
 
+    std::vector<std::string> expectedResults;
+    expectedResults.push_back(simulation.getNavigationContainer(1)->getName() + ", 3, 2, 5");
+    expectedResults.push_back(simulation.getNavigationContainer(2)->getName() + ", 2, 2, 4");
+    expectedResults.push_back(simulation.getNavigationContainer(0)->getName() + ", 0, -1, -1");
+
     simulation.startSimulation();
+
+    assertResults(expectedResults, requests);
 }
