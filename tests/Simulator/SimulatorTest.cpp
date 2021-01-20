@@ -177,6 +177,78 @@ TEST_F(SimulatorTest, resultsTest) {
     taskManager->setResult(2, 2, 0,
                            std::make_unique<TaskResult>(std::move(routes220), true, true, 50));
 
+    auto routes001 = std::make_unique<Routes>(
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(32745), Minutes(202.15),
+                                    mockWays),
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(32745), Minutes(202.15),
+                                    mockWays), true, "");
+    taskManager->setResult(0, 0, 1,
+                           std::make_unique<TaskResult>(std::move(routes001), true, true, 78));
+
+    auto routes101 = std::make_unique<Routes>(
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(12), Minutes(59),
+                                    mockWays),
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(134), Minutes(20),
+                                    mockWays), true, "");
+    taskManager->setResult(1, 0, 1,
+                           std::make_unique<TaskResult>(std::move(routes101), false, true, 555));
+
+    auto routes201 = std::make_unique<Routes>(
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(32745), Minutes(202.15),
+                                    mockWays),
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(32745), Minutes(202.15),
+                                    mockWays), true, "");
+    taskManager->setResult(2, 0, 1,
+                           std::make_unique<TaskResult>(std::move(routes201), true, true, 108));
+
+    auto routes011 = std::make_unique<Routes>(
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40523.1), Minutes(208.3),
+                                    mockWays),
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40523.1), Minutes(208.3),
+                                    mockWays), true, "");
+    taskManager->setResult(0, 1, 1,
+                           std::make_unique<TaskResult>(std::move(routes011), true, true, 301));
+
+    auto routes111 = std::make_unique<Routes>(
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40523.1), Minutes(208.3),
+                                    mockWays),
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40523.1), Minutes(208.3),
+                                    mockWays), true, "");
+    taskManager->setResult(1, 1, 1,
+                           std::make_unique<TaskResult>(std::move(routes111), true, true, 301));
+
+    auto routes211 = std::make_unique<Routes>(
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(19803.3), Minutes(208.3),
+                                    mockWays),
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40523.1), Minutes(208.3),
+                                    mockWays), true, "");
+    taskManager->setResult(2, 1, 1,
+                           std::make_unique<TaskResult>(std::move(routes211), true, true, 321));
+
+    auto routes021 = std::make_unique<Routes>(
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40523.1), Minutes(208.4),
+                                    mockWays),
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40522.8), Minutes(208.3),
+                                    mockWays), true, "");
+    taskManager->setResult(0, 2, 1,
+                           std::make_unique<TaskResult>(std::move(routes021), true, true, 120));
+
+    auto routes121 = std::make_unique<Routes>(
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40523.1), Minutes(208.4),
+                                    mockWays),
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(49525.2), Minutes(259.11),
+                                    mockWays), true, "");
+    taskManager->setResult(1, 2, 1,
+                           std::make_unique<TaskResult>(std::move(routes121), true, true, 111));
+
+    auto routes221 = std::make_unique<Routes>(
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40523.1), Minutes(208.4),
+                                    mockWays),
+            std::make_unique<Route>(requests[1].getFrom(), requests[1].getTo(), Meters(40522.8), Minutes(208.3),
+                                    mockWays), true, "");
+    taskManager->setResult(2, 2, 1,
+                           std::make_unique<TaskResult>(std::move(routes221), true, true, 908));
+
     simulation.setTaskManager(std::move(taskManager));
     startSimulation(5, "astar.json", "requests.txt");
 

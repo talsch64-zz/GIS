@@ -28,7 +28,7 @@ int NavigationTask::getRequestIndex() const {
 }
 
 std::unique_ptr<TaskResult> NavigationTask::execute() {
-    auto routes = navigation->getRoutes(request.getFrom(), request.getTo()));
+    auto routes = navigation->getRoutes(request.getFrom(), request.getTo());
     bool validRoutes = routes->isValid();
     bool distanceValid = false, timeValid = false;
     if (validRoutes) {
