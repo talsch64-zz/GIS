@@ -106,7 +106,7 @@ public:
         EXPECT_EQ(title, expectedTitle);
 
         EXPECT_EQ(resultLines.size() - 1, expectedResults.size());
-        for (int i = 1; i < resultLines.size(); i++) {
+        for (std::size_t i = 1; i < resultLines.size(); i++) {
             EXPECT_EQ(resultLines[i], expectedResults[i - 1]);
         }
     }
@@ -129,7 +129,7 @@ public:
     void assertStrangeResults(std::vector<std::string> expectedStrangeResults) {
         auto strangeResultLines = getStrangeResultsLines();
         EXPECT_EQ(strangeResultLines.size(), expectedStrangeResults.size());
-        for (int i = 0; i < expectedStrangeResults.size(); i++) {
+        for (std::size_t i = 0; i < expectedStrangeResults.size(); i++) {
             auto &expectedRes = expectedStrangeResults[i];
             EXPECT_NE(std::find(strangeResultLines.begin(), strangeResultLines.end(), expectedRes),
                       strangeResultLines.end()) << "Couldn't find strange result #" << i << ":\n" << expectedRes;

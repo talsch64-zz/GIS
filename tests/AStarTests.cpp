@@ -75,7 +75,7 @@ TEST_F(IsraelMapTest, getSegmentPartsOnWayTest1) {
     Coordinates coordinates(Longitude(31.99435), Latitude(35.49579));
     auto tuple = gis.getWayClosestPoint(coordinates);
     EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple), EntityId("W2060"));
-    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple), 0);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple), (std::size_t) 0);
     auto &way = gis.getWay(EntityId("W2060"));
     auto distancePair = way.getSegmentPartsOnWay(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple), coordinates);
     Meters distance = distancePair.first + distancePair.second;
@@ -84,7 +84,7 @@ TEST_F(IsraelMapTest, getSegmentPartsOnWayTest1) {
 
     // check segment equals to -1 if the coordinates are not located on the way
     auto way2 = dynamic_cast<Way *>(gis.getEntityById(EntityId("W2060")));
-    EXPECT_EQ(way2->getContainingSegment(Coordinates(Longitude(0), Latitude(0))), -1);
+    EXPECT_EQ(way2->getContainingSegment(Coordinates(Longitude(0), Latitude(0))), (std::size_t) -1);
 }
 
 
@@ -98,11 +98,11 @@ TEST_F(IsraelMapTest, getSegmentPartsOnWayTest2) {
 
 
     EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple0), EntityId("W2035"));
-    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple0), 0);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple0), (std::size_t) 0);
     EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple1), EntityId("W2035"));
-    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple1), 1);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple1), (std::size_t) 1);
     EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::WayId>(tuple2), EntityId("W2035"));
-    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple2), 2);
+    EXPECT_EQ(std::get<AbstractGIS::ClosestPoint::SegmentIndex>(tuple2), (std::size_t) 2);
 
 
     auto &way = gis.getWay(EntityId("W2035"));
