@@ -53,6 +53,9 @@ void Registrar::parseCommandLineArguments(int argc, char **argv) {
                 printUsage(argv[0]);
         }
     }
+    //reset
+    optind = 1;
+
     if (validateCommandLineArguments() == FAILURE) {
         printUsage(argv[0]);
     }

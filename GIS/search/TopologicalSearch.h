@@ -6,9 +6,9 @@
 #include <memory>
 #include "../../Common/GISNamedTypes.h"
 #include "Grid.h"
-#include "../UserCommon/entities/geometry/Circle.h"
-#include "../UserCommon/entities/geometry/PointList.h"
-#include "../UserCommon/entities/geometry/Point.h"
+#include "../../UserCommon/entities/geometry/Circle.h"
+#include "../../UserCommon/entities/geometry/PointList.h"
+#include "../../UserCommon/entities/geometry/Point.h"
 
 
 

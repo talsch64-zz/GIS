@@ -2,9 +2,9 @@
 #include "Grid.h"
 #include "../../UserCommon/entities/geometry/Geometry.h"
 #include "../../Common/CoordinatesMath.h"
-#include "../UserCommon/entities/geometry/PointList.h"
-#include "../UserCommon/entities/geometry/Point.h"
-#include "../UserCommon/entities/geometry/Circle.h"
+#include "../../UserCommon/entities/geometry/PointList.h"
+#include "../../UserCommon/entities/geometry/Point.h"
+#include "../../UserCommon/entities/geometry/Circle.h"
 
 double Grid::truncateDecimalCoordinate(double coordinate) const {
     return std::floor(coordinate / precision) * precision;
