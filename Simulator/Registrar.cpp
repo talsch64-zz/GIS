@@ -17,6 +17,7 @@
 #define SO_EXTENSION ".so"
 
 void Registrar::parseCommandLineArguments(int argc, char **argv) {
+    optind = 1;
     int opt = 0, option_index = 0;
     static struct option long_options[] = {
             {"num_threads",         required_argument, 0, 't'},

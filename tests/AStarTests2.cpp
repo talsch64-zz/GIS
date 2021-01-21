@@ -96,8 +96,8 @@ TEST(AStar, InvalidRouteLastWayHighway) {
     gis.loadMapFile("astar3.json");
     NavigationGIS navigationGis(gis);
     Navigation_315524694 navigation(navigationGis);
-    Coordinates startCoord(Longitude( 20.867132),
-                           Latitude( 43.988861));
+    Coordinates startCoord(Longitude(20.867132),
+                           Latitude(43.988861));
     Coordinates endCoord(Longitude(20.881755),
                          Latitude(43.996210));
 
@@ -158,9 +158,9 @@ TEST(AStar, HighwayWithinThreeMeters) {
  * Beware! Infinite Improbability Drive may cause unexpected results!
  */
 TEST(AStar, HeartOfGold) {
-    srand(time(NULL));
+    srand(50);
     std::unique_ptr<GISMock> gis = std::make_unique<GISMock>();
-    int v = 8, e = 14, reps = 100;
+    int v = 4, e = 7, reps = 20;
     for (int i = 0; i < reps; i++) {
         IdGenerator idGenerator;
         Bound bound = RandTestUtils::randBound();
