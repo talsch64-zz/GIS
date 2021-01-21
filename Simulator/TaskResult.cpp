@@ -1,13 +1,11 @@
 #include <iostream>
 #include "TaskResult.h"
 
-void TaskResult::setRoutes(std::unique_ptr<AbstractRoutes> routes) {
-    TaskResult::routes = std::move(routes);
-}
-
-void TaskResult::setGisUsageCount(size_t gisUsage) {
-    TaskResult::gisUsageCount = gisUsage;
-}
+TaskResult::TaskResult(std::unique_ptr<AbstractRoutes> routes, bool shortestDistanceValid,
+                       bool shortestTimeValid, size_t gisUsageCount) : routes(std::move(routes)),
+                                                                       shortestDistanceValid(shortestDistanceValid),
+                                                                       shortestTimeValid(shortestTimeValid),
+                                                                       gisUsageCount(gisUsageCount) {}
 
 const std::unique_ptr<AbstractRoutes> &TaskResult::getRoutes() const {
     return routes;
@@ -22,16 +20,8 @@ bool TaskResult::isShortestDistanceValid() const {
     return shortestDistanceValid;
 }
 
-void TaskResult::setShortestDistanceValid(bool shortestDistanceValid) {
-    TaskResult::shortestDistanceValid = shortestDistanceValid;
-}
-
 bool TaskResult::isShortestTimeValid() const {
     return shortestTimeValid;
-}
-
-void TaskResult::setShortestTimeValid(bool shortestTimeValid) {
-    TaskResult::shortestTimeValid = shortestTimeValid;
 }
 
 bool TaskResult::isValid() const {

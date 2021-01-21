@@ -72,6 +72,8 @@ public:
 
     const NavigationRequest &getNavigationRequest(int index);
 
+    void setTaskManager(std::unique_ptr<NavigationTasksManager> taskManager);
+
     /**
      * Get a reference to the array element of the result,
      * corresponding to a GIS, Navigation algorithm and request combination
@@ -91,14 +93,6 @@ private:
      * @brief the function where threads execute navigation tasks
      */
     void navigationThread();
-
-
-    /**
-     * @brief execute a task (task = Navigation x GIS x request)
-     * @param task the task to execute
-     * @return std::unique_ptr<TaskResult>
-     */
-    std::unique_ptr<TaskResult> executeTask(const NavigationTask &task);
 };
 
 

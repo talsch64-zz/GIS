@@ -28,7 +28,7 @@ public:
      * @return true - Route is valid
      * @return false - Route is not valid
      */
-    bool validateRoute(const Coordinates &start, const Coordinates &end, const AbstractRoute &routes) const;
+    virtual bool validateRoute(const Coordinates &start, const Coordinates &end, const AbstractRoute &routes) const;
 
     /**
      * @brief Validates the given Route with Restricitons from Start Point to End Point on referenced GIS

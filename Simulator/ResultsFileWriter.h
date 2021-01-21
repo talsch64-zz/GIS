@@ -18,8 +18,8 @@ public:
     void writeStrangeGisResult(const std::string &navigationName, const std::string &gisName,
                                const NavigationRequest &request, const TaskResult &result, bool shortestDistance) const;
 
-    void writeScoresTable(const std::vector<std::unique_ptr<NavigationScores>> &scores,
-                          const std::vector<int> &consensusRequests);
+    void writeScoresTable(std::vector<std::unique_ptr<NavigationScores>> scores,
+                          std::vector<int> consensusRequests);
 };
 
 

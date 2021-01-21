@@ -36,9 +36,10 @@ const NavigationRequest &Simulation::getNavigationRequest(int index) {
 
 void Simulation::startSimulation() {
     requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
-
-    taskManager = std::make_unique<NavigationTasksManager>(gisContainers.size(), navigationContainers.size(),
-                                                           requests.size());
+    if (taskManager == nullptr) {
+        setTaskManager(std::make_unique<NavigationTasksManager>(gisContainers.size(), navigationContainers.size(),
+                                                                requests.size()));
+    }
     resultsAnalyzer = std::make_unique<ResultsAnalyzer>(gisContainers.size(), navigationContainers.size(),
                                                         requests.size(), registrar->getOutputPath());
     results = std::make_unique<std::unique_ptr<TaskResult>[]>(
@@ -75,7 +76,7 @@ void Simulation::navigationThread() {
             }
         }
         if (cond) {
-            std::unique_ptr<TaskResult> result = executeTask(*task);
+            std::unique_ptr<TaskResult> result = task->execute();
             setResult(task->getGisIndex(), task->getNavigationIndex(), task->getRequestIndex(), std::move(result));
             taskManager->discardTask(*task);
         }
@@ -93,23 +94,6 @@ void Simulation::setResult(int gisIndex, int navigationIndex, int requestIndex, 
     getResult(gisIndex, navigationIndex, requestIndex) = std::move(result);
 }
 
-std::unique_ptr<TaskResult> Simulation::executeTask(const NavigationTask &task) {
-    auto &navigation = task.getNavigation();
-    auto req = task.getRequest();
-    std::unique_ptr<TaskResult> result = std::make_unique<TaskResult>();
-    result->setRoutes(navigation->getRoutes(req.getFrom(), req.getTo()));
-    auto &routes = result->getRoutes();
-    bool validRoutes = routes->isValid();
-    if (validRoutes) {
-        auto &shortestDistanceRoute = routes->shortestDistance();
-        auto &shortestTimeRoute = routes->shortestTime();
-        result->setShortestDistanceValid(task.getValidator()->validateRoute(req.getFrom(), req.getTo(), shortestDistanceRoute));
-        result->setShortestTimeValid(task.getValidator()->validateRoute(req.getFrom(), req.getTo(), shortestTimeRoute));
-    }
-    result->setGisUsageCount(task.getNavigationGis()->getUsageCounter());
-    return result;
-}
-
 void Simulation::clear() {
     gisContainers.clear();
     navigationContainers.clear();
@@ -118,6 +102,10 @@ void Simulation::clear() {
 
 const std::unique_ptr<Registrar> &Simulation::getRegistrar() const {
     return registrar;
+}
+
+void Simulation::setTaskManager(std::unique_ptr<NavigationTasksManager> taskManager) {
+    this->taskManager = std::move(taskManager);
 }
 
 

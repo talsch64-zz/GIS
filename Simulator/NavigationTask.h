@@ -11,6 +11,7 @@
 #include "GISContainer.h"
 #include "NavigationContainer.h"
 #include "NavigationValidator.h"
+#include "TaskResult.h"
 
 
 /**
@@ -19,7 +20,6 @@
  * The task is indexed by the three indices of the gisIndex, navigationIndex and requestIndex.
  */
 class NavigationTask {
-    std::unique_ptr<GISContainer> &gisContainer;
     std::unique_ptr<AbstractNavigation> navigation = nullptr;
     std::unique_ptr<NavigationValidator> validator = nullptr;
     std::unique_ptr<NavigationGIS> navigationGIS = nullptr;
@@ -28,20 +28,15 @@ class NavigationTask {
     int navigationIndex;
     int requestIndex;
 
+protected:
+    std::unique_ptr<GISContainer> &gisContainer;
+
 public:
     NavigationTask(std::unique_ptr<GISContainer> &gisContainer,
                    std::unique_ptr<NavigationContainer> &navigationContainer, const NavigationRequest &request,
                    int gisIndex, int navigationIndex, int requestIndex);
 
-    const std::unique_ptr<AbstractNavigation> &getNavigation() const;
-
-    const std::unique_ptr<NavigationValidator> &getValidator() const;
-
-    const std::unique_ptr<NavigationGIS> &getNavigationGis() const;
-
-    GISContainer &getGisContainer() const;
-
-    const NavigationRequest &getRequest() const;
+    virtual std::unique_ptr<TaskResult> execute();
 
     int getGisIndex() const;
 
@@ -49,7 +44,7 @@ public:
 
     int getRequestIndex() const;
 
-
+    GISContainer &getGisContainer() const;
 };
 
 

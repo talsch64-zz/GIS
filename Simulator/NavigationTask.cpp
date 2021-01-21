@@ -15,14 +15,6 @@ NavigationTask::NavigationTask(std::unique_ptr<GISContainer> &gisContainer,
     validator = std::make_unique<NavigationValidator>(*gis);
 }
 
-const std::unique_ptr<AbstractNavigation> &NavigationTask::getNavigation() const {
-    return navigation;
-}
-
-const NavigationRequest &NavigationTask::getRequest() const {
-    return request;
-}
-
 int NavigationTask::getGisIndex() const {
     return gisIndex;
 }
@@ -35,12 +27,19 @@ int NavigationTask::getRequestIndex() const {
     return requestIndex;
 }
 
-const std::unique_ptr<NavigationValidator> &NavigationTask::getValidator() const {
-    return validator;
-}
-
-const std::unique_ptr<NavigationGIS> &NavigationTask::getNavigationGis() const {
-    return navigationGIS;
+std::unique_ptr<TaskResult> NavigationTask::execute() {
+    auto routes = navigation->getRoutes(request.getFrom(), request.getTo());
+    bool validRoutes = routes->isValid();
+    bool distanceValid = false, timeValid = false;
+    if (validRoutes) {
+        auto &shortestDistanceRoute = routes->shortestDistance();
+        auto &shortestTimeRoute = routes->shortestTime();
+        distanceValid = validator->validateRoute(request.getFrom(), request.getTo(), shortestDistanceRoute);
+        timeValid = validator->validateRoute(request.getFrom(), request.getTo(), shortestTimeRoute);
+    }
+    int gisUsages = navigationGIS->getUsageCounter();
+    auto result = std::make_unique<TaskResult>(std::move(routes), distanceValid, timeValid, gisUsages);
+    return result;
 }
 
 GISContainer &NavigationTask::getGisContainer() const {

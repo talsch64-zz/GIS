@@ -19,9 +19,8 @@ class TaskResult {
     std::size_t gisUsageCount;
 
 public:
-    void setRoutes(std::unique_ptr<AbstractRoutes> routes);
-
-    void setGisUsageCount(size_t gisUsage);
+    TaskResult(std::unique_ptr<AbstractRoutes> routes, bool shortestDistanceValid, bool shortestTimeValid,
+               size_t gisUsageCount);
 
     const std::unique_ptr<AbstractRoutes> &getRoutes() const;
 
@@ -31,11 +30,7 @@ public:
 
     bool isShortestDistanceValid() const;
 
-    void setShortestDistanceValid(bool shortestDistanceValid);
-
     bool isShortestTimeValid() const;
-
-    void setShortestTimeValid(bool shortestTimeValid);
 };
 
 

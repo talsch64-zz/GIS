@@ -34,8 +34,8 @@ void ResultsFileWriter::writeStrangeGisResult(const std::string &navigationName,
     log.close();
 }
 
-void ResultsFileWriter::writeScoresTable(const std::vector<std::unique_ptr<NavigationScores>> &scores,
-                                         const std::vector<int> &consensusRequests) {
+void ResultsFileWriter::writeScoresTable(std::vector<std::unique_ptr<NavigationScores>> scores,
+                                         std::vector<int> consensusRequests) {
     Simulation &sim = Simulation::getInstance();
     std::ofstream resultsFile;
     resultsFile.open(resultsFilePath, std::ios_base::app);

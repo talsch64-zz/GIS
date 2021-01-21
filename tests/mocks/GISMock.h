@@ -1,7 +1,7 @@
 #ifndef GIS_CPP_GISMOCK_H
 #define GIS_CPP_GISMOCK_H
 
-#include "../GIS/GIS_315524694.h"
+#include "../../GIS/GIS_315524694.h"
 
 class GISMock : public GIS_315524694
 {
