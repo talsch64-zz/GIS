@@ -11,7 +11,7 @@ TEST(RequestsParsing, RequestsParsingTest) {
                                                                     Coordinates(Longitude(-98.347658),
                                                                                 Latitude(-48.1335523)))};
 
-    auto actualReq = reqParser.parse("requests.txt");
+    auto actualReq = reqParser.parse("requests_test.txt");
 
     EXPECT_EQ(actualReq.size(), expectedReq.size());
     for (std::size_t i = 0; i < actualReq.size(); i++) {
