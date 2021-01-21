@@ -34,10 +34,8 @@ std::unique_ptr<TaskResult> NavigationTask::execute() {
     if (validRoutes) {
         auto &shortestDistanceRoute = routes->shortestDistance();
         auto &shortestTimeRoute = routes->shortestTime();
-        auto &start = shortestTimeRoute.getWayStartPoint();
-        auto &end = shortestTimeRoute.getWayEndPoint();
-        distanceValid = validator->validateRoute(start, end, shortestDistanceRoute);
-        timeValid = validator->validateRoute(start, end, shortestTimeRoute);
+        distanceValid = validator->validateRoute(request.getFrom(), request.getTo(), shortestDistanceRoute);
+        timeValid = validator->validateRoute(request.getFrom(), request.getTo(), shortestTimeRoute);
     }
     int gisUsages = navigationGIS->getUsageCounter();
     auto result = std::make_unique<TaskResult>(std::move(routes), distanceValid, timeValid, gisUsages);
