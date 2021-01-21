@@ -4,7 +4,7 @@ COMP = g++-10
 GOOGLE_LIB = /usr/src/googletest/googletest/gcc-10-build/lib/
 GOOGLE_TEST_INCLUDE = /usr/src/googletest/googletest/include/
 
-SOURCE_FILES := $(wildcard main.cpp ../UserCommon/Utils.cpp Navigation/*.cpp GIS/GIS_315524694.cpp UserCommon/entities/*.cpp UserCommon/entities/geometry/*.cpp UserCommon/entities/JsonHandlers/Serializers/*.cpp UserCommon/entities/JsonHandlers/parsers/*.cpp GIS/search/*.cpp UserCommon/*.cpp Simulator/*.cpp tests/*.cpp tests/Simulator/*.cpp)
+SOURCE_FILES := $(wildcard main.cpp ../UserCommon/Utils.cpp Navigation/*.cpp GIS/GIS_315524694.cpp UserCommon/entities/*.cpp UserCommon/entities/geometry/*.cpp UserCommon/entities/JsonHandlers/Serializers/*.cpp UserCommon/entities/JsonHandlers/parsers/*.cpp GIS/search/*.cpp UserCommon/*.cpp Simulator/*.cpp tests/*.cpp tests/mocks/*.cpp tests/Simulator/*.cpp)
 OBJS := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 EXEC := ex3_tests
