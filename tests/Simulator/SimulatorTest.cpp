@@ -9,10 +9,8 @@
 
 
 class SimulatorTest : public ::testing::Test {
-    char *mapsDirectory = strdup("/home/tal/CLionProjects/advanced-ex1/Simulator/simulations/");
-    char *requestsDirectory = strdup("/home/tal/CLionProjects/advanced-ex1/tests/Simulator/");
-    char *navigationSoDirectory = strdup("/home/tal/CLionProjects/advanced-ex1/Simulator/simulations/shared_libraries/navigation/");
-    char *gisSoDirectory = strdup("/home/tal/CLionProjects/advanced-ex1/Simulator/simulations/shared_libraries/gis/");
+    char *mapsDirectory = strdup("/home/student/repos/advanced-topics/advanced-ex1/tests/");
+    char *requestsDirectory = strdup("/home/student/repos/advanced-topics/advanced-ex1/tests/Simulator/");
 
 public:
     std::unique_ptr<RequestsFileParser> requestsFileParser;
@@ -23,7 +21,8 @@ public:
     void SetUp() override {
     }
 
-    void prepareSimulation(int numThreads, std::string mapFileName, std::string requestsFileName) {
+    void prepareSimulation(int numThreads, std::string mapFileName, std::string requestsFileName,
+                           std::string gisSoRelativePath, std::string navSoRelativePath) {
         Simulation &simulation = Simulation::getInstance();
         char *mapPath = (char *) malloc(strlen(mapsDirectory) + mapFileName.size() + 1);
         strcpy(mapPath, mapsDirectory);
@@ -33,6 +32,14 @@ public:
         strcat(requestsPath, requestsFileName.c_str());
         char *numThreadsChars = (char *) malloc(3);
         sprintf(numThreadsChars, "%d", numThreads);
+
+        char *navigationSoDirectory = (char *) malloc(strlen(requestsDirectory) + navSoRelativePath.size() + 1);
+        strcpy(navigationSoDirectory, requestsDirectory);
+        strcat(navigationSoDirectory, navSoRelativePath.c_str());
+        char *gisSoDirectory = (char *) malloc(strlen(requestsDirectory) + gisSoRelativePath.size() + 1);
+        strcpy(gisSoDirectory, requestsDirectory);
+        strcat(gisSoDirectory, gisSoRelativePath.c_str());
+
         char *numThreadsTitle = strdup("-num_threads");
         char *navigationTitle = strdup("-navigation");
         char *gisTitle = strdup("-gis");
@@ -56,6 +63,8 @@ public:
         free(navigationRequestsTitle);
         free(mapPath);
         free(requestsPath);
+        free(gisSoDirectory);
+        free(navigationSoDirectory);
     }
 
     void TearDown()
@@ -129,13 +138,11 @@ public:
     virtual ~SimulatorTest() {
         free(mapsDirectory);
         free(requestsDirectory);
-        free(navigationSoDirectory);
-        free(gisSoDirectory);
     }
 };
 
 TEST_F(SimulatorTest, resultsTest) {
-    prepareSimulation(5, "israel.json", "requests.txt");
+    prepareSimulation(5, "astar.json", "requests.txt", "GISSo/3", "NavigationSo/3");
     Simulation &simulation = Simulation::getInstance();
     auto &registrar = simulation.getRegistrar();
     auto requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
@@ -330,7 +337,7 @@ TEST_F(SimulatorTest, resultsTest) {
 }
 
 TEST_F(SimulatorTest, noConsensusTest) {
-    prepareSimulation(3, "astar.json", "requests4.txt");
+    prepareSimulation(3, "astar.json", "requests4.txt", "GISSo/2", "NavigationSo/3");
     Simulation &simulation = Simulation::getInstance();
     auto &registrar = simulation.getRegistrar();
     auto requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
@@ -351,7 +358,7 @@ TEST_F(SimulatorTest, noConsensusTest) {
             std::make_unique<Route>(requests[0].getFrom(), requests[0].getTo(), Meters(1980.523), Minutes(591.23),
                                     mockWays), true, "");
     taskManager->setResult(1, 0, 0,
-                           std::make_unique<TaskResult>(std::move(routes000), true, true, 67));
+                           std::make_unique<TaskResult>(std::move(routes100), true, true, 67));
 
     auto routes010 = std::make_unique<Routes>(
             std::make_unique<Route>(requests[0].getFrom(), requests[0].getTo(), Meters(365), Minutes(365),
@@ -374,7 +381,7 @@ TEST_F(SimulatorTest, noConsensusTest) {
                                     mockWays),
             std::make_unique<Route>(requests[0].getFrom(), requests[0].getTo(), Meters(365), Minutes(365),
                                     mockWays), true, "");
-    taskManager->setResult(1, 2, 0,
+    taskManager->setResult(0, 2, 0,
                            std::make_unique<TaskResult>(std::move(routes020), true, true, 342));
 
     auto routes120 = std::make_unique<Routes>(
@@ -434,6 +441,8 @@ TEST_F(SimulatorTest, noConsensusTest) {
     taskManager->setResult(1, 2, 1,
                            std::make_unique<TaskResult>(std::move(routes121), false, true, 50));
 
+    simulation.setTaskManager(std::move(taskManager));
+
     std::vector<std::string> expectedResults;
     expectedResults.push_back(simulation.getNavigationContainer(1)->getName() + ", 4, 4");
     expectedResults.push_back(simulation.getNavigationContainer(0)->getName() + ", -1, -1");
@@ -441,6 +450,8 @@ TEST_F(SimulatorTest, noConsensusTest) {
 
     simulation.startSimulation();
 
+    auto &requestsCopy = requests;
+    requestsCopy.erase(requestsCopy.begin());
     assertResults(expectedResults, requests);
 //    assertStrangeResults(expectedStrangeResults);
 }
