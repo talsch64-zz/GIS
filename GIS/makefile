@@ -1,6 +1,5 @@
 COMP = g++-10
 
-INC:=-I../include
 SOURCE_FILES := $(wildcard GIS_315524694.cpp ../UserCommon/entities/*.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/entities/JsonHandlers/Serializers/*.cpp ../UserCommon/entities/JsonHandlers/parsers/*.cpp search/*.cpp ../UserCommon/*.cpp)
 OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
@@ -27,7 +26,7 @@ $(OUTPUT_SHARED_OBJ): $(OBJS)
 # c++ source
 $(BIN_DIR)/%.o: %.cpp
 	mkdir -p $(dir $@)
-	$(COMP) $(CPP_COMP_FLAG) $(INC) -c $< -o $@
+	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
 
 clean:
 	rm -rf $(BIN_DIR) $(OUTPUT_SHARED_OBJ)

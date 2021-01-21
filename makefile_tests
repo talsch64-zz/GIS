@@ -1,0 +1,34 @@
+# IMPORTANT: delete simulation's main.cpp before building
+COMP = g++-10
+
+GOOGLE_LIB = /usr/src/googletest/googletest/gcc-10-build/lib/
+GOOGLE_TEST_INCLUDE = /usr/src/googletest/googletest/include/
+
+SOURCE_FILES := $(wildcard main.cpp ../UserCommon/Utils.cpp Navigation/*.cpp GIS/GIS_315524694.cpp UserCommon/entities/*.cpp UserCommon/entities/geometry/*.cpp UserCommon/entities/JsonHandlers/Serializers/*.cpp UserCommon/entities/JsonHandlers/parsers/*.cpp GIS/search/*.cpp UserCommon/*.cpp Simulator/*.cpp tests/*.cpp tests/Simulator/*.cpp)
+OBJS := $(SOURCE_FILES:%.cpp=%.o)
+BIN_DIR := bin
+EXEC := ex3_tests
+OUTPUT_DIR := tests
+OUTPUT_EXEC := $(OUTPUT_DIR)/$(EXEC) 
+
+CPP_COMP_FLAG = -std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG -I$(GOOGLE_TEST_INCLUDE) 
+CPP_LINK_FLAG = -L$(GOOGLE_LIB) -lgtest -lgtest_main -rdynamic -pthread -ldl
+
+all: $(BIN_DIR) $(OUTPUT_DIR) $(OUTPUT_EXEC)
+
+$(BIN_DIR): 
+	mkdir -p $(BIN_DIR)
+
+$(OUTPUT_DIR):
+	mkdir -p $(OUTPUT_DIR)
+
+$(OUTPUT_EXEC): $(addprefix $(BIN_DIR)/, $(OBJS))
+	$(COMP) $^ $(CPP_LINK_FLAG) -o $@
+
+$(BIN_DIR)/%.o: %.cpp
+	mkdir -p $(dir $@)
+	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
+
+
+clean:
+	rm -rf $(BIN_DIR) $(OUTPUT_EXEC)

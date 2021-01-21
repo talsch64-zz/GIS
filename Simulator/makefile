@@ -1,8 +1,5 @@
 COMP = g++-10
 
-#remove on nova:
-INC:=-I../include
-
 SOURCE_FILES := $(wildcard *.cpp ../UserCommon/Utils.cpp)
 OBJS := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
@@ -26,7 +23,7 @@ $(OUTPUT_EXEC): $(addprefix $(BIN_DIR)/, $(OBJS))
 
 $(BIN_DIR)/%.o: %.cpp
 	mkdir -p $(dir $@)
-	$(COMP) $(CPP_COMP_FLAG) $(INC) -c $< -o $@
+	$(COMP) $(CPP_COMP_FLAG) -c $< -o $@
 
 
 clean:
