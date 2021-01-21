@@ -3,7 +3,7 @@ std::mutex GISContainer::freeGisMutex;
 
 GISContainer::GISContainer(const std::function<std::unique_ptr<AbstractGIS>()> &factory, const std::string &name,
                            const std::string &mapFilepath)
-        : factory(factory), name(name), mapFilepath(mapFilepath) {}
+        : factory(factory), mapFilepath(mapFilepath), name(name) {}
 
 std::unique_ptr<AbstractGIS> &GISContainer::getGIS() {
     if (gis == nullptr) {

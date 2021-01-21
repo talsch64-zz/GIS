@@ -143,7 +143,7 @@ std::optional<std::pair<Meters, Minutes>>
 ResultsAnalyzer::findValidConsensusResult(std::vector<std::pair<std::pair<Meters, Minutes>, int>> &results) {
     std::optional<std::pair<Meters, Minutes>> consensusResult;
     int agreeThreshold = gisAmount / 2;
-    for (int i = 0; i < results.size() && !consensusResult.has_value(); i++) {
+    for (std::size_t i = 0; i < results.size() && !consensusResult.has_value(); i++) {
         auto &resultPair = results[i];
         if (resultPair.second > agreeThreshold) {
             consensusResult = resultPair.first;
@@ -159,7 +159,7 @@ ResultsAnalyzer::compareGisResultsToConsensus(int requestIndex, int navigationIn
     NavigationRequest navigationRequest = sim.getNavigationRequest(requestIndex);
 
     std::string navigationName = sim.getNavigationContainer(navigationIndex)->getName();
-    std::pair<std::optional<int>, std::optional<int>> minGisUsagesCount; // first for distance, second for time
+    std::pair<std::optional<std::size_t>, std::optional<std::size_t>> minGisUsagesCount; // first for distance, second for time
     for (int k = 0; k < gisAmount; k++) {
         std::string gisName = sim.getGISContainer(k)->getName();
         auto &taskResult = sim.getResult(k, navigationIndex, requestIndex);
