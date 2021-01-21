@@ -9,10 +9,10 @@
 
 
 class SimulatorTest : public ::testing::Test {
-    char *mapsDirectory = strdup("/home/student/repos/advanced-topics/advanced-ex1/tests/");
-    char *requestsDirectory = strdup("/home/student/repos/advanced-topics/advanced-ex1/tests/Simulator/");
-    char *navigationSoDirectory = strdup("/home/student/repos/advanced-topics/advanced-ex1/Navigation/old-obuntu-so");
-    char *gisSoDirectory = strdup("/home/student/repos/advanced-topics/advanced-ex1/GIS/old-obuntu-so");
+    char *mapsDirectory = strdup("/home/tal/CLionProjects/advanced-ex1/Simulator/simulations/");
+    char *requestsDirectory = strdup("/home/tal/CLionProjects/advanced-ex1/tests/Simulator/");
+    char *navigationSoDirectory = strdup("/home/tal/CLionProjects/advanced-ex1/Simulator/simulations/shared_libraries/navigation/");
+    char *gisSoDirectory = strdup("/home/tal/CLionProjects/advanced-ex1/Simulator/simulations/shared_libraries/gis/");
 
 public:
     std::unique_ptr<RequestsFileParser> requestsFileParser;
@@ -135,7 +135,7 @@ public:
 };
 
 TEST_F(SimulatorTest, resultsTest) {
-    prepareSimulation(5, "astar.json", "requests.txt");
+    prepareSimulation(5, "israel.json", "requests.txt");
     Simulation &simulation = Simulation::getInstance();
     auto &registrar = simulation.getRegistrar();
     auto requests = requestsFileParser->parse(registrar->getNavigationRequestsPath());
