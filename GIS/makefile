@@ -6,8 +6,8 @@ OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))
 SHARED_OBJ := GIS_315524694.so
-# OUTPUT_DIR := ../../OUTPUT/GIS
-OUTPUT_DIR := .
+OUTPUT_DIR := ../../OUTPUT/GIS
+# OUTPUT_DIR := .
 OUTPUT_SHARED_OBJ := $(OUTPUT_DIR)/$(SHARED_OBJ)
 
 CPP_COMP_FLAG := -std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden

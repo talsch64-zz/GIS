@@ -1,14 +1,14 @@
 COMP = g++-10
 
 INC:=-I../include
-SOURCE_FILES := $(wildcard *.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/*.cpp)
+SOURCE_FILES := $(wildcard *.cpp ../UserCommon/Utils.cpp)
 
 OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))
 SHARED_OBJ := Navigation_315524694.so
-# OUTPUT_DIR := ../../OUTPUT/Navigation
-OUTPUT_DIR := .
+OUTPUT_DIR := ../../OUTPUT/Navigation
+# OUTPUT_DIR := .
 OUTPUT_SHARED_OBJ := $(OUTPUT_DIR)/$(SHARED_OBJ)
 
 CPP_COMP_FLAG := -std=c++20 -Werror -Wall -Wextra -pedantic-errors -DNDEBUG -fPIC -fvisibility=hidden -fvisibility-inlines-hidden

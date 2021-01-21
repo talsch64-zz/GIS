@@ -50,7 +50,7 @@ void ResultsFileWriter::writeScoresTable(std::vector<std::unique_ptr<NavigationS
     for (auto &navigationScores : scores) {
         std::string navLine = navigationScores->getNavigationName() + sep;
 
-        for (int i = 0; i < consensusRequests.size(); i++) {
+        for (std::size_t i = 0; i < consensusRequests.size(); i++) {
             navLine += std::to_string(navigationScores->getScore(i)) + sep;
         }
         navLine += std::to_string(navigationScores->getTotalScore()) + "\n";
