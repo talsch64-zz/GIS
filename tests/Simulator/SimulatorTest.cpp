@@ -118,10 +118,11 @@ public:
         std::string gisStr = simulation.getGISContainer(gisIndex)->getName();
         std::string navStr = simulation.getNavigationContainer(navIndex)->getName();
         std::string sep = ", ";
+        std::string distanceStr = distance == Meters(0) ? "0" : std::to_string((double) distance);
+        std::string timeStr = time == Minutes(0) ? "0" : std::to_string((double) time);
         std::string str =
                 navStr + sep + shortestType + sep + gisStr + sep + req.toString() + sep +
-                std::to_string((double) distance) +
-                sep + std::to_string((double) time) + sep + valid;
+                distanceStr + sep + timeStr + sep + valid;
         return str;
     }
 
@@ -448,10 +449,44 @@ TEST_F(SimulatorTest, noConsensusTest) {
     expectedResults.push_back(simulation.getNavigationContainer(0)->getName() + ", -1, -1");
     expectedResults.push_back(simulation.getNavigationContainer(2)->getName() + ", -2, -2");
 
+    std::vector<std::string> expectedStrangeResults;
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 0, "shortest_distance", requests[0], Meters(1980.523), Minutes(591.23), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 0, "shortest_time", requests[0], Meters(1982.523), Minutes(590.11), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 1, "shortest_distance", requests[0], Meters(1982.523), Minutes(590.11), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 1, "shortest_time", requests[0], Meters(1980.523), Minutes(591.23), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 0, "shortest_distance", requests[0], Meters(365), Minutes(365), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 0, "shortest_time", requests[0], Meters(365), Minutes(365), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 1, "shortest_distance", requests[0], Meters(0), Minutes(0), "0"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 1, "shortest_time", requests[0], Meters(0), Minutes(0), "0"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 0, "shortest_distance", requests[1], Meters(1), Minutes(2), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 0, "shortest_time", requests[1], Meters(890), Minutes(15.8), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 1, "shortest_distance", requests[1], Meters(890), Minutes(15.8), "1"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(0, 1, "shortest_time", requests[1], Meters(12), Minutes(13), "0"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 0, "shortest_distance", requests[1], Meters(0), Minutes(0), "0"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 0, "shortest_time", requests[1], Meters(0), Minutes(0), "0"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 1, "shortest_distance", requests[1], Meters(0), Minutes(0), "0"));
+    expectedStrangeResults.push_back(
+            getStrangeResultStr(2, 1, "shortest_time", requests[1], Meters(0), Minutes(0), "0"));
+
     simulation.startSimulation();
 
     auto &requestsCopy = requests;
     requestsCopy.erase(requestsCopy.begin());
     assertResults(expectedResults, requests);
-//    assertStrangeResults(expectedStrangeResults);
+    assertStrangeResults(expectedStrangeResults);
 }
