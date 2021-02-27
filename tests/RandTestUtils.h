@@ -1,7 +1,7 @@
 #ifndef GIS_CPP_RANDTESTUTILS_H
 #define GIS_CPP_RANDTESTUTILS_H
 
-#include "../GIS/GIS_315524694.h"
+#include "../GIS/GIS.h"
 #include "Bound.h"
 #include "../UserCommon/entities/Entity.h"
 #include "../UserCommon/entities/Junction.h"

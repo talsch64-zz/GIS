@@ -9,7 +9,7 @@
 #include "../../../IdGenerator.h"
 #include<memory>
 
-class GIS_315524694;
+class GIS;
 
 
 /// EntityJsonParser handles Entity parsing from JSON files and initializing Entity objects and generates Ids if necessary
@@ -21,7 +21,7 @@ class EntityJsonParser {
 
 
 public:
-    std::unique_ptr<Entity> parse(rapidjson::Value &doc, GIS_315524694 &gis);
+    std::unique_ptr<Entity> parse(rapidjson::Value &doc, GIS &gis);
 
     /* returns true if at least one entity in current file contains id.
      * returns flase if all entities doesn't contain ids */
@@ -49,7 +49,7 @@ private:
 
     std::vector<std::string> parseAccessibility(rapidjson::Value &doc);
 
-    std::unique_ptr<Way> parseWay(rapidjson::Value &doc, const GIS_315524694 &gis);
+    std::unique_ptr<Way> parseWay(rapidjson::Value &doc, const GIS &gis);
 
     TrafficDirection parseDirection(rapidjson::Value &doc);
 

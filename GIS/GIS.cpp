@@ -2,7 +2,7 @@
 #include <optional>
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
-#include "GIS_315524694.h"
+#include "GIS.h"
 #include <stdexcept>
 #include <stack>
 #include <set>
@@ -14,14 +14,14 @@
 
 REGISTER_GIS(GIS_315524694) // Registering the GIS
 
-GIS_315524694::GIS_315524694() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
+GIS::GIS() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
                                  topologicalSearch(std::make_unique<TopologicalSearch>()),
                                  logger(std::make_unique<Logger>()),
                                  ids(std::vector<EntityId>()) {
     logger->initialize();
 }
 
-std::size_t GIS_315524694::clear() {
+std::size_t GIS::clear() {
     int size = entities.size();
     entities.clear();
     grid->clear();
@@ -29,7 +29,7 @@ std::size_t GIS_315524694::clear() {
     return size;
 }
 
-std::vector<EntityId> GIS_315524694::loadMapFile(const std::string &filename) {
+std::vector<EntityId> GIS::loadMapFile(const std::string &filename) {
     std::vector<EntityId> entityIds;
     FILE *fp = fopen(filename.c_str(), "rb"); // non-Windows use "r"
     if (fp == nullptr) {
@@ -54,7 +54,7 @@ std::vector<EntityId> GIS_315524694::loadMapFile(const std::string &filename) {
     return entityIds;
 }
 
-std::size_t GIS_315524694::saveMapFile(const std::string &filename) {
+std::size_t GIS::saveMapFile(const std::string &filename) {
     rapidjson::Document doc;
     doc.SetArray();
     std::size_t size = 0;
@@ -67,7 +67,7 @@ std::size_t GIS_315524694::saveMapFile(const std::string &filename) {
     return size;
 }
 
-std::vector<EntityId> GIS_315524694::getEntities(const std::string &search_name) {
+std::vector<EntityId> GIS::getEntities(const std::string &search_name) {
     std::vector<EntityId> entityIds;
     for (const auto &pair : entities) {
         if (filterEntityByName(pair.second.get(), search_name)) {
@@ -77,12 +77,12 @@ std::vector<EntityId> GIS_315524694::getEntities(const std::string &search_name)
     return entityIds;
 }
 
-bool GIS_315524694::filterEntityByName(const Entity *entity, const std::string &search_name) {
+bool GIS::filterEntityByName(const Entity *entity, const std::string &search_name) {
     return entity->getName() == search_name;
 }
 
 std::vector<EntityId>
-GIS_315524694::getEntities(const std::string &search_name, const Coordinates &coordinates, Meters radius) {
+GIS::getEntities(const std::string &search_name, const Coordinates &coordinates, Meters radius) {
     std::vector<const Entity *> foundEntities = getEntities(coordinates, radius);
     std::vector<EntityId> ids;
     for (auto entity : foundEntities) {
@@ -94,19 +94,19 @@ GIS_315524694::getEntities(const std::string &search_name, const Coordinates &co
 }
 
 std::optional<Coordinates>
-GIS_315524694::getEntityClosestPoint(const EntityId &entityId, const Coordinates &coordinates) {
+GIS::getEntityClosestPoint(const EntityId &entityId, const Coordinates &coordinates) {
     if (entities.find(entityId) == entities.end()) {
         return {};
     }
     return entities.find(entityId)->second->getGeometry()->getClosestPoint(coordinates);
 }
 
-std::tuple<Coordinates, EntityId, std::size_t> GIS_315524694::getWayClosestPoint(const Coordinates &coord) const {
+std::tuple<Coordinates, EntityId, std::size_t> GIS::getWayClosestPoint(const Coordinates &coord) const {
     return getWayClosestPoint(coord, Restrictions(""));
 }
 
 std::tuple<Coordinates, EntityId, std::size_t>
-GIS_315524694::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
+GIS::getWayClosestPoint(const Coordinates &coord, const Restrictions &res) const {
     bool wayFound = false;
     int level = 0;
     std::stack<Grid::GridCell> stack;
@@ -174,7 +174,7 @@ GIS_315524694::getWayClosestPoint(const Coordinates &coord, const Restrictions &
     return result;
 }
 
-std::vector<EntityId> GIS_315524694::loadEntities(rapidjson::Document &document) {
+std::vector<EntityId> GIS::loadEntities(rapidjson::Document &document) {
     std::vector<EntityId> entityIds;
     for (auto &jsonEntity : document.GetArray()) {
         EntityId entityId("");
@@ -196,7 +196,7 @@ std::vector<EntityId> GIS_315524694::loadEntities(rapidjson::Document &document)
     return entityIds;
 }
 
-Entity *GIS_315524694::getEntityById(const EntityId &id) const {
+Entity *GIS::getEntityById(const EntityId &id) const {
     auto pair = entities.find(id);
     if (pair == entities.end()) {
         return nullptr;
@@ -205,7 +205,7 @@ Entity *GIS_315524694::getEntityById(const EntityId &id) const {
     }
 }
 
-std::vector<const Entity *> GIS_315524694::getEntities(const Coordinates &coordinates, Meters radius) {
+std::vector<const Entity *> GIS::getEntities(const Coordinates &coordinates, Meters radius) {
     std::vector<Grid::GridCell> cells = topologicalSearch->searchCircleInGrid(*grid, coordinates, radius);
     std::set<EntityId> searchedEntityIds;
     std::vector<const Entity *> foundEntities;
@@ -224,7 +224,7 @@ std::vector<const Entity *> GIS_315524694::getEntities(const Coordinates &coordi
     return foundEntities;
 }
 
-bool GIS_315524694::addEntity(std::unique_ptr<Entity> entity) {
+bool GIS::addEntity(std::unique_ptr<Entity> entity) {
     bool success = true;
     EntityId entityId = entity->getId();
     // if entityId not loaded yet
@@ -239,7 +239,7 @@ bool GIS_315524694::addEntity(std::unique_ptr<Entity> entity) {
     return success;
 }
 
-const AbstractWay &GIS_315524694::getWay(const EntityId &id) const {
+const AbstractWay &GIS::getWay(const EntityId &id) const {
     if (entities.find(id) == entities.end()) {
         throw std::runtime_error("Id not found");
     }
@@ -251,7 +251,7 @@ const AbstractWay &GIS_315524694::getWay(const EntityId &id) const {
     return *(dynamic_cast<Way *>(entity));
 }
 
-std::vector<EntityId> GIS_315524694::getWaysByJunction(const EntityId &id) const {
+std::vector<EntityId> GIS::getWaysByJunction(const EntityId &id) const {
     if (entities.find(id) == entities.end()) {
         return std::vector<EntityId>();
     }
@@ -263,7 +263,7 @@ std::vector<EntityId> GIS_315524694::getWaysByJunction(const EntityId &id) const
 }
 
 std::optional<std::tuple<Coordinates, EntityId, std::size_t>>
-GIS_315524694::getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const {
+GIS::getWayClosestPointFallback(const Coordinates &coord, const Restrictions &res) const {
     std::optional<std::tuple<Coordinates, EntityId, std::size_t>> foundWay;
     Coordinates closestPoint(Longitude(0), Latitude(0));
     Meters shortestDistance(INT_MAX);

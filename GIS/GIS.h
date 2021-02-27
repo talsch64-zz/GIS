@@ -30,7 +30,7 @@ class EntityJsonParser;
  *  Search closest point on entities perimeters from a given Coordinates
  *  Search closest way (and the closest Coordinates on the way) from a given Coordinates
  */
-class GIS_315524694 : public AbstractGIS {
+class GIS : public AbstractGIS {
 protected:
     /**
      * Max depth of BFS to search the grid for closest way before resorting to a fallback (iterating over all the ways)
@@ -49,7 +49,7 @@ protected:
     std::vector<EntityId> ids;
 
 public:
-    GIS_315524694();
+    GIS();
 
     std::size_t clear();
 

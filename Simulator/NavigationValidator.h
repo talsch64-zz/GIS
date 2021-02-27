@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Navigation/Route.h"
-#include "../GIS/GIS_315524694.h"
+#include "../GIS/GIS.h"
 
 /**
  * @brief NavigationValidator class to test validity or Route

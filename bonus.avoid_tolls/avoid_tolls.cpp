@@ -1,19 +1,19 @@
 #include "gtest/gtest.h"
 #include "../Common/GISNamedTypes.h"
-#include "../Navigation/Navigation_315524694.h"
+#include "../Navigation/Navigation.h"
 #include "../Simulator/NavigationValidator.h"
 #include "../UserCommon/entities/Way.h"
 #include "../UserCommon/Utils.h"
 
 class IsraelMapTest : public ::testing::Test {
 protected:
-    GIS_315524694 gis;
+    GIS gis;
     NavigationGIS navGis;
-    Navigation_315524694 navigation;
+    Navigation navigation;
     NavigationValidator validator;
 
 public:
-    IsraelMapTest() : gis(GIS_315524694()), navGis(gis), navigation(navGis), validator(gis) {
+    IsraelMapTest() : gis(GIS()), navGis(gis), navigation(navGis), validator(gis) {
     }
 
     void SetUp() override {

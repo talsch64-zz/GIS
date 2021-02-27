@@ -2,9 +2,9 @@
 #define GIS_CPP_NAVIGATIONMOCK_H
 
 
-#include "../Navigation/Navigation_315524694.h"
+#include "../Navigation/Navigation.h"
 
-class NavigationMock: public Navigation_315524694 {
+class NavigationMock: public Navigation {
 public:
     NavigationMock(const NavigationGIS &navigationGis);
 
