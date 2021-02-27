@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../GIS/GIS_315524694.h"
+#include "../GIS/GIS.h"
 #include <fstream>
 
 bool logContainsError(std::string err) {
@@ -15,7 +15,7 @@ bool logContainsError(std::string err) {
 }
 
 TEST(ErrorHandling, ErrorHandlingTest) {
-    GIS_315524694 gis;
+    GIS gis;
 
     auto entityIds = gis.loadMapFile("map-with-errors.json");
 

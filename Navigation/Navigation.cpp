@@ -1,23 +1,23 @@
 
 #include <iostream>
-#include "Navigation_315524694.h"
+#include "Navigation.h"
 #include "AStar.h"
 #include "../Common/NavigationRegistration.h"
 #include "../UserCommon/Utils.h"
 
 REGISTER_NAVIGATION(Navigation_315524694) // Registering the Navigation
 
-Navigation_315524694::Navigation_315524694(const NavigationGIS &navigationGis) : AbstractNavigation(navigationGis) {
+Navigation::Navigation(const NavigationGIS &navigationGis) : AbstractNavigation(navigationGis) {
 }
 
 std::unique_ptr<AbstractRoutes>
-Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end) const {
+Navigation::getRoutes(const Coordinates &start, const Coordinates &end) const {
     return getRoutes(start, end, Restrictions(""));
 }
 
 std::unique_ptr<AbstractRoutes>
-Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end,
-                                const Restrictions &restrictions) const {
+Navigation::getRoutes(const Coordinates &start, const Coordinates &end,
+                      const Restrictions &restrictions) const {
     try {
         auto startTuple = getClosestValidWay(start, restrictions);
         const Coordinates &startPoint = std::get<0>(startTuple);
@@ -47,7 +47,7 @@ Navigation_315524694::getRoutes(const Coordinates &start, const Coordinates &end
 }
 
 std::tuple<Coordinates, const AbstractWay &, std::size_t>
-Navigation_315524694::getClosestValidWay(const Coordinates &coord, const Restrictions &restrictions) const {
+Navigation::getClosestValidWay(const Coordinates &coord, const Restrictions &restrictions) const {
     auto wayClosestPointTuple = gis.getWayClosestPoint(coord, restrictions);
     const AbstractWay &way = gis.getWay(std::get<AbstractGIS::ClosestPoint::WayId>(wayClosestPointTuple));
     Coordinates wayCoord = std::get<AbstractGIS::ClosestPoint::Coord>(wayClosestPointTuple);

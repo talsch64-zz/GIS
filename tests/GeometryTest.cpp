@@ -4,7 +4,7 @@
 #include "../UserCommon/entities/geometry/Circle.h"
 #include "../UserCommon/entities/Way.h"
 #include "../UserCommon/entities/geometry/PointList.h"
-#include "../GIS/GIS_315524694.h"
+#include "../GIS/GIS.h"
 #include "../Common/NavigationGIS.h"
 #include <numbers>
 
@@ -75,7 +75,7 @@ TEST(CoordinatesTest, ZulVernLatitudeTest) {
 }
 
 TEST(GISBasic, MygetWayClosestPointTest1) {
-    GIS_315524694 gis;
+    GIS gis;
     gis.loadMapFile("nyc2.json");
     Coordinates coord(Longitude(40.731437), Latitude(-73.996967));
     Coordinates expected(Longitude(40.73248), Latitude(-73.99693));
@@ -84,7 +84,7 @@ TEST(GISBasic, MygetWayClosestPointTest1) {
 }
 
 TEST(GISBasic, MygetWayClosestPointTest2) {
-    GIS_315524694 gis;
+    GIS gis;
     gis.loadMapFile("russia.json");
     Coordinates coord(Longitude(90.28674), Latitude(65.77863));
     Coordinates closest =  std::get<0>(gis.getWayClosestPoint(coord));
@@ -93,7 +93,7 @@ TEST(GISBasic, MygetWayClosestPointTest2) {
 }
 
 TEST(GISBasic, MygetWayClosestPointTest3) {
-    GIS_315524694 gis;
+    GIS gis;
     gis.loadMapFile("russia.json");
     Coordinates coord(Longitude(91.68265), Latitude(65.92547));
     Coordinates closest =  std::get<0>(gis.getWayClosestPoint(coord));
@@ -102,7 +102,7 @@ TEST(GISBasic, MygetWayClosestPointTest3) {
 }
 
 TEST(WayGeometry, GetWayLengthWithCurves) {
-    GIS_315524694 gis;
+    GIS gis;
     gis.loadMapFile("ways.json");
     Meters expectedLength(43633);
     Meters acceptedError = WAY_LENGTH_ACCEPTED_ERROR * expectedLength;
@@ -114,7 +114,7 @@ TEST(WayGeometry, GetWayLengthWithCurves) {
 }
 
 TEST(WayGeometry, GetWayLengthWithoutCurves) {
-    GIS_315524694 gis;
+    GIS gis;
     gis.loadMapFile("ways.json");
     Meters expectedLength(21223);
     Meters acceptedError = WAY_LENGTH_ACCEPTED_ERROR * expectedLength;
@@ -126,7 +126,7 @@ TEST(WayGeometry, GetWayLengthWithoutCurves) {
 }
 //TODO fix test
 //TEST(ClosestWay, ClosestWayWithRestrictions) {
-//    GIS_315524694 gis;
+//    GIS gis;
 //    NavigationGIS navigationGis(gis);
 //    Coordinates coord(Longitude(23.916374), Latitude(-30.671331));
 //    gis.loadMapFile("astar.json");

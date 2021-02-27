@@ -13,7 +13,7 @@
  * Get the shortest routes by distance and time.
  *
  */
-class Navigation_315524694 : public AbstractNavigation {
+class Navigation : public AbstractNavigation {
     mutable std::unordered_map<EntityId, const AbstractWay &> waysMap;     // ways caching for lower gis usage
     mutable std::unordered_map<EntityId, std::vector<EntityId>> waysByJunctionMap;     // ways caching for lower gis usage
 
@@ -23,7 +23,7 @@ public:
      *
      * @param navigationGis - Note: you get a const ref of NavigationGIS
      */
-    Navigation_315524694(const NavigationGIS &navigationGis);
+    Navigation(const NavigationGIS &navigationGis);
 
     /**
      * @brief Get the Routes object

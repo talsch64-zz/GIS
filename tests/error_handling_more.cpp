@@ -1,11 +1,11 @@
 #include "gtest/gtest.h"
-#include "../GIS/GIS_315524694.h"
+#include "../GIS/GIS.h"
 #include <fstream>
 
 bool logContainsError(std::string err);
 
 TEST(ErrorHandling, LoadNonExisitingFileTest) {
-    GIS_315524694 gis;
+    GIS gis;
 
     gis.loadMapFile("map-doesnt-exist.json");
 
@@ -13,7 +13,7 @@ TEST(ErrorHandling, LoadNonExisitingFileTest) {
 }
 
 TEST(ErrorHandling, LoadInvalidJsonTest) {
-    GIS_315524694 gis;
+    GIS gis;
 
     gis.loadMapFile("invalid-map.json");
 
@@ -21,7 +21,7 @@ TEST(ErrorHandling, LoadInvalidJsonTest) {
 }
 
 TEST(ErrorHandling, MixedIdTest) {
-    GIS_315524694 gis;
+    GIS gis;
 
     auto entityIds = gis.loadMapFile("mixed-id-map.json");
 
