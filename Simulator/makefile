@@ -3,7 +3,7 @@ COMP = g++-10
 SOURCE_FILES := $(wildcard *.cpp ../UserCommon/Utils.cpp)
 OBJS := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
-EXEC := simulator_315524694
+EXEC := simulator
 OUTPUT_DIR := ../../OUTPUT
 OUTPUT_EXEC := $(OUTPUT_DIR)/$(EXEC) 
 

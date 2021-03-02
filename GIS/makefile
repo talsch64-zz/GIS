@@ -1,10 +1,10 @@
 COMP = g++-10
 
-SOURCE_FILES := $(wildcard GIS_315524694.cpp ../UserCommon/entities/*.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/entities/JsonHandlers/Serializers/*.cpp ../UserCommon/entities/JsonHandlers/parsers/*.cpp search/*.cpp ../UserCommon/*.cpp)
+SOURCE_FILES := $(wildcard GIS.cpp ../UserCommon/entities/*.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/entities/JsonHandlers/Serializers/*.cpp ../UserCommon/entities/JsonHandlers/parsers/*.cpp search/*.cpp ../UserCommon/*.cpp)
 OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))
-SHARED_OBJ := GIS_315524694.so
+SHARED_OBJ := GIS.so
 OUTPUT_DIR := ../../OUTPUT/GIS
 # OUTPUT_DIR := .
 OUTPUT_SHARED_OBJ := $(OUTPUT_DIR)/$(SHARED_OBJ)

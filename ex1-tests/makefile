@@ -4,7 +4,7 @@ GOOGLE_LIB = /usr/src/googletest/googletest/gcc-10-build/lib/
 GOOGLE_TEST_INCLUDE = /usr/src/googletest/googletest/include/
 
 PROJECT_DIR := ../GIS
-SOURCE_FILES := $(wildcard ../GIS/GIS_315524694.cpp ../UserCommon/entities/*.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/entities/JsonHandlers/Serializers/*.cpp ../UserCommon/entities/JsonHandlers/parsers/*.cpp ../GIS/search/*.cpp ../UserCommon/*.cpp) tests.cpp main.cpp
+SOURCE_FILES := $(wildcard ../GIS/GIS.cpp ../UserCommon/entities/*.cpp ../UserCommon/entities/geometry/*.cpp ../UserCommon/entities/JsonHandlers/Serializers/*.cpp ../UserCommon/entities/JsonHandlers/parsers/*.cpp ../GIS/search/*.cpp ../UserCommon/*.cpp) tests.cpp main.cpp
 OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))

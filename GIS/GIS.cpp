@@ -12,7 +12,7 @@
 #include "../Common/GISRegistration.h"
 #include <climits>
 
-REGISTER_GIS(GIS_315524694) // Registering the GIS
+REGISTER_GIS(GIS) // Registering the GIS
 
 GIS::GIS() : entityJsonParser(std::make_shared<EntityJsonParser>()), grid(std::make_shared<Grid>()),
                                  topologicalSearch(std::make_unique<TopologicalSearch>()),

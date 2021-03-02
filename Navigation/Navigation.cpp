@@ -5,7 +5,7 @@
 #include "../Common/NavigationRegistration.h"
 #include "../UserCommon/Utils.h"
 
-REGISTER_NAVIGATION(Navigation_315524694) // Registering the Navigation
+REGISTER_NAVIGATION(Navigation) // Registering the Navigation
 
 Navigation::Navigation(const NavigationGIS &navigationGis) : AbstractNavigation(navigationGis) {
 }

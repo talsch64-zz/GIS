@@ -5,7 +5,7 @@ SOURCE_FILES := $(wildcard *.cpp ../UserCommon/Utils.cpp)
 OBJS_FILES := $(SOURCE_FILES:%.cpp=%.o)
 BIN_DIR := bin
 OBJS := $(addprefix $(BIN_DIR)/, $(OBJS_FILES))
-SHARED_OBJ := Navigation_315524694.so
+SHARED_OBJ := Navigation.so
 OUTPUT_DIR := ../../OUTPUT/Navigation
 # OUTPUT_DIR := .
 OUTPUT_SHARED_OBJ := $(OUTPUT_DIR)/$(SHARED_OBJ)
